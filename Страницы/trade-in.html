@@ -1,0 +1,884 @@
+<style>
+    /* === HYPEROS 3 & TITANIUM DESIGN (DARK MODE) === */
+    :root {
+        --mi-orange: #ff6900;
+        --mi-orange-glow: rgba(255, 105, 0, 0.4);
+        --frame-titanium: #2d2d2d;
+        --frame-shine: #555555;
+        /* Темный абстрактный фон экрана */
+        --screen-bg-gradient: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+        --glass-panel: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --input-bg: #ffffff;
+        --text-primary: #ffffff;
+        --text-secondary: #94a3b8;
+        --radius-phone: 40px;
+        --radius-ui: 16px;
+    }
+
+    /* Изоляция от стилей сайта */
+    .tradein-calc-wrapper {
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: transparent;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        box-sizing: border-box;
+        position: relative; 
+        z-index: 0;         
+        isolation: isolate; 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* === РЕЖИМ FULLSCREEN (Активируется JS на мобильных) === */
+    .tradein-calc-wrapper.fullscreen-mode {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        padding: 0; margin: 0;
+        z-index: 999999; /* Поверх всего */
+        background: #000;
+    }
+    
+    .tradein-calc-wrapper.fullscreen-mode .xiaomi-device {
+        width: 100%; height: 100%; max-width: none; border-radius: 0;
+        box-shadow: none; border: none; padding: 0;
+    }
+    
+    .tradein-calc-wrapper.fullscreen-mode .xiaomi-screen {
+        border-radius: 0; height: 100%;
+    }
+    
+    .tradein-calc-wrapper.fullscreen-mode .exit-btn {
+        display: flex;
+    }
+
+    /* Кнопка выхода (Крестик) */
+    .exit-btn {
+        position: absolute; top: 50px; right: 20px; z-index: 100;
+        width: 40px; height: 40px;
+        background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+        border-radius: 50%; display: none;
+        justify-content: center; align-items: center; cursor: pointer;
+        color: white; font-weight: bold; font-size: 20px;
+        transition: background 0.3s;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .exit-btn:active { background: rgba(255,255,255,0.3); }
+
+    /* === КОРПУС ТЕЛЕФОНА === */
+    .xiaomi-device {
+        width: 100%; max-width: 360px;
+        background: var(--frame-titanium);
+        border-radius: var(--radius-phone);
+        padding: 8px;
+        box-shadow: 
+            0 0 0 1px #1a1a1a,
+            inset 0 0 0 1px var(--frame-shine),
+            0 30px 60px -15px rgba(0,0,0,0.6);
+        position: relative; margin: 0 auto; box-sizing: border-box; z-index: 1;
+        transition: all 0.5s ease;
+    }
+
+    /* Кнопки сбоку */
+    .xiaomi-device::after {
+        content: ''; position: absolute; right: -3px; top: 120px;
+        width: 3px; height: 50px; background: var(--frame-shine); border-radius: 0 4px 4px 0;
+    }
+    .xiaomi-device::before {
+        content: ''; position: absolute; right: -3px; top: 200px;
+        width: 3px; height: 30px; background: var(--mi-orange);
+        border-radius: 0 4px 4px 0; box-shadow: 0 0 10px var(--mi-orange-glow);
+    }
+
+    /* ЭКРАН */
+    .xiaomi-screen {
+        background: var(--screen-bg-gradient);
+        border-radius: 32px;
+        overflow: hidden;
+        height: 740px;
+        position: relative; display: flex; flex-direction: column;
+        color: var(--text-primary);
+    }
+
+    /* Dynamic Island / Камера */
+    .screen-notch {
+        position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+        width: 96px; height: 26px; z-index: 20;
+        background: #000; border-radius: 20px;
+        display: flex; justify-content: center; align-items: center;
+    }
+    .camera-hole { width: 10px; height: 10px; background: #111; border-radius: 50%; border: 1px solid #333; }
+
+    /* Status Bar */
+    .status-bar {
+        padding: 14px 25px 0 25px; display: flex; justify-content: space-between;
+        font-size: 13px; font-weight: 600; color: #fff; z-index: 15; opacity: 0.9;
+    }
+
+    /* === КОНТЕНТ (SCROLL) === */
+    .app-scroll-container {
+        flex-grow: 1; overflow-y: auto; scrollbar-width: none;
+        padding: 50px 20px 40px 20px;
+    }
+    .app-scroll-container::-webkit-scrollbar { display: none; }
+
+    h2 { 
+        text-align: center; font-size: 22px; font-weight: 400; 
+        margin: 0 0 25px 0; color: #fff; letter-spacing: 0.5px;
+    }
+
+    /* Поля ввода (Контрастные: Белый фон) */
+    .calc-form-group { margin-bottom: 16px; }
+    .calc-form-group label {
+        display: block; font-size: 13px; color: var(--text-secondary);
+        margin-bottom: 6px; font-weight: 500; padding-left: 4px;
+    }
+    
+    .input-wrapper {
+        position: relative;
+        background: var(--input-bg);
+        border-radius: var(--radius-ui);
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .input-wrapper:focus-within {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 2px var(--mi-orange);
+    }
+    
+    .calc-form-group select, .calc-form-group input {
+        width: 100%; height: 50px; padding: 0 16px;
+        border: none; background: transparent;
+        font-size: 16px; font-weight: 600; color: #000; /* Черный текст на белом */
+        outline: none; border-radius: var(--radius-ui);
+        appearance: none; -webkit-appearance: none;
+    }
+    /* Стрелка для select */
+    .input-wrapper:not(.text-input)::after {
+        content: ''; position: absolute; right: 16px; top: 22px;
+        border: 5px solid transparent; border-top-color: #666; pointer-events: none;
+    }
+
+    .calc-form-group select:disabled { background: #e0e0e0; color: #999; }
+
+    /* Описание состояния */
+    .condition-desc {
+        background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+        padding: 12px; border-radius: 12px; margin-top: 10px;
+        font-size: 12px; color: #ccc; line-height: 1.4;
+        display: none; border-left: 3px solid var(--mi-orange);
+    }
+
+    /* Кнопки */
+    .btn-calc, .btn-submit, .btn-start-os {
+        background: var(--mi-orange); color: white; border: none; width: 100%; 
+        padding: 16px; border-radius: var(--radius-ui); 
+        font-size: 16px; font-weight: 700; margin-top: 15px; cursor: pointer;
+        box-shadow: 0 8px 25px rgba(255, 105, 0, 0.3);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-calc:active, .btn-submit:active { transform: scale(0.96); }
+
+    .btn-back {
+        background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);
+        width: 100%; padding: 14px; border-radius: var(--radius-ui);
+        font-size: 14px; font-weight: 600; margin-top: 12px; cursor: pointer;
+    }
+
+    /* Карточки результатов (Widget Style) */
+    .device-summary-card {
+        background: rgba(255,255,255, 0.08); backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-ui); padding: 20px; margin-bottom: 20px;
+        text-align: center;
+    }
+    .summary-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+    .summary-details { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
+    .summary-price-tag { font-size: 38px; font-weight: 800; color: var(--mi-orange); }
+    
+    .disclaimer-text { font-size: 11px; color: #777; text-align: center; margin: 15px 0; font-style: italic; }
+
+    /* Капча */
+    .captcha-block { 
+        background: rgba(255,255,255,0.05); padding: 15px; border-radius: 16px;
+        margin-top: 15px; text-align: center; border: 1px solid var(--glass-border);
+    }
+    .captcha-header { color: #fff; font-size: 13px; margin-bottom: 10px; display: block;}
+    .captcha-target { color: var(--mi-orange); font-weight: bold; font-size: 18px; }
+    .captcha-options { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+    .cp-btn {
+        width: 45px; height: 45px; border-radius: 12px; 
+        background: #2a2a2a; border: 1px solid #444; 
+        color: #fff; font-weight: bold; cursor: pointer;
+        display: flex; justify-content: center; align-items: center;
+        transition: all 0.2s; font-size: 16px;
+    }
+    .cp-btn:hover { border-color: var(--mi-orange); background: #333; }
+    .cp-btn.correct { background: #4fbe31; border-color: #4fbe31; }
+    .cp-btn.wrong { background: #e74c3c; border-color: #e74c3c; }
+
+    /* Экраны и Анимации */
+    .screen-view {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        display: flex; flex-direction: column;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .view-hidden { opacity: 0; pointer-events: none; transform: scale(0.9); z-index: 0; }
+    .view-active { opacity: 1; pointer-events: all; transform: scale(1); z-index: 10; }
+
+    /* Lock Screen */
+    #view_start { justify-content: center; align-items: center; text-align: center; padding-bottom: 80px; }
+    .lock-clock { font-size: 80px; font-weight: 100; color: #fff; letter-spacing: -2px; line-height: 1; margin-bottom: 10px; }
+    .lock-date { font-size: 18px; color: var(--text-secondary); margin-bottom: 60px; }
+    .btn-start-os { width: auto; padding: 15px 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); box-shadow: none; }
+
+    /* Boot Screen */
+    #view_boot { background: #000; z-index: 25; justify-content: center; align-items: center; }
+    .hyper-logo { font-size: 40px; font-weight: 800; background: linear-gradient(90deg, #fff, #666, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 2s infinite; }
+    
+    /* Success Screen */
+    .success-icon { width: 70px; height: 70px; background: #4fbe31; border-radius: 50%; color: white; font-size: 40px; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 0 20px rgba(79,190,49,0.4); }
+    
+    .home-indicator {
+        position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+        height: 4px; width: 120px; background: #fff; opacity: 0.3; border-radius: 2px; z-index: 20;
+    }
+
+    @keyframes shimmer { 0% { background-position: -200%; } 100% { background-position: 200%; } }
+</style>
+
+<div class="tradein-calc-wrapper" id="calcWrapper">
+    
+    <!-- Кнопка выхода (для Fullscreen) -->
+    <div class="exit-btn" onclick="exitFullScreen()">✕</div>
+
+    <div class="xiaomi-device">
+        <div class="xiaomi-screen">
+            <!-- Статус бар -->
+            <div class="screen-notch"><div class="camera-hole"></div></div>
+            <div class="status-bar">
+                <span id="status_bar_time">12:00</span>
+                <span>5G &nbsp; 100%</span>
+            </div>
+
+            <!-- 1. LOCK SCREEN -->
+            <div id="view_start" class="screen-view view-active">
+                <div class="lock-clock" id="clock_time">12:00</div>
+                <div class="lock-date" id="clock_date">Monday</div>
+                <button class="btn-start-os" onclick="startSystem()">Оценить стоимость</button>
+            </div>
+
+            <!-- 2. BOOT -->
+            <div id="view_boot" class="screen-view view-hidden" style="display:none;">
+                <div class="hyper-logo">HyperOS</div>
+            </div>
+
+            <!-- 3. КАЛЬКУЛЯТОР -->
+            <div id="view_app" class="screen-view view-hidden">
+                <div class="app-scroll-container">
+                    <h2>Trade-In</h2>
+                    
+                    <div class="calc-form-group">
+                        <label>Бренд устройства</label>
+                        <div class="input-wrapper">
+                            <select id="ph_brand" onchange="TradeInPhoneCalc.updateModels()"><option value="">Выберите...</option></select>
+                        </div>
+                    </div>
+
+                    <div class="calc-form-group">
+                        <label>Модель</label>
+                        <div class="input-wrapper">
+                            <select id="ph_model" disabled onchange="TradeInPhoneCalc.updateConfigs()"><option value="">Сначала бренд</option></select>
+                        </div>
+                    </div>
+
+                    <div class="calc-form-group">
+                        <label>Память</label>
+                        <div class="input-wrapper">
+                            <select id="ph_config" disabled><option value="">Сначала модель</option></select>
+                        </div>
+                    </div>
+
+                    <div class="calc-form-group">
+                        <label>Состояние</label>
+                        <div class="input-wrapper">
+                            <select id="ph_condition" onchange="TradeInPhoneCalc.onConditionChange()">
+                                <option value="">Выберите состояние</option>
+                                <option value="1.0">Идеальное</option>
+                                <option value="0.85">Хорошее</option>
+                                <option value="0.60">Среднее</option>
+                                <option value="0.40">Плохое</option>
+                            </select>
+                        </div>
+                        <div id="condition_desc_text" class="condition-desc"></div>
+                    </div>
+
+                    <button class="btn-calc" onclick="TradeInPhoneCalc.calculate()">Рассчитать</button>
+                </div>
+            </div>
+
+            <!-- 4. РЕЗУЛЬТАТ -->
+            <div id="view_result" class="screen-view view-hidden">
+                <div class="app-scroll-container">
+                    <h2>Оценка готова</h2>
+                    
+                    <div class="device-summary-card">
+                        <div class="summary-title" id="res_device">...</div>
+                        <div class="summary-details">
+                            <span id="res_config">...</span> • <span id="res_condition">...</span>
+                        </div>
+                        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:5px;">Предварительная цена</div>
+                        <div class="summary-price-tag" id="res_price">0 ₽</div>
+                        
+                        <div id="res_condition_text" style="font-size:12px; color:#aaa; margin-top:15px; font-style:italic; padding-top:10px; border-top:1px solid rgba(255,255,255,0.1);"></div>
+                    </div>
+
+                    <div class="disclaimer-text">*Окончательная стоимость будет зависеть от результатов технической и визуальной оценки вашего устройства в нашем магазине.</div>
+
+                    <button class="btn-submit" onclick="TradeInPhoneCalc.goToForm()">Оформить заявку</button>
+                    <button class="btn-back" onclick="TradeInPhoneCalc.backToCalc()">Изменить параметры</button>
+                </div>
+            </div>
+
+            <!-- 5. ФОРМА -->
+            <div id="view_form" class="screen-view view-hidden">
+                <div class="app-scroll-container">
+                    <h2>Заявка</h2>
+
+                    <!-- Мини-карточка -->
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--glass-border);">
+                        <div>
+                            <div id="sum_device" style="font-weight:bold; color:white;">iPhone</div>
+                            <div style="font-size:12px; color:#aaa;"><span id="sum_config">Gb</span>, <span id="sum_condition">Cond</span></div>
+                        </div>
+                        <div id="sum_price" style="font-weight:bold; color:var(--mi-orange); font-size:18px;">0 ₽</div>
+                    </div>
+
+                    <div class="calc-form-group">
+                        <label>Ваше Имя</label>
+                        <div class="input-wrapper text-input">
+                            <input type="text" id="ph_name" placeholder="Введите имя" maxlength="50">
+                        </div>
+                    </div>
+                    <div class="calc-form-group">
+                        <label>Телефон</label>
+                        <div class="input-wrapper text-input">
+                            <input type="tel" id="ph_phone" placeholder="+7 (___) ___-__-__" maxlength="18">
+                        </div>
+                    </div>
+
+                    <div class="captcha-block">
+                        <span class="captcha-header">Подтвердите, что вы не робот</span>
+                        <div style="font-size:12px; color:#aaa; margin-bottom:5px;">Нажмите число: <span class="captcha-target" id="ph_cp_target_num">00</span></div>
+                        <div class="captcha-options" id="ph_cp_buttons_container"></div>
+                        <div id="ph_cp_success_msg" style="display:none; color:#4fbe31; font-size:12px; margin-top:5px;">✓ Верно</div>
+                    </div>
+
+                    <button id="ph_submit_btn" class="btn-submit" onclick="TradeInPhoneCalc.sendToCSCart()">Отправить</button>
+                    <button class="btn-back" onclick="TradeInPhoneCalc.backToResult()">Назад</button>
+                </div>
+            </div>
+
+            <!-- 6. УСПЕХ -->
+            <div id="view_success" class="screen-view view-hidden">
+                <div class="app-scroll-container" style="text-align:center; padding-top:100px;">
+                    <div class="success-icon">✓</div>
+                    <h3 style="margin:0; color:#fff; font-size: 24px;">Принято!</h3>
+                    <p style="color:#aaa; font-size:14px; margin: 10px 0 40px 0;">Менеджер свяжется с вами в ближайшее время.</p>
+                    <button class="btn-back" onclick="location.reload()">На главную</button>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+</div>
+
+<!-- CS-Cart Hidden Form -->
+<div style="display: none;">
+    <form action="{""|fn_url}" method="post" name="phone_tradein_form" class="cm-ajax" id="phone_sys_form">
+        <input type="hidden" name="dispatch" value="pages.send_form" />
+        <input type="hidden" name="page_id" value="1053" />
+        <input type="hidden" name="result_ids" value="phone_sys_form_result" />
+        <input type="text" name="form_values[590]" id="ph_sys_name" value="" />
+        <input type="text" name="form_values[591]" id="ph_sys_phone" value="" />
+        <textarea name="form_values[592]" id="ph_sys_message"></textarea>
+        <button type="submit" id="ph_sys_submit">Send</button>
+    </form>
+    <div id="phone_sys_form_result"></div>
+</div>
+
+{literal}
+<script>
+// --- Управление экранами ---
+function switchView(fromId, toId) {
+    var fromEl = document.getElementById(fromId);
+    var toEl = document.getElementById(toId);
+    if(fromEl) { fromEl.classList.remove('view-active'); fromEl.classList.add('view-hidden'); }
+    if(toEl) {
+        toEl.style.display = 'flex';
+        setTimeout(function(){ toEl.classList.remove('view-hidden'); toEl.classList.add('view-active'); }, 50);
+    }
+}
+
+// --- FULLSCREEN LOGIC ---
+function startSystem() {
+    // Проверка на мобильное устройство (ширина < 768px)
+    if (window.innerWidth < 768) {
+        var wrapper = document.getElementById('calcWrapper');
+        wrapper.classList.add('fullscreen-mode');
+        // Блокируем скролл основной страницы
+        document.body.style.overflow = 'hidden';
+    }
+
+    switchView('view_start', 'view_boot');
+    setTimeout(function() { switchView('view_boot', 'view_app'); }, 1200);
+}
+
+function exitFullScreen() {
+    var wrapper = document.getElementById('calcWrapper');
+    wrapper.classList.remove('fullscreen-mode');
+    document.body.style.overflow = ''; // Возвращаем скролл
+    location.reload(); // Сброс состояния
+}
+
+// Часы
+(function initClock() {
+    var update = function() {
+        var now = new Date();
+        var hours = String(now.getHours()).padStart(2, '0');
+        var minutes = String(now.getMinutes()).padStart(2, '0');
+        var dateOpt = { weekday: 'long', month: 'long', day: 'numeric' };
+        
+        var timeString = hours + ':' + minutes;
+        var dateString = now.toLocaleDateString('ru-RU', dateOpt);
+
+        var lockTime = document.getElementById('clock_time');
+        var lockDate = document.getElementById('clock_date');
+        var barTime = document.getElementById('status_bar_time');
+
+        if(lockTime) lockTime.textContent = timeString;
+        if(lockDate) lockDate.textContent = dateString;
+        if(barTime) barTime.textContent = timeString;
+    };
+    update();
+    setInterval(update, 1000);
+})();
+
+// --- Логика Калькулятора ---
+var TradeInPhoneCalc = {
+    // === ПОЛНАЯ БАЗА ДАННЫХ ===
+    database: [
+        {
+            brand: "Apple",
+            models: [
+                { name: "iPhone 16 Pro Max", configs: { "1 ТБ": 75000, "512 ГБ": 70000, "256 ГБ": 65000, "128 ГБ": 65000 } },
+                { name: "iPhone 16 Pro", configs: { "512 ГБ": 70000, "256 ГБ": 65000, "128 ГБ": 60000 } },
+                { name: "iPhone 16 Plus", configs: { "512 ГБ": 51000, "256 ГБ": 48000, "128 ГБ": 45000 } },
+                { name: "iPhone 16", configs: { "512 ГБ": 48000, "256 ГБ": 45000, "128 ГБ": 42000 } },
+                { name: "iPhone 15 Pro Max", configs: { "512 ГБ": 55000, "256 ГБ": 50000, "128 ГБ": 50000 } },
+                { name: "iPhone 15 Pro", configs: { "512 ГБ": 52000, "256 ГБ": 47000, "128 ГБ": 42000 } },
+                { name: "iPhone 15", configs: { "256 ГБ": 37000, "128 ГБ": 32000 } },
+                { name: "iPhone 14 Pro Max", configs: { "256 ГБ": 45000, "128 ГБ": 40000 } },
+                { name: "iPhone 14 Pro", configs: { "512 ГБ": 41000, "256 ГБ": 36000, "128 ГБ": 33000 } },
+                { name: "iPhone 14 Plus", configs: { "512 ГБ": 36000, "256 ГБ": 32000, "128 ГБ": 28000 } },
+                { name: "iPhone 14", configs: { "512 ГБ": 36000, "256 ГБ": 33000, "128 ГБ": 30000 } },
+                { name: "iPhone 13 Pro Max", configs: { "512 ГБ": 42000, "256 ГБ": 37000, "128 ГБ": 32000 } },
+                { name: "iPhone 13 Pro", configs: { "512 ГБ": 38000, "256 ГБ": 33000, "128 ГБ": 28000 } },
+                { name: "iPhone 13", configs: { "512 ГБ": 30000, "256 ГБ": 26000, "128 ГБ": 22000 } },
+                { name: "iPhone 12 Pro Max", configs: { "512 ГБ": 36000, "256 ГБ": 32000, "128 ГБ": 28000 } },
+                { name: "iPhone 12 Pro", configs: { "512 ГБ": 33000, "256 ГБ": 29000, "128 ГБ": 25000 } },
+                { name: "iPhone 12", configs: { "256 ГБ": 23000, "128 ГБ": 20000 } },
+                { name: "iPhone 12 mini", configs: { "256 ГБ": 22000, "128 ГБ": 19000 } },
+                { name: "iPhone 11 Pro Max", configs: { "512 ГБ": 12000, "256 ГБ": 9000, "128 ГБ": 9000 } },
+                { name: "iPhone 11 Pro", configs: { "512 ГБ": 13000, "256 ГБ": 10000, "128 ГБ": 7000 } },
+                { name: "iPhone 11", configs: { "256 ГБ": 9000, "128 ГБ": 7000 } }
+            ]
+        },
+        {
+            brand: "Samsung",
+            models: [
+                { name: "Galaxy Z Fold7", configs: { "1 ТБ": 52704, "512 ГБ": 46077, "256 ГБ": 42253 } },
+                { name: "Galaxy Z Fold6", configs: { "1 ТБ": 49595, "512 ГБ": 41860, "256 ГБ": 39494 } },
+                { name: "Galaxy Z Fold5", configs: { "1 ТБ": 38675, "512 ГБ": 36400, "256 ГБ": 33750 } },
+                { name: "Galaxy Z Fold4", configs: { "1 ТБ": 24120, "256 ГБ": 23219, "512 ГБ": 22770 } },
+                { name: "Galaxy Z Flip7", configs: { "512 ГБ": 42497, "256 ГБ": 39494 } },
+                { name: "Galaxy Z Flip6", configs: { "512 ГБ": 29785, "256 ГБ": 27216 } },
+                { name: "Galaxy Z Flip5", configs: { "512 ГБ": 20838, "256 ГБ": 18450 } },
+                { name: "Galaxy Z Flip4", configs: { "512 ГБ": 16470, "256 ГБ": 14459, "128 ГБ": 12758 } },
+                { name: "Galaxy S25 Ultra", configs: { "1 ТБ": 56637, "512 ГБ": 51415, "256 ГБ": 42770 } },
+                { name: "Galaxy S24 Ultra", configs: { "1 ТБ": 46319, "512 ГБ": 43771, "256 ГБ": 37583 } },
+                { name: "Galaxy S23 Ultra", configs: { "1 ТБ": 36462, "512 ГБ": 32745, "256 ГБ": 29520 } },
+                { name: "Galaxy S22 Ultra", configs: { "1 ТБ": 34871, "512 ГБ": 25830, "256 ГБ": 24665, "128 ГБ": 23814 } },
+                { name: "Galaxy S25 Plus", configs: { "512 ГБ": 42315, "256 ГБ": 35370 } },
+                { name: "Galaxy S24 Plus", configs: { "512 ГБ": 30600, "256 ГБ": 27900 } },
+                { name: "Galaxy S23 Plus", configs: { "512 ГБ": 22964, "256 ГБ": 21600 } },
+                { name: "Galaxy S22 Plus", configs: { "256 ГБ": 15309, "128 ГБ": 14459 } },
+                { name: "Galaxy S25", configs: { "512 ГБ": 39494, "256 ГБ": 32490, "128 ГБ": 30600 } },
+                { name: "Galaxy S24", configs: { "512 ГБ": 28620, "256 ГБ": 28260, "128 ГБ": 24665 } },
+                { name: "Galaxy S23", configs: { "512 ГБ": 25515, "256 ГБ": 22539, "128 ГБ": 19987 } },
+                { name: "Galaxy S22", configs: { "256 ГБ": 16110, "128 ГБ": 13608 } },
+                { name: "Galaxy S25 Edge", configs: { "512 ГБ": 42497, "256 ГБ": 36400 } },
+                { name: "Galaxy S25 FE", configs: { "512 ГБ": 24030, "256 ГБ": 21420 } },
+                { name: "Galaxy S24 FE", configs: { "512 ГБ": 23940, "256 ГБ": 22113, "128 ГБ": 20327 } },
+                { name: "Galaxy S23 FE", configs: { "256 ГБ": 19137, "128 ГБ": 17436 } },
+                { name: "Galaxy S21 FE", configs: { "256 ГБ": 10800, "128 ГБ": 9360 } },
+                { name: "Galaxy A56", configs: { "256 ГБ": 16110, "128 ГБ": 13608 } },
+                { name: "Galaxy A55", configs: { "256 ГБ": 13608, "128 ГБ": 12758 } },
+                { name: "Galaxy A54", configs: { "1 ТБ": 12420, "512 ГБ": 10620, "256 ГБ": 9630, "128 ГБ": 8231 } },
+                { name: "Galaxy A53", configs: { "256 ГБ": 8411, "128 ГБ": 7401 } },
+                { name: "Galaxy A36", configs: { "256 ГБ": 12690, "128 ГБ": 10620 } },
+                { name: "Galaxy A35", configs: { "256 ГБ": 12077, "128 ГБ": 11822 } },
+                { name: "Galaxy A34", configs: { "256 ГБ": 10376, "128 ГБ": 7149 } },
+                { name: "Galaxy A33", configs: { "256 ГБ": 6308, "128 ГБ": 5887 } },
+                { name: "Galaxy A26", configs: { "256 ГБ": 8633, "128 ГБ": 7565 } },
+                { name: "Galaxy A25", configs: { "128 ГБ": 7402, "256 ГБ": 7120 } },
+                { name: "Galaxy A24", configs: { "128 ГБ": 6056 } },
+                { name: "Galaxy A23", configs: { "128 ГБ": 4205, "64 ГБ": 3364 } },
+                { name: "Galaxy A17", configs: { "256 ГБ": 6853, "128 ГБ": 6052 } },
+                { name: "Galaxy A16", configs: { "256 ГБ": 6853, "128 ГБ": 5887 } },
+                { name: "Galaxy A15", configs: { "256 ГБ": 6645, "128 ГБ": 5285 } },
+                { name: "Galaxy A14", configs: { "128 ГБ": 4005, "64 ГБ": 3364 } },
+                { name: "Galaxy A07", configs: { "256 ГБ": 5162, "128 ГБ": 4183, "64 ГБ": 3146 } },
+                { name: "Galaxy A06", configs: { "128 ГБ": 4122, "64 ГБ": 3465 } },
+                { name: "Galaxy A05", configs: { "128 ГБ": 4037, "64 ГБ": 3028 } },
+                { name: "Galaxy A05S", configs: { "128 ГБ": 4205, "64 ГБ": 3206 } },
+                { name: "Galaxy A04", configs: { "128 ГБ": 3649, "64 ГБ": 2314, "32 ГБ": 2187 } }
+            ]
+        },
+        {
+            brand: "Xiaomi",
+            models: [
+                { name: "Xiaomi Mix FLIP", configs: { "1 ТБ": 53508, "256 ГБ": 41860, "512 Гб": 25200 } },
+                { name: "Xiaomi Mix Fold 4", configs: { "1 ТБ": 50757, "512 Гб": 43507, "256 ГБ": 39882 } },
+                { name: "Xiaomi 15 Ultra", configs: { "512 Гб": 42824, "256 ГБ": 41931 } },
+                { name: "Xiaomi 14 Ultra", configs: { "1 ТБ": 49595, "512 Гб": 38363, "256 ГБ": 36400 } },
+                { name: "Xiaomi 13 Ultra", configs: { "1 ТБ": 30690, "512 Гб": 24300, "256 ГБ": 22770 } },
+                { name: "Xiaomi 15", configs: { "1 ТБ": 40147, "512 Гб": 34853, "256 ГБ": 31765 } },
+                { name: "Xiaomi 15T Pro", configs: { "1 ТБ": 34200, "512 Гб": 31500, "128 ГБ": 31500, "256 ГБ": 28800 } },
+                { name: "Xiaomi 15T", configs: { "1 ТБ": 25200, "128 ГБ": 22500, "512 Гб": 16200, "256 ГБ": 15300 } },
+                { name: "Xiaomi 14", configs: { "1 ТБ": 32400, "512 Гб": 28800, "256 ГБ": 25650 } },
+                { name: "Xiaomi 14T Pro", configs: { "1 ТБ": 27794, "512 Гб": 25625, "256 ГБ": 22059 } },
+                { name: "Xiaomi 14T", configs: { "512 Гб": 21530, "256 ГБ": 16588 } },
+                { name: "Xiaomi 13T Pro", configs: { "1 ТБ": 24390, "512 Гб": 15819, "256 ГБ": 14459 } },
+                { name: "Xiaomi 13T", configs: { "256 ГБ": 12673 } },
+                { name: "Xiaomi 13", configs: { "512 Гб": 19080, "128 ГБ": 18270, "256 ГБ": 17100 } },
+                { name: "Xiaomi 13 Lite", configs: { "256 ГБ": 10170, "128 ГБ": 9900 } }
+            ]
+        },
+        {
+            brand: "Redmi",
+            models: [
+                { name: "Redmi Note 15 Pro Plus", configs: { "512 ГБ": 16390, "256 ГБ": 13204 } },
+                { name: "Redmi Note 15 Pro", configs: { "512 ГБ": 12525, "256 ГБ": 10472 } },
+                { name: "Redmi Note 15", configs: { "256 ГБ": 8194, "128 ГБ": 6843 } },
+                { name: "Redmi Note 14 Pro Plus", configs: { "512 ГБ": 15840, "256 ГБ": 15030 } },
+                { name: "Redmi Note 14 Pro", configs: { "512 ГБ": 13398, "256 ГБ": 11700, "128 ГБ": 10800 } },
+                { name: "Redmi Note 14S", configs: { "512 ГБ": 10139, "256 ГБ": 8030, "128 ГБ": 6586 } },
+                { name: "Redmi Note 14", configs: { "512 ГБ": 8613, "256 ГБ": 7126, "128 ГБ": 6230 } },
+                { name: "Redmi Note 13 Pro Plus", configs: { "512 ГБ": 12150, "256 ГБ": 10206 } },
+                { name: "Redmi Note 13 Pro", configs: { "512 ГБ": 10206, "256 ГБ": 8411, "128 ГБ": 7654 } },
+                { name: "Redmi Note 13", configs: { "512 ГБ": 8010, "256 ГБ": 6728, "128 ГБ": 5785 } },
+                { name: "Redmi Note 12 Pro Plus", configs: { "256 ГБ": 8159 } },
+                { name: "Redmi Note 12 Pro", configs: { "256 ГБ": 6728, "128 ГБ": 5215, "64 ГБ": 4626 } },
+                { name: "Redmi Note 12S", configs: { "256 ГБ": 5131, "128 ГБ": 4710, "64 ГБ": 4628 } },
+                { name: "Redmi Note 12", configs: { "256 ГБ": 4710, "128 ГБ": 3869, "64 ГБ": 3649 } },
+                { name: "Redmi 15", configs: { "256 ГБ": 7126, "128 ГБ": 5951 } },
+                { name: "Redmi 15C", configs: { "256 ГБ": 5162, "128 ГБ": 4272 } },
+                { name: "Redmi 14C", configs: { "256 ГБ": 4205, "128 ГБ": 3869 } },
+                { name: "Redmi 13", configs: { "256 ГБ": 4710, "128 ГБ": 4290 } },
+                { name: "Redmi 13C", configs: { "256 ГБ": 4037, "128 ГБ": 3196, "32 ГБ": 723 } },
+                { name: "Redmi 12", configs: { "256 ГБ": 4037, "128 ГБ": 3028 } },
+                { name: "Redmi 12C", configs: { "128 ГБ": 3028, "64 ГБ": 1935, "32 ГБ": 1767 } },
+                { name: "Redmi A5", configs: { "128 ГБ": 3047, "64 ГБ": 1424 } },
+                { name: "Redmi A4", configs: { "128 ГБ": 2314 } },
+                { name: "Redmi A3X", configs: { "128 ГБ": 2047, "64 ГБ": 2047 } },
+                { name: "Redmi A3", configs: { "128 ГБ": 1958, "64 ГБ": 1691 } }
+            ]
+        },
+        {
+            brand: "POCO",
+            models: [
+                { name: "POCO F7 Ultra", configs: { "512 ГБ": 25200, "256 ГБ": 23940 } },
+                { name: "POCO F7 Pro", configs: { "512 ГБ": 21330, "256 ГБ": 15120 } },
+                { name: "POCO F6 Pro", configs: { "1 ТБ": 21060, "512 ГБ": 17280, "256 ГБ": 13500 } },
+                { name: "POCO F6", configs: { "512 ГБ": 11880, "256 ГБ": 5963 } },
+                { name: "POCO F5 Pro", configs: { "512 ГБ": 13050, "256 ГБ": 10340 } },
+                { name: "POCO F5", configs: { "256 ГБ": 10800 } },
+                { name: "POCO X7 Pro", configs: { "512 ГБ": 12690, "256 ГБ": 10800 } },
+                { name: "POCO X7", configs: { "512 ГБ": 10800, "256 ГБ": 8633 } },
+                { name: "POCO X6 Pro", configs: { "512 ГБ": 10260, "256 ГБ": 9630 } },
+                { name: "POCO X6", configs: { "512 ГБ": 10260, "256 ГБ": 6675 } },
+                { name: "POCO X5 Pro", configs: { "256 ГБ": 5874, "128 ГБ": 5518 } },
+                { name: "POCO X5", configs: { "256 ГБ": 10080, "128 ГБ": 9360 } },
+                { name: "POCO M7 Pro", configs: { "512 ГБ": 10080, "256 ГБ": 6141 } },
+                { name: "POCO M6 Pro", configs: { "512 ГБ": 7565, "256 ГБ": 4806 } },
+                { name: "POCO M6", configs: { "256 ГБ": 4272, "128 ГБ": 4005 } },
+                { name: "POCO M5", configs: { "128 ГБ": 2848, "64 ГБ": 2403 } },
+                { name: "POCO C75", configs: { "256 ГБ": 3827, "128 ГБ": 2848 } },
+                { name: "POCO C71", configs: { "128 ГБ": 2581, "64 ГБ": 1780 } },
+                { name: "POCO C65", configs: { "256 ГБ": 4361, "128 ГБ": 2848 } },
+                { name: "POCO C61", configs: { "128 ГБ": 2047, "64 ГБ": 1602 } },
+                { name: "POCO C55", configs: { "128 ГБ": 11700, "64 ГБ": 10260 } },
+                { name: "POCO C51", configs: { "64 ГБ": 1335 } },
+                { name: "POCO C40", configs: { "64 ГБ": 1767 } }
+            ]
+        }
+    ],
+
+    conditionTexts: {
+        "1.0": "Идеальное: Как новое, без следов использования.",
+        "0.85": "Хорошее: Мелкие потертости, экран без глубоких царапин.",
+        "0.60": "Среднее: Заметные царапины, возможны мелкие сколы.",
+        "0.40": "Плохое: Дефекты корпуса/экрана, требует ремонта."
+    },
+
+    tempData: {},
+    captchaSolved: false,
+    captchaTarget: 0,
+    els: {},
+
+    init: function() {
+        this.els = {
+            brand: document.getElementById('ph_brand'),
+            model: document.getElementById('ph_model'),
+            config: document.getElementById('ph_config'),
+            condition: document.getElementById('ph_condition'),
+            conditionDesc: document.getElementById('condition_desc_text'),
+            resDevice: document.getElementById('res_device'),
+            resConfig: document.getElementById('res_config'),
+            resCondition: document.getElementById('res_condition'),
+            resConditionText: document.getElementById('res_condition_text'),
+            resPrice: document.getElementById('res_price'),
+            sumDevice: document.getElementById('sum_device'),
+            sumConfig: document.getElementById('sum_config'),
+            sumCondition: document.getElementById('sum_condition'),
+            sumPrice: document.getElementById('sum_price'),
+            name: document.getElementById('ph_name'),
+            phone: document.getElementById('ph_phone'),
+            submitBtn: document.getElementById('ph_submit_btn'),
+            cpTargetNum: document.getElementById('ph_cp_target_num'),
+            cpContainer: document.getElementById('ph_cp_buttons_container'),
+            cpSuccessMsg: document.getElementById('ph_cp_success_msg'),
+            sysName: document.getElementById('ph_sys_name'),
+            sysPhone: document.getElementById('ph_sys_phone'),
+            sysMessage: document.getElementById('ph_sys_message'),
+            sysSubmit: document.getElementById('ph_sys_submit')
+        };
+
+        this.initPhoneMask(this.els.phone);
+        this.populateBrands();
+    },
+
+    sanitizeInput: function(input) {
+        if (!input) return "";
+        var clean = input.replace(/<[^>]*>?/gm, '');
+        clean = clean.replace(/[\{\}\[\]\$`'"\\]/g, '');
+        return clean.substring(0, 100);
+    },
+
+    populateBrands: function() {
+        var self = this;
+        this.database.forEach(function(item) {
+            var option = document.createElement('option');
+            option.value = item.brand;
+            option.textContent = item.brand;
+            self.els.brand.appendChild(option);
+        });
+    },
+
+    updateModels: function() {
+        var els = this.els;
+        els.model.innerHTML = '<option value="">Выберите модель</option>';
+        els.config.innerHTML = '<option value="">Сначала выберите модель</option>';
+        els.model.disabled = true; els.config.disabled = true;
+
+        var selectedBrand = els.brand.value;
+        if (!selectedBrand) return;
+
+        var brandData = this.database.find(function(item) { return item.brand === selectedBrand; });
+        if (brandData) {
+            brandData.models.forEach(function(model) {
+                var option = document.createElement('option');
+                option.value = model.name;
+                option.textContent = model.name;
+                els.model.appendChild(option);
+            });
+            els.model.disabled = false;
+        }
+    },
+
+    updateConfigs: function() {
+        var els = this.els;
+        els.config.innerHTML = '<option value="">Выберите память</option>';
+        els.config.disabled = true;
+
+        var selectedBrand = els.brand.value;
+        var selectedModel = els.model.value;
+        if (!selectedBrand || !selectedModel) return;
+
+        var brandData = this.database.find(function(item) { return item.brand === selectedBrand; });
+        var modelData = brandData.models.find(function(m) { return m.name === selectedModel; });
+
+        if (modelData) {
+            for (var storage in modelData.configs) {
+                var price = modelData.configs[storage];
+                var option = document.createElement('option');
+                option.value = price;
+                option.textContent = storage;
+                els.config.appendChild(option);
+            }
+            els.config.disabled = false;
+        }
+    },
+
+    onConditionChange: function() {
+        var els = this.els;
+        var selectedVal = els.condition.value;
+        if (selectedVal && this.conditionTexts[selectedVal]) {
+            els.conditionDesc.textContent = this.conditionTexts[selectedVal];
+            els.conditionDesc.style.display = 'block';
+        } else {
+            els.conditionDesc.style.display = 'none';
+        }
+    },
+
+    initCaptcha: function() {
+        this.captchaSolved = false;
+        this.els.cpSuccessMsg.style.display = 'none';
+        this.els.cpContainer.innerHTML = '';
+        var target = Math.floor(Math.random() * 90) + 10;
+        this.captchaTarget = target;
+        this.els.cpTargetNum.textContent = target;
+        var options = [target];
+        while (options.length < 3) {
+            var r = Math.floor(Math.random() * 90) + 10;
+            if (!options.includes(r)) options.push(r);
+        }
+        options.sort(function() { return 0.5 - Math.random() });
+        var self = this;
+        options.forEach(function(num) {
+            var btn = document.createElement('div');
+            btn.className = 'cp-btn';
+            btn.textContent = num;
+            btn.onclick = function() { self.checkCaptcha(num, btn); };
+            self.els.cpContainer.appendChild(btn);
+        });
+    },
+
+    checkCaptcha: function(val, btnElem) {
+        if (this.captchaSolved) return;
+        if (val === this.captchaTarget) {
+            this.captchaSolved = true;
+            btnElem.classList.add('correct');
+            this.els.cpSuccessMsg.style.display = 'block';
+            var allBtns = this.els.cpContainer.children;
+            for (var i = 0; i < allBtns.length; i++) {
+                if (!allBtns[i].classList.contains('correct')) {
+                    allBtns[i].style.opacity = '0.5';
+                    allBtns[i].style.pointerEvents = 'none';
+                }
+            }
+        } else {
+            btnElem.classList.add('wrong');
+            setTimeout(function() { btnElem.classList.remove('wrong'); }, 500);
+        }
+    },
+
+    initPhoneMask: function(input) {
+        input.addEventListener('input', function(e) {
+            var value = input.value.replace(/\D+/g, "");
+            var result = "+";
+            if (input.value.includes('+8') || input.value[0] === '8') result = "";
+            if (value.length > 0) {
+                var firstDigit = value[0];
+                if (firstDigit === '9') { value = '7' + value; firstDigit = '7'; }
+                if (firstDigit === '8') { firstDigit = '7'; value = '7' + value.substring(1); }
+                if (firstDigit === '7') {
+                    result = "+7 (";
+                    if (value.length > 1) result += value.substring(1, 4);
+                    if (value.length >= 5) result += ") " + value.substring(4, 7);
+                    if (value.length >= 8) result += "-" + value.substring(7, 9);
+                    if (value.length >= 10) result += "-" + value.substring(9, 11);
+                } else return;
+                input.value = result;
+            } else input.value = "";
+        });
+    },
+
+    calculate: function() {
+        var els = this.els;
+        var basePrice = parseInt(els.config.value);
+        var conditionMultiplier = parseFloat(els.condition.value);
+        
+        if (isNaN(basePrice)) { alert("Выберите бренд, модель и память"); return; }
+        if (isNaN(conditionMultiplier)) { alert("Выберите состояние"); return; }
+        
+        var finalPrice = Math.floor((basePrice * conditionMultiplier) / 100) * 100;
+        var formattedPrice = 'до ' + finalPrice.toLocaleString('ru-RU') + ' ₽';
+        
+        this.tempData = {
+            device: els.brand.value + ' ' + els.model.value,
+            config: els.config.options[els.config.selectedIndex].text,
+            condition: els.condition.options[els.condition.selectedIndex].text,
+            price: formattedPrice,
+            conditionVal: els.condition.value
+        };
+
+        els.resDevice.textContent = this.tempData.device;
+        els.resConfig.textContent = this.tempData.config;
+        els.resCondition.textContent = this.tempData.condition;
+        els.resConditionText.textContent = this.conditionTexts[this.tempData.conditionVal];
+        els.resPrice.textContent = formattedPrice;
+
+        switchView('view_app', 'view_result');
+    },
+
+    goToForm: function() {
+        var els = this.els;
+        els.sumDevice.textContent = this.tempData.device;
+        els.sumConfig.textContent = this.tempData.config;
+        els.sumCondition.textContent = this.tempData.condition;
+        els.sumPrice.textContent = this.tempData.price;
+        this.initCaptcha();
+        switchView('view_result', 'view_form');
+    },
+
+    backToCalc: function() {
+        switchView('view_result', 'view_app');
+        switchView('view_form', 'view_app');
+    },
+    
+    backToResult: function() {
+        switchView('view_form', 'view_result');
+    },
+
+    sendToCSCart: function() {
+        var els = this.els;
+        var safeName = this.sanitizeInput(els.name.value);
+        var safePhone = this.sanitizeInput(els.phone.value);
+
+        if (safePhone.length < 18) { alert('Введите корректный номер телефона.'); return; }
+        if (safeName.length < 2) { alert('Введите ваше имя.'); return; }
+        if (!this.captchaSolved) { alert('Подтвердите, что вы не робот.'); return; }
+
+        var fullMessage = "Заявка PHONE.\nУстройство: " + this.tempData.device + 
+                          "\nПамять: " + this.tempData.config + 
+                          "\nСостояние: " + this.tempData.condition + 
+                          "\nОценка: " + this.tempData.price;
+        
+        els.sysName.value = safeName;
+        els.sysPhone.value = safePhone;
+        els.sysMessage.value = fullMessage;
+        
+        els.sysSubmit.click();
+        switchView('view_form', 'view_success');
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    TradeInPhoneCalc.init();
+});
+</script>
+{/literal}

@@ -1,0 +1,117 @@
+# SEO Homepage Reviews Block — GOODMi
+
+Правило оформления блока **«Отзывы покупателей GOODMi»** на главной (`HOMEPAGE-REVIEWS-SHORT-BLOCK-2026-03-24.html`).
+
+## Назначение
+- Зафиксировать стабильный HTML-паттерн витрины из **6 карточек**.
+- Упростить добавление новых отзывов: меняются только данные карточек, верстка/скрипт остаются неизменными.
+
+## Обязательная разметка блока (структура)
+1) Контейнер витрины:
+```html
+<div class="gm-block">
+  <section class="gm-section gm-homepage-reviews-short" aria-labelledby="home-reviews-heading">
+    ...
+  </section>
+</div>
+```
+
+2) Внутри блока:
+- Блок источников отзывов: `<div class="gm-review-sources" ...>...</div>` (оставлять как есть).
+- Перед источниками добавить блок рейтинга:
+  - `<div class="gm-reviews-rating-summary" role="img" aria-label="5.0 из 5 на основе COUNT оценок">`
+  - 5 звёзд + `На основе COUNT оценок` (как в текущем HTML).
+- Сетка карточек: `<div class="gm-services-grid" role="list">` и **ровно 6** `<article class="gm-service-card gm-homepage-review-card" role="listitem">`.
+- CTA в конце: `.gm-cta` с двумя кнопками:
+  - `Смотреть все отзывы` → `https://goodmi.ru/testimonials/`
+  - `Оставить отзыв` → `https://goodmi.ru/kak-ostavit-otzyv-o-nas/`
+- Скрипт-логика показа/скрытия кнопки “Читать полностью” (в конце файла) сохраняется без изменений.
+
+## Паттерн карточки отзыва (обязательный)
+Для каждой карточки строго используйте:
+
+1) Заголовок источника (без текста названия площадки):
+```html
+<h3 class="gm-review-source-title">
+  <span>Источник:</span><img class="gm-review-source-icon" src="..." alt="..." loading="lazy">
+</h3>
+```
+
+2) Шапка с аватаром:
+```html
+<div class="gm-review-head">
+  <div class="gm-review-user">
+    <img class="gm-review-avatar" src="..." alt="Имя пользователя" loading="lazy">
+    <div class="gm-review-user-meta">
+      <span class="gm-review-user-name">Имя пользователя</span>
+      <div class="gm-review-stars" role="img" aria-label="Рейтинг X из 5">
+        <!-- 5 звёзд: X заполненных и (5-X) пустых -->
+        <span class="gm-review-star gm-review-star--filled" aria-hidden="true">★</span>
+</div>
+
+<!-- Для X<5 добавь оставшиеся пустые звёзды: class gm-review-star--empty -->
+      <div class="gm-review-date">Дата отзыва</div>
+    </div>
+  </div>
+</div>
+```
+
+3) Текст отзыва с мобильной обрезкой:
+```html
+<div class="gm-review-text-collapsed">
+  <p class="gm-review-text">Текст отзыва</p>
+</div>
+```
+
+4) Кнопка “Читать полностью”:
+```html
+<button type="button" class="gm-review-show-more-btn" aria-expanded="false" aria-label="Читать полностью текст отзыва">
+  Читать полностью
+</button>
+```
+
+5) Ссылка на источник (иконка):
+```html
+<a href="URL источника" class="gm-service-link gm-review-source-anchor"
+   rel="nofollow noopener" target="_blank" aria-label="Открыть отзыв ...">
+  <img class="gm-review-source-icon" src="ICON_URL" alt="Источник" loading="lazy">
+  <span class="gm-review-source-view">Посмотреть &#8594;</span>
+</a>
+```
+
+## Маппинг `source` → иконка/URL
+Skill обязан поддерживать `source` (строго из списка):
+- `Авито`
+- `Яндекс Карты`
+- `ВКонтакте`
+- `Отзовик`
+- `Сайт`
+
+Сопоставление для карточек:
+- `Яндекс Карты`
+  - иконка: `https://res.smartwidgets.ru/res/review_yandex_map.svg`
+  - URL: `https://yandex.com/maps/959/sevastopol/chain/goodmi/3793837384/`
+- `ВКонтакте`
+  - иконка: `https://res.smartwidgets.ru/res/review_vk_market_reviews.svg`
+  - URL: `https://vk.com/reviews-126411469`
+- `Авито`
+  - иконка: `https://res.smartwidgets.ru/res/review_avito.svg`
+  - URL: `https://www.avito.ru/brands/i155162702`
+- `Отзовик`
+  - иконка: `https://res.smartwidgets.ru/res/review_otzovik.svg`
+  - URL: `https://otzovik.com/reviews/mi92_ru-internet-magazin_tehniki_xiaomi/`
+- `Сайт`
+  - иконка: `https://goodmi.ru/images/logos/72/GOODMi_%D0%BB%D0%BE%D0%B3%D0%BE-%D0%BD%D0%B0%D0%B4%D0%BF%D0%B8%D1%81%D1%8C_.svg`
+  - URL: `https://goodmi.ru/testimonials/`
+
+## JSON-LD Review (критично для GSC)
+- В каждом объекте `Review` внутри `ItemList.itemListElement[].item` обязательно добавлять поле:
+  - `"itemReviewed": { "@id": "https://goodmi.ru/#organization" }`
+- `@id` должен ссылаться на ту же сущность `Organization`, которая описана в этом же `@graph`.
+- Нельзя оставлять `Review` без `itemReviewed`, иначе в GSC появляется критическая ошибка «Отсутствует поле itemReviewed».
+
+## Запрещено
+- Не менять классы и структуру карточек (это ломает JS и мобильную обрезку).
+- Не менять порог обрезки (`170px`) без согласования с текущей JS-логикой.
+- Не добавлять/не удалять кнопку “Читать полностью” для карточек (должно быть 6 кнопок).
+

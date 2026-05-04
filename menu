@@ -1,0 +1,209 @@
+<style>
+  /* GOODMi icon menu (HTML+Smarty block) */
+  .gmIconMenu {
+    --gm-gap: 16px;
+    --gm-item-size: 110px; /* desktop default */
+    --gm-label-size: 14px;
+    width: 100%;
+  }
+
+  .gmIconMenu__inner {
+    width: 100%;
+  }
+
+  .gmIconMenu__row {
+    display: flex;
+    gap: var(--gm-gap);
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .gmIconMenu__row--scroll {
+    overflow-x: auto;            /* нужен скролл */
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding-bottom: 2px; /* чтобы скроллбар не “наезжал” на контент */
+  }
+
+  /* Стилизация скроллбара (опционально) */
+  .gmIconMenu__row--scroll::-webkit-scrollbar {
+    height: 8px;
+  }
+  .gmIconMenu__row--scroll::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.25);
+    border-radius: 8px;
+  }
+  .gmIconMenu__row--scroll::-webkit-scrollbar-track {
+    background: rgba(0,0,0,.06);
+    border-radius: 8px;
+  }
+
+  .gmIconMenu__item {
+    width: var(--gm-item-size);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+    user-select: none;
+  }
+
+  .gmIconMenu__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .gmIconMenu__label {
+    margin-top: 10px;
+    font-size: var(--gm-label-size);
+    line-height: 1.15;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  /* Mobile labels a bit smaller (иконки подгоняются JS) */
+  @media (max-width: 767.98px) {
+    .gmIconMenu {
+      --gm-label-size: 12px;
+    }
+  }
+</style>
+
+<div class="gmIconMenu" id="gmIconMenuCategories">
+  <div class="gmIconMenu__inner">
+    <div class="gmIconMenu__row gmIconMenu__row1">
+      <a class="gmIconMenu__item" data-gm-index="0" href="https://goodmi.ru/smartfonyi/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/1-phone.png" alt="Смартфоны Xiaomi, Redmi и POCO" loading="lazy">
+        <span class="gmIconMenu__label">Смартфоны Xiaomi</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="1" href="https://goodmi.ru/planshetyi/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/2-pads.png" alt="Планшеты Xiaomi Pad и Redmi Pad" loading="lazy">
+        <span class="gmIconMenu__label">Планшеты Xiaomi</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="2" href="https://goodmi.ru/televizory-xiaomi/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/3-tv.png" alt="Телевизоры Xiaomi 4K и miniLED" loading="lazy">
+        <span class="gmIconMenu__label">Телевизоры Xiaomi</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="3" href="https://goodmi.ru/smart-chasy/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/4-watch.png" alt="Смарт-часы Xiaomi и Amazfit" loading="lazy">
+        <span class="gmIconMenu__label">Смарт-часы</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="4" href="https://goodmi.ru/roboty-pylesosy/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/5-for-home.png" alt="Роботы-пылесосы Xiaomi для дома" loading="lazy">
+        <span class="gmIconMenu__label">Роботы-пылесосы</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="5" href="https://goodmi.ru/gril/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/6-for-kitchen.png" alt="Аэрогрили Xiaomi" loading="lazy">
+        <span class="gmIconMenu__label">Аэрогрили</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="6" href="https://goodmi.ru/monitory-xiaomi/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/7-camera.png" alt="Игровые мониторы Xiaomi" loading="lazy">
+        <span class="gmIconMenu__label">Мониторы Xiaomi</span>
+      </a>
+      <a class="gmIconMenu__item" data-gm-index="7" href="https://goodmi.ru/treyd-in-goodmi/">
+        <img src="https://goodmi.ru/images/companies/2/Menu/Home/8-trade-in.png" alt="Трейд-ин" loading="lazy">
+        <span class="gmIconMenu__label">Трейд-ин</span>
+      </a>
+    </div>
+    <div class="gmIconMenu__row gmIconMenu__row2" style="display:none;"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  (function () {
+    var root = document.getElementById('gmIconMenuCategories');
+    if (!root) return;
+
+    var row1 = root.querySelector('.gmIconMenu__row1');
+    var row2 = root.querySelector('.gmIconMenu__row2');
+    // Все ссылки уже присутствуют в HTML. JS только переставляет элементы в зависимости от ширины.
+    var items = Array.prototype.slice.call(root.querySelectorAll('.gmIconMenu__item'));
+
+    var GAP = 16;
+    var BREAKPOINT_MOBILE = 768;
+    var ITEM_DESKTOP = 110;
+    var SCROLL_THRESHOLD = 4; // когда остается только 4 - убираем из скрола и показываем вторым рядом
+
+    function setItemsToRow(row, startIndex, count) {
+      // Убираем текущие элементы и вставляем нужные из уже существующих ссылок
+      while (row.firstChild) row.removeChild(row.firstChild);
+      var end = startIndex + count;
+      for (var i = startIndex; i < end && i < items.length; i++) {
+        row.appendChild(items[i]);
+      }
+    }
+
+    function layout() {
+      var width = root.clientWidth;
+      if (!width) return;
+
+      // MOBILE: < 768px => 2 ряда по 4, размер иконки под ширину
+      if (width < BREAKPOINT_MOBILE) {
+        row1.classList.remove('gmIconMenu__row--scroll');
+        row1.style.overflowX = 'visible';
+        row2.style.display = 'flex';
+
+        var iconSize = Math.floor((width - (GAP * 3)) / 4);
+        if (iconSize < 60) iconSize = 60; // защита от слишком узких ширин
+
+        root.style.setProperty('--gm-item-size', iconSize + 'px');
+
+        setItemsToRow(row1, 0, 4);
+        setItemsToRow(row2, 4, 4);
+        return;
+      }
+
+      // DESKTOP
+      root.style.setProperty('--gm-item-size', ITEM_DESKTOP + 'px');
+      row2.style.display = 'none';
+
+      // сколько "ячеек" помещается по ширине
+      // cell = item + gap, при flex gap учитываем добавку (width + gap)
+      var cell = ITEM_DESKTOP + GAP;
+      var perRow = Math.floor((width + GAP) / cell);
+      if (!perRow) perRow = 1;
+      if (perRow > items.length) perRow = items.length;
+
+      if (perRow === items.length) {
+        // помещаются все 8 => без скролла
+        row1.classList.remove('gmIconMenu__row--scroll');
+        row1.style.overflowX = 'visible';
+        setItemsToRow(row1, 0, items.length);
+        row2.innerHTML = '';
+        return;
+      }
+
+      if (perRow <= SCROLL_THRESHOLD) {
+        // видны только первые 4 => убираем остальное из скрола, показываем 2-й ряд
+        row1.classList.remove('gmIconMenu__row--scroll');
+        row1.style.overflowX = 'visible';
+
+        row2.style.display = 'flex';
+        setItemsToRow(row1, 0, perRow); // обычно будет 4
+        setItemsToRow(row2, perRow, items.length - perRow);
+        return;
+      }
+
+      // видны 5..7 => скролл в первом ряду
+      row1.classList.add('gmIconMenu__row--scroll');
+      row1.style.overflowX = 'auto';
+      setItemsToRow(row1, 0, items.length);
+      row2.innerHTML = '';
+    }
+
+    var t = null;
+    window.addEventListener('resize', function () {
+      if (t) clearTimeout(t);
+      t = setTimeout(layout, 80);
+    });
+
+    // first paint
+    layout();
+  })();
+</script>
+

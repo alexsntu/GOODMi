@@ -1,0 +1,422 @@
+---
+description: Стандарт генерации SEO HTML-блоков для статей блога GOODMi (goodmi.ru/blog/). Применяется при создании, оптимизации или переработке статей блога: обзоры, советы, новости, гайды по технике Xiaomi. Отличие от seo--for-shop-html-block — информационный + коммерческий интент, JSON-LD BlogPosting, блок автора, Key Facts box.
+globs: "**/*.html"
+alwaysApply: false
+---
+
+# SEO HTML-блоки статей блога GOODMi — стандарт CS-Cart
+
+## Бренд и контакты
+
+- Бренд: `GOODMi` (не Goodmi, не GOODMI)
+- Телефон: `8 (800) 250-17-00` / `href="tel:+78002501700"` — бесплатно
+- Сайт: `https://goodmi.ru` · Блог: `https://goodmi.ru/blog-xiaomi-na-russkom/`
+- Логотип: `https://goodmi.ru/images/logos/goodmi-logo.png`
+- Специализация: фирменный магазин техники Xiaomi в Крыму с 2015 года
+- Рейтинг: 5.0 / 500+ отзывов на Яндексе
+
+---
+
+## Структура файла (строго в порядке)
+
+1. `<script type="application/ld+json">` — JSON-LD
+2. `<div class="gm-block gm-article" itemscope itemtype="https://schema.org/Article">`
+   - **Article header** `.gm-article-header`
+   - **Key Facts box** `.gm-article-key-facts` ← GEO: первичный цитируемый элемент
+   - **TOC** `.gm-article-toc` *(только если 4+ секций H2)*
+   - **Article body** `.gm-article-body`
+   - **FAQ** `<section class="gm-faq">` ← AEO
+   - **CTA** `.gm-cta`
+   - **Author box** `.gm-article-author` ← E-E-A-T (всегда последний блок статьи)
+
+> `<style>` теги внутри HTML-блока **ЗАПРЕЩЕНЫ**. Весь CSS — в `goodmi-styles.css`.
+> Эмодзи-символы напрямую **ЗАПРЕЩЕНЫ** — только HTML-сущности (см. таблицу ниже).
+
+---
+
+## JSON-LD — обязательные типы
+
+`@graph` содержит:
+- `BlogPosting` — headline, description (150–160 chars), datePublished, dateModified, author, publisher с logo, image (если есть), url, inLanguage: `"ru"`, keywords (3–7 слов), speakable, mainEntityOfPage
+- `BreadcrumbList` — 3 уровня: Главная → Блог → Заголовок статьи
+- `FAQPage` — те же 4 вопроса, что и HTML-секция FAQ (должны совпадать)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/#article",
+      "headline": "ЗАГОЛОВОК",
+      "description": "ОПИСАНИЕ 150–160 СИМВОЛОВ",
+      "datePublished": "YYYY-MM-DD",
+      "dateModified": "YYYY-MM-DD",
+      "inLanguage": "ru",
+      "url": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/",
+      "keywords": ["ключевое слово", "Xiaomi", "GOODMi"],
+      "author": { "@type": "Organization", "name": "GOODMi", "url": "https://goodmi.ru" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "GOODMi",
+        "logo": { "@type": "ImageObject", "url": "https://goodmi.ru/images/logos/goodmi-logo.png" }
+      },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/" },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [".gm-article-key-facts", ".gm-faq"]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://goodmi.ru/" },
+        { "@type": "ListItem", "position": 2, "name": "Блог", "item": "https://goodmi.ru/blog-xiaomi-na-russkom/" },
+        { "@type": "ListItem", "position": 3, "name": "ЗАГОЛОВОК", "item": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/" }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## Article header
+
+```html
+<header class="gm-article-header">
+  <div class="gm-article-tags">
+    <a class="gm-article-tag" href="https://goodmi.ru/blog-xiaomi-na-russkom/">Блог GOODMi</a>
+    <a class="gm-article-tag" href="https://goodmi.ru/blog-xiaomi-na-russkom/poleznoe/">КАТЕГОРИЯ</a>
+  </div>
+
+  <!-- H1 — только если H1 НЕ задан отдельно в настройках CS-Cart -->
+  <h1 class="gm-article-title" itemprop="headline">ЗАГОЛОВОК СТАТЬИ</h1>
+</header>
+```
+
+**Ссылка на объект-категорию блога:**
+- Ссылка на основной блог для тега `Блог GOODMi` всегда: `https://goodmi.ru/blog-xiaomi-na-russkom/`.
+- Ссылка на категорию (второй тег в `.gm-article-tags`) берется автоматически из фиксированного списка разрешенных категорий ниже.
+- URL категории у пользователя не запрашивается.
+
+**Разрешённые категории блога (использовать только этот список):**
+- `Обзоры` → `https://goodmi.ru/blog-xiaomi-na-russkom/obzory/`
+- `База знаний` → `https://goodmi.ru/blog-xiaomi-na-russkom/poleznoe/`
+- `Новости` → `https://goodmi.ru/blog-xiaomi-na-russkom/novosti/`
+- `Статьи` → `https://goodmi.ru/blog-xiaomi-na-russkom/stati/`
+- `Видео` → `https://goodmi.ru/blog-xiaomi-na-russkom/video/`
+
+Новые/другие категории добавлять нельзя. Если категория вне списка, нужно запросить уточнение у пользователя.
+
+Блок с автором, датой и временем чтения в начале статьи не выводится в HTML — эти данные показывает CS-Cart.
+
+**H1 всегда задан в CS-Cart отдельно** — тег `<h1>` в HTML-блок не добавлять, первый заголовок в теле статьи — H2.
+
+---
+
+## Обязательные параметры для сборки статьи
+
+Запрашиваются 4 параметра — все сразу, одним сообщением:
+
+1. `slug` статьи
+2. Дата публикации (`YYYY-MM-DD`)
+3. Категория из разрешенного списка (`Обзоры`, `База знаний`, `Новости`, `Статьи`, `Видео`)
+4. Ссылки для перелинковки (необязательно) — формат: `Анкор -> URL`. Если нет — `нет`.
+
+Правила:
+- Все 4 параметра запрашиваются каждый раз, без исключений.
+- URL категории не запрашивается и определяется автоматически по выбранной категории.
+- Подтверждение по H1 не запрашивается (H1 всегда задан отдельно в CS-Cart).
+- Подтверждение главного изображения не запрашивается (всегда использовать текущее изображение из исходной статьи).
+- Если пользователь ответил `нет` на параметр 4 — блок перелинковки не добавляется.
+- Если пользователь передал ссылки — они добавляются строго в блок «Что выбрать в каталоге GOODMi» в конце body, без изменения анкоров и URL.
+
+---
+
+## Key Facts box (GEO — основной элемент цитирования AI)
+
+```html
+<div class="gm-article-key-facts">
+  <p class="gm-article-key-facts-title">&#x2714;&nbsp; Ключевые факты</p>
+  <ul class="gm-article-key-facts-list">
+    <li>Факт 1 — конкретный, самодостаточный</li>
+    <li>Факт 2</li>
+    <li>Факт 3</li>
+  </ul>
+</div>
+```
+
+**Правила Key Facts:**
+- 3–5 пунктов, каждый понятен без контекста статьи
+- Конкретные данные: числа, даты, технические характеристики
+- Не отсылки к тексту («как сказано выше», «согласно статье»)
+- `speakable` указывает на `.gm-article-key-facts` — AI цитирует этот блок первым
+
+---
+
+## Table of Contents (если 4+ секций H2)
+
+```html
+<nav class="gm-article-toc" aria-label="Содержание статьи">
+  <p class="gm-article-toc-title">Содержание</p>
+  <ol class="gm-article-toc-list">
+    <li><a class="gm-article-toc-link" href="#section-1">Раздел 1</a></li>
+    <li><a class="gm-article-toc-link" href="#section-2">Раздел 2</a></li>
+  </ol>
+</nav>
+```
+
+Каждый H2 в `.gm-article-body` **обязан** иметь уникальный `id`, совпадающий с href в TOC.
+
+---
+
+## Article body — правила разметки
+
+```html
+<div class="gm-article-body" itemprop="articleBody">
+  <section id="section-1">
+    <h2>Заголовок раздела</h2>
+    <p>Абзац — самодостаточный, понятен без контекста.</p>
+  </section>
+
+  <!-- Pull-quote для ключевых утверждений -->
+  <blockquote class="gm-article-pullquote">
+    <p>«Ключевая цитата или важный тезис»</p>
+  </blockquote>
+
+  <!-- Подсказка / callout — переиспользует gm-highlight -->
+  <div class="gm-highlight">
+    <span class="gm-highlight-icon" aria-hidden="true">&#x1F4A1;</span>
+    <div class="gm-highlight-body"><p><strong>Совет:</strong> текст.</p></div>
+  </div>
+
+  <!-- Шаги процесса — переиспользует gm-howto-steps -->
+  <ol class="gm-howto-steps" itemscope itemtype="https://schema.org/HowTo">
+    <li class="gm-howto-step" itemprop="step" itemscope itemtype="https://schema.org/HowToStep">
+      <div class="gm-howto-step-body">
+        <strong itemprop="name">Шаг 1</strong>
+        <p itemprop="text">Описание.</p>
+      </div>
+    </li>
+  </ol>
+
+  <!-- Изображение -->
+  <figure>
+    <img src="URL" alt="Описание" itemprop="image" loading="lazy"
+         style="width:100%;height:auto;border-radius:16px;display:block;">
+    <figcaption>Подпись</figcaption>
+  </figure>
+</div>
+```
+
+Перед блоком Key Facts обязательно выводить вводный `.gm-intro-text` как отдельный визуальный блок (в `goodmi-styles.css`: фон + внутренние отступы + нижний отступ к Key Facts; стандартный интервал до Key Facts `20px`, на мобильных `16px`).
+
+**Правила body:**
+- Каждый абзац самодостаточен (GEO: AI вырезает куски дословно)
+- Нет межабзацных отсылок: «как мы писали», «см. выше», «в предыдущем разделе»
+- Ссылки на товары GOODMi: `<a href="https://goodmi.ru/[slug]/">` без `target="_blank"`
+- Внешние ссылки: `rel="noopener"` или `rel="nofollow noopener"`
+
+---
+
+## Перелинковка: блок «Что выбрать в каталоге GOODMi»
+
+Если пользователь передал список ссылок и анкоров, обязательно добавляй их в конце `.gm-article-body` отдельным блоком:
+
+```html
+<section class="gm-section" aria-labelledby="catalog-links-heading">
+  <h3 id="catalog-links-heading">Что выбрать в каталоге GOODMi</h3>
+  <ul>
+    <li><a href="https://goodmi.ru/primer-1/">Анкор 1</a></li>
+    <li><a href="https://goodmi.ru/primer-2/">Анкор 2</a></li>
+  </ul>
+</section>
+```
+
+Правила:
+- Ссылки берутся строго из данных пользователя (URL + анкор), без самовольной замены.
+- Количество ссылок = количеству, которое передал пользователь.
+- Ссылки должны открываться в текущем окне: не добавлять `target="_blank"`.
+- Для этих ссылок не добавлять `rel="nofollow"` и `rel="noopener"`.
+- Для блока перелинковки не использовать класс `.gm-cta` (он зарезервирован под финальный контактный CTA и имеет темный фон).
+- Блок размещать после основного контента статьи (в конце body), до Author box.
+
+---
+
+## Author box (E-E-A-T)
+
+Блок автора всегда размещается в самом конце статьи: после FAQ и CTA, непосредственно перед закрывающим `</div>` обёртки `.gm-block.gm-article`.
+
+Между блоками `.gm-cta` и `.gm-article-author` обязательно сохраняется визуальный вертикальный отступ (стандарт: `16px` через CSS в `goodmi-styles.css`).
+
+```html
+<div class="gm-article-author">
+  <span class="gm-article-author-icon" aria-hidden="true">&#x1F464;</span>
+  <div class="gm-article-author-body">
+    <strong>Команда GOODMi</strong>
+    <p>Специалисты фирменного магазина техники Xiaomi в Крыму. Работаем с 2015 года,
+       фирменный магазин техники Xiaomi в Крыму &#8212; знаем технику изнутри.</p>
+  </div>
+</div>
+```
+
+**Варианты иконки:** `&#x1F464;` — общий автор · `&#x1F50D;` — сервисный центр
+
+**E-E-A-T сигналы** — обязательно вплетать в текст статьи:
+
+| Фактор | Формулировка |
+|---|---|
+| Experience | «с 2015 года», «более 10 лет», конкретные цифры |
+| Expertise | «фирменный магазин техники Xiaomi», технические факты |
+| Authoritativeness | «крупнейший магазин Xiaomi в Крыму», рейтинг 5.0 / 500+ отзывов |
+| Trustworthiness | Реальный адрес, дата публикации, официальная гарантия |
+
+> E-E-A-T — только как фактические утверждения, не рекламные лозунги.
+
+---
+
+## FAQ — требования AEO
+
+```html
+<section class="gm-faq" aria-labelledby="faq-heading"
+         itemscope itemtype="https://schema.org/FAQPage">
+  <h2 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы</h2>
+
+  <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <p class="gm-faq-question" itemprop="name">ВОПРОС</p>
+    <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">ПРЯМОЙ ОТВЕТ первым предложением. Детали далее. 40–80 слов.</p>
+    </div>
+  </div>
+</section>
+```
+
+**4 вопроса, покрывают 4 интента:**
+
+| № | Тип | Пример |
+|---|---|---|
+| 1 | Тема статьи | «Чем Xiaomi 15 отличается от Xiaomi 14?» |
+| 2 | Покупка / доставка | «Где купить [тема] в Севастополе?» |
+| 3 | Гарантия / сервис | «Какая гарантия на технику Xiaomi в GOODMi?» |
+| 4 | Сравнение / выбор | «Что лучше: [вариант A] или [вариант B]?» |
+
+**Правила AEO:**
+- Первое предложение каждого ответа = полный прямой ответ
+- Не начинать с «Это зависит от...», «Мы рекомендуем...», «Отвечаем:»
+- JSON-LD `FAQPage` содержит те же 4 вопроса — дословно совпадают с HTML
+
+---
+
+## GEO (Generative Engine Optimization)
+
+Оптимизация под AI-поисковики: ChatGPT Search, Gemini, Perplexity.
+
+| Принцип | Применение |
+|---|---|
+| Самодостаточность | Каждый абзац понятен без контекста — AI вырезает куски |
+| Key Facts box | Первичный цитируемый элемент — конкретные standalone-факты |
+| speakable | `.gm-article-key-facts` + `.gm-faq` |
+| Прямой ответ | `BlogPosting.description` — 40–60 слов, прямо отвечает на главный вопрос статьи |
+| Бренд + гео | Естественное упоминание GOODMi + «в Крыму» / «в Севастополе» в коммерческом контексте |
+
+---
+
+## CTA
+
+```html
+<div class="gm-cta" role="complementary" aria-label="Контакты GOODMi">
+  <div class="gm-cta-text">
+    <h3>Нужна помощь с выбором?</h3>
+    <p>Напишите нам на почту или воспользуйтесь онлайн-чатом на странице &#8212;
+       специалисты GOODMi помогут выбрать устройство и оформить покупку. Или звоните бесплатно.</p>
+  </div>
+  <div class="gm-cta-actions">
+    <a href="mailto:store@goodmi.ru" class="gm-btn gm-btn-primary"
+       aria-label="Написать на почту GOODMi">&#x2709;&nbsp; store@goodmi.ru</a>
+    <a href="tel:+78002501700" class="gm-btn gm-btn-secondary"
+       aria-label="Позвонить бесплатно 8-800-250-17-00">&#x260E;&nbsp; 8 (800) 250-17-00</a>
+  </div>
+</div>
+```
+
+---
+
+## CSS — белый список классов для статей
+
+```
+Обёртка:      gm-block · gm-article
+Header:       gm-article-header · gm-article-tags · gm-article-tag
+              gm-article-title
+Key Facts:    gm-article-key-facts · gm-article-key-facts-title · gm-article-key-facts-list
+TOC:          gm-article-toc · gm-article-toc-title · gm-article-toc-list · gm-article-toc-link
+Body:         gm-article-body
+Pull-quote:   gm-article-pullquote
+Author:       gm-article-author · gm-article-author-icon · gm-article-author-body
+FAQ:          gm-faq · gm-faq-item · gm-faq-question · gm-faq-answer
+Section:      gm-section · gm-section-title
+Highlight:    gm-highlight · gm-highlight-icon · gm-highlight-body
+HowTo:        gm-howto-steps · gm-howto-step · gm-howto-step-body
+CTA:          gm-cta · gm-cta-text · gm-cta-actions · gm-btn · gm-btn-primary · gm-btn-secondary
+```
+
+---
+
+## Таблица HTML-сущностей
+
+| Символ | Сущность | | Символ | Сущность |
+|--------|----------|-|--------|----------|
+| ✔ | `&#x2714;` | | 💡 | `&#x1F4A1;` |
+| ⚡ | `&#x26A1;` | | 🔋 | `&#x1F50B;` |
+| 📱 | `&#x1F4F1;` | | 👤 | `&#x1F464;` |
+| 💻 | `&#x1F4BB;` | | 📅 | `&#x1F4C5;` |
+| 📷 | `&#x1F4F7;` | | 🕐 | `&#x1F550;` |
+| 🛡 | `&#x1F6E1;` | | 🔍 | `&#x1F50D;` |
+| 🚚 | `&#x1F69A;` | | ⭐ | `&#x2B50;` |
+| 🔄 | `&#x1F504;` | | — | `&#8212;` |
+| ☎ | `&#x260E;` | | · | `&#183;` |
+| 💬 | `&#x1F4AC;` | | ₽ | `&#8381;` |
+
+---
+
+## Чеклист перед выводом HTML
+
+**Структура:**
+- [ ] Нет `<style>` тегов, нет сырых эмодзи
+- [ ] Каждый H2 в body имеет уникальный `id`
+- [ ] TOC href совпадают с `id` заголовков (или TOC отсутствует при < 4 H2)
+- [ ] Key Facts: 3–5 самодостаточных пунктов
+- [ ] Если пользователь передал ссылки для перелинковки, добавлен блок «Что выбрать в каталоге GOODMi» с теми же URL и анкорами
+- [ ] Author box присутствует с описанием экспертизы
+- [ ] FAQ: 4 вопроса, первое предложение = прямой ответ, 40–80 слов
+
+**JSON-LD:**
+- [ ] `BlogPosting.description` — 150–160 символов
+- [ ] `datePublished` — ISO 8601 (YYYY-MM-DD)
+- [ ] `speakable.cssSelector` = `[".gm-article-key-facts", ".gm-faq"]`
+- [ ] `BreadcrumbList` — ровно 3 уровня
+- [ ] `FAQPage` дословно совпадает с HTML FAQ
+
+**GEO/AEO/E-E-A-T:**
+- [ ] Key Facts пункты — без отсылок к статье, standalone
+- [ ] Абзацы body — без межсекционных ссылок
+- [ ] E-E-A-T как фактические утверждения, не лозунги
+- [ ] FAQ ответы начинаются с прямого ответа
+
+---
+
+## Вывод результата в чат
+
+- Готовый HTML-код статьи в чат **не выводить**.
+- После генерации и сохранения файла отвечать в чате **кратко**: что результат готов и записан в файл (указать путь к файлу).
+
+---
+
+## Зафиксированный паттерн блока преимуществ (обновление 2026-03-24)
+
+Если в статье/SEO-блоке нужен блок преимуществ магазина, и карточечная сетка на `.gm-advantages-list` конфликтует с темой, использовать стабильный шаблон:
+
+- `.gm-trust-strip` для 4 преимуществ,
+- `.gm-highlight` для отдельного акцентного пункта.
+
+Не использовать временные локальные модификаторы сетки (`--equal`, точечные id-хаки для колонок) как постоянное решение. Базовый приоритет — предсказуемая адаптивность и отсутствие визуальных артефактов.

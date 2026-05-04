@@ -1,0 +1,75 @@
+<section class="gm-quick-links-top gm-section" aria-label="Быстрые ссылки по категориям">
+  <div class="gm-quick-links-top-inner">
+    <nav id="gm-ql-televizory-xiaomi-top-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-tv-a-2026/" class="gm-quick-link">Xiaomi TV A 2026</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-tv-a-pro-2026/" class="gm-quick-link">Xiaomi TV A Pro 2026</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/tv-s-mini-led-25/" class="gm-quick-link">TV S Mini LED</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/tv-a-2025-pro/" class="gm-quick-link">TV A Pro 2025</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/tv-a-2025/" class="gm-quick-link">TV A 2025</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/qd-mini-led/" class="gm-quick-link">mini LED</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/qled/" class="gm-quick-link">QLED</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/s-razresheniem-4k/" class="gm-quick-link">4K</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-32/" class="gm-quick-link">32 дюйма</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-43/" class="gm-quick-link">43 дюйма</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-50/" class="gm-quick-link">50 дюймов</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-55/" class="gm-quick-link">55 дюймов</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-65/" class="gm-quick-link">65 дюймов</a>
+      <a href="https://goodmi.ru/televizory-xiaomi/xiaomi-75/" class="gm-quick-link">75 дюймов</a>
+    </nav>
+    <div class="gm-ql-trigger">
+      <button id="gm-ql-televizory-xiaomi-top-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-televizory-xiaomi-top-nav">
+        <span class="gm-ql-btn-text">Показать ещё</span>
+        <span class="gm-ql-chevron" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-televizory-xiaomi-top-nav');
+  var btn = document.getElementById('gm-ql-televizory-xiaomi-top-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>

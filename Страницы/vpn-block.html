@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Доступ ограничен — GOODMi</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    /* ── Сброс и основа ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gm-orange:       #FF6900;
+      --gm-orange-dark:  #E55A00;
+      --gm-orange-light: #FFF0E6;
+      --gm-black:        #1C1C1C;
+      --gm-gray-1:       #3D3D3D;
+      --gm-gray-2:       #6B6B6B;
+      --gm-border:       #E5E5E5;
+      --gm-surface:      #F5F5F5;
+      --gm-white:        #FFFFFF;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
+                   system-ui, -apple-system, Arial, sans-serif;
+      color: var(--gm-black);
+      background: var(--gm-surface);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Шапка ── */
+    .vpn-header {
+      background: var(--gm-white);
+      border-bottom: 1px solid var(--gm-border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .vpn-header__logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .vpn-header__logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gm-orange);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .vpn-header__logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+    }
+
+    .vpn-header__logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gm-black);
+      letter-spacing: -0.3px;
+    }
+
+    .vpn-header__logo-text span {
+      color: var(--gm-orange);
+    }
+
+    /* ── Основная область ── */
+    .vpn-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .vpn-card {
+      background: var(--gm-white);
+      border-radius: 20px;
+      border: 1px solid var(--gm-border);
+      padding: 48px 40px 44px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ── Иконка-щит ── */
+    .vpn-icon-wrap {
+      width: 88px;
+      height: 88px;
+      background: var(--gm-orange-light);
+      border-radius: 50%;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vpn-icon-wrap svg {
+      width: 44px;
+      height: 44px;
+    }
+
+    /* ── Бейдж «Доступ ограничен» ── */
+    .vpn-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gm-orange-light);
+      color: var(--gm-orange);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .vpn-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: var(--gm-orange);
+      border-radius: 50%;
+    }
+
+    /* ── Заголовок ── */
+    .vpn-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gm-black);
+      letter-spacing: -0.4px;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+
+    /* ── Основной текст ── */
+    .vpn-text {
+      font-size: 15px;
+      color: var(--gm-gray-1);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .vpn-text strong {
+      color: var(--gm-black);
+      font-weight: 600;
+    }
+
+    /* ── Шаги ── */
+    .vpn-steps {
+      background: var(--gm-surface);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .vpn-steps__title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--gm-gray-2);
+      margin-bottom: 14px;
+    }
+
+    .vpn-steps__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .vpn-steps__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--gm-gray-1);
+      line-height: 1.5;
+    }
+
+    .vpn-steps__num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--gm-orange);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* ── Кнопка «Обновить» ── */
+    .vpn-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 15px 28px;
+      background: var(--gm-orange);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.18s ease, transform 0.12s ease;
+      letter-spacing: -0.1px;
+    }
+
+    .vpn-btn:hover {
+      background: var(--gm-orange-dark);
+    }
+
+    .vpn-btn:active {
+      transform: scale(0.98);
+    }
+
+    .vpn-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    /* ── Нижний текст ── */
+    .vpn-note {
+      font-size: 13px;
+      color: var(--gm-gray-2);
+      margin-top: 18px;
+      line-height: 1.55;
+    }
+
+    .vpn-note a {
+      color: var(--gm-orange);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .vpn-note a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Подвал ── */
+    .vpn-footer {
+      background: var(--gm-white);
+      border-top: 1px solid var(--gm-border);
+      padding: 18px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--gm-gray-2);
+    }
+
+    .vpn-footer a {
+      color: var(--gm-orange);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ── Адаптив ── */
+    @media (max-width: 560px) {
+      .vpn-card {
+        padding: 36px 24px 32px;
+        border-radius: 16px;
+      }
+
+      .vpn-title {
+        font-size: 22px;
+      }
+
+      .vpn-steps {
+        padding: 16px 18px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .vpn-card {
+        padding: 28px 16px 24px;
+      }
+
+      .vpn-title {
+        font-size: 20px;
+      }
+
+      .vpn-icon-wrap {
+        width: 72px;
+        height: 72px;
+      }
+
+      .vpn-icon-wrap svg {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Шапка -->
+  <header class="vpn-header">
+    <a class="vpn-header__logo" href="https://goodmi.ru/">
+      <div class="vpn-header__logo-icon">
+        <!-- Стилизованный логотип Xiaomi -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 3a7 7 0 110 14A7 7 0 0112 5zm0 2a5 5 0 100 10A5 5 0 0012 7zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+        </svg>
+      </div>
+      <span class="vpn-header__logo-text">GOOD<span>Mi</span></span>
+    </a>
+  </header>
+
+  <!-- Основной контент -->
+  <main class="vpn-main">
+    <div class="vpn-card">
+
+      <!-- Иконка щита -->
+      <div class="vpn-icon-wrap">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 4L8 10v14c0 9.4 6.8 18.2 16 20 9.2-1.8 16-10.6 16-20V10L24 4z" fill="#FF6900" opacity="0.15"/>
+          <path d="M24 4L8 10v14c0 9.4 6.8 18.2 16 20 9.2-1.8 16-10.6 16-20V10L24 4z" stroke="#FF6900" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M24 17v7" stroke="#FF6900" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="24" cy="29" r="1.6" fill="#FF6900"/>
+        </svg>
+      </div>
+
+      <!-- Бейдж -->
+      <div class="vpn-badge">Доступ ограничен</div>
+
+      <!-- Заголовок -->
+      <h1 class="vpn-title">
+        Похоже, вы&nbsp;не&nbsp;из России<br>или используете VPN
+      </h1>
+
+      <!-- Текст -->
+      <p class="vpn-text">
+        Интернет-магазин <strong>GOODMi</strong> работает только для жителей
+        России. Мы&nbsp;определили, что ваш запрос пришёл из&nbsp;другой страны
+        или через VPN&#8209;сервис.
+      </p>
+
+      <!-- Шаги -->
+      <div class="vpn-steps">
+        <p class="vpn-steps__title">Что нужно сделать</p>
+        <ul class="vpn-steps__list">
+          <li class="vpn-steps__item">
+            <span class="vpn-steps__num">1</span>
+            <span>Отключите VPN или прокси-сервис на вашем устройстве</span>
+          </li>
+          <li class="vpn-steps__item">
+            <span class="vpn-steps__num">2</span>
+            <span>Нажмите кнопку ниже или вручную обновите страницу (F5)</span>
+          </li>
+          <li class="vpn-steps__item">
+            <span class="vpn-steps__num">3</span>
+            <span>Если ошибка повторяется — очистите кэш браузера и попробуйте снова</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Кнопка обновить -->
+      <button class="vpn-btn" onclick="location.reload(true)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        Обновить страницу
+      </button>
+
+      <!-- Нижний текст -->
+      <p class="vpn-note">
+        Если вы находитесь в&nbsp;России и видите эту страницу ошибочно —<br>
+        напишите нам на&nbsp;<a href="mailto:store@goodmi.ru">store@goodmi.ru</a>.
+      </p>
+
+    </div>
+  </main>
+
+  <!-- Подвал -->
+  <footer class="vpn-footer">
+    © 2026 <a href="https://goodmi.ru/" target="_blank" rel="noopener">GOODMi.ru</a> — фирменный магазин техники Xiaomi в&nbsp;Крыму
+  </footer>
+
+</body>
+</html>

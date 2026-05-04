@@ -1,0 +1,123 @@
+# Блок «Быстрые ссылки вверху» — стандарт CS-Cart GOODMi
+
+## Назначение
+
+Вариант блока быстрых ссылок для размещения **в верхней части страницы** (над основным контентом).
+Визуально отличается от блока «Быстрый выбор»: без заголовка, без оранжевой полоски, кнопка «Показать ещё» в одну строку с пунктами меню, обводка со скруглёнными краями.
+
+Применяется на:
+- Страницах категорий магазина и сервиса, где блок выводится в шапке или над SEO-текстом
+- Там же, где нужна фасетная навигация по ЧПУ-ссылкам, но в компактном «верхнем» оформлении
+
+SEO-требования (ЧПУ, анкоры, запрет nofollow, дубли) — **те же**, что в `.cursor/rules/quick-links-seo-block.mdc`.
+
+---
+
+## HTML-структура
+
+Заголовок H3 и оранжевая полоска **отсутствуют**. Навигация и кнопка «Показать ещё» — в одной строке внутри обводки.
+
+```html
+<section class="gm-quick-links-top gm-section" aria-label="Быстрые ссылки по категориям">
+  <div class="gm-quick-links-top-inner">
+    <nav id="gm-ql-[slug]-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+      <a href="https://goodmi.ru/[slug]/[page]/" class="gm-quick-link">[Анкор]</a>
+      <!-- все ссылки подряд, без div-обёрток и span-лейблов -->
+    </nav>
+    <div class="gm-ql-trigger">
+      <button id="gm-ql-[slug]-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-[slug]-nav">
+        <span class="gm-ql-btn-text">Показать ещё</span>
+        <span class="gm-ql-chevron" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-[slug]-nav');
+  var btn = document.getElementById('gm-ql-[slug]-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>
+```
+
+**`[slug]`** — уникальный идентификатор (например `planshety-top`, `smartfony-top`), чтобы не конфликтовать с блоком быстрых ссылок внизу страницы, если он есть.
+
+---
+
+## CSS-классы (goodmi-styles.css, секция 12c)
+
+| Класс | Назначение |
+|---|---|
+| `.gm-quick-links-top` | Секция-обёртка: обводка, скругление, padding |
+| `.gm-quick-links-top-inner` | Flex-контейнер: ссылки и кнопка в одну строку |
+| `.gm-quick-links-tags` | Общий с блоком «Быстрый выбор» — контейнер тегов |
+| `.gm-quick-link` | Общий — стиль pill-ссылки |
+| `.gm-ql-hidden` | Общий — скрытые ссылки (JS) |
+| `.gm-ql-trigger` | Общий; внутри top — без отступа сверху, в строку |
+| `.gm-ql-btn`, `.gm-ql-chevron` | Общие |
+
+Весь CSS — в `goodmi-styles.css`, без `<style>` и инлайн-стилей.
+
+---
+
+## Порядок ссылок и ограничения
+
+Как в `quick-links-seo-block.mdc`: первая строка — самые приоритетные (модели, серии, память и т.д.), без дублей URL и без дублей с карточками `.gm-services-grid`.
+
+---
+
+## Отдельный файл
+
+Блок «Быстрые ссылки вверху» создаётся в **отдельном файле** (например `[category]-quick-links-top.html`). Не встраивать в файл SEO-описания.
+
+---
+
+## Запрещено
+
+- Заголовок H3 и оранжевая полоска в этом блоке
+- `rel="nofollow"` на внутренних ссылках
+- Ссылки с `href="#"`, дубли URL, дубли с карточками выше
+- `<style>` и инлайн-стили

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "Maxmobiles": {
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "c:\\Users\\Алекс\\GOODMi\\cscart-mcp-server\\src\\index.js"
+      ],
+      "env": {
+        "CSCART_API_URL": "https://maxmobiles.ru/api",
+        "CSCART_API_EMAIL": "MCP@maxmobiles.ru",
+        "CSCART_API_KEY": "m97Z1c2321h8uN4t1J09S61bD59BdJhE",
+        "LOG_LEVEL": "info"
+      }
+    }
+  }
+}
+

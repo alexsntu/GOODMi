@@ -1,0 +1,77 @@
+<section class="gm-quick-links-top gm-section" aria-label="Быстрые ссылки по категориям">
+  <div class="gm-quick-links-top-inner">
+    <nav id="gm-ql-besprovodnye-naushniki-top-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+      <a href="https://goodmi.ru/besprovodnye-naushniki/xiaomi/" class="gm-quick-link">Наушники Xiaomi</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/redmi/" class="gm-quick-link">Наушники Redmi</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/marshall/" class="gm-quick-link">Наушники Marshall</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/vkladyshi/" class="gm-quick-link">Вкладыши</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/vakuumnye/" class="gm-quick-link">Вакуумные</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/nakladnye/" class="gm-quick-link">Накладные</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/s-shumopodavleniem/" class="gm-quick-link">С активным шумоподавлением</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/s-besprovodnoy-zaryadkoy/" class="gm-quick-link">С беспроводной зарядкой</a>
+      <a href="https://goodmi.ru/besprovodnye-naushniki/32-om/" class="gm-quick-link">32 Ом</a>
+    </nav>
+    <div class="gm-ql-trigger">
+      <button id="gm-ql-besprovodnye-naushniki-top-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-besprovodnye-naushniki-top-nav">
+        <span class="gm-ql-btn-text">Показать ещё</span>
+        <span class="gm-ql-chevron" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-besprovodnye-naushniki-top-nav');
+  var btn = document.getElementById('gm-ql-besprovodnye-naushniki-top-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    if (!links.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>

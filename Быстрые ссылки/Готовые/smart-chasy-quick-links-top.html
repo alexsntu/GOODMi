@@ -1,0 +1,81 @@
+<section class="gm-quick-links-top gm-section" aria-label="Быстрые ссылки по категориям">
+  <div class="gm-quick-links-top-inner">
+    <nav id="gm-ql-smart-chasy-top-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+      <a href="https://goodmi.ru/smart-chasy/mi-watch/" class="gm-quick-link">Mi Watch</a>
+      <a href="https://goodmi.ru/smart-chasy/xiaomi-amazfit-t-rex/" class="gm-quick-link">Amazfit T-Rex</a>
+      <a href="https://goodmi.ru/smart-chasy/redmi-watch-5/" class="gm-quick-link">Redmi Watch 5</a>
+      <a href="https://goodmi.ru/smart-chasy/xiaomi-amazfit-bip/" class="gm-quick-link">Amazfit Bip</a>
+      <a href="https://goodmi.ru/smart-chasy/kruglye/" class="gm-quick-link">Круглые</a>
+      <a href="https://goodmi.ru/smart-chasy/kvadratnye/" class="gm-quick-link">Квадратные</a>
+      <a href="https://goodmi.ru/smart-chasy/zenskie/" class="gm-quick-link">Женские</a>
+      <a href="https://goodmi.ru/smart-chasy/vodonepronicaemye/" class="gm-quick-link">Водонепроницаемые</a>
+      <a href="https://goodmi.ru/smart-chasy/casy-s-nfc/" class="gm-quick-link">С NFC</a>
+      <a href="https://goodmi.ru/smart-chasy/gps-treker/" class="gm-quick-link">GPS-трекер</a>
+      <a href="https://goodmi.ru/smart-chasy/casy-s-sagomerom/" class="gm-quick-link">С шагомером</a>
+      <a href="https://goodmi.ru/smart-chasy/funkcia-telefona/" class="gm-quick-link">Функция телефона</a>
+      <a href="https://goodmi.ru/smart-chasy/call-watch/" class="gm-quick-link">Можно звонить</a>
+    </nav>
+    <div class="gm-ql-trigger">
+      <button id="gm-ql-smart-chasy-top-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-smart-chasy-top-nav">
+        <span class="gm-ql-btn-text">Показать ещё</span>
+        <span class="gm-ql-chevron" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-smart-chasy-top-nav');
+  var btn = document.getElementById('gm-ql-smart-chasy-top-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    if (!links.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>

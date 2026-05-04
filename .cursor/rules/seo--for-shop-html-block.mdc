@@ -1,0 +1,844 @@
+---
+description: Стандарт генерации SEO HTML-блоков для CS-Cart (GOODMi). Применяется при создании/редактировании HTML-страниц для категорий ТОВАРОВ интернет-магазина (не сервисного центра).
+globs: **/*.html
+alwaysApply: false
+---
+
+# SEO HTML-блоки для категорий товаров GOODMi — стандарт CS-Cart
+
+## Бренд и контакты (магазин)
+
+- Название бренда всегда: `GOODMi` (не Goodmi, не GOODMI)
+- Единый бесплатный номер: `8 (800) 250-17-00` / `href="tel:+78002501700"` — звонок по России бесплатный
+- Email: `store@goodmi.ru`
+- Часы работы: ежедневно 10:00–21:00
+- Сайт: `https://goodmi.ru`
+- Главный магазин: `г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»`
+- Самовывоз: Севастополь (4 точки) · Симферополь · Ялта
+- Доставка: СДЭК по всей России
+- Работаем с: 2015 года (более 10 лет)
+- Специализация: фирменный магазин техники Xiaomi в Крыму
+- Также продаём: Redmi, POCO, Amazfit, Marshall, JBL и другие бренды из экосистемы
+
+## Этап исследования — запросы, GEO, AEO и анализ конкурентов
+
+Перед генерацией HTML-блока **обязательно** выполняется исследовательский этап.
+Он состоит из четырёх шагов, результаты которых влияют на текст, структуру и разметку блока.
+
+---
+
+### Шаг 1 — Сбор семантического ядра (SEO + LSI)
+
+Страницы магазина работают **только с коммерческим интентом** — информационные запросы (обзоры, характеристики, «стоит ли покупать») не используются.
+
+Собери 2 группы запросов для целевой категории:
+
+**Транзакционные (коммерческие):**
+- «купить [Категория/Модель] в Севастополе», «[Модель] цена Крым»
+- «[Модель] GOODMi Севастополь», «[Модель] доставка по России»
+- «купить [Модель] с доставкой СДЭК», «заказать [Модель] онлайн»
+- «[Модель] цена купить GOODMi Крым»
+- «[Модель] трейд-ин рассрочка кредит»
+- «Xiaomi [серия] купить Севастополь»
+
+**LSI и синонимы (расширяют семантическое поле — только в коммерческом контексте):**
+- Характеристики как аргументы покупки: «камера», «дисплей», «автономность», «память», «HyperOS»
+- Условия покупки: «гарантия 1 год», «рассрочка», «кредит», «трейд-ин», «обмен»
+- Доверительные маркеры: «фирменный», «оригинал», «фирменный магазин техники Xiaomi»
+
+> Ключевые запросы органично распределяются по: H2, H3, лид-абзацу (`.gm-intro-text`),
+> карточкам моделей/категорий, FAQ-вопросам и CTA-блоку.
+
+---
+
+### Шаг 2 — GEO (Generative Engine Optimization)
+
+**GEO** — оптимизация под AI-поисковики: ChatGPT Search, Gemini, Perplexity, Bing Copilot.
+Они цитируют страницы дословно, поэтому контент должен быть «цитируемым».
+
+**Принципы GEO-контента для товарных категорий:**
+
+| Принцип | Как применять в блоке |
+|---|---|
+| Авторитетные утверждения | «работаем с 2015 года», «более 10 лет на рынке», «фирменный магазин техники Xiaomi» |
+| Сущностная полнота | Явно: бренд + город + категория товара + условия покупки + гарантия |
+| Самодостаточные абзацы | Каждый абзац понятен без контекста — AI вырезает куски дословно |
+| Прямые ответы | Лид `.gm-intro-text` за 2–3 предложения: что продаём, где, как купить, что получает клиент |
+| Структурированные списки | Условия покупки, что входит в гарантию, модели — всегда `<ul>` / `<ol>` |
+| Цитируемые формулировки | «GOODMi в Севастополе — фирменный магазин техники Xiaomi с доставкой по России через СДЭК» |
+
+**JSON-LD усиления для GEO:**
+- `LocalBusiness.description` — специализация магазина + категория + гео (2–3 предложения)
+- `WebPage.description` — прямой ответ на главный транзакционный запрос страницы
+- `speakable.cssSelector` — включать `.gm-intro-text` и `.gm-faq`
+
+**E-E-A-T сигналы для товарных страниц:**
+- Опыт: «с 2015 года», «более 10 лет на рынке техники Xiaomi»
+- Экспертиза: «фирменный магазин техники Xiaomi в Севастополе», «знаем технику изнутри»
+- Авторитетность: программа трейд-ин, СДЭК-доставка, самовывоз в 6 точках Крыма
+- Доверие: официальная гарантия 1 год, бонусная программа GOODMi, покупка в кредит
+
+---
+
+### Шаг 3 — AEO (Answer Engine Optimization)
+
+**AEO** — оптимизация под прямые ответы: Google Featured Snippets, People Also Ask,
+голосовой поиск (Siri, Алиса, Google Assistant).
+
+**Правила AEO для FAQ-секции товарных категорий:**
+
+- **4 вопроса** в формате реальных поисковых запросов
+- Структура ответа: **1-е предложение = прямой ответ** → затем детали
+- Длина ответа: 40–80 слов — оптимально для Featured Snippet
+- Вопросы охватывают 4 типа покупательских интентов:
+
+| Тип интента | Пример вопроса |
+|---|---|
+| Доставка | «Как купить [Модель Xiaomi] с доставкой в [Город]?» |
+| Гарантия | «Какая гарантия на технику Xiaomi в GOODMi?» |
+| Трейд-ин | «Как сдать старый смартфон по программе трейд-ин в GOODMi?» |
+| Выбор | «Чем [Модель A] отличается от [Модель B]?» |
+
+**`speakable` разметка** — обязательна:
+```json
+"speakable": {
+  "@type": "SpeakableSpecification",
+  "cssSelector": [".gm-intro-text", ".gm-faq"]
+}
+```
+
+**HowTo-разметка** (опционально, если страница описывает процесс покупки/трейд-ин):
+Если есть шаги «Как оформить заказ» или «Как сдать по трейд-ин» — добавлять
+`itemtype="https://schema.org/HowTo"` с `HowToStep`. Даёт расширенный сниппет в Google.
+
+---
+
+### Шаг 4 — Анализ конкурентов (когда предоставлены URL)
+
+Когда пользователь присылает ссылки на страницы конкурентов — **обязательно** выполнить
+анализ через `WebFetch` перед генерацией блока.
+
+**Процесс анализа:**
+
+1. **Загрузи каждую страницу** с помощью WebFetch
+2. **Заполни таблицу анализа** по каждому конкуренту:
+
+| Параметр | Что фиксировать |
+|---|---|
+| H1 / H2-заголовки | Формулировки, ключи, гео |
+| Модели и категории | Какие выделены, как названы |
+| Условия покупки | Гарантия, доставка, рассрочка, трейд-ин — как подаются |
+| FAQ-вопросы | Темы, которые закрывают |
+| LSI-термины | Слова и фразы, которых нет в нашей семантике |
+| CTA-формулировки | Тексты кнопок, призывы |
+| Структурные паттерны | Порядок секций, уникальные блоки |
+| Слабые стороны | Что отсутствует, что сделано плохо |
+
+3. **Выяви конкурентные разрывы** (Gap Analysis):
+   - Что есть у конкурентов и чего нет у нас → добавить в контент
+   - Что есть у нас и чего нет у них → усилить как преимущество
+   - Какие LSI-термины они используют → включить органично
+
+4. **Сформулируй 2–3 тезиса** уникального преимущества GOODMi vs конкуренты.
+
+**Формат вывода Gap Analysis** (перед генерацией HTML):
+
+```
+## Gap Analysis: [Категория/Модель]
+
+### Конкурент 1: [домен]
+- Категории/модели: ...
+- LSI-находки: ...
+- Условия: гарантия, доставка, рассрочка
+- Слабо: нет FAQ, нет Schema.org, нет гео
+
+### Наши преимущества vs конкурент 1:
+✅ Фирменный магазин техники Xiaomi в Севастополе
+✅ Трейд-ин + бонусная программа GOODMi
+✅ Самовывоз в 6 точках Крыма
+⚠️ Добавить в контент: «...»
+```
+
+> Текст всегда оригинальный. Анализ — только для поиска точек отрыва.
+
+---
+
+## Структура файла
+
+Каждый HTML-блок состоит из **трёх частей** строго в этом порядке:
+1. JSON-LD (`<script type="application/ld+json">`)
+2. HTML-контент в обёртке collapse (`.gm-collapse-wrapper → .gm-collapse-content → .gm-block`)
+3. `<script>` с функцией `gmBlockToggle` и инициализацией
+
+> **ВАЖНО:** `<style>` теги ЗАПРЕЩЕНЫ внутри HTML-блока CS-Cart. Весь CSS хранится
+> в `goodmi-styles.css` и подключается через **Дизайн → Темы → Редактировать → Свой CSS**
+> (один раз для всего сайта).
+
+## Механизм collapse / expand (собственный)
+
+CS-Cart имеет встроенный toggle, но он ненадёжен в Chrome. Используется собственный механизм.
+
+**Структура HTML:**
+```html
+<div class="gm-collapse-wrapper">
+  <div class="gm-collapse-content">
+    <div class="gm-block" itemscope ...>
+      <!-- весь контент страницы -->
+    </div>
+    <div class="gm-collapse-fade"></div>
+  </div>
+  <div class="gm-collapse-trigger">
+    <button class="gm-collapse-btn" onclick="gmBlockToggle(this)" aria-expanded="false">
+      <span class="gm-collapse-btn-text">Показать больше</span>
+      <span class="gm-collapse-chevron" aria-hidden="true">
+        <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
+          <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var allContents = document.querySelectorAll('.gm-collapse-content');
+  var content = allContents[allContents.length - 1];
+  if (!content) return;
+  content.style.maxHeight = '400px';
+  content.dataset.gmState = 'collapsed';
+  var fade = content.querySelector('.gm-collapse-fade');
+  if (fade) fade.style.opacity = '1';
+})();
+
+function gmBlockToggle(btn) {
+  var trigger = btn.parentElement;
+  var content = trigger.previousElementSibling;
+  var fade    = content.querySelector('.gm-collapse-fade');
+  var label   = btn.querySelector('.gm-collapse-btn-text');
+  var wrapper = trigger.parentElement;
+
+  if (content.dataset.gmState !== 'expanded') {
+    content.style.transition = 'max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1)';
+    content.style.maxHeight  = content.scrollHeight + 'px';
+    content.dataset.gmState  = 'expanded';
+    if (fade) { fade.style.transition = 'opacity 0.25s ease'; fade.style.opacity = '0'; }
+    btn.classList.add('gm-is-expanded');
+    btn.setAttribute('aria-expanded', 'true');
+    if (label) label.textContent = 'Скрыть';
+    setTimeout(function () {
+      if (content.dataset.gmState === 'expanded') {
+        content.style.transition = '';
+        content.style.maxHeight  = 'none';
+      }
+    }, 580);
+  } else {
+    content.style.transition = '';
+    content.style.maxHeight  = content.scrollHeight + 'px';
+    content.dataset.gmState  = 'collapsing';
+    void content.offsetHeight;
+    content.style.transition = 'max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1)';
+    content.style.maxHeight  = '400px';
+    content.dataset.gmState  = 'collapsed';
+    if (fade) { fade.style.transition = 'opacity 0.3s ease 0.2s'; fade.style.opacity = '1'; }
+    btn.classList.remove('gm-is-expanded');
+    btn.setAttribute('aria-expanded', 'false');
+    if (label) label.textContent = 'Показать больше';
+    setTimeout(function () {
+      wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 120);
+  }
+}
+</script>
+```
+
+**Правила collapse:**
+- Начальная высота: **400px** (без анимации при загрузке)
+- Fade-шторка: находится **внутри** `.gm-collapse-content` (`position: absolute; bottom: 0`)
+- `transform` на hover **ЗАПРЕЩЁН** — вызывает баг Chrome с `overflow: hidden`
+- После раскрытия `max-height` снимается (`'none'`) через `setTimeout` 580ms
+- При сворачивании — плавная прокрутка к началу блока (`scrollIntoView`)
+
+**Collapse — опциональный механизм:**
+
+| Указание пользователя | Поведение |
+|---|---|
+| «с коллапсом» / «collapse» / не указано | Обернуть `.gm-block` в `.gm-collapse-wrapper`, добавить `<script>` |
+| «без коллапса» / «no collapse» | Вывести `.gm-block` напрямую, без обёртки и без `<script>` |
+
+## JSON-LD — обязательные типы
+
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "LocalBusiness" },
+    { "@type": "WebPage" },
+    { "@type": "FAQPage" }
+  ]
+}
+```
+
+Опционально для страниц с перечнем моделей — добавлять `ItemList` в граф:
+```json
+{
+  "@type": "ItemList",
+  "name": "Купить [Категория] в Севастополе — GOODMi",
+  "description": "...",
+  "numberOfItems": N,
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "[Модель 1]", "url": "https://goodmi.ru/..." },
+    { "@type": "ListItem", "position": 2, "name": "[Модель 2]", "url": "https://goodmi.ru/..." }
+  ]
+}
+```
+
+### LocalBusiness — обязательные поля
+
+```json
+{
+  "@type": "LocalBusiness",
+  "@id": "https://goodmi.ru/#business",
+  "name": "GOODMi",
+  "alternateName": "Магазин Xiaomi GOODMi",
+  "description": "GOODMi — фирменный магазин техники Xiaomi в Крыму. Работаем с 2015 года. Магазины в Севастополе, Симферополе и Ялте. Доставка по всей России через СДЭК.",
+  "url": "https://goodmi.ru",
+  "telephone": "+7-800-250-17-00",
+  "priceRange": "&#8381;&#8381;&#8381;",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Вакуленчука, 29",
+    "addressLocality": "Севастополь",
+    "addressRegion": "Севастополь",
+    "addressCountry": "RU"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Севастополь" },
+    { "@type": "City", "name": "Симферополь" },
+    { "@type": "City", "name": "Ялта" },
+    { "@type": "AdministrativeArea", "name": "Крым" },
+    { "@type": "Country", "name": "Россия" }
+  ],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "10:00",
+    "closes": "21:00"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": 5.0,
+    "reviewCount": 500
+  }
+}
+```
+
+### WebPage — обязательные поля
+
+```json
+{
+  "@type": "WebPage",
+  "@id": "https://goodmi.ru/SLUG/#webpage",
+  "name": "Купить [Категория] в Севастополе — GOODMi",
+  "description": "...",
+  "url": "https://goodmi.ru/SLUG/",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".gm-intro-text", ".gm-faq"]
+  },
+  "about": { "@id": "https://goodmi.ru/#business" }
+}
+```
+
+### FAQPage
+- 4 реальных вопроса из контента страницы
+- Обязательно охватывают **4 типа покупательских интентов** (AEO): доставка · гарантия · трейд-ин · выбор модели
+- Каждый `acceptedAnswer` начинается с прямого ответа (первое предложение = вся суть)
+- На странице допускается только **один** источник `FAQPage` — в JSON-LD. В HTML-секции FAQ не добавлять `itemscope itemtype="https://schema.org/FAQPage"`, чтобы не создавать дубли в GSC.
+
+## Заголовки
+
+- Начинать с **H2** (H1 уже есть на странице CS-Cart)
+- Иерархия: H2 → H3 → H4
+- H2 размер: **28px** на ПК, **22px** на мобильных (≤640px)
+- H3 размер: `clamp(18px, 2.8vw, 24px)`
+
+## Иконки и спецсимволы
+
+**Запрещено** использовать эмодзи-символы напрямую — только HTML-сущности:
+
+| Символ | Сущность |
+|--------|----------|
+| ⚡ молния | `&#x26A1;` |
+| 📱 телефон | `&#x1F4F1;` |
+| 💻 ноутбук | `&#x1F4BB;` |
+| ⌚ часы | `&#x231A;` |
+| 📷 камера | `&#x1F4F7;` |
+| 🛡 щит | `&#x1F6E1;` |
+| 🔍 лупа | `&#x1F50D;` |
+| 📦 коробка | `&#x1F4E6;` |
+| 🚚 доставка | `&#x1F69A;` |
+| 🔄 обмен | `&#x1F504;` |
+| ✔ галочка | `&#x2714;` |
+| ☎ телефон | `&#x260E;` |
+| 🎁 подарок | `&#x1F381;` |
+| ⭐ звезда | `&#x2B50;` |
+| — тире | `&#8212;` |
+| · точка | `&#183;` |
+| ₽ рубль | `&#8381;` |
+
+## Бейдж `.gm-stat-badge` — правила
+
+Бейдж выводится под лид-абзацем (`.gm-intro-text`) и содержит 1–2 тезиса.
+
+**Формулировки для магазина:**
+- ✅ «Официальная гарантия 1 год» — для новых устройств
+- ✅ «Быстрая доставка по России» — короткая формулировка для бейджа
+- ✅ «Трейд-ин: обменяйте старое устройство» — программа обмена
+- ✅ «Фирменный магазин техники Xiaomi» — экспертный сигнал
+- ❌ Конкретные сроки доставки в днях — могут меняться
+
+**Однострочный бейдж** (один тезис):
+```html
+<span class="gm-stat-badge" role="note" aria-label="...">
+  &#x2714;&nbsp; Текст тезиса
+</span>
+```
+
+**Двухстрочный бейдж** (два тезиса — для длинных фраз):
+```html
+<span class="gm-stat-badge gm-stat-badge--mobile-2line" role="note" aria-label="...">
+  <span class="gm-badge-item">&#x2714;&nbsp; Первый тезис</span>
+  <span class="gm-badge-sep" aria-hidden="true">&#183;</span>
+  <span class="gm-badge-item">&#x2714;&nbsp; Второй тезис</span>
+</span>
+```
+> Для стабильного мобильного переноса добавляйте класс `gm-stat-badge--mobile-2line` (фолбэк для браузеров без `:has()`); на desktop бейдж остаётся компактным.
+
+## Гарантия — правило формулировок (обязательно)
+
+Срок гарантии **всегда предоставляет пользователь** — не угадывать и не выводить из категории самостоятельно.
+
+**Источник данных:** ответ пользователя на вопрос «Какая гарантия на товары в этой категории?» (см. Step 1b в `seo-shop-page-builder/SKILL.md`). Пока ответа нет — **не собирать финальный HTML** блока категории, если пользователь **сам явно** не разрешил пропуск (например «год», «нет гарантии», «ставь гарантию качества без вопросов»).
+
+| Ответ пользователя | Формулировка в блоке |
+|---|---|
+| «1 год», «6 месяцев», «2 года» и т.п. | «Официальная гарантия [срок]» |
+| «нет гарантии» | «Гарантия качества» |
+| явное разрешение дефолта («пропусти гарантию», «по умолчанию гарантия качества») | «Гарантия качества» |
+
+**Правила применения** — формулировка используется единообразно во всём блоке:
+
+- **Лид и бейдж**: «Официальная гарантия X» или «Гарантия качества»
+- **Trust strip**: иконка `&#x1F6E1;` + `<strong>Гарантия X</strong>` или `<strong>Гарантия качества</strong>`
+- **Блок преимуществ**:
+  - Есть гарантия → ссылка `https://goodmi.ru/info/guarantee/`, текст «Официальная гарантия [срок]»
+  - Нет гарантии → ссылка **`https://goodmi.ru/info/vozvrat-ru/`**, текст «Гарантия качества»
+- **FAQ**: при «Гарантия качества» вопрос «Какая гарантия?» заменить на «Можно ли вернуть [категория] в GOODMi?»
+- **ЗАПРЕЩЕНО** самостоятельно подставлять «гарантия 1 год» без явного подтверждения пользователя
+
+## CSS — дизайн-система Xiaomi / HyperOS
+
+Все стили изолированы в `.gm-block`. Хранятся в `goodmi-styles.css`.
+
+**Цвета:**
+- Текст: `#1C1C1C`
+- Вторичный: `#6B6B6B`
+- Фон сетки `.gm-services-grid`: `#F2F2F2` (серый контейнер, `border-radius: 24px; padding: 20px`)
+- Фон карточек `.gm-service-card`: `#fff` (белый, `border-radius: 16px`)
+- Акцент оранжевый: `#FF6900` (hover: `#E55A00`)
+- Разделитель: `#E5E5E5`
+- CTA-блок фон: `linear-gradient(145deg, #1C1C1C, #2D2D2D)` + оранжевая полоса слева
+
+**Шрифт:**
+```css
+font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
+             system-ui, -apple-system, Arial, sans-serif;
+-webkit-font-smoothing: antialiased;
+```
+
+**Кнопки — hover без transform:**
+```css
+/* transform на hover ЗАПРЕЩЁН — вызывает баг Chrome с overflow:hidden */
+.gm-btn-primary:hover  { background: linear-gradient(135deg,#E55A00,#E57A00); box-shadow: 0 4px 18px rgba(255,105,0,0.40); }
+.gm-btn-secondary:hover { background: rgba(255,255,255,0.2); box-shadow: 0 4px 16px rgba(255,255,255,0.08); }
+```
+
+## Структура HTML-контента
+
+Обязательные секции в порядке:
+1. **Intro** — H2 + лид-абзац `.gm-intro-text` (без бейджа)
+2. **Highlights grid** — карточки `.gm-services-grid` (без Product-микроразметки). Перед вёрсткой — **обязательный запрос URL изображений** (см. раздел «Обязательный запрос изображений для блока карточек (highlights grid)» в этом файле).
+3. **Преимущества** — список `.gm-advantages-list` или highlight-блок `.gm-highlight`
+4. **FAQ** — 4 вопроса с microdata `Question/Answer` (секция обёрнута в `<section class="gm-faq">`, без `itemtype="https://schema.org/FAQPage"`)
+5. **CTA** — тёмный блок `.gm-cta` с двумя кнопками
+
+### Блок «Преимущества» — Layout (CSS)
+
+Блок обёрнут в `<section class="gm-section">`. Список `<ul class="gm-advantages-list">` использует flexbox с переносом строк.
+
+**Десктоп (≥641px):** 4 пункта — по 2 в ряд; 5-й пункт (виджет Яндекс) — на всю ширину.
+**Мобильный (≤640px):** все пункты — 1 колонка.
+
+| Элемент | CSS в goodmi-styles.css |
+|---|---|
+| `.gm-block .gm-advantages-list` | `display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0` — **двойной селектор** для перекрытия браузерных/CS-Cart стилей `ul` |
+| `.gm-advantages-list > li` | `flex: 0 0 calc(50% - 4px); max-width: calc(50% - 4px)` — строго 2 в ряд |
+| `.gm-advantages-list > li:last-child` | `flex: 0 0 100%; max-width: 100%` — полная ширина |
+| `.gm-advantage-item` | `flex: 1` — равная высота карточек в ряду (через flex-direction:column на `li`) |
+| Мобильный `li`, `li:last-child` | `flex: 0 0 100%; max-width: 100%` — 1 колонка |
+
+> ⚠️ Селектор для списка — **`.gm-block .gm-advantages-list`** (не просто `.gm-advantages-list`). Это необходимо, чтобы перекрыть правило CS-Cart вида `.content ul { padding-left: 40px }` (специфичность 11), которое иначе создаёт асимметричный левый отступ на мобильных устройствах.
+
+> Список **всегда** содержит **ровно 5 элементов**: 4 преимущества (гарантия, доставка, трейд-ин+бонусы, кредит) + Яндекс-виджет последним.
+
+### Ссылки в блоке «Преимущества» (обязательно)
+
+Каждый пункт `.gm-advantage-item` **обязан** содержать ссылку на соответствующую страницу сайта. Заголовок (`<strong>`) оборачивается в `<a class="gm-advantage-link">`.
+
+**Стандартные URL для пунктов преимуществ:**
+
+| Пункт | URL |
+|---|---|
+| Официальная гарантия (есть срок) | `https://goodmi.ru/info/guarantee/` |
+| Гарантия качества (нет срока) | `https://goodmi.ru/info/vozvrat-ru/` |
+| Доставка по России (СДЭК) | `https://goodmi.ru/info/delivery/` |
+| Трейд-ин | `https://goodmi.ru/treyd-in-goodmi/` |
+| Бонусная программа GOODMi | `https://goodmi.ru/bonusnaya-programma/` |
+| Кредит и рассрочка | `https://goodmi.ru/credit/` |
+
+**Шаблон пункта с одной ссылкой:**
+```html
+<li class="gm-advantage-item" role="listitem">
+  <span class="gm-advantage-icon" aria-hidden="true">&#x1F6E1;</span>
+  <div class="gm-advantage-body">
+    <a href="https://goodmi.ru/info/guarantee/" class="gm-advantage-link"><strong>Официальная гарантия 1 год</strong></a> &#8212; текст описания.
+  </div>
+</li>
+```
+
+**Шаблон пункта с двумя ссылками** (трейд-ин + бонусы):
+```html
+<li class="gm-advantage-item" role="listitem">
+  <span class="gm-advantage-icon" aria-hidden="true">&#x1F504;</span>
+  <div class="gm-advantage-body">
+    <a href="https://goodmi.ru/treyd-in-goodmi/" class="gm-advantage-link"><strong>Трейд-ин</strong></a> и <a href="https://goodmi.ru/bonusnaya-programma/" class="gm-advantage-link"><strong>бонусная программа GOODMi</strong></a> &#8212; текст описания.
+  </div>
+</li>
+```
+
+**Правила:**
+- Класс `.gm-advantage-link` — подчёркивание оранжевым, на hover текст становится `#FF6900`
+- **ЗАПРЕЩЕНО** писать «беспроцентная рассрочка» — только «кредит и рассрочка» (условия меняются)
+- Ссылки без `target="_blank"` — это внутренние страницы сайта
+- Яндекс-ссылка (`rel="nofollow noopener" target="_blank"`) — исключение (внешний сайт)
+
+### Яндекс-виджет рейтинга в блоке «Преимущества» (обязательно)
+
+Последний пункт `.gm-advantages-list` **всегда** содержит живой виджет рейтинга Яндекс.Карт вместо статичного текста. Виджет ID GOODMi: `81345582117`.
+
+```html
+<li class="gm-advantage-item" role="listitem">
+  <span class="gm-advantage-icon" aria-hidden="true">&#x2B50;</span>
+  <div class="gm-advantage-body">
+    <strong>Более 500 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2015 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:#F9F9F9;border-radius:10px;border:1px solid #EEEEEE;">
+      <iframe src="https://yandex.ru/sprav/widget/rating-badge/81345582117?type=rating"
+              width="150" height="50" frameborder="0"
+              title="Рейтинг GOODMi на Яндекс Картах" loading="lazy"
+              style="display:block;border:none;flex-shrink:0;"></iframe>
+      <a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/"
+         target="_blank" rel="nofollow noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#FF6900;color:#fff;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap;"
+         aria-label="Посмотреть все отзывы о GOODMi на Яндексе">Посмотреть все отзывы &#8594;</a>
+    </div>
+  </div>
+</li>
+```
+
+**Правила виджета:**
+- Виджет и кнопка в одном flex-контейнере: виджет слева, оранжевая кнопка справа
+- Контейнер: `background:#F5F5F5; border-radius:12px; border:1px solid #E5E5E5` — лёгкая карточка
+- Кнопка: цвет акцента `#FF6900`, `border-radius:8px`, `white-space:nowrap` — не переносится
+- `flex-wrap:wrap` — на мобильных виджет и кнопка складываются вертикально
+- `loading="lazy"` — не тормозит загрузку страницы
+- `rel="nofollow noopener"` + `target="_blank"` — обязательны
+- Статичный текст «Рейтинг 5.0» в этом пункте **ЗАПРЕЩЁН** — только живой виджет
+
+### Требования к лид-абзацу `.gm-intro-text` (GEO)
+
+Лид обязан содержать **все 5 сущностей** — это минимум для цитирования AI-поисковиками:
+1. **Бренд**: «GOODMi»
+2. **Город**: «Севастополь» или «в Крыму»
+3. **Категория/модель**: «Xiaomi 15 Pro», «планшеты Xiaomi» и т.д.
+4. **Действие/предложение**: «купить», «в наличии», «фирменный магазин Xiaomi»
+5. **Условие покупки**: гарантия или доставка
+
+Пример корректного лида:
+> «В **GOODMi** в **Севастополе** вы найдёте полный ассортимент **смартфонов Xiaomi** с официальной **гарантией 1 год**. Доставляем по всей России через СДЭК — оформите заказ онлайн или заберите в одном из 6 магазинов Крыма.»
+
+### Требования к FAQ-секции (AEO)
+
+Секция обёрнута классом `.gm-faq` — это обязательно для `speakable` разметки:
+```html
+<section class="gm-faq" aria-labelledby="faq-heading">
+```
+
+4 вопроса строго покрывают 4 интента:
+
+| № | Интент | Пример |
+|---|---|---|
+| 1 | Доставка | «Как купить [Модель] с доставкой по России?» |
+| 2 | Гарантия | «Какая гарантия на технику Xiaomi в GOODMi?» |
+| 3 | Трейд-ин | «Как сдать старый смартфон по трейд-ин в GOODMi?» |
+| 4 | Выбор | «Чем [Модель A] отличается от [Модель B]?» |
+
+Каждый ответ: **первое предложение = прямой ответ**, затем детали. Объём 40–80 слов.
+
+## Чеклист GEO/AEO перед финальным выводом HTML
+
+**GEO (Generative Engine Optimization):**
+- [ ] Лид `.gm-intro-text` содержит все 5 сущностей: бренд + город + категория/модель + действие + условие покупки
+- [ ] `LocalBusiness.description` — 2–3 предложения со специализацией магазина + гео
+- [ ] `WebPage.description` — прямой ответ на главный транзакционный запрос страницы
+- [ ] `speakable.cssSelector` содержит `[".gm-intro-text", ".gm-faq"]`
+- [ ] Преимущества конкретны: не «быстрая доставка», а «доставка по России через СДЭК»; не расплывчатые эпитеты, а «гарантия производителя 1 год»
+
+**AEO (Answer Engine Optimization):**
+- [ ] FAQ-секция обёрнута в `<section class="gm-faq" ...>`
+- [ ] 4 вопроса покрывают 4 интента: доставка · гарантия · трейд-ин · выбор модели
+- [ ] Каждый `acceptedAnswer` начинается с прямого ответа (не вводного слова, не «мы»)
+- [ ] Длина каждого ответа: 40–80 слов
+- [ ] JSON-LD `FAQPage` содержит те же 4 вопроса, что и HTML (не расходятся!)
+- [ ] В HTML нет `itemtype="https://schema.org/FAQPage"` (чтобы не дублировать JSON-LD FAQPage)
+
+**Виджет отзывов:**
+- [ ] Последний пункт `.gm-advantages-list` содержит `<iframe>` виджет Яндекс рейтинга (ID `81345582117`)
+- [ ] Рядом с виджетом — ссылка на отзывы `https://yandex.ru/maps/org/goodmi/81345582117/reviews/`
+- [ ] Статичный текст «Рейтинг 5.0» в пункте отзывов отсутствует
+
+---
+
+### Блок популярных отзывов (главная) — обязательный сбор данных (обновление 2026-03-25)
+
+Если в задаче есть блок популярных отзывов на главной (короткая витрина), то перед формированием HTML **обязательно запросить** у пользователя по каждому отзыву:
+
+- `date` — дата отзыва (как в источнике, в формате `15 марта 2026` или `2026-03-15`)
+- `avatarUrl` — ссылка на аватарку пользователя (фото пользователя)
+- `source` — источник отзыва (одно из: `Яндекс Карты`, `ВКонтакте`, `Авито`, `Отзовик`)
+- `authorName` — имя пользователя
+- `reviewText` — текст отзыва
+- `sourceReviewUrl` — ссылка на конкретный отзыв на источнике
+
+Также **в общем макете** вывести все источники отзывов (иконка + название + ссылка) в отдельном блоке:
+
+- `Яндекс Карты` — ссылка: `https://yandex.com/maps/959/sevastopol/chain/goodmi/3793837384/` , иконка: `https://res.smartwidgets.ru/res/review_yandex_map.svg`
+- `ВКонтакте` — ссылка: `https://vk.com/reviews-126411469` , иконка: `https://res.smartwidgets.ru/res/review_vk_market_reviews.svg`
+- `Авито` — ссылка: `https://www.avito.ru/brands/i155162702` , иконка: `https://res.smartwidgets.ru/res/review_avito.svg`
+- `Отзовик` — ссылка: `https://otzovik.com/reviews/mi92_ru-internet-magazin_tehniki_xiaomi/` , иконка: `https://res.smartwidgets.ru/res/review_otzovik.svg`
+- `Сайт (все отзывы)` — ссылка: `https://goodmi.ru/testimonials/` , иконка: `https://goodmi.ru/images/logos/72/GOODMi_%D0%BB%D0%BE%D0%B3%D0%BE-%D0%BD%D0%B0%D0%B4%D0%BF%D0%B8%D1%81%D1%8C_.svg`
+
+Ожидаемый результат витрины:
+- карточки в `.gm-services-grid` (3–6 штук), в каждой карточке: аватар + имя + дата + текст + иконка источника + ссылка на источник
+- отдельная CTA-кнопка на `https://goodmi.ru/testimonials/` (все отзывы).
+
+JSON-LD для витрины отзывов:
+- если в блоке присутствуют сущности `Review`, у каждого `Review` обязательно должно быть поле:
+  - `"itemReviewed": { "@id": "https://goodmi.ru/#organization" }`
+- отсутствие `itemReviewed` в `Review` недопустимо (GSC фиксирует критическую ошибку).
+
+### Trust strip — иконки для магазина
+
+Используй 4 из следующих (выбирай наиболее релевантные для категории):
+
+| Иконка | `<strong>` (жирный) | Дополнение (обычный текст) |
+|---|---|---|
+| `&#x1F6E1;` | Гарантия 1 год | на новую технику |
+| `&#x1F69A;` | Доставка СДЭК | по всей России |
+| `&#x1F504;` | Трейд-ин | сдайте старое |
+| `&#x1F4F1;` | GOODMi | с 2015 года |
+| `&#x260E;` | Бесплатный звонок | 8 (800) 250-17-00 |
+| `&#x1F4E6;` | Самовывоз | 6 точек в Крыму |
+| `&#x1F50D;` | Фирменный магазин | техники Xiaomi |
+| `&#x1F381;` | Бонусная программа | GOODMi |
+
+> **CSS `.gm-trust-label strong`** выводит первую строку жирным. Всегда используй двухуровневую структуру:
+> ```html
+> <span class="gm-trust-label"><strong>Гарантия 1 год</strong> на новую технику</span>
+> ```
+
+### Обязательный запрос изображений для блока карточек (highlights grid)
+
+**Момент в workflow:** после анализа категории и фиксации списка карточек (3 или 6) для `.gm-services-grid`, **до** добавления HTML этой секции.
+
+**Обязанность агента:** **всегда** запросить у пользователя в текущем диалоге:
+
+- либо **прямые URL изображений** для каждой карточки **в том же порядке**, что и карточки в сетке (1-я ссылка — 1-й `<article>`, и т.д.);
+- либо явное **«пропустить»** — тогда для всех соответствующих карточек используется **Вариант Б** (`.gm-service-card-icon`), без `<img>`.
+
+**Запрещено без явного согласования с пользователем в этом диалоге:**
+
+- подставлять URL с `goodmi.ru`, CDN или витрины каталога «от себя»;
+- копировать ссылки на картинки из других файлов проекта или из прошлых чатов;
+- собирать финальный блок карточек с фото, не получив ответ на запрос (или не имея исключения ниже);
+- верстать **Вариант Б** (только иконки), если пользователь **не написал явно** «пропустить» / «без фото» для карточек — отсутствие ответа не равно «пропустить».
+
+**Исключение (повторный запрос не нужен):** пользователь в **том же запросе**, где заказан блок, уже передал полный набор URL (число URL = числу карточек) **или** явно написал **«пропустить»** для изображений.
+
+**После ответа:** только тогда вёрстка Варианта А (`gm-service-card-img`) с присланными URL или Варианта Б по правилам ниже.
+
+### Highlights grid — карточки категории
+
+Карточки в сетке `.gm-services-grid` (строго 3 или 6) представляют:
+- **Топовые модели** категории (например: Xiaomi 15 Pro, Xiaomi 15, Redmi Note 15 Pro)
+- **Подкатегории** (например: Xiaomi, Redmi, POCO)
+- **Ключевые особенности** линейки (камера, дисплей, автономность)
+
+**Структура карточки — два варианта:**
+
+> **Заголовок карточки — `<h3>`** (CSS стилизует `.gm-service-card h3` и `.gm-service-card h4` одинаково; используй `<h3>` для правильной семантической иерархии H2 → H3-карточка).
+
+**Вариант А — с фото устройства (предпочтительный):**
+```html
+<article class="gm-service-card" role="listitem"
+         >
+  <img src="[URL фото]" alt="[Модель] — купить в GOODMi"
+       class="gm-service-card-img" loading="lazy">
+  <h3>Название модели / подкатегории</h3>
+  <p>Ключевая характеристика или преимущество — 1–2 предложения.</p>
+  <a href="https://goodmi.ru/[slug]/" class="gm-service-link"
+     aria-label="Купить [Модель] в GOODMi">Выбрать модель &#8594;</a>
+</article>
+```
+
+**Вариант Б — без фото (запасной, если фото не предоставлены):**
+```html
+<article class="gm-service-card" role="listitem"
+         >
+  <span class="gm-service-card-icon" aria-hidden="true">&#x1F4F1;</span>
+  <h3>Название модели / подкатегории</h3>
+  <p>Ключевая характеристика или преимущество — 1–2 предложения.</p>
+  <a href="https://goodmi.ru/[slug]/" class="gm-service-link"
+     aria-label="Купить [Модель] в GOODMi">Выбрать модель &#8594;</a>
+</article>
+```
+
+**CSS `.gm-service-card-img`** (в `goodmi-styles.css`):
+- `object-fit: contain` — сохраняет пропорции устройства
+- `height: 150px` — фиксированная высота изображения
+- `border-radius: 10px` — скруглённые углы
+- Белый фон изображению не нужен — карточка `.gm-service-card` сама белая (`background: #fff`)
+
+> Цены в карточках **ЗАПРЕЩЕНЫ**. Для цен используется прайс-лист CS-Cart.
+
+### Перелинковка внутри блока
+
+- Класс ссылки: `gm-service-link`
+- `aria-label` содержит полное название: «Купить [Модель] в GOODMi»
+- Текст ссылки в карточке модели: «Выбрать модель &#8594;»
+- Текст ссылки в карточке подкатегории: «Смотреть каталог &#8594;»
+- Если URL страницы неизвестен — оставить `href="#"` с комментарием `<!-- TODO: вставить URL -->`
+
+> ⚠️ Для карточек листинга в `.gm-services-grid` **не использовать** `itemscope itemtype="https://schema.org/Product"` и `itemprop`.  
+> Причина: Google Search Console начинает валидировать каждую карточку как Product и показывает критические ошибки `offers/review/aggregateRating`.
+
+### CTA — кнопки для магазина
+
+> **Обязательно:** текст и заголовок CTA обёрнуты в `<div class="gm-cta-text">`. Заголовок — `<h3>`, не `<h2>`.
+
+На сайте GOODMi подключён JivoChat (`//code.jivo.ru/widget/KAsYFxIsnB`).
+Первая кнопка (оранжевая) **всегда** открывает чат через `window.jivo_api.open()`.
+Вторая кнопка (белая) — номер телефона 8-800.
+
+```html
+<div class="gm-cta" role="complementary" aria-label="Контакты для заказа [Категория]">
+  <div class="gm-cta-text">
+    <h3>Готовы сделать заказ?</h3>
+    <p>Напишите в чат &#8212; поможем выбрать модель и оформить покупку онлайн. Или звоните бесплатно.</p>
+  </div>
+  <div class="gm-cta-actions">
+    <button type="button" class="gm-btn gm-btn-primary"
+       onclick="if(typeof window.jivo_api!=='undefined'){window.jivo_api.open();}"
+       aria-label="Открыть онлайн-чат GOODMi">
+      &#x1F4AC;&nbsp; Написать в чат
+    </button>
+    <a href="tel:+78002501700" class="gm-btn gm-btn-secondary" aria-label="Позвонить бесплатно 8-800-250-17-00">
+      &#x260E;&nbsp; 8 (800) 250-17-00
+    </a>
+  </div>
+</div>
+```
+
+## ARIA и доступность
+
+- Все секции: `aria-labelledby="id-заголовка"`
+- Декоративные иконки: `aria-hidden="true"`
+- Списки: `role="list"` / `role="listitem"`
+- Кнопки: `aria-label` с полным описанием действия
+- Кнопка collapse: `aria-expanded="false"` / `"true"` (переключается JS)
+
+## Сетка карточек `.gm-services-grid`
+
+Сетка **3 колонки** на десктопе (≥901px). Количество карточек — строго **3 или 6**.
+
+**Как выбрать количество:**
+- Категория с 3–4 топовыми моделями → **3 карточки**
+- Категория с 5+ моделями или подкатегориями → **6 карточек**
+
+### Обёртка и мобильный горизонтальный скроллер
+
+Сетка **всегда** оборачивается в `.gm-services-scroll-wrap` с кнопками-стрелками:
+
+```html
+<div class="gm-services-scroll-wrap">
+  <button class="gm-scroll-btn gm-scroll-btn--prev" aria-label="Предыдущие модели" type="button">&#8592;</button>
+  <div class="gm-services-grid" role="list">
+    <!-- article cards -->
+  </div><!-- /.gm-services-grid -->
+  <button class="gm-scroll-btn gm-scroll-btn--next" aria-label="Следующие модели" type="button">&#8594;</button>
+</div><!-- /.gm-services-scroll-wrap -->
+```
+
+**Поведение:**
+- **Десктоп (≥641px):** кнопки `display: none`, сетка отображается как обычный CSS Grid 3 колонки
+- **Мобильный (≤640px):** сетка переключается в `flex` с `overflow-x: auto` и `scroll-snap-type: x mandatory`; кнопки-стрелки появляются по бокам, прокручивают ровно на одну карточку (`smooth`)
+- Системный скроллбар скрыт (`scrollbar-width: none`)
+- JavaScript для стрелок добавляется в `<script>` блок в конце файла (рядом с `gmBlockToggle`)
+
+## Цены в тексте — ЗАПРЕЩЕНО
+
+**Запрещено:**
+- ❌ Любые конкретные суммы в тексте и карточках
+- ❌ Упоминание цен в описаниях карточек
+- ❌ Цены в `description` полей JSON-LD
+
+**Допустимо:**
+- ✅ «Актуальные цены смотрите в каталоге выше»
+- ✅ `"priceRange": "&#8381;&#8381;&#8381;"` в JSON-LD `LocalBusiness`
+- ✅ Сравнительные формулировки: «выгоднее при покупке в комплекте»
+
+## Именование файлов
+
+- Смартфоны Xiaomi: `xiaomi-smartfony-category.html`
+- Смартфоны Redmi: `redmi-category.html`
+- Смартфоны POCO: `poco-category.html`
+- Планшеты: `planshety-category.html`
+- Смарт-часы: `smart-chasy-category.html`
+- Ноутбуки: `noutbuki-category.html`
+- Наушники: `naushniki-category.html`
+- Пылесосы: `pylesos-category.html`
+- Конкретная модель: `xiaomi-15-pro.html`, `redmi-note-15-pro.html`
+
+## Зафиксированный паттерн блока преимуществ (обновление 2026-03-24)
+
+Для страниц/блоков, где список преимуществ визуально конфликтует с темой CS-Cart (плавающие ширины, пустые зоны справа, нестабильная сетка), использовать стабильный формат:
+
+- основа: `.gm-trust-strip` (4 преимущества),
+- дополнение: `.gm-highlight` (1 полноширинный акцент),
+- без кастомных модификаторов сетки для `.gm-advantages-list` на конкретной странице.
+
+Правила применения:
+
+- Не добавлять временные/локальные классы вида `--equal`, `#...-advantages-list` и т.п. для борьбы с раскладкой.
+- Если требуется предсказуемый вид на desktop/mobile, предпочитать `gm-trust-strip + gm-highlight` вместо экспериментов с flex/grid внутри `.gm-advantages-list`.
+- Решение считается стандартным и приоритетным для новых HTML-блоков GOODMi.

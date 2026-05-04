@@ -1,0 +1,68 @@
+<section class="gm-quick-links gm-section" aria-labelledby="gm-ql-fitnes-braslety-xiaomi-heading">
+  <h3 id="gm-ql-fitnes-braslety-xiaomi-heading" class="gm-section-title">Быстрый выбор</h3>
+  <nav id="gm-ql-fitnes-braslety-xiaomi-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/xiaomi-smart-band-10/" class="gm-quick-link">Xiaomi Smart Band 10</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/xiaomi-smart-band-9-pro/" class="gm-quick-link">Xiaomi Smart Band 9 Pro</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/rabota-svyse-15-dnej/" class="gm-quick-link">С работой свыше 15 дней</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/korpus-iz-aluminia/" class="gm-quick-link">С алюминиевым корпусом</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/korpus-iz-keramiki/" class="gm-quick-link">С керамическим корпусом</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/rozovye/" class="gm-quick-link">Розовые</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/cernye/" class="gm-quick-link">Черные</a>
+    <a href="https://goodmi.ru/fitnes-braslety-xiaomi/serebristye/" class="gm-quick-link">Серебристые</a>
+  </nav>
+  <div class="gm-ql-trigger">
+    <button id="gm-ql-fitnes-braslety-xiaomi-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-fitnes-braslety-xiaomi-nav">
+      <span class="gm-ql-btn-text">Показать ещё</span>
+      <span class="gm-ql-chevron" aria-hidden="true">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-fitnes-braslety-xiaomi-nav');
+  var btn = document.getElementById('gm-ql-fitnes-braslety-xiaomi-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>

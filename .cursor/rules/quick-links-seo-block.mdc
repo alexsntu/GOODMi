@@ -1,0 +1,214 @@
+# Блок быстрых ссылок (фасетная навигация) — стандарт CS-Cart GOODMi
+
+## Назначение
+
+Блок быстрых ссылок размещается **в конце SEO-блока категории**, непосредственно перед `.gm-cta`.
+Цель — горизонтальная перелинковка на страницы фильтров и смежные категории,
+расширение семантики страницы-хаба, передача PageRank на подстраницы.
+
+Применяется на:
+- Страницах категорий магазина (Смартфоны Xiaomi, Redmi, POCO, Планшеты, Ноутбуки, Смарт-часы и т.д.)
+- Страницах сервисного центра (ремонт Xiaomi, ремонт Redmi, ремонт POCO и т.д.)
+- **Только если** каждая ссылка ведёт на реально существующую страницу с ЧПУ-URL
+
+---
+
+## SEO-требования Google и Яндекс
+
+### Фасетная навигация — правила
+
+| Требование | Правило |
+|---|---|
+| URL | Только ЧПУ-адреса — никаких GET-параметров (`?filter=`, `?color=`) |
+| `rel="nofollow"` | **ЗАПРЕЩЁН** на внутренних ссылках — снижает передачу PageRank |
+| `rel="canonical"` | Не нужен — ЧПУ-страницы самодостаточны |
+| Анкор | Точное название целевой страницы, совпадающее с H1 на ней |
+| Уникальность | Каждая ссылка → уникальная страница с уникальным контентом |
+| Дубли URL | Один URL — одна ссылка. Дублирующий анкор с тем же href — удалять |
+| Дубли карточек | Не размещать ссылку, если страница уже есть в карточках `.gm-services-grid` выше |
+
+### Лимиты
+
+- **Нет жёсткого лимита** на количество ссылок — используется row-overflow механизм (см. ниже)
+- Максимум **6 смысловых групп** в порядке SEO-приоритета — больше размывает тематический сигнал
+- Все ссылки публикуются в DOM; первая строка видна сразу, остальные скрыты под кнопкой «Показать ещё»
+
+### Требования к анкорному тексту
+
+| Тип | Правильно | Запрещено |
+|---|---|---|
+| Модели | «Xiaomi 15 Pro», «Redmi Note 15 Pro», «POCO X7 Pro» | «смартфон», «телефон» |
+| Память | «128 ГБ», «256 ГБ», «512 ГБ» | «большая память» |
+| Цвет | «Чёрный», «Белый», «Зелёный» | «красивый цвет» |
+| Смежные категории | «Чехлы для Xiaomi», «Смарт-часы Amazfit» | «аксессуары», «подробнее» |
+| **Запрещено всегда** | — | «здесь», «нажмите», «смотреть», «подробнее» |
+
+---
+
+## HTML-структура
+
+Все ссылки — в один плоский поток без группировки и подписей.
+Первая строка видна всегда; ссылки, не вошедшие в первую строку, скрываются JS и раскрываются кнопкой.
+
+```html
+<section class="gm-quick-links gm-section" aria-labelledby="gm-ql-[slug]-heading">
+  <h3 id="gm-ql-[slug]-heading" class="gm-section-title">[Заголовок]</h3>
+  <nav id="gm-ql-[slug]-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+    <a href="https://goodmi.ru/[slug]/[page]/" class="gm-quick-link">[Анкор]</a>
+    <!-- все ссылки подряд, без div-обёрток и span-лейблов -->
+  </nav>
+  <div class="gm-ql-trigger">
+    <button id="gm-ql-[slug]-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-[slug]-nav">
+      <span class="gm-ql-btn-text">Показать ещё</span>
+      <span class="gm-ql-chevron" aria-hidden="true">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-[slug]-nav');
+  var btn = document.getElementById('gm-ql-[slug]-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>
+```
+
+**`[slug]`** — уникальный идентификатор страницы (например `planshety`, `smartfony`, `noutbuki`).
+Обязателен, если на странице несколько блоков быстрых ссылок — предотвращает конфликт ID.
+
+**Нет** `<div class="gm-quick-links-group">` — группировка отменена.
+**Нет** `<span class="gm-quick-links-label">` — подписи групп отменены.
+
+### Заголовок H3 — варианты по типу страницы
+
+| Тип страницы | Текст H3 |
+|---|---|
+| Категория магазина | «Быстрый выбор» |
+| Конкретная модель | «Смотрите также» |
+| Страница сервиса | «Другие устройства в сервисе» |
+
+---
+
+## CSS-классы (из goodmi-styles.css)
+
+| Класс | Назначение |
+|---|---|
+| `.gm-quick-links` | Секция-обёртка |
+| `.gm-section` | Отступы секции (уже в CSS, добавлять вторым классом) |
+| `.gm-section-title` | Заголовок H3 |
+| `.gm-quick-links-tags` | `flex; flex-wrap: wrap; gap: 8px` — плоский контейнер тегов |
+| `.gm-quick-link` | Тег-ссылка pill: серый фон → оранжевый hover |
+| `.gm-ql-hidden` | `display: none !important` — скрытые ссылки (управляет JS) |
+| `.gm-ql-trigger` | Обёртка кнопки «Показать ещё» |
+| `.gm-ql-btn` | Кнопка раскрытия/скрытия |
+| `.gm-ql-chevron` | Шеврон внутри кнопки (анимируется CSS-transition) |
+
+**ЗАПРЕЩЕНО** добавлять `<style>` теги или `style=""` атрибуты — весь CSS в `goodmi-styles.css`.
+**ЗАПРЕЩЕНО** использовать `.gm-quick-links-groups`, `.gm-quick-links-group`, `.gm-quick-links-label` — эти классы не существуют.
+
+---
+
+## Порядок ссылок в потоке (приоритет по SEO-ценности)
+
+Первая строка всегда видна — **самые коммерчески ценные ссылки ставить первыми**.
+Рекомендуемый порядок:
+
+1. **Модели** — конкретные устройства (только если не дублируют карточки выше)
+2. **Серии** — Xiaomi / Redmi / POCO / базовая / Pro / Ultra
+3. **Память** — только если страницы по памяти существуют в CS-Cart
+4. **Диагональ / ОЗУ** — только если страницы существуют
+5. **Экран, связность, функции** — Гц, 4G LTE, быстрая зарядка, для игр
+6. **Процессор, камера, корпус, цвет** — технические и визуальные фильтры
+
+---
+
+## Размещение в структуре SEO-блока
+
+```
+.gm-block
+  ├── .gm-intro
+  ├── .gm-trust-strip
+  ├── .gm-section (карточки моделей — .gm-services-grid)
+  ├── .gm-section (преимущества — .gm-advantages-list)
+  ├── .gm-section .gm-faq (FAQ)
+  ├── .gm-quick-links  ← ЗДЕСЬ, перед CTA
+  └── .gm-cta
+```
+
+---
+
+## Отдельный файл — обязательно
+
+Блок быстрых ссылок **всегда создаётся в отдельном файле** — он подключается в CS-Cart
+как самостоятельный HTML-блок, независимо от основного SEO-блока категории.
+
+Итоговый файл по умолчанию сохранять в папку `Быстрые ссылки/`.
+
+**Запрещено** встраивать блок быстрых ссылок в файл SEO-описания.
+
+### Именование файлов
+
+| Страница | Файл SEO-блока | Файл быстрых ссылок (папка `Быстрые ссылки/`) |
+|---|---|---|
+| Категория Смартфоны Xiaomi | `xiaomi-smartphones-category.html` | `xiaomi-smartphones-quick-links.html` |
+| Категория Redmi | `redmi-category.html` | `redmi-quick-links.html` |
+| Категория POCO | `poco-category.html` | `poco-quick-links.html` |
+| Категория Планшеты | `planshety-category.html` | `planshety-quick-links.html` |
+| Категория Смарт-часы | `smart-chasy-category.html` | `smart-chasy-quick-links.html` |
+| Категория Ноутбуки | `noutbuki-category.html` | `noutbuki-quick-links.html` |
+| Ремонт Xiaomi | `xiaomi-remont.html` | `xiaomi-remont-quick-links.html` |
+
+---
+
+## Запрещено
+
+- Ссылки с `href="#"` — мёртвые ссылки нарушают доверие и не дают SEO-эффекта
+- Два разных анкора с одинаковым `href` в одном блоке — оставлять только один
+- Дублирование ссылок из карточек `.gm-services-grid`
+- `rel="nofollow"` или `rel="sponsored"` на внутренних ссылках
+- `<style>` теги или инлайн-стили `style=""` внутри блока
+- Цены в анкорах ссылок
+- Эмодзи — только HTML-сущности если нужны символы (`&#8211;`, `&#215;` и т.д.)
+- Встраивание блока внутрь файла SEO-описания категории

@@ -1,0 +1,79 @@
+<section class="gm-quick-links-top gm-section" aria-label="Быстрые ссылки по категориям">
+  <div class="gm-quick-links-top-inner">
+    <nav id="gm-ql-noutbuki-top-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+      <a href="https://goodmi.ru/noutbuki/intel/" class="gm-quick-link">Intel</a>
+      <a href="https://goodmi.ru/noutbuki/amd/" class="gm-quick-link">AMD</a>
+      <a href="https://goodmi.ru/noutbuki/s-geforce-rtx/" class="gm-quick-link">С GeForce RTX</a>
+      <a href="https://goodmi.ru/noutbuki/ips/" class="gm-quick-link">IPS</a>
+      <a href="https://goodmi.ru/noutbuki/igrovye/" class="gm-quick-link">Игровые</a>
+      <a href="https://goodmi.ru/noutbuki/ultrabuki/" class="gm-quick-link">Ультрабуки</a>
+      <a href="https://goodmi.ru/noutbuki/nedorogie-noutbuki/" class="gm-quick-link">Недорогие</a>
+      <a href="https://goodmi.ru/noutbuki/dlja-raboty/" class="gm-quick-link">Для работы</a>
+      <a href="https://goodmi.ru/noutbuki/dlja-montazha-foto-i-video/" class="gm-quick-link">Для видеомонтажа</a>
+      <a href="https://goodmi.ru/noutbuki/dlja-programmirovanija/" class="gm-quick-link">Для программирования</a>
+      <a href="https://goodmi.ru/noutbuki/legkie/" class="gm-quick-link">Легкие</a>
+    </nav>
+    <div class="gm-ql-trigger">
+      <button id="gm-ql-noutbuki-top-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-noutbuki-top-nav">
+        <span class="gm-ql-btn-text">Показать ещё</span>
+        <span class="gm-ql-chevron" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-noutbuki-top-nav');
+  var btn = document.getElementById('gm-ql-noutbuki-top-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    if (!links.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>

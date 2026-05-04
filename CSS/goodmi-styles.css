@@ -1,0 +1,1858 @@
+/*
+=======================================================================
+  GOODMi — Стили SEO HTML-блоков
+  Сайт: goodmi.ru — фирменный магазин техники Xiaomi в Крыму
+  Подключение: Дизайн → Темы → Редактировать → Свой CSS
+  Все стили изолированы в .gm-block и не влияют на тему CS-Cart
+  Дизайн-язык: Xiaomi / HyperOS 2
+  Версия: 1.1
+=======================================================================
+
+  ⚠️  ПРОТОКОЛ ПРОВЕРКИ ПЕРЕД РЕДАКТИРОВАНИЕМ CSS
+  ─────────────────────────────────────────────────
+  Этот файл подключён глобально и влияет на ВСЕ страницы ниже.
+  Перед любым изменением селектора или удалением правила — запустить
+  проверку: grep по папке GOODMi на затрагиваемый класс.
+
+  Файлы, использующие этот CSS (обновлять список при добавлении новых):
+  • Категории/televizory-xiaomi-category.html
+  • Категории/planshety-category.html
+  • Блог/obzor-fena-laifen-swift-4.html
+  • Быстрые ссылки/televizory-xiaomi-quick-links-top.html
+
+  Правила безопасного редактирования:
+  1. Сужение селектора (напр. `.gm-btn` → `.gm-block .gm-btn`) —
+     проверить, что класс встречается ТОЛЬКО внутри .gm-block
+     во всех файлах выше.
+  2. Переименование класса — найти и обновить все HTML-файлы.
+  3. Удаление правила — убедиться, что класс не используется нигде.
+  4. Добавление !important — допустимо только для борьбы с CS-Cart
+     overrides; не применять к layout-свойствам (display, position).
+  ─────────────────────────────────────────────────
+
+  Цветовая палитра Xiaomi:
+  --gm-orange:       #FF6900   (primary brand)
+  --gm-orange-dark:  #E55A00   (hover)
+  --gm-orange-light: #FFF0E6   (surface tint)
+  --gm-black:        #1C1C1C   (text primary)
+  --gm-gray-1:       #3D3D3D   (text secondary)
+  --gm-gray-2:       #6B6B6B   (text tertiary)
+  --gm-gray-3:       #ADADAD   (placeholder)
+  --gm-surface:      #F5F5F5   (card bg)
+  --gm-surface-2:    #EBEBEB   (card bg hover)
+  --gm-border:       #E5E5E5   (dividers)
+  --gm-white:        #FFFFFF
+
+  Содержание:
+  1. Основа
+  2. Intro (H2, лид, бейдж)
+  3. Trust strip
+  4. Section
+  5. Service cards
+  6. Advantages
+  7. Highlight box
+  8. FAQ
+  9. CTA + кнопки
+  10. Responsive (≤640px)
+  11. Collapse / Expand механизм
+  12. Quick Links — быстрые ссылки
+  12b. Quick Links — Row Overflow (кнопка «Показать ещё»)
+  12c. Quick Links Top — быстрые ссылки вверху
+  13. Badge item — двухстрочный бейдж
+  14. Repair photo — фото устройств
+  15. Blog Article — типографика статей блога
+=======================================================================
+*/
+
+
+/* ================================================================
+   1. Основа
+================================================================ */
+.gm-block {
+  font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
+               system-ui, -apple-system, Arial, sans-serif;
+  color: #1C1C1C;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.gm-block * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ================================================================
+   2. Intro
+================================================================ */
+.gm-intro {
+  margin-bottom: 48px;
+}
+
+.gm-intro h2 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: #1C1C1C;
+  margin-bottom: 18px;
+  line-height: 1.2;
+}
+
+.gm-intro-text {
+  font-size: 16px;
+  color: #3D3D3D;
+  line-height: 1.75;
+  max-width: 740px;
+}
+
+/* Бейдж-таблетка — оранжевый градиент Xiaomi */
+.gm-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(135deg, #FF6900 0%, #FF8C1A 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 100px;
+  margin-top: 20px;
+  letter-spacing: -0.1px;
+  line-height: 1.4;
+}
+
+
+/* ================================================================
+   3. Trust strip
+================================================================ */
+.gm-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  row-gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid #E5E5E5;
+  border-bottom: 1px solid #E5E5E5;
+  margin-bottom: 48px;
+}
+
+.gm-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 180px;
+  padding: 0 20px 0 0;
+}
+
+.gm-trust-item:not(:last-child) {
+  border-right: 1px solid #E5E5E5;
+  margin-right: 20px;
+}
+
+.gm-trust-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.gm-trust-label {
+  font-size: 13px;
+  color: #6B6B6B;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.gm-trust-label strong {
+  display: block;
+  color: #1C1C1C;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+
+/* ================================================================
+   4. Section
+================================================================ */
+.gm-section {
+  margin-bottom: 48px;
+}
+
+.gm-section-title {
+  font-size: clamp(18px, 2.8vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #1C1C1C;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #FF6900;
+  line-height: 1.3;
+}
+
+.gm-section-lead {
+  font-size: 16px;
+  color: #3D3D3D;
+  margin-bottom: 24px;
+  line-height: 1.65;
+}
+
+
+/* ================================================================
+   5. Service cards
+================================================================ */
+.gm-services-scroll-wrap {
+  position: relative;
+}
+
+.gm-scroll-btn {
+  display: none;
+}
+
+.gm-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  background: #F2F2F2;
+  border-radius: 24px;
+  padding: 20px;
+}
+
+/* Одиночная карточка в последней строке — центрируем */
+.gm-services-grid > article:last-child:nth-child(3n + 1) {
+  grid-column: 2;
+}
+
+.gm-service-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 26px 24px;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.gm-service-card:hover {
+  border-color: #FFD4AD;
+  box-shadow: 0 8px 28px rgba(255, 105, 0, 0.10);
+}
+
+.gm-service-card-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.gm-service-card-img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.gm-service-card h3,
+.gm-service-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1C1C1C;
+  margin-bottom: 10px;
+  letter-spacing: -0.1px;
+  line-height: 1.35;
+}
+
+.gm-service-card p {
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   6. Advantages
+================================================================ */
+.gm-block .gm-advantages-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Пункты 1–4: строго по 2 в строку, одинаковая ширина и высота */
+.gm-advantages-list > li {
+  flex: 1 0 calc(50% - 4px);
+  max-width: calc(50% - 4px);
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Последний пункт (виджет Яндекс) — на всю ширину */
+.gm-advantages-list > li:last-child {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+
+.gm-advantage-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid #E5E5E5;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+  flex: 1;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gm-advantage-item:hover {
+  border-color: #FF6900;
+  box-shadow: 0 4px 20px rgba(255, 105, 0, 0.08);
+}
+
+.gm-advantage-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #FF6900, #FF8C1A);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.gm-advantage-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: #FFF0E6;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 1px;
+}
+
+.gm-advantage-body strong {
+  display: inline;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1C1C1C;
+  letter-spacing: -0.1px;
+}
+
+.gm-advantage-body p {
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.6;
+}
+
+.gm-advantage-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 105, 0, 0.35);
+  text-underline-offset: 3px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.gm-advantage-link:hover {
+  color: #FF6900;
+  text-decoration-color: #FF6900;
+}
+
+
+/* ================================================================
+   7. Highlight box
+================================================================ */
+.gm-highlight {
+  background: linear-gradient(135deg, #FFF7F0 0%, #FFF0E6 100%);
+  border: 1px solid #FFD4AD;
+  border-radius: 20px;
+  padding: 28px 32px;
+  margin-bottom: 48px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.gm-highlight-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.gm-highlight-body p {
+  font-size: 15px;
+  color: #1C1C1C;
+  line-height: 1.7;
+}
+
+.gm-highlight-body p + p {
+  margin-top: 10px;
+}
+
+
+/* ================================================================
+   8. FAQ
+================================================================ */
+.gm-faq {
+  margin-bottom: 48px;
+}
+
+.gm-faq-item {
+  border-bottom: 1px solid #E5E5E5;
+  padding: 18px 0;
+}
+
+.gm-faq-item:first-of-type {
+  border-top: 1px solid #E5E5E5;
+}
+
+.gm-faq-question {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1C1C1C;
+  margin-bottom: 8px;
+  letter-spacing: -0.1px;
+  line-height: 1.4;
+}
+
+.gm-faq-answer {
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.65;
+}
+
+
+/* ================================================================
+   9. CTA + кнопки
+================================================================ */
+.gm-cta {
+  background: linear-gradient(145deg, #1C1C1C 0%, #2D2D2D 100%);
+  border-radius: 24px;
+  padding: 44px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Декоративный оранжевый акцент — левая полоса */
+.gm-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #FF6900, #FF8C1A);
+  border-radius: 24px 0 0 24px;
+}
+
+.gm-block .gm-cta-text h3 {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: #ffffff !important;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.gm-block .gm-cta-text p {
+  font-size: 15px;
+  color: #9E9E9E !important;
+  line-height: 1.6;
+  max-width: 460px;
+}
+
+.gm-cta-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gm-btn {
+  display: inline-block;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  /* transform на hover ЗАПРЕЩЁН — вызывает баг Chrome с overflow:hidden */
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.gm-block .gm-btn-primary {
+  background: linear-gradient(135deg, #FF6900 0%, #FF8C1A 100%);
+  color: #ffffff !important;
+}
+
+.gm-block .gm-btn-primary:hover {
+  background: linear-gradient(135deg, #E55A00 0%, #E57A00 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(255, 105, 0, 0.40);
+}
+
+.gm-block .gm-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.gm-block .gm-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.08);
+}
+
+
+/* ================================================================
+   10. Responsive
+================================================================ */
+
+/* Планшет: 641px–900px → 2 колонки карточек */
+@media (max-width: 900px) and (min-width: 641px) {
+  .gm-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gm-services-grid > article:last-child:nth-child(3n + 1) {
+    grid-column: auto;
+  }
+}
+
+/* Мобильный: ≤640px → 1 колонка */
+@media (max-width: 640px) {
+  /* Единый боковой отступ для всего блока — все секции отступают от края экрана */
+  .gm-block {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .gm-intro h2 { font-size: 22px; }
+
+  /* CTA: достаточный отступ слева, чтобы контент не прилипал к оранжевой полосе */
+  .gm-cta { padding: 24px 20px; }
+
+  /* Горизонтальный скроллер на мобильном */
+  .gm-services-grid {
+    display: flex;
+    grid-template-columns: unset;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-radius: 20px;
+    padding: 16px;
+    padding-left: 20px;
+    gap: 12px;
+  }
+
+  /* Блок отзывов на главной: даём больше ширины карточкам */
+  .gm-block .gm-homepage-reviews-short .gm-services-grid {
+    padding: 14px 12px;
+    padding-left: 12px;
+    /* Уменьшаем "выглядывание" следующего отзыва:
+       увеличенный right-padding даёт больше фактической ширины первой карточке. */
+    padding-right: 96px;
+    scroll-padding-left: 12px;
+    scroll-padding-right: 96px;
+  }
+
+  .gm-services-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gm-services-grid > article:last-child:nth-child(3n + 1) {
+    grid-column: auto;
+  }
+
+  .gm-service-card {
+    min-width: 320px;
+    width: 320px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  .gm-block .gm-homepage-reviews-short .gm-homepage-review-card {
+    min-height: 335px; /* было 420px; уменьшаем на 85px */
+    height: 335px;
+  }
+
+  /* При разворачивании текста карточке нужно расти, иначе контент выйдет
+     за границы и перекроет низ (иконку источника и ссылку). */
+  .gm-block .gm-homepage-reviews-short .gm-homepage-review-card.gm-review-card--expanded {
+    height: auto;
+    min-height: 335px;
+  }
+
+  /* Кнопки-стрелки */
+  .gm-scroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    font-size: 18px;
+    color: #1C1C1C;
+    cursor: pointer;
+    z-index: 2;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .gm-scroll-btn:hover {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+  }
+
+  /* Кнопки внутри серого контейнера — не обрезаются overflow:hidden родителя */
+  .gm-scroll-btn--prev { left: 8px; }
+  .gm-scroll-btn--next { right: 8px; }
+
+  /* Для блока отзывов: уводим стрелки от контента карточек */
+  .gm-block .gm-homepage-reviews-short .gm-scroll-btn--prev { left: -6px; }
+  .gm-block .gm-homepage-reviews-short .gm-scroll-btn--next { right: -6px; }
+
+  .gm-trust-strip { gap: 16px; }
+  .gm-trust-item:not(:last-child) { border-right: none; margin-right: 0; }
+
+  /* Преимущества — 1 колонка на мобильном */
+  .gm-advantages-list > li,
+  .gm-advantages-list > li:last-child {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+
+  .gm-advantage-item {
+    padding: 12px 14px;
+    gap: 12px;
+    border-radius: 12px;
+  }
+
+  .gm-advantage-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    border-radius: 8px;
+    margin-top: 2px;
+  }
+
+  .gm-advantage-body {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .gm-advantage-body strong {
+    font-size: 14px;
+  }
+
+  .gm-highlight { flex-direction: column; gap: 12px; padding: 22px 20px; }
+
+  .gm-stat-badge {
+    font-size: 13px;
+    padding: 8px 15px;
+    gap: 6px;
+  }
+
+  /* Многострочный бейдж: вертикальная укладка
+     Фолбэк-класс для браузеров без :has() */
+  .gm-stat-badge:has(.gm-badge-sep),
+  .gm-stat-badge.gm-stat-badge--mobile-2line {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    border-radius: 14px;
+  }
+
+  .gm-badge-sep { display: none; }
+}
+
+
+/* ================================================================
+   10b. Ссылка внутри карточки услуги
+================================================================ */
+.gm-service-link {
+  display: inline-block;
+  margin-top: auto;
+  padding-top: 10px;
+  color: #FF6900;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: -0.1px;
+  transition: color 0.18s ease;
+}
+
+.gm-service-link:hover {
+  color: #E55A00;
+  text-decoration: underline;
+}
+
+/* ================================================================
+   Homepage reviews (avatars + source icons)
+================================================================ */
+.gm-block .gm-homepage-reviews-short {
+  margin-bottom: 48px;
+}
+
+.gm-block .gm-homepage-review-card h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.gm-block .gm-reviews-short-subtitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C1C1C;
+  margin: 14px 0 14px;
+  letter-spacing: -0.2px;
+}
+
+/* Рейтинг над блоком источников (витрина отзывов) */
+.gm-block .gm-reviews-rating-summary {
+  margin: 0 0 14px;
+}
+
+.gm-block .gm-reviews-rating-summary-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gm-block .gm-reviews-rating-summary-value {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1C1C1C;
+}
+
+.gm-block .gm-reviews-rating-summary-of {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1C1C1C;
+}
+
+.gm-block .gm-reviews-rating-summary-stars {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  color: #ff6900;
+  font-size: 18px;
+}
+
+.gm-block .gm-reviews-rating-summary-star {
+  line-height: 1;
+}
+
+.gm-block .gm-reviews-rating-summary-based {
+  font-size: 13px;
+  color: #6B6B6B;
+  margin-top: 6px;
+}
+
+.gm-block .gm-review-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.gm-block .gm-review-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.gm-block .gm-review-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid #E5E5E5;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+.gm-block .gm-review-user-name {
+  font-size: 14px;
+  color: #1C1C1C;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.1px;
+}
+
+.gm-block .gm-review-date {
+  font-size: 13px;
+  color: #6B6B6B;
+  line-height: 1.2;
+}
+
+.gm-block .gm-review-source-icon {
+  height: 20px;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+  transform-origin: center;
+}
+
+.gm-block .gm-review-text {
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.7;
+}
+
+.gm-block .gm-review-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  margin-bottom: 18px;
+}
+
+.gm-block .gm-review-sources-title {
+  display: none;
+}
+
+.gm-block .gm-review-source-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px; /* сверху/снизу 5px от иконки */
+  background: #fff;
+  border: none;
+  border-radius: 100px;
+  text-decoration: none;
+  color: #1C1C1C;
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1;
+  transition: color 0.18s ease;
+}
+
+/* Убираем оранжевую полосу (border-bottom) у заголовка витрины отзывов на главной */
+.gm-block .gm-homepage-reviews-short .gm-section-title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 25px;
+}
+
+.gm-block .gm-review-source-item:hover {
+  color: #FF6900;
+}
+
+.gm-block .gm-review-source-icon-lg {
+  height: 20px;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+  transform-origin: center;
+}
+
+/* Фиксация верстки карточек отзывов (чтобы "Открыть источник" был в одном месте) */
+.gm-block .gm-homepage-review-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 16px;
+  background: #ffffff;
+  border: 1px solid #F1F1F1;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.gm-block .gm-review-source-title {
+  display: none; /* на новом дизайне источник показываем через "Открыть источник" */
+}
+
+.gm-block .gm-review-text {
+  flex: 0 0 auto;
+}
+
+.gm-block .gm-review-source-anchor {
+  margin-top: auto !important;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.gm-block .gm-review-source-anchor:hover {
+  text-decoration: none;
+}
+
+.gm-block .gm-review-source-view {
+  color: #FF6900;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Источник внутри карточки больше не нужен (скрываем заголовок) */
+.gm-block .gm-review-source-title {
+  display: none;
+}
+
+/* Скрытие длинного текста отзывов на мобильной версии */
+.gm-block .gm-review-text-collapsed {
+  flex: 0 0 auto;
+  overflow: hidden;
+  max-height: none;
+  background: #F3F3F3;
+  border-radius: 16px;
+  padding: 16px 14px 14px;
+  position: relative;
+}
+
+.gm-block .gm-review-text-collapsed::after {
+  /* Небольшой "хвостик" облачка */
+  content: "";
+  position: absolute;
+  left: 26px;
+  bottom: -10px;
+  width: 20px;
+  height: 20px;
+  background: #F3F3F3;
+  border-radius: 0 0 0 14px;
+  transform: rotate(45deg);
+}
+
+.gm-block .gm-homepage-review-card .gm-review-head {
+  margin-bottom: 12px;
+}
+
+.gm-block .gm-homepage-review-card .gm-review-avatar {
+  width: 52px;
+  height: 52px;
+}
+
+.gm-block .gm-homepage-review-card .gm-review-user {
+  min-width: unset;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.gm-block .gm-review-user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gm-block .gm-review-stars {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.gm-block .gm-review-star {
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.gm-block .gm-review-star--filled {
+  color: #ff6900;
+}
+
+.gm-block .gm-review-star--empty {
+  color: #E5E5E5;
+}
+
+.gm-block .gm-homepage-review-card .gm-review-user-name {
+  font-size: 15px;
+}
+
+.gm-block .gm-homepage-review-card .gm-review-date {
+  font-size: 12px;
+  color: #8E8E8E;
+}
+
+.gm-block .gm-homepage-review-card .gm-review-text {
+  font-size: 14px;
+  color: #1C1C1C;
+  line-height: 1.55;
+}
+
+.gm-block .gm-review-show-more-btn {
+  display: none;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 10px 0 0;
+  color: #6B6B6B;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gm-block .gm-review-show-more-btn:hover {
+  text-decoration: underline;
+}
+
+.gm-block .gm-homepage-review-card.gm-review-card--expanded .gm-review-text-collapsed {
+  overflow: visible;
+  max-height: none;
+}
+
+.gm-block .gm-homepage-review-card.gm-review-card--expanded .gm-review-show-more-btn {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .gm-block .gm-review-text-collapsed {
+    max-height: 170px;
+    overflow: hidden;
+  }
+
+  .gm-block .gm-review-show-more-btn {
+    display: inline-flex;
+    margin: 6px 0 0;
+  }
+
+  /* Чтобы кнопки не сливались и в них было удобно попадать */
+  .gm-block .gm-review-source-anchor {
+    margin-top: auto !important;
+    margin-bottom: 0;
+  }
+
+  /* На развёрнутом отзыве добавляем зазор 20px
+     между текстом (и его хвостиком) и иконкой источника. */
+  .gm-block .gm-homepage-reviews-short .gm-homepage-review-card.gm-review-card--expanded .gm-review-text-collapsed {
+    margin-bottom: 20px !important;
+    padding-bottom: 34px !important; /* хвостик облачка больше не наезжает вниз */
+  }
+
+  /* Название источника в карточке: строго 1 строка */
+  .gm-block .gm-review-source-title {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    flex-wrap: nowrap;
+    max-width: none;
+    font-size: 16px;
+  }
+}
+
+/* Desktop: витрина отзывов как горизонтальный скроллер */
+@media (min-width: 641px) {
+  .gm-block .gm-homepage-reviews-short .gm-services-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Стрелки для десктопа (видимы и работают вместе со скроллом) */
+  .gm-block .gm-homepage-reviews-short .gm-scroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    font-size: 20px;
+    color: #1C1C1C;
+    cursor: pointer;
+    z-index: 2;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .gm-block .gm-homepage-reviews-short .gm-scroll-btn--prev { left: -10px; }
+  .gm-block .gm-homepage-reviews-short .gm-scroll-btn--next { right: -10px; }
+
+  .gm-block .gm-homepage-reviews-short .gm-services-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gm-block .gm-homepage-reviews-short .gm-homepage-review-card {
+    min-width: 340px;
+    width: 340px;
+    min-height: 360px;
+    height: 360px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Серый блок с текстом должен отделяться минимум 20px от иконки источника */
+  .gm-block .gm-homepage-reviews-short .gm-review-text-collapsed {
+    flex: 1 1 auto;
+    max-height: 170px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  /* На развёрнутой карточке даём высоте расти, иначе текст перекроет источник */
+  .gm-block .gm-homepage-reviews-short .gm-homepage-review-card.gm-review-card--expanded {
+    height: auto;
+    min-height: 360px;
+  }
+
+  .gm-block .gm-homepage-reviews-short .gm-review-source-anchor {
+    margin-top: auto !important;
+  }
+}
+
+/* Развести блок карточек отзывов и CTA */
+.gm-block .gm-homepage-reviews-short .gm-cta {
+  margin-top: 24px;
+}
+
+
+/* ================================================================
+   10c. HowTo-шаги (нумерованный список процесса)
+================================================================ */
+.gm-howto-steps {
+  list-style: none;
+  counter-reset: gm-step;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gm-howto-step {
+  counter-increment: gm-step;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #E5E5E5;
+  border-radius: 16px;
+  padding: 18px 22px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gm-howto-step:hover {
+  border-color: #FF6900;
+  box-shadow: 0 4px 20px rgba(255, 105, 0, 0.08);
+}
+
+.gm-howto-step::before {
+  content: counter(gm-step);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #FF6900, #FF8C1A);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 50%;
+  margin-top: 1px;
+}
+
+.gm-howto-step-body strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1C1C1C;
+  margin-bottom: 4px;
+  letter-spacing: -0.1px;
+}
+
+.gm-howto-step-body p {
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   11. Collapse / Expand — собственный механизм
+================================================================ */
+.gm-collapse-wrapper {
+  position: relative;
+}
+
+/* overflow:hidden + position:relative нужны для fade-шторки */
+.gm-collapse-content {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Градиент-шторка — абсолютно позиционирована внутри .gm-collapse-content */
+.gm-collapse-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Кнопка «Показать больше / Скрыть» */
+.gm-collapse-trigger {
+  text-align: center;
+  padding: 20px 0 8px;
+}
+
+.gm-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid #E5E5E5;
+  color: #FF6900;
+  font-family: "MiSans", "PingFang SC", "Helvetica Neue", system-ui, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 11px 24px;
+  border-radius: 100px;
+  cursor: pointer;
+  letter-spacing: -0.1px;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.gm-collapse-btn:hover {
+  background: #FFF0E6;
+  border-color: #FF6900;
+}
+
+/* Шеврон: вращается на 180° при раскрытии */
+.gm-collapse-chevron {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gm-collapse-btn.gm-is-expanded .gm-collapse-chevron {
+  transform: rotate(180deg);
+}
+
+
+/* ================================================================
+   12. Quick Links — быстрые ссылки / фасетная навигация
+================================================================ */
+.gm-quick-links {
+  margin-bottom: 48px;
+}
+
+.gm-quick-links-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gm-quick-link {
+  display: inline-block;
+  padding: 7px 16px;
+  background: #F5F5F5;
+  color: #1C1C1C;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.gm-quick-link:hover {
+  background: #FFF0E6;
+  border-color: #FF6900;
+  color: #FF6900;
+}
+
+/* Скрытый тег (управляется JS) */
+.gm-ql-hidden {
+  display: none !important;
+}
+
+
+/* ================================================================
+   12b. Quick Links — Row Overflow (кнопка «Показать ещё»)
+================================================================ */
+.gm-ql-trigger {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.gm-ql-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid #E5E5E5;
+  color: #FF6900;
+  font-family: "MiSans", "PingFang SC", "Helvetica Neue", system-ui, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 100px;
+  cursor: pointer;
+  letter-spacing: -0.1px;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.gm-ql-btn:hover {
+  background: #FFF0E6;
+  border-color: #FF6900;
+}
+
+.gm-ql-chevron {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ================================================================
+   12c. Quick Links Top — быстрые ссылки вверху (без заголовка, кнопка в строку)
+================================================================ */
+.gm-quick-links-top {
+  margin-bottom: 24px;
+  border: 1px solid #E5E5E5;
+  border-radius: 16px;
+  padding: 16px 20px;
+  background: #fff;
+}
+
+/* Сетка: ссылки в первой колонке (переносятся), кнопка — во второй, всегда в одной строке */
+.gm-quick-links-top-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.gm-quick-links-top .gm-quick-links-tags {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.gm-quick-links-top .gm-ql-trigger {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+
+/* ================================================================
+   13. Badge item — двухстрочный бейдж
+================================================================ */
+
+/* .gm-badge-item — flex-дочерний элемент .gm-stat-badge.
+   Используется для разделения двух тезисов внутри бейджа.
+   Стилизация через родительский flex-контейнер — отдельные правила не нужны. */
+.gm-badge-item {
+  display: contents; /* прозрачная обёртка — не ломает flex родителя */
+}
+
+/* .gm-badge-sep — разделитель «·» между тезисами, скрывается на мобильном */
+.gm-badge-sep {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+
+/* ================================================================
+   14. Repair photo — фото устройств (страницы сервиса/категорий)
+================================================================ */
+.gm-repair-photo {
+  margin-bottom: 32px;
+}
+
+.gm-repair-photo img {
+  max-width: 460px;
+  height: auto;
+  border-radius: 20px;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .gm-repair-photo img {
+    max-width: 100%;
+    max-height: 600px;
+  }
+}
+
+
+/* ================================================================
+   15. Blog Article — типографика и структура статей блога
+================================================================ */
+
+/* ── Article header ── */
+.gm-article-header {
+  margin-bottom: 32px;
+}
+
+/* Теги / категории */
+.gm-article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.gm-article-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  background: #FFF0E6;
+  color: #FF6900 !important;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid #FFD4AD;
+  letter-spacing: 0;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.gm-article-tag:hover {
+  background: #FF6900;
+  color: #ffffff !important;
+  border-color: #FF6900;
+  text-decoration: none;
+}
+
+/* Заголовок статьи H1 (если выводится внутри HTML-блока) */
+.gm-article-title {
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 700;
+  color: #1C1C1C;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* Мета: автор · дата · время чтения */
+.gm-article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 20px;
+  color: #6B6B6B;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.gm-article-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gm-article-meta-item time {
+  color: #6B6B6B;
+}
+
+/* Вводный текст статьи перед Key Facts */
+.gm-article .gm-intro-text {
+  max-width: none;
+  background: #F7F7F7;
+  border: 1px solid #ECECEC;
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin: 0 0 20px;
+}
+
+.gm-article .gm-intro-text p {
+  margin: 0;
+}
+
+
+/* ── Key Facts box (GEO — primary AI citation target) ── */
+.gm-article-key-facts {
+  background: linear-gradient(135deg, #FFF7F0 0%, #FFF0E6 100%);
+  border: 1px solid #FFD4AD;
+  border-left: 4px solid #FF6900;
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 36px;
+}
+
+.gm-article-key-facts-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF6900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 14px;
+}
+
+.gm-article-key-facts-list {
+  list-style: none !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.gm-article-key-facts-list li {
+  font-size: 15px;
+  color: #1C1C1C;
+  line-height: 1.55;
+  padding-left: 22px;
+  position: relative;
+  list-style: none !important;
+}
+
+.gm-article-key-facts-list li::marker {
+  content: "";
+}
+
+.gm-article-key-facts-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #FF6900;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+
+/* ── Table of Contents ── */
+.gm-article-toc {
+  background: #F5F5F5;
+  border-radius: 16px;
+  padding: 22px 26px;
+  margin-bottom: 36px;
+}
+
+.gm-article-toc-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1C1C1C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.gm-article-toc-list {
+  padding-left: 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gm-article-toc-link {
+  font-size: 14px;
+  color: #3D3D3D;
+  text-decoration: none;
+  line-height: 1.45;
+  transition: color 0.18s ease;
+}
+
+.gm-article-toc-link:hover {
+  color: #FF6900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+
+/* ── Article body — prose typography ── */
+.gm-article-body {
+  font-size: 17px;
+  color: #1C1C1C;
+  line-height: 1.78;
+  max-width: 780px;
+  margin-bottom: 44px;
+}
+
+.gm-article-body h2 {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: #1C1C1C;
+  letter-spacing: -0.3px;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  line-height: 1.25;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #FF6900;
+}
+
+.gm-article-body h3 {
+  font-size: clamp(17px, 2.5vw, 21px);
+  font-weight: 600;
+  color: #1C1C1C;
+  letter-spacing: -0.2px;
+  margin-top: 36px;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.gm-article-body h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #3D3D3D;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.gm-article-body p {
+  margin-bottom: 20px;
+}
+
+.gm-article-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Списки — переопределяем CS-Cart ul с отступом слева */
+.gm-article-body ul,
+.gm-article-body ol {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gm-article-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.gm-article-body ol {
+  padding-left: 20px;
+}
+
+.gm-article-body ul li {
+  font-size: 16px;
+  color: #1C1C1C;
+  line-height: 1.65;
+  padding-left: 22px;
+  position: relative;
+}
+
+.gm-article-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+  background: #FF6900;
+  border-radius: 50%;
+}
+
+.gm-article-body ol li {
+  font-size: 16px;
+  color: #1C1C1C;
+  line-height: 1.65;
+}
+
+.gm-article-body a {
+  color: #FF6900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.18s ease;
+}
+
+.gm-article-body a:hover {
+  color: #E55A00;
+}
+
+.gm-article-body strong {
+  font-weight: 600;
+  color: #1C1C1C;
+}
+
+.gm-article-body em {
+  font-style: italic;
+  color: #3D3D3D;
+}
+
+/* Изображения и подписи */
+.gm-article-body figure {
+  margin: 32px 0;
+}
+
+.gm-article-body figure img,
+.gm-article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  display: block;
+}
+
+.gm-article-body figcaption {
+  font-size: 13px;
+  color: #6B6B6B;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* Разделитель секций */
+/* (правило временно оставлено без деклараций, чтобы не вмешиваться в отступы) */
+
+/* ── Pull-quote / цитата ── */
+.gm-article-pullquote {
+  border-left: 4px solid #FF6900;
+  background: #FFF0E6;
+  border-radius: 0 14px 14px 0;
+  padding: 20px 24px;
+  margin: 36px 0;
+}
+
+.gm-article-pullquote p {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1C1C1C;
+  line-height: 1.55;
+  font-style: italic;
+  margin: 0;
+}
+
+
+/* ── Author box (E-E-A-T) ── */
+.gm-article-author {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #F5F5F5;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-top: 16px;
+  margin-bottom: 40px;
+}
+
+.gm-article-author-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #E5E5E5;
+  line-height: 1;
+}
+
+.gm-article-author-body strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C1C1C;
+  margin-bottom: 6px;
+}
+
+.gm-article-author-body p {
+  font-size: 13px;
+  color: #6B6B6B;
+  line-height: 1.6;
+  margin: 0;
+}
+
+
+/* ── Responsive ≤640px ── */
+@media (max-width: 640px) {
+  .gm-article-body {
+    font-size: 16px;
+  }
+
+  .gm-article-body h2 {
+    margin-top: 36px;
+  }
+
+  .gm-article-body h3 {
+    margin-top: 28px;
+  }
+
+  .gm-article-pullquote {
+    padding: 16px 18px;
+    margin: 24px 0;
+  }
+
+  .gm-article-pullquote p {
+    font-size: 16px;
+  }
+
+  .gm-article-author {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+
+  .gm-article-key-facts {
+    padding: 18px 20px;
+  }
+
+  .gm-article .gm-intro-text {
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .gm-article-toc {
+    padding: 18px 20px;
+  }
+
+  .gm-article-toc-list {
+    padding-left: 16px;
+  }
+}

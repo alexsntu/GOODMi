@@ -1,0 +1,418 @@
+{literal}
+<style>
+  .gm-lottery-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0 36px;
+  }
+
+  .gm-lottery-hero {
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    border: 1px solid #e7e7e7;
+    background: #f7f3ff;
+  }
+
+  .gm-lottery-hero img {
+    width: 100%;
+    display: block;
+    height: auto;
+  }
+
+  .gm-lottery-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(320px, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .gm-lottery-tickets {
+    background: #f5f5f5;
+    border-radius: 24px;
+    padding: 16px;
+    border: 1px solid #e5e5e5;
+  }
+
+  .gm-lottery-grid {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .gm-ticket-btn {
+    appearance: none;
+    border: 2px solid #ff6900;
+    border-radius: 12px;
+    background: #fff;
+    color: #1c1c1c;
+    min-height: 52px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .gm-ticket-btn:hover {
+    background: #fff0e6;
+  }
+
+  .gm-ticket-btn.is-occupied {
+    background: #1c1c1c;
+    border-color: #1c1c1c;
+    color: #ffffff;
+  }
+
+  .gm-ticket-btn.is-selected {
+    box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.35);
+  }
+
+  .gm-lottery-side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .gm-lottery-info-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .gm-lottery-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+    color: #3d3d3d;
+    font-size: 14px;
+  }
+
+  .gm-lottery-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .gm-lottery-dot--free {
+    background: #ffffff;
+    border: 2px solid #ff6900;
+  }
+
+  .gm-lottery-dot--busy {
+    background: #1c1c1c;
+  }
+
+  .gm-lottery-counter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .gm-lottery-counter span {
+    border-radius: 999px;
+    padding: 6px 12px;
+    background: #fff0e6;
+    color: #1c1c1c;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .gm-lottery-owner {
+    margin-top: 10px;
+    background: #f7f7f7;
+    border: 1px solid #ececec;
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 64px;
+    font-size: 14px;
+    color: #3d3d3d;
+  }
+
+  .gm-lottery-updated {
+    font-size: 13px;
+    color: #6b6b6b;
+    margin-top: 8px;
+  }
+
+  .gm-lottery-list {
+    max-height: 360px;
+    overflow-y: auto;
+    margin-top: 8px;
+    border: 1px solid #ececec;
+    border-radius: 12px;
+  }
+
+  .gm-lottery-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .gm-lottery-table th,
+  .gm-lottery-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f1f1f1;
+    text-align: left;
+    font-size: 13px;
+  }
+
+  .gm-lottery-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fafafa;
+    font-weight: 600;
+  }
+
+  .gm-prizes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .gm-prize-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .gm-prize-photo {
+    width: 100%;
+    min-height: 150px;
+    border-radius: 12px;
+    background: #f5f5f5;
+    border: 1px dashed #d6d6d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b6b6b;
+    text-align: center;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .gm-prize-name {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1c1c1c;
+  }
+
+  @media (max-width: 980px) {
+    .gm-lottery-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gm-prizes-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gm-lottery-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .gm-ticket-btn {
+      font-size: 20px;
+      min-height: 46px;
+    }
+  }
+</style>
+
+<div class="gm-block gm-lottery-page">
+  <section class="gm-lottery-hero" aria-label="Баннер акции">
+    <img src="C:\Users\Алекс\.cursor\projects\c-Users-GOODMi\assets\c__Users_______AppData_Roaming_Cursor_User_workspaceStorage_37bd82bdb6bde817c88473925c7cd1c3_images_photo_2026-04-30_14-25-38-4604466d-dba4-4e37-b7ea-708fc030a6be.png" alt="GOODMi Лотерея Счастливый номер">
+  </section>
+
+  <section class="gm-intro" aria-labelledby="lottery-title">
+    <h2 id="lottery-title">Акция GOODMi «Счастливый номер»</h2>
+    <p class="gm-intro-text">
+      Участвуйте в розыгрыше фирменных подарков: при покупке в магазине GOODMi на сумму от 5000 рублей вы выбираете один номер лотерейного билета.
+      Всего в акции 100 номеров. Когда все номера будут распределены между покупателями, мы проводим розыгрыш в прямом эфире в нашей группе ВКонтакте.
+      Количество билетов на одного покупателя не ограничено, но к одному чеку можно получить только один номер и одну наклейку. Для получения выигрыша обязательно предъявить чек.
+    </p>
+    <span class="gm-stat-badge" role="note" aria-label="Ежедневное обновление участников">
+      &#x2714;&nbsp; Список участников обновляется ежедневно
+    </span>
+  </section>
+
+  <section class="gm-section" aria-labelledby="lottery-prizes-title">
+    <h3 class="gm-section-title" id="lottery-prizes-title">Подарки в розыгрыше</h3>
+    <div class="gm-prizes-grid">
+      <article class="gm-prize-card" role="listitem">
+        <div class="gm-prize-photo">Сюда вставим фото<br>Квартира</div>
+        <p class="gm-prize-name">Квартира</p>
+      </article>
+      <article class="gm-prize-card" role="listitem">
+        <div class="gm-prize-photo">Сюда вставим фото<br>Машина</div>
+        <p class="gm-prize-name">Машина</p>
+      </article>
+      <article class="gm-prize-card" role="listitem">
+        <div class="gm-prize-photo">Сюда вставим фото<br>Поездка на 2-х в Турцию</div>
+        <p class="gm-prize-name">Поездка на 2-х в Турцию</p>
+      </article>
+      <article class="gm-prize-card" role="listitem">
+        <div class="gm-prize-photo">Сюда вставим фото<br>И много гаджетов и техники</div>
+        <p class="gm-prize-name">И много гаджетов и техники</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="gm-section" aria-labelledby="lottery-grid-title">
+    <h3 class="gm-section-title" id="lottery-grid-title">Выбор и статус номеров</h3>
+    <div class="gm-lottery-layout">
+      <div class="gm-lottery-tickets">
+        <div class="gm-lottery-grid" id="gmLotteryGrid"></div>
+      </div>
+
+      <aside class="gm-lottery-side">
+        <div class="gm-lottery-info-card">
+          <strong>Легенда</strong>
+          <div class="gm-lottery-legend">
+            <span><i class="gm-lottery-dot gm-lottery-dot--free" aria-hidden="true"></i>Свободный номер</span>
+            <span><i class="gm-lottery-dot gm-lottery-dot--busy" aria-hidden="true"></i>Занятый номер</span>
+          </div>
+          <div class="gm-lottery-counter">
+            <span id="gmCounterBusy">Занято: 0</span>
+            <span id="gmCounterFree">Свободно: 100</span>
+          </div>
+          <div class="gm-lottery-updated" id="gmLastUpdated">Актуальность: --</div>
+        </div>
+
+        <div class="gm-lottery-info-card">
+          <strong>Информация по номеру</strong>
+          <div class="gm-lottery-owner" id="gmTicketOwner">
+            Нажмите на номер, чтобы увидеть его статус.
+          </div>
+        </div>
+
+        <div class="gm-lottery-info-card">
+          <strong>Список занятых номеров</strong>
+          <div class="gm-lottery-list">
+            <table class="gm-lottery-table">
+              <thead>
+                <tr>
+                  <th>Номер</th>
+                  <th>Клиент</th>
+                  <th>Телефон</th>
+                </tr>
+              </thead>
+              <tbody id="gmOccupiedTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="gm-highlight" aria-label="Условия получения подарка">
+    <div class="gm-highlight-icon" aria-hidden="true">&#x1F381;</div>
+    <div class="gm-highlight-body">
+      <p><strong>Подарок выдается только по чеку</strong> с наклейкой номера, который победил в розыгрыше.</p>
+      <p>Розыгрыш запускается после распределения всех 100 номеров и проводится в прямом эфире в группе GOODMi ВКонтакте.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    // Обновляйте этот массив ежедневно: номер, имя и последние 4 цифры телефона.
+    var occupiedTickets = [
+      { number: 7, name: "Анна", phoneLast4: "4382" },
+      { number: 14, name: "Максим", phoneLast4: "1190" },
+      { number: 26, name: "Ольга", phoneLast4: "5521" },
+      { number: 31, name: "Игорь", phoneLast4: "8844" },
+      { number: 50, name: "Сергей", phoneLast4: "7005" },
+      { number: 69, name: "Наталья", phoneLast4: "3640" },
+      { number: 77, name: "Владислав", phoneLast4: "9207" }
+    ];
+
+    var lastUpdatedText = "30.04.2026 14:30";
+    var totalTickets = 100;
+    var occupiedMap = {};
+    var selectedButton = null;
+
+    occupiedTickets.forEach(function (item) {
+      occupiedMap[item.number] = item;
+    });
+
+    var grid = document.getElementById("gmLotteryGrid");
+    var ownerBox = document.getElementById("gmTicketOwner");
+    var busyCounter = document.getElementById("gmCounterBusy");
+    var freeCounter = document.getElementById("gmCounterFree");
+    var updatedBlock = document.getElementById("gmLastUpdated");
+    var occupiedBody = document.getElementById("gmOccupiedTableBody");
+
+    function showTicketInfo(ticketNumber, button) {
+      if (selectedButton) selectedButton.classList.remove("is-selected");
+      selectedButton = button;
+      selectedButton.classList.add("is-selected");
+
+      var taken = occupiedMap[ticketNumber];
+      if (!taken) {
+        ownerBox.innerHTML = "Номер <strong>" + ticketNumber + "</strong> свободен и доступен для выбора.";
+        return;
+      }
+
+      ownerBox.innerHTML =
+        "Номер <strong>" + ticketNumber + "</strong> уже занят.<br>" +
+        "Клиент: <strong>" + taken.name + "</strong><br>" +
+        "Телефон: <strong>**** " + taken.phoneLast4 + "</strong>";
+    }
+
+    function renderGrid() {
+      for (var i = 1; i <= totalTickets; i++) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "gm-ticket-btn";
+        button.textContent = i;
+        button.setAttribute("aria-label", "Номер " + i);
+
+        if (occupiedMap[i]) button.classList.add("is-occupied");
+
+        button.addEventListener("click", (function (ticketNumber, ticketButton) {
+          return function () {
+            showTicketInfo(ticketNumber, ticketButton);
+          };
+        })(i, button));
+
+        grid.appendChild(button);
+      }
+    }
+
+    function renderOccupiedTable() {
+      var sorted = occupiedTickets.slice().sort(function (a, b) {
+        return a.number - b.number;
+      });
+
+      sorted.forEach(function (item) {
+        var row = document.createElement("tr");
+        row.innerHTML =
+          "<td>" + item.number + "</td>" +
+          "<td>" + item.name + "</td>" +
+          "<td>**** " + item.phoneLast4 + "</td>";
+        occupiedBody.appendChild(row);
+      });
+    }
+
+    function renderCounters() {
+      var busy = occupiedTickets.length;
+      var free = totalTickets - busy;
+      busyCounter.textContent = "Занято: " + busy;
+      freeCounter.textContent = "Свободно: " + free;
+      updatedBlock.textContent = "Актуальность: " + lastUpdatedText;
+    }
+
+    renderGrid();
+    renderOccupiedTable();
+    renderCounters();
+  })();
+</script>
+{/literal}

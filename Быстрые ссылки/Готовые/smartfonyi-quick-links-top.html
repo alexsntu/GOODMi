@@ -1,0 +1,101 @@
+<section class="gm-quick-links-top gm-section" aria-label="Быстрые ссылки по категориям">
+  <div class="gm-quick-links-top-inner">
+    <nav id="gm-ql-smartfonyi-top-nav" aria-label="Быстрые ссылки по категориям" class="gm-quick-links-tags">
+      <a href="https://goodmi.ru/smartfony-xiaomi-ru/" class="gm-quick-link">Xiaomi</a>
+      <a href="https://goodmi.ru/smartfony-redmi/" class="gm-quick-link">Redmi</a>
+      <a href="https://goodmi.ru/smartfony-redmi-note/" class="gm-quick-link">Redmi Note</a>
+      <a href="https://goodmi.ru/smartfony-poco/" class="gm-quick-link">POCO</a>
+      <a href="https://goodmi.ru/smartfonyi/flagmany-xiaomi/" class="gm-quick-link">Флагманы</a>
+      <a href="https://goodmi.ru/smartfonyi/xiaomi-15-series/" class="gm-quick-link">Xiaomi 15 Series</a>
+      <a href="https://goodmi.ru/smartfonyi/redmi-note-15-series/" class="gm-quick-link">Redmi Note 15 Series</a>
+      <a href="https://goodmi.ru/smartfonyi/poco-f8-series/" class="gm-quick-link">POCO F8 Series</a>
+      <a href="https://goodmi.ru/xiaomi-15-ultra/" class="gm-quick-link">Xiaomi 15 Ultra</a>
+      <a href="https://goodmi.ru/xiaomi-15t-pro/" class="gm-quick-link">Xiaomi 15T Pro</a>
+      <a href="https://goodmi.ru/xiaomi-15t/" class="gm-quick-link">Xiaomi 15T</a>
+      <a href="https://goodmi.ru/poco-f8-ultra/" class="gm-quick-link">POCO F8 Ultra</a>
+      <a href="https://goodmi.ru/poco-f8-pro/" class="gm-quick-link">POCO F8 Pro</a>
+      <a href="https://goodmi.ru/poco-f7-pro-5g/" class="gm-quick-link">Poco F7 Pro 5G</a>
+      <a href="https://goodmi.ru/poco-f7-ultra-5g/" class="gm-quick-link">Poco F7 Ultra</a>
+      <a href="https://goodmi.ru/poco-c85/" class="gm-quick-link">Poco C85</a>
+      <a href="https://goodmi.ru/redmi-a5/" class="gm-quick-link">Redmi A5</a>
+      <a href="https://goodmi.ru/redmi-note-14-pro-plus/" class="gm-quick-link">Redmi Note 14 Pro+ 5G</a>
+      <a href="https://goodmi.ru/redmi-note-14-pro-5g/" class="gm-quick-link">Redmi Note 14 Pro 5G</a>
+      <a href="https://goodmi.ru/redmi-note-14-pro-4g/" class="gm-quick-link">Redmi Note 14 Pro 4G</a>
+      <a href="https://goodmi.ru/redmi-note-14-4g/" class="gm-quick-link">Redmi Note 14 4G</a>
+      <a href="https://goodmi.ru/poco-m7/" class="gm-quick-link">Poco M7</a>
+      <a href="https://goodmi.ru/poco-m7-pro-5g/" class="gm-quick-link">Poco M7 Pro 5G</a>
+      <a href="https://goodmi.ru/poco-x7-pro-5g/" class="gm-quick-link">Poco X7 Pro 5G</a>
+      <a href="https://goodmi.ru/poco-x7-5g/" class="gm-quick-link">Poco X7 5G</a>
+      <a href="https://goodmi.ru/smartfonyi/s-nfc/" class="gm-quick-link">С NFC</a>
+      <a href="https://goodmi.ru/smartfonyi/smartfony-2025-goda/" class="gm-quick-link">2025 года</a>
+      <a href="https://goodmi.ru/smartfonyi/smartfony-128-gb/" class="gm-quick-link">128GB</a>
+      <a href="https://goodmi.ru/smartfonyi/smartfony-256-gb/" class="gm-quick-link">256GB</a>
+      <a href="https://goodmi.ru/smartfonyi/512gb/" class="gm-quick-link">512GB</a>
+      <a href="https://goodmi.ru/smartfonyi/white/" class="gm-quick-link">Белые</a>
+      <a href="https://goodmi.ru/smartfonyi/yellow/" class="gm-quick-link">Желтые</a>
+      <a href="https://goodmi.ru/smartfonyi/15k/" class="gm-quick-link">до 15 000</a>
+    </nav>
+    <div class="gm-ql-trigger">
+      <button id="gm-ql-smartfonyi-top-btn" class="gm-ql-btn" aria-expanded="false" aria-controls="gm-ql-smartfonyi-top-nav">
+        <span class="gm-ql-btn-text">Показать ещё</span>
+        <span class="gm-ql-chevron" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var nav = document.getElementById('gm-ql-smartfonyi-top-nav');
+  var btn = document.getElementById('gm-ql-smartfonyi-top-btn');
+  if (!nav || !btn) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.gm-quick-link'));
+  var btnText = btn.querySelector('.gm-ql-btn-text');
+  var chevron = btn.querySelector('.gm-ql-chevron');
+  var expanded = false;
+  var overflowLinks = [];
+  var resizeTimer;
+
+  function calcRows() {
+    if (!links.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    links.forEach(function (l) { l.classList.remove('gm-ql-hidden'); });
+    overflowLinks = [];
+    var firstTop = links[0].offsetTop;
+    links.forEach(function (link) {
+      if (link.offsetTop > firstTop + 4) { overflowLinks.push(link); }
+    });
+    if (!overflowLinks.length) {
+      btn.style.display = 'none';
+      return;
+    }
+    btn.style.display = '';
+    if (!expanded) {
+      overflowLinks.forEach(function (l) { l.classList.add('gm-ql-hidden'); });
+    }
+  }
+
+  function toggle() {
+    expanded = !expanded;
+    overflowLinks.forEach(function (l) { l.classList.toggle('gm-ql-hidden', !expanded); });
+    btnText.textContent = expanded ? 'Свернуть' : 'Показать ещё';
+    chevron.style.transform = expanded ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(expanded));
+  }
+
+  btn.addEventListener('click', toggle);
+  window.addEventListener('resize', function () {
+    if (expanded) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calcRows, 150);
+  });
+  requestAnimationFrame(function () { requestAnimationFrame(calcRows); });
+}());
+</script>
