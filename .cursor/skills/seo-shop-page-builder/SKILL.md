@@ -21,10 +21,12 @@ Extract from the user's message:
 - **Page type**: top-level category (Смартфоны, Планшеты, Ноутбуки) or specific model landing
 - **URL slug** inferred (e.g., `smartfony`, `smartfony/xiaomi-15-pro`, `planshety`)
 - **Competitor URLs** — if provided, flag for Step 2b analysis
-- **Collapse** — whether to wrap the block in the collapse/expand mechanism:
-  - If the user says **«с коллапсом»**, **«с раскрытием»**, or **«collapse»** → use collapse wrapper
-  - If the user says **«без коллапса»**, **«без раскрытия»**, or **«no collapse»** → output `.gm-block` directly, no wrapper, no `<script>`
-  - If **not specified** → use collapse by default
+- **Collapse** — управление двухблочной структурой вывода:
+  - Стандарт (по умолчанию и при **«с коллапсом»**): два раздельных блока —
+    1. **SEO-блок** (всегда видим): `<div class="gm-block">` → intro-секция + FAQ
+    2. **Визуальный блок** (коллапс): `.gm-collapse-wrapper` → `<div class="gm-block">` → highlights grid + преимущества + CTA
+  - Если пользователь говорит **«без коллапса»** или **«no collapse»** → оба блока выводятся как обычные `<div class="gm-block">` без `.gm-collapse-wrapper` и без `<script>` toggle
+  - Разделение на два блока обязательно при любом варианте — меняется только наличие collapse-обёртки вокруг второго блока
 
 ### Step 1a — If request includes popular reviews block (обновление 2026-03-25)
 
@@ -68,14 +70,48 @@ Also ask/ensure that output includes an **all-sources strip** (иконка + н
 
 ### Step 2a — SERP & keyword research
 
-Run **4 WebSearch queries in parallel**:
+Run **5 WebSearch queries in parallel**:
 
 1. `"купить [Категория/Модель] Севастополь"` — local buy intent
 2. `"купить [Модель] с доставкой по России СДЭК"` — delivery signals
 3. `"[Модель] цена купить GOODMi Крым"` — commercial price + geo intent
 4. `"[Модель] трейд-ин рассрочка кредит Xiaomi"` — purchase condition signals
+5. `"купить Сяоми [Категория] Севастополь"` — кириллический коммерческий интент
 
 **Goal:** Identify commercial LSI terms, FAQ seeds, trust signals, how competitors structure category pages. **Do NOT use informational queries** (reviews, specs, comparisons) — this is a shop page with commercial intent only.
+
+### Step 2c — Кириллические написания бренда (обязательно для каждой категории)
+
+Для любой категории, связанной с брендами Xiaomi / Redmi / POCO / Amazfit — **обязательно** проверять и включать кириллические LSI-варианты названий. Многие пользователи вводят запросы с кириллической клавиатуры, особенно через мобильный и голосовой ввод.
+
+**Стандартная таблица кириллических LSI-вариантов:**
+
+| Латиница | Кириллица (основная) | Альтернативные написания |
+|---|---|---|
+| Xiaomi | Сяоми | Ксяоми, Ксиаоми, Сяомi |
+| Redmi | Редми | Редмi |
+| POCO | Поко | — |
+| Amazfit | Амазфит | Амейзфит |
+| Mi | Ми | — |
+
+**Правила использования кириллики в тексте:**
+
+1. **JSON-LD `alternateName`** — добавлять массив с кириллическими вариантами (GEO-сигнал для AI-поисковиков, не отображается пользователю).
+2. **Лид-абзац `.gm-intro-text`** — один раз добавить кириллику в скобках: «Xiaomi (Сяоми)» или «Redmi (Редми)» — органично, без спама.
+3. **Один вопрос FAQ** — переформулировать с кириллическим написанием бренда: «Как купить смартфон Сяоми (Xiaomi)...» — захватывает кириллический Featured Snippet.
+4. **Одна карточка модели** — в описании добавить «Сяоми» / «Редми» / «Поко» (только для одной карточки, чтобы не создавать шаблонный повтор).
+5. **H3 заголовок секции** — опционально, только если это не перегружает заголовок.
+
+**Запрещено:**
+- Добавлять кириллику в `alt` и `title` изображений (перегружает атрибуты).
+- Повторять кириллику в каждой карточке (спам-паттерн).
+- Использовать «Ксяоми» или «Ксиаоми» в видимом тексте — только в JSON-LD `alternateName`.
+
+**JSON-LD `alternateName` — шаблон для смартфонов Xiaomi:**
+```json
+"alternateName": ["Магазин Xiaomi GOODMi", "Магазин Сяоми GOODMi", "Смартфоны Сяоми Крым", "Купить Сяоми Севастополь"]
+```
+Адаптировать под конкретную категорию (для Redmi — «Редми», для POCO — «Поко» и т.д.).
 
 ### Step 2b — Competitor analysis (if URLs provided)
 
@@ -119,8 +155,9 @@ Compile internally (do NOT output to user):
 | Условия | гарантия 1 год, трейд-ин, рассрочка, кредит |
 | LSI модели | конкретные модели из топа продаж категории |
 | Доверие | с 2015 года, фирменный магазин техники Xiaomi в Крыму |
+| **Кириллика** | **купить Сяоми [Категория], Редми [Модель], Поко [Модель] — кириллические написания бренда** |
 
-Distribute: H2 (1 ключ) → лид-абзац (2–3) → карточки (1/карточка) → FAQ (вопросы = запросы).
+Distribute: H2 (1 ключ) → лид-абзац (2–3, вкл. кириллику в скобках) → одна карточка (кириллика) → один FAQ (кириллика в вопросе) → JSON-LD alternateName (полный список кириллических вариантов).
 
 ### Step 3b — GEO & AEO requirements
 
@@ -199,16 +236,80 @@ Distribute: H2 (1 ключ) → лид-абзац (2–3) → карточки (
 
 Follow **all** rules in `seo--for-shop-html-block.mdc` strictly.
 
-Required sections in order:
-1. **JSON-LD** — `@graph`: LocalBusiness + WebPage + FAQPage (+ ItemList if listing models)
-2. **Collapse wrapper** (see condition below) → `.gm-collapse-content` → `.gm-block`
-3. Inside `.gm-block`:
-   - **Intro**: обёртка **`<section class="gm-section gm-intro" aria-labelledby="...">`** (НЕ `<header>`!) → H2 + `.gm-intro-text` (без `.gm-stat-badge`)
-   - **Highlights grid**: strictly **3 or 6** `<article>` cards; секция начинается с **`<h3 class="gm-section-title">`** + обязательный **`<p class="gm-section-lead">`** под заголовком; сетка обёрнута в `.gm-services-scroll-wrap` с кнопками `gm-scroll-btn--prev` / `gm-scroll-btn--next`
-   - **Advantages**: **`<ul class="gm-advantages-list" role="list">`** (атрибут `role="list"` обязателен!); секция начинается с **`<h3 class="gm-section-title">`**; последний пункт — Яндекс-виджет рейтинга
-   - **FAQ**: секция начинается с **`<h3 class="gm-section-title">`**; 4 questions (delivery, guarantee, trade-in, model choice)
-   - **CTA**: dark gradient block, 2 buttons — **кнопка 1 (оранжевая): онлайн-чат JivoChat** (`jivo_api.open()`), **кнопка 2 (белая): телефон 8-800-250-17-00**
-4. **collapse `<script>`** at the end — **only if collapse is enabled**
+**Обязательная двухблочная структура (стандарт SEO-разделения 2026):**
+
+```
+1. JSON-LD
+2. Блок 1 — SEO-блок (всегда видимый)
+3. Блок 2 — Визуальный блок (collapse ON/OFF)
+4. <script> — только при collapse ON
+```
+
+**Блок 1 — SEO-блок (всегда видимый, никогда не оборачивать в коллапс):**
+
+```html
+<!-- Блок 1: Всегда видимый — SEO-критичный (интро + FAQ) -->
+<div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
+  <section class="gm-section gm-intro" aria-labelledby="[id]-heading">
+    <!-- H2 + .gm-intro-text -->
+  </section>
+  <section class="gm-faq" aria-labelledby="faq-heading">
+    <!-- 4 FAQ-вопроса -->
+  </section>
+</div><!-- /.gm-block (SEO-блок: всегда видим) -->
+```
+
+Содержит строго:
+- **Intro**: `<section class="gm-section gm-intro" aria-labelledby="...">` (НЕ `<header>`!) → H2 + `.gm-intro-text`
+- **FAQ**: `<section class="gm-faq">` → `<h3 class="gm-section-title">` → 4 вопроса (delivery, guarantee, trade-in, model choice)
+
+**Блок 2 — Визуальный блок (collapse ON по умолчанию):**
+
+```html
+<!-- Блок 2: Коллапс — визуальные секции (карточки, преимущества, CTA) -->
+<div class="gm-collapse-wrapper">
+  <div class="gm-collapse-content">
+    <div class="gm-block">
+      <!-- highlights grid -->
+      <!-- advantages -->
+      <!-- CTA -->
+    </div><!-- /.gm-block -->
+    <div class="gm-collapse-fade"></div>
+  </div><!-- /.gm-collapse-content -->
+  <div class="gm-collapse-trigger">
+    <button class="gm-collapse-btn" onclick="gmBlockToggle(this)" aria-expanded="false">
+      <span class="gm-collapse-btn-text">Популярные модели и условия покупки</span>
+      <span class="gm-collapse-chevron" aria-hidden="true">
+        <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
+          <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+</div><!-- /.gm-collapse-wrapper -->
+```
+
+Содержит строго:
+- **Highlights grid**: strictly **3 or 6** `<article>` cards; секция начинается с **`<h3 class="gm-section-title">`** + обязательный **`<p class="gm-section-lead">`**; сетка обёрнута в `.gm-services-scroll-wrap` с кнопками `gm-scroll-btn--prev` / `gm-scroll-btn--next`
+- **Advantages**: **`<ul class="gm-advantages-list" role="list">`** (атрибут `role="list"` обязателен!); секция с **`<h3 class="gm-section-title">`**; последний пункт — Яндекс-виджет рейтинга
+- **CTA**: dark gradient block, 2 buttons — **кнопка 1 (оранжевая): JivoChat** (`jivo_api.open()`), **кнопка 2 (белая): телефон 8-800-250-17-00**
+
+**Текст кнопки коллапса:**
+- Свёрнуто: `«Популярные модели и условия покупки»`
+- Развёрнуто (JS): `«Скрыть»`
+- При сворачивании JS восстанавливает: `«Популярные модели и условия покупки»`
+
+**Collapse condition (from Step 1):**
+- **Collapse ON** (default): Блок 2 обёрнут в `.gm-collapse-wrapper → .gm-collapse-content`, добавить `.gm-collapse-fade`, `.gm-collapse-trigger`, `<script>` в конце файла
+- **Collapse OFF**: Блок 2 выводится как обычный `<div class="gm-block">` без обёрток и без `<script>` toggle
+- **Блок 1 (SEO)** — всегда обычный `<div class="gm-block">` без коллапса, независимо от настройки
+
+**Логика разделения (почему именно так):**
+- Блок 1 (intro + FAQ) — приоритет индексации: `speakable` целевые элементы (`.gm-intro-text`, `.gm-faq`) всегда в DOM без JS-барьеров; Featured Snippets и AEO требуют немедленной доступности
+- Блок 2 (карточки + преимущества + CTA) — приоритет UX: визуальный и объёмный; коллапс даёт пользователю выбор без ущерба для SEO текстового контента
+
+**`<script>` блок (только при collapse ON):** добавляется после Блока 2 и содержит IIFE-инициализацию + `gmBlockToggle` + JS горизонтального скроллера карточек
 
 **Ссылки в пунктах `.gm-advantages-list` (обязательно):**
 
@@ -293,10 +394,6 @@ Required sections in order:
 }());
 ```
 
-**Collapse condition (from Step 1):**
-- **Collapse ON** (default): wrap `.gm-block` in `.gm-collapse-wrapper → .gm-collapse-content`, add `.gm-collapse-fade`, `.gm-collapse-trigger`, and the `<script>` block at the end
-- **Collapse OFF**: output `.gm-block` directly, no `.gm-collapse-wrapper`, no `.gm-collapse-fade`, no `<script>` toggle block
-
 **Advantages block — Layout rules:**
 
 Блок преимуществ обёрнут в `<section class="gm-section">`. Список `<ul class="gm-advantages-list">` использует flexbox.
@@ -320,6 +417,16 @@ Each model/subcategory card **must** include a `.gm-service-link` pointing to it
 If the URL is unknown — use `href="#"` with `<!-- TODO: вставить URL -->`.
 
 ### Step 6 — Self-check before outputting
+
+**Двухблочная структура (обязательная проверка):**
+- [ ] **Блок 1 (SEO)** выводится как обычный `<div class="gm-block">` — без `.gm-collapse-wrapper`, без JS-инициализации
+- [ ] **Блок 1** содержит строго: intro-секция (`gm-section gm-intro`) + FAQ-секция (`gm-faq`) — и только их
+- [ ] **Блок 2 (визуальный)** содержит: highlights grid + преимущества + CTA — без FAQ и без intro
+- [ ] При collapse ON — Блок 2 обёрнут в `.gm-collapse-wrapper`, Блок 1 — нет
+- [ ] При collapse OFF — оба блока обычные `<div class="gm-block">`, `<script>` toggle отсутствует
+- [ ] Текст кнопки collapse-trigger: `«Популярные модели и условия покупки»` (не «Показать больше»)
+- [ ] JS `gmBlockToggle` при сворачивании восстанавливает текст `«Популярные модели и условия покупки»`
+- [ ] FAQ-секция находится в Блоке 1 (SEO), а не в Блоке 2 (коллапс)
 
 **Structure & code:**
 - [ ] **Step 1b выполнен:** пользователь ответил по гарантии или в первом сообщении были срок / «нет гарантии» / явное «пропусти гарантию»; нет самовольной подстановки «Гарантия качества» без явного разрешения
@@ -362,6 +469,13 @@ If the URL is unknown — use `href="#"` with `<!-- TODO: вставить URL -
 - [ ] Длина каждого ответа: 40–80 слов
 - [ ] JSON-LD FAQPage содержит те же 4 вопроса, что и HTML (строго совпадают)
 - [ ] В HTML нет `itemtype="https://schema.org/FAQPage"` (чтобы не дублировать JSON-LD FAQPage)
+
+**Кириллические LSI-запросы (обязательная проверка — Step 2c):**
+- [ ] JSON-LD `LocalBusiness.alternateName` содержит массив с кириллическими вариантами бренда (Сяоми, Редми, Поко — по контексту категории)
+- [ ] Лид `.gm-intro-text` содержит кириллику в скобках рядом с латинским брендом: «Xiaomi (Сяоми)»
+- [ ] Один вопрос FAQ переформулирован с кириллическим написанием бренда — вопрос в JSON-LD FAQPage совпадает с HTML
+- [ ] Описание одной карточки `.gm-service-card` содержит кириллический вариант бренда — не более одной карточки
+- [ ] Кириллика отсутствует в `alt` и `title` изображений
 
 **E-E-A-T checklist:**
 - [ ] **Experience**: «с 2015 года», «более 10 лет», конкретные факты

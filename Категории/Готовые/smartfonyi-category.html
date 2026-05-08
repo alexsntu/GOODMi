@@ -6,7 +6,7 @@
       "@type": "LocalBusiness",
       "@id": "https://goodmi.ru/#business",
       "name": "GOODMi",
-      "alternateName": "Магазин Xiaomi GOODMi",
+      "alternateName": ["Магазин Xiaomi GOODMi", "Магазин Сяоми GOODMi", "Смартфоны Сяоми Крым", "Купить Сяоми Севастополь"],
       "description": "GOODMi — фирменный магазин техники Xiaomi в Крыму с 2015 года. В каталоге смартфоны Xiaomi, Redmi и POCO с официальной гарантией 1 год. Магазины в Севастополе, Симферополе и Ялте, доставка по всей России через СДЭК.",
       "url": "https://goodmi.ru",
       "telephone": "+7-800-250-17-00",
@@ -54,7 +54,7 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Как купить смартфон Xiaomi, Redmi или POCO с доставкой по России?",
+          "name": "Как купить смартфон Сяоми (Xiaomi), Редми или Поко с доставкой по России?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Оформите заказ на goodmi.ru или позвоните по номеру 8 (800) 250-17-00, и мы отправим смартфон через СДЭК в любой город России. Самовывоз доступен в 6 точках Крыма: четыре магазина в Севастополе, магазин в Симферополе и магазин в Ялте. По Крыму также работает доставка по адресу."
@@ -104,16 +104,52 @@
 }
 </script>
 
+<!-- Блок 1: Всегда видимый — SEO-критичный (интро + FAQ) -->
+<div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
+  <section class="gm-section gm-intro" aria-labelledby="smartfony-heading">
+    <h2 id="smartfony-heading">Купить смартфоны Xiaomi, Redmi и POCO в Севастополе &#8212; GOODMi</h2>
+    <p class="gm-intro-text">
+      В <strong>GOODMi</strong> в <strong>Севастополе</strong> вы можете <strong>купить смартфоны Xiaomi (Сяоми), Redmi и POCO</strong> с официальной <strong>гарантией 1 год</strong>. В каталоге представлены актуальные серии для разных задач: от сбалансированных моделей Redmi Note до флагманов Xiaomi и производительных POCO. Оформляйте заказ онлайн с доставкой по России через СДЭК или забирайте покупку в одном из 6 магазинов Крыма.
+    </p>
+  </section>
+
+  <section class="gm-faq" aria-labelledby="faq-heading">
+    <h3 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы о смартфонах Xiaomi, Redmi и POCO</h3>
+
+    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+      <p class="gm-faq-question" itemprop="name">Как купить смартфон Сяоми (Xiaomi), Редми или Поко с доставкой по России?</p>
+      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+        <p itemprop="text">Оформите заказ на goodmi.ru или позвоните по номеру 8 (800) 250-17-00, и мы отправим смартфон через СДЭК в любой город России. Самовывоз доступен в 6 точках Крыма: четыре магазина в Севастополе, магазин в Симферополе и магазин в Ялте. По Крыму также работает доставка по адресу.</p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+      <p class="gm-faq-question" itemprop="name">Какая гарантия на смартфоны Xiaomi, Redmi и POCO в GOODMi?</p>
+      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+        <p itemprop="text">На новые смартфоны Xiaomi, Redmi и POCO в GOODMi действует официальная гарантия 1 год. Техника продается оригинальная, с документами и поддержкой магазина. По вопросам гарантийного обслуживания можно обратиться в любой магазин GOODMi в Крыму или уточнить детали по бесплатному телефону 8 (800) 250-17-00.</p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+      <p class="gm-faq-question" itemprop="name">Как работает трейд-ин при покупке смартфона в GOODMi?</p>
+      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+        <p itemprop="text">Трейд-ин в GOODMi позволяет сдать старый смартфон и получить скидку на новый Xiaomi, Redmi или POCO. Специалист оценивает устройство по состоянию и комплектации, после чего сумма зачета уменьшает стоимость покупки. Оформить обмен можно в магазине, а детали условий заранее посмотреть на странице программы трейд-ин.</p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+      <p class="gm-faq-question" itemprop="name">Чем отличаются Xiaomi 15T Pro, Redmi Note 15 Pro Plus 5G и POCO F8 Ultra?</p>
+      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+        <p itemprop="text">Xiaomi 15T Pro ориентирован на флагманскую производительность и продвинутые фото-возможности для ежедневного использования. Redmi Note 15 Pro Plus 5G делает акцент на балансе цены, камеры и автономности, поэтому подходит большинству покупателей. POCO F8 Ultra создан для максимальной скорости в играх и тяжелых задачах, где важен запас мощности.</p>
+      </div>
+    </div>
+  </section>
+</div><!-- /.gm-block (SEO-блок: всегда видим) -->
+
+<!-- Блок 2: Коллапс — визуальные секции (карточки моделей, преимущества, CTA) -->
 <div class="gm-collapse-wrapper">
   <div class="gm-collapse-content">
-    <div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
-      <section class="gm-section gm-intro" aria-labelledby="smartfony-heading">
-        <h2 id="smartfony-heading">Купить смартфоны Xiaomi, Redmi и POCO в Севастополе &#8212; GOODMi</h2>
-        <p class="gm-intro-text">
-          В <strong>GOODMi</strong> в <strong>Севастополе</strong> вы можете <strong>купить смартфоны Xiaomi, Redmi и POCO</strong> с официальной <strong>гарантией 1 год</strong>. В каталоге представлены актуальные серии для разных задач: от сбалансированных моделей Redmi Note до флагманов Xiaomi и производительных POCO. Оформляйте заказ онлайн с доставкой по России через СДЭК или забирайте покупку в одном из 6 магазинов Крыма.
-        </p>
-      </section>
-
+    <div class="gm-block">
       <section class="gm-section" aria-labelledby="popular-models-heading">
         <h3 id="popular-models-heading" class="gm-section-title">Популярные модели смартфонов Xiaomi, Redmi и POCO</h3>
         <p class="gm-section-lead">Подборка актуальных моделей с высокой производительностью, современными камерами и поддержкой 5G для работы, контента и мобильных игр.</p>
@@ -126,7 +162,7 @@
                    class="gm-service-card-img"
                    fetchpriority="high">
               <h3>Xiaomi 17 Ultra</h3>
-              <p>Флагманская линейка Xiaomi для тех, кому нужна максимальная производительность, премиальный дисплей и продвинутые возможности мобильной съемки.</p>
+              <p>Флагман <strong>Сяоми</strong> серии Ultra: максимальная производительность, премиальный дисплей и продвинутые возможности мобильной съёмки для тех, кто выбирает лучшее.</p>
               <a href="https://goodmi.ru/xiaomi-17-ultra/" class="gm-service-link" aria-label="Купить Xiaomi 17 Ultra в GOODMi">Выбрать модель &#8594;</a>
             </article>
 
@@ -234,38 +270,6 @@
         </ul>
       </section>
 
-      <section class="gm-faq" aria-labelledby="faq-heading">
-        <h3 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы о смартфонах Xiaomi, Redmi и POCO</h3>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Как купить смартфон Xiaomi, Redmi или POCO с доставкой по России?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Оформите заказ на goodmi.ru или позвоните по номеру 8 (800) 250-17-00, и мы отправим смартфон через СДЭК в любой город России. Самовывоз доступен в 6 точках Крыма: четыре магазина в Севастополе, магазин в Симферополе и магазин в Ялте. По Крыму также работает доставка по адресу.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Какая гарантия на смартфоны Xiaomi, Redmi и POCO в GOODMi?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">На новые смартфоны Xiaomi, Redmi и POCO в GOODMi действует официальная гарантия 1 год. Техника продается оригинальная, с документами и поддержкой магазина. По вопросам гарантийного обслуживания можно обратиться в любой магазин GOODMi в Крыму или уточнить детали по бесплатному телефону 8 (800) 250-17-00.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Как работает трейд-ин при покупке смартфона в GOODMi?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Трейд-ин в GOODMi позволяет сдать старый смартфон и получить скидку на новый Xiaomi, Redmi или POCO. Специалист оценивает устройство по состоянию и комплектации, после чего сумма зачета уменьшает стоимость покупки. Оформить обмен можно в магазине, а детали условий заранее посмотреть на странице программы трейд-ин.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Чем отличаются Xiaomi 15T Pro, Redmi Note 15 Pro Plus 5G и POCO F8 Ultra?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Xiaomi 15T Pro ориентирован на флагманскую производительность и продвинутые фото-возможности для ежедневного использования. Redmi Note 15 Pro Plus 5G делает акцент на балансе цены, камеры и автономности, поэтому подходит большинству покупателей. POCO F8 Ultra создан для максимальной скорости в играх и тяжелых задачах, где важен запас мощности.</p>
-          </div>
-        </div>
-      </section>
-
       <div class="gm-cta" role="complementary" aria-label="Контакты для заказа смартфонов Xiaomi, Redmi и POCO">
         <div class="gm-cta-text">
           <h3>Готовы сделать заказ?</h3>
@@ -282,12 +286,12 @@
           </a>
         </div>
       </div>
-    </div><!-- /.gm-block -->
+    </div><!-- /.gm-block (коллапс-блок: карточки + преимущества + CTA) -->
     <div class="gm-collapse-fade"></div>
   </div><!-- /.gm-collapse-content -->
   <div class="gm-collapse-trigger">
     <button class="gm-collapse-btn" onclick="gmBlockToggle(this)" aria-expanded="false">
-      <span class="gm-collapse-btn-text">Показать больше</span>
+      <span class="gm-collapse-btn-text">Популярные модели и условия покупки</span>
       <span class="gm-collapse-chevron" aria-hidden="true">
         <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
           <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2"
@@ -341,7 +345,7 @@ function gmBlockToggle(btn) {
     if (fade) { fade.style.transition = 'opacity 0.3s ease 0.2s'; fade.style.opacity = '1'; }
     btn.classList.remove('gm-is-expanded');
     btn.setAttribute('aria-expanded', 'false');
-    if (label) label.textContent = 'Показать больше';
+    if (label) label.textContent = 'Популярные модели и условия покупки';
     setTimeout(function () {
       wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 120);
