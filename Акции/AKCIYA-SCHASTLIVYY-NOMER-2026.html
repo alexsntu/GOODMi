@@ -17,7 +17,8 @@
   .gm-lottery-hero img {
     width: 100%;
     display: block;
-    height: auto;
+    max-height: 500px;
+    object-fit: contain;
   }
 
   .gm-lottery-layout {
@@ -169,9 +170,17 @@
     font-weight: 600;
   }
 
+  .gm-lottery-empty-notice {
+    padding: 24px 16px;
+    text-align: center;
+    color: #6b6b6b;
+    font-size: 13px;
+  }
+
+  /* Prizes grid: 4 columns on desktop */
   .gm-prizes-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -180,28 +189,26 @@
     border: 1px solid #e5e5e5;
     border-radius: 16px;
     padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
-  .gm-prize-photo {
+  .gm-prize-img {
     width: 100%;
-    min-height: 150px;
-    border-radius: 12px;
-    background: #f5f5f5;
-    border: 1px dashed #d6d6d6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6b6b6b;
-    text-align: center;
-    font-size: 13px;
-    padding: 10px;
+    height: 140px;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
   }
 
   .gm-prize-name {
     margin-top: 10px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #1c1c1c;
+    line-height: 1.35;
   }
 
   @media (max-width: 980px) {
@@ -210,9 +217,10 @@
     }
   }
 
+  /* Mobile: 2 columns for prizes */
   @media (max-width: 640px) {
     .gm-prizes-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .gm-lottery-grid {
@@ -224,44 +232,268 @@
       min-height: 46px;
     }
   }
+
+  /* Bonus guarantee block */
+  .gm-bonus-guarantee {
+    background: linear-gradient(135deg, #fff8f0, #fff3e6);
+    border: 2px solid #ff6900;
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-top: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .gm-bonus-guarantee-icon {
+    font-size: 48px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .gm-bonus-guarantee-body h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c1c1c;
+    line-height: 1.3;
+  }
+
+  .gm-bonus-guarantee-body p {
+    margin: 0 0 10px;
+    color: #3d3d3d;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .gm-bonus-guarantee-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .gm-bonus-guarantee-body a {
+    color: #ff6900;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .gm-bonus-guarantee-body a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .gm-bonus-guarantee {
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px 16px;
+    }
+
+    .gm-bonus-guarantee-icon {
+      font-size: 36px;
+    }
+
+    .gm-bonus-guarantee-body h3 {
+      font-size: 17px;
+    }
+  }
+
+  /* Tagline */
+  .gm-lottery-tagline {
+    font-size: 18px;
+    line-height: 1.55;
+    color: #3d3d3d;
+    margin: 8px 0 0;
+  }
+
+  /* Steps block */
+  .gm-lottery-steps {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    margin: 20px 0 20px;
+    flex-wrap: wrap;
+  }
+
+  .gm-lottery-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f5f5f5;
+    border-radius: 16px;
+    padding: 16px 20px;
+    flex: 1;
+    min-width: 170px;
+  }
+
+  .gm-lottery-step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ff6900;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .gm-lottery-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .gm-lottery-step-text strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1c1c1c;
+  }
+
+  .gm-lottery-step-text span {
+    font-size: 13px;
+    color: #6b6b6b;
+  }
+
+  .gm-lottery-step-arrow {
+    font-size: 22px;
+    color: #ff6900;
+    font-weight: 700;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* Rules list */
+  .gm-lottery-rules-list {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .gm-lottery-rules-list li {
+    position: relative;
+    padding: 12px 16px 12px 44px;
+    background: #f7f7f7;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #3d3d3d;
+    line-height: 1.55;
+  }
+
+  .gm-lottery-rules-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 16px;
+    top: 12px;
+    color: #ff6900;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  @media (max-width: 640px) {
+    .gm-lottery-step-arrow {
+      display: none;
+    }
+
+    .gm-lottery-step {
+      flex: 0 0 100%;
+    }
+
+    .gm-lottery-tagline {
+      font-size: 16px;
+    }
+  }
 </style>
 
 <div class="gm-block gm-lottery-page">
   <section class="gm-lottery-hero" aria-label="Баннер акции">
-    <img src="C:\Users\Алекс\.cursor\projects\c-Users-GOODMi\assets\c__Users_______AppData_Roaming_Cursor_User_workspaceStorage_37bd82bdb6bde817c88473925c7cd1c3_images_photo_2026-04-30_14-25-38-4604466d-dba4-4e37-b7ea-708fc030a6be.png" alt="GOODMi Лотерея Счастливый номер">
+    <img src="https://goodmi.ru/images/promotion/151/%D1%81%D1%87%D0%B0%D1%81%D1%82%D0%BB%D0%B8%D0%B2%D0%BE%D0%B5_%D1%87%D0%B8%D1%81%D0%BB%D0%BE_%D1%81%D0%B0%D0%B9%D1%82500.jpg" alt="GOODMi — Акция Счастливый номер" fetchpriority="high">
   </section>
 
   <section class="gm-intro" aria-labelledby="lottery-title">
-    <h2 id="lottery-title">Акция GOODMi «Счастливый номер»</h2>
-    <p class="gm-intro-text">
-      Участвуйте в розыгрыше фирменных подарков: при покупке в магазине GOODMi на сумму от 5000 рублей вы выбираете один номер лотерейного билета.
-      Всего в акции 100 номеров. Когда все номера будут распределены между покупателями, мы проводим розыгрыш в прямом эфире в нашей группе ВКонтакте.
-      Количество билетов на одного покупателя не ограничено, но к одному чеку можно получить только один номер и одну наклейку. Для получения выигрыша обязательно предъявить чек.
+    <h2 id="lottery-title">Акция «Счастливый номер»</h2>
+    <p class="gm-lottery-tagline">
+      Купите технику на 5 000 ₽ — и вы уже в игре. <strong>8 победителей получат фирменные подарки. Остальным — 500 бонусов.</strong> Проигравших нет.
     </p>
+
+    <div class="gm-lottery-steps" role="list" aria-label="Как участвовать в акции">
+      <div class="gm-lottery-step" role="listitem">
+        <div class="gm-lottery-step-num" aria-hidden="true">1</div>
+        <div class="gm-lottery-step-text">
+          <strong>Купите от 5 000 ₽</strong>
+          <span>в магазине GOODMi</span>
+        </div>
+      </div>
+      <div class="gm-lottery-step-arrow" aria-hidden="true">&#8594;</div>
+      <div class="gm-lottery-step" role="listitem">
+        <div class="gm-lottery-step-num" aria-hidden="true">2</div>
+        <div class="gm-lottery-step-text">
+          <strong>Выберите номер</strong>
+          <span>из 100 лотерейных билетов</span>
+        </div>
+      </div>
+      <div class="gm-lottery-step-arrow" aria-hidden="true">&#8594;</div>
+      <div class="gm-lottery-step" role="listitem">
+        <div class="gm-lottery-step-num" aria-hidden="true">3</div>
+        <div class="gm-lottery-step-text">
+          <strong>Смотрите розыгрыш</strong>
+          <span>в прямом эфире ВКонтакте</span>
+        </div>
+      </div>
+    </div>
+
     <span class="gm-stat-badge" role="note" aria-label="Ежедневное обновление участников">
       &#x2714;&nbsp; Список участников обновляется ежедневно
     </span>
   </section>
 
   <section class="gm-section" aria-labelledby="lottery-prizes-title">
-    <h3 class="gm-section-title" id="lottery-prizes-title">Подарки в розыгрыше</h3>
+    <h3 class="gm-section-title" id="lottery-prizes-title">8 подарков ждут своих победителей</h3>
     <div class="gm-prizes-grid">
       <article class="gm-prize-card" role="listitem">
-        <div class="gm-prize-photo">Сюда вставим фото<br>Квартира</div>
-        <p class="gm-prize-name">Квартира</p>
+        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/151/11_03y4-gq.jpg" alt="Подарочный набор Xiaomi — блендер и дозатор" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Подарочный набор Xiaomi (блендер и дозатор)</p>
       </article>
       <article class="gm-prize-card" role="listitem">
-        <div class="gm-prize-photo">Сюда вставим фото<br>Машина</div>
-        <p class="gm-prize-name">Машина</p>
+        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/107/0_lm2f-9l_jpg.webp" alt="Подарочный набор Xiaomi — термос, чехол, плетёная сумка" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Подарочный набор Xiaomi (термос, чехол, плетёная сумка)</p>
       </article>
       <article class="gm-prize-card" role="listitem">
-        <div class="gm-prize-photo">Сюда вставим фото<br>Поездка на 2-х в Турцию</div>
-        <p class="gm-prize-name">Поездка на 2-х в Турцию</p>
+        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/151/88f362ca_2c9c_41f7_90d7_10368e590d8a78678_1682060827.jpg" alt="Подарочный набор Xiaomi — зеркало и расчёска" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Подарочный набор Xiaomi (зеркало и расчёска)</p>
       </article>
       <article class="gm-prize-card" role="listitem">
-        <div class="gm-prize-photo">Сюда вставим фото<br>И много гаджетов и техники</div>
-        <p class="gm-prize-name">И много гаджетов и техники</p>
+        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/151/71_my86-tg.jpg" alt="Умные часы Imilab" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Умные часы Imilab</p>
       </article>
+      <article class="gm-prize-card" role="listitem">
+        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/151/21_kpyz-zk.jpg" alt="Умные часы Maimo" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Умные часы Maimo</p>
+      </article>
+      <article class="gm-prize-card" role="listitem">
+        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/151/7104081186.webp" alt="Держатель и стерилизатор зубных щёток Oclean" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Держатель и стерилизатор зубных щёток Oclean</p>
+      </article>
+      <article class="gm-prize-card" role="listitem">
+        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/83/Screenshot_2_oh66-ib_png.webp" alt="Термос Roborock" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Термос Roborock</p>
+      </article>
+      <article class="gm-prize-card" role="listitem">
+        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/151/41_hexr-xk.jpg" alt="Зонт Xiaomi" class="gm-prize-img" loading="lazy">
+        <p class="gm-prize-name">Зонт Xiaomi</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="gm-bonus-guarantee" aria-label="500 бонусов каждому участнику">
+    <div class="gm-bonus-guarantee-icon" aria-hidden="true">&#x2B50;</div>
+    <div class="gm-bonus-guarantee-body">
+      <h3>Проигравших нет — 500 бонусов каждому участнику!</h3>
+      <p>Даже если ваш номер не вошёл в список 8 победителей, вы всё равно получите <strong>500 бонусных баллов</strong> на счёт в <a href="https://goodmi.ru/bonusnaya-programma/">бонусной программе GOODMi</a>. Бонусы начисляются автоматически всем участникам, чей номер не выиграл главный приз.</p>
+      <p>Бонусные баллы дают скидку до 25% при следующей покупке и действуют целый год. Подключите Telegram-бот GOODMi:club, чтобы следить за балансом и использовать бонусы в любом нашем магазине.</p>
     </div>
   </section>
 
@@ -312,12 +544,15 @@
     </div>
   </section>
 
-  <section class="gm-highlight" aria-label="Условия получения подарка">
-    <div class="gm-highlight-icon" aria-hidden="true">&#x1F381;</div>
-    <div class="gm-highlight-body">
-      <p><strong>Подарок выдается только по чеку</strong> с наклейкой номера, который победил в розыгрыше.</p>
-      <p>Розыгрыш запускается после распределения всех 100 номеров и проводится в прямом эфире в группе GOODMi ВКонтакте.</p>
-    </div>
+  <section class="gm-section" aria-labelledby="lottery-rules-title">
+    <h3 class="gm-section-title" id="lottery-rules-title">Условия участия</h3>
+    <ul class="gm-lottery-rules-list">
+      <li>Покупка в магазине GOODMi в Севастополе (ТЦ «Муссон», ул. Вакуленчука, 29) на сумму <strong>от 5 000 рублей</strong></li>
+      <li>К одному чеку — один номер и одна наклейка. Количество участий не ограничено: несколько чеков — несколько билетов</li>
+      <li>Розыгрыш проводится в прямом эфире в группе <strong>GOODMi ВКонтакте</strong> после того, как все 100 номеров будут распределены</li>
+      <li><strong>Главный приз</strong> выдаётся только по чеку с наклейкой выигравшего номера</li>
+      <li>Все остальные участники получают <strong>500 бонусных баллов</strong> — без дополнительных условий</li>
+    </ul>
   </section>
 </div>
 
@@ -325,16 +560,16 @@
   (function () {
     // Обновляйте этот массив ежедневно: номер, имя и последние 4 цифры телефона.
     var occupiedTickets = [
-      { number: 7, name: "Анна", phoneLast4: "4382" },
-      { number: 14, name: "Максим", phoneLast4: "1190" },
-      { number: 26, name: "Ольга", phoneLast4: "5521" },
-      { number: 31, name: "Игорь", phoneLast4: "8844" },
-      { number: 50, name: "Сергей", phoneLast4: "7005" },
-      { number: 69, name: "Наталья", phoneLast4: "3640" },
-      { number: 77, name: "Владислав", phoneLast4: "9207" }
+      { number: 8,  name: "Андрей",                    phoneLast4: "6699" },
+      { number: 14, name: "Зубарев Алексей",            phoneLast4: "2483" },
+      { number: 16, name: "Нагулов Денис",              phoneLast4: "2095" },
+      { number: 21, name: "Игнат",                      phoneLast4: "3454" },
+      { number: 29, name: "Парфенов Дмитрий Михайлович",phoneLast4: "7491" },
+      { number: 33, name: "Александр",                  phoneLast4: "4228" },
+      { number: 57, name: "Александр",                  phoneLast4: "5413" }
     ];
 
-    var lastUpdatedText = "30.04.2026 14:30";
+    var lastUpdatedText = "08.05.2026";
     var totalTickets = 100;
     var occupiedMap = {};
     var selectedButton = null;
@@ -388,6 +623,13 @@
     }
 
     function renderOccupiedTable() {
+      if (occupiedTickets.length === 0) {
+        var emptyRow = document.createElement("tr");
+        emptyRow.innerHTML = '<td colspan="3"><div class="gm-lottery-empty-notice">Ни один номер ещё не выбран. Будьте первым!</div></td>';
+        occupiedBody.appendChild(emptyRow);
+        return;
+      }
+
       var sorted = occupiedTickets.slice().sort(function (a, b) {
         return a.number - b.number;
       });
