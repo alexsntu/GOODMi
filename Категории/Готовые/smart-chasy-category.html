@@ -101,18 +101,55 @@
 }
 </script>
 
-<div class="gm-collapse-wrapper">
-  <div class="gm-collapse-content">
-    <div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
-
-      <section class="gm-section gm-intro" aria-labelledby="smart-chasy-heading">
+<!-- Блок 1: Всегда видимый — SEO-критичный (интро + FAQ) -->
+<div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
+<section class="gm-section gm-intro" aria-labelledby="smart-chasy-heading">
         <h2 id="smart-chasy-heading">Купить смарт-часы Xiaomi, Amazfit и Redmi в Севастополе &#8212; GOODMi</h2>
         <p class="gm-intro-text">
           В <strong>GOODMi</strong> в <strong>Севастополе</strong> и по Крыму вы можете <strong>купить смарт-часы Xiaomi (Сяоми), Amazfit (Амазфит) и Redmi (Редми)</strong> &#8212; от бюджетных Redmi Watch до флагманов Amazfit с длительной автономностью. На новые устройства действует <strong>официальная гарантия 1 год</strong>; заказ оформляйте онлайн с доставкой по всей России через <strong>СДЭК</strong> или забирайте в одном из шести магазинов сети.
         </p>
       </section>
 
-      <section class="gm-section" aria-labelledby="models-heading">
+<section class="gm-faq" aria-labelledby="faq-heading">
+        <h3 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы о смарт-часах</h3>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Как купить смарт-часы Сяоми (Xiaomi) или Амазфит (Amazfit) с доставкой по России?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">Оформите заказ на goodmi.ru или позвоните на 8 (800) 250-17-00 &#8212; отправим смарт-часы через СДЭК в любой город России. Самовывоз доступен из шести точек в Крыму: четыре магазина в Севастополе, Симферополь (ТЦ Меганом) и Ялта (ТЦ Дом Торговли). По региону Крым доставку часто выполняет собственная служба GOODMi &#8212; уточните детали при оформлении.</p>
+          </div>
+        </div>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Какая гарантия на технику Xiaomi в GOODMi?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">На новые смарт-часы Xiaomi, Amazfit и Redmi в GOODMi распространяется официальная гарантия 1 год на оригинальную технику. Сохраняйте чек и гарантийный талон; при вопросах по сервису обратитесь в магазин в Севастополе (ТЦ «Муссон», ул. Вакуленчука, 29) или по бесплатному номеру 8 (800) 250-17-00.</p>
+          </div>
+        </div>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Как сдать старое устройство по программе трейд-ин в GOODMi?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">Принесите смартфон, часы или другой гаджет в любой магазин GOODMi в Крыму &#8212; специалист оценит состояние и зачтёт сумму в счёт новой покупки. Программа трейд-ин снижает цену новых смарт-часов без лишней суеты; актуальные правила и примеры оценки смотрите на странице трейд-ин на goodmi.ru.</p>
+          </div>
+        </div>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Чем смарт-часы Amazfit отличаются от Redmi Watch?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">Amazfit ориентированы на автономность, спорт и продвинутые датчики в линейках T-Rex и GTS &#8212; удобный выбор для тренировок и туризма. Redmi Watch дают сбалансированный набор функций за доступную цену: уведомления, трекинг активности и привычный форм-фактор в экосистеме Xiaomi. Точные отличия по экрану, GPS и NFC смотрите в карточках выбранных моделей в каталоге GOODMi.</p>
+          </div>
+        </div>
+
+      </section>
+
+</div><!-- /.gm-block (SEO-блок: всегда видим) -->
+
+<!-- Блок 2: Коллапс — визуальные секции (карточки, преимущества, CTA) -->
+<div class="gm-collapse-wrapper">
+  <div class="gm-collapse-content">
+    <div class="gm-block">
+<section class="gm-section" aria-labelledby="models-heading">
         <h3 id="models-heading" class="gm-section-title">Три ключевых направления каталога</h3>
         <p class="gm-section-lead">Выберите линейку &#8212; спортивные Amazfit, умные часы Xiaomi и доступные Redmi Watch &#8212; и перейдите в подборку с актуальными моделями и ценами.</p>
         <div class="gm-services-scroll-wrap">
@@ -209,40 +246,7 @@
         </ul>
       </section>
 
-      <section class="gm-faq" aria-labelledby="faq-heading">
-        <h3 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы о смарт-часах</h3>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Как купить смарт-часы Сяоми (Xiaomi) или Амазфит (Amazfit) с доставкой по России?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Оформите заказ на goodmi.ru или позвоните на 8 (800) 250-17-00 &#8212; отправим смарт-часы через СДЭК в любой город России. Самовывоз доступен из шести точек в Крыму: четыре магазина в Севастополе, Симферополь (ТЦ Меганом) и Ялта (ТЦ Дом Торговли). По региону Крым доставку часто выполняет собственная служба GOODMi &#8212; уточните детали при оформлении.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Какая гарантия на технику Xiaomi в GOODMi?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">На новые смарт-часы Xiaomi, Amazfit и Redmi в GOODMi распространяется официальная гарантия 1 год на оригинальную технику. Сохраняйте чек и гарантийный талон; при вопросах по сервису обратитесь в магазин в Севастополе (ТЦ «Муссон», ул. Вакуленчука, 29) или по бесплатному номеру 8 (800) 250-17-00.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Как сдать старое устройство по программе трейд-ин в GOODMi?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Принесите смартфон, часы или другой гаджет в любой магазин GOODMi в Крыму &#8212; специалист оценит состояние и зачтёт сумму в счёт новой покупки. Программа трейд-ин снижает цену новых смарт-часов без лишней суеты; актуальные правила и примеры оценки смотрите на странице трейд-ин на goodmi.ru.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Чем смарт-часы Amazfit отличаются от Redmi Watch?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Amazfit ориентированы на автономность, спорт и продвинутые датчики в линейках T-Rex и GTS &#8212; удобный выбор для тренировок и туризма. Redmi Watch дают сбалансированный набор функций за доступную цену: уведомления, трекинг активности и привычный форм-фактор в экосистеме Xiaomi. Точные отличия по экрану, GPS и NFC смотрите в карточках выбранных моделей в каталоге GOODMi.</p>
-          </div>
-        </div>
-
-      </section>
-
-      <div class="gm-cta" role="complementary" aria-label="Контакты для заказа смарт-часов">
+<div class="gm-cta" role="complementary" aria-label="Контакты для заказа смарт-часов">
         <div class="gm-cta-text">
           <h3>Нужна помощь с выбором?</h3>
           <p>Напишите в чат &#8212; подберём модель по сценарию: спорт, звонки с часов или максимум автономности. Или позвоните бесплатно по России.</p>
@@ -258,13 +262,12 @@
           </a>
         </div>
       </div>
-
-    </div><!-- /.gm-block -->
+    </div><!-- /.gm-block (коллапс-блок: карточки + преимущества + CTA) -->
     <div class="gm-collapse-fade"></div>
   </div><!-- /.gm-collapse-content -->
   <div class="gm-collapse-trigger">
     <button class="gm-collapse-btn" onclick="gmBlockToggle(this)" aria-expanded="false">
-      <span class="gm-collapse-btn-text">Показать больше</span>
+      <span class="gm-collapse-btn-text">Популярные модели и условия покупки</span>
       <span class="gm-collapse-chevron" aria-hidden="true">
         <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
           <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2"
@@ -274,7 +277,6 @@
     </button>
   </div>
 </div><!-- /.gm-collapse-wrapper -->
-
 <script>
 (function () {
   var allContents = document.querySelectorAll('.gm-collapse-content');
@@ -318,7 +320,7 @@ function gmBlockToggle(btn) {
     if (fade) { fade.style.transition = 'opacity 0.3s ease 0.2s'; fade.style.opacity = '1'; }
     btn.classList.remove('gm-is-expanded');
     btn.setAttribute('aria-expanded', 'false');
-    if (label) label.textContent = 'Показать больше';
+    if (label) label.textContent = 'Популярные модели и условия покупки';
     setTimeout(function () {
       wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 120);

@@ -104,18 +104,55 @@
 }
 </script>
 
-<div class="gm-collapse-wrapper">
-  <div class="gm-collapse-content">
-    <div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
-
-      <section class="gm-section gm-intro" aria-labelledby="tws-heading">
+<!-- Блок 1: Всегда видимый — SEO-критичный (интро + FAQ) -->
+<div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
+<section class="gm-section gm-intro" aria-labelledby="tws-heading">
         <h2 id="tws-heading">Купить беспроводные наушники TWS в Севастополе &#8212; GOODMi</h2>
         <p class="gm-intro-text">
           В <strong>GOODMi</strong> вы можете <strong>купить беспроводные наушники</strong> и TWS-гарнитуры <strong>Xiaomi (Сяоми)</strong>, <strong>Redmi (Редми)</strong>, <strong>JBL</strong>, <strong>Marshall</strong>, <strong>Haylou</strong> и других брендов из каталога &#8212; в <strong>Севастополе</strong>, с выдачей по Крыму и <strong>доставкой по всей России через СДЭК</strong>. На оригинальную технику распространяется <strong>официальная гарантия 1 год</strong>; доступны <strong>трейд-ин</strong>, <strong>кредит</strong> и <strong>бонусная программа GOODMi</strong>.
         </p>
       </section>
 
-      <section class="gm-section" aria-labelledby="tws-models-heading">
+<section class="gm-faq" aria-labelledby="tws-faq-heading">
+        <h3 id="tws-faq-heading" class="gm-section-title">Часто задаваемые вопросы</h3>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Как купить беспроводные наушники Сяоми (Xiaomi) или Редми (Redmi) с доставкой по России?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">Оформите заказ на goodmi.ru или позвоните на 8 (800) 250-17-00 &#8212; отправим TWS или накладные наушники через СДЭК в любой город России. Самовывоз доступен из шести точек в Крыму: четыре магазина в Севастополе, Симферополь (ТЦ Меганом) и Ялта (ТЦ Дом Торговли). По Крыму доставку часто выполняет собственная служба GOODMi &#8212; уточните сроки и способ при оформлении заказа.</p>
+          </div>
+        </div>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Какая гарантия на беспроводные наушники в GOODMi?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">На новые беспроводные наушники Xiaomi, Redmi и брендов-партнёров в GOODMi распространяется официальная гарантия 1 год на оригинальную технику. Сохраняйте чек и гарантийный талон; при вопросах по сервису обратитесь в магазин в Севастополе (ТЦ «Муссон», ул. Вакуленчука, 29) или по бесплатному номеру 8 (800) 250-17-00.</p>
+          </div>
+        </div>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Как сдать старое устройство по программе трейд-ин в GOODMi?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">Принесите смартфон, наушники или другой гаджет в любой магазин GOODMi в Крыму &#8212; специалист оценит состояние и зачтёт сумму в счёт новой покупки. Программа трейд-ин снижает цену новых TWS без лишней суеты; актуальные правила и примеры оценки смотрите на странице трейд-ин на goodmi.ru.</p>
+          </div>
+        </div>
+
+        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <p class="gm-faq-question" itemprop="name">Чем TWS Xiaomi Buds отличаются от Redmi Buds?</p>
+          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text">Серия Xiaomi Buds ориентирована на флагманское звучание, продвинутые кодеки и премиальные материалы кейса; Redmi Buds &#8212; на сбалансированное соотношение цены и функций: шумоподавление, автономность и удобство для ежедневных сценариев. Конкретные отличия по кодекам, ANC и времени работы смотрите в карточках моделей в каталоге GOODMi.</p>
+          </div>
+        </div>
+
+      </section>
+
+</div><!-- /.gm-block (SEO-блок: всегда видим) -->
+
+<!-- Блок 2: Коллапс — визуальные секции (карточки, преимущества, CTA) -->
+<div class="gm-collapse-wrapper">
+  <div class="gm-collapse-content">
+    <div class="gm-block">
+<section class="gm-section" aria-labelledby="tws-models-heading">
         <h3 id="tws-models-heading" class="gm-section-title">Подборки по брендам: беспроводные наушники</h3>
         <p class="gm-section-lead">Выберите линейку &#8212; в листинге категории выше доступны фильтры по конструкции, шумоподавлению и кодекам.</p>
         <div class="gm-services-scroll-wrap">
@@ -245,40 +282,7 @@
         </ul>
       </section>
 
-      <section class="gm-faq" aria-labelledby="tws-faq-heading">
-        <h3 id="tws-faq-heading" class="gm-section-title">Часто задаваемые вопросы</h3>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Как купить беспроводные наушники Сяоми (Xiaomi) или Редми (Redmi) с доставкой по России?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Оформите заказ на goodmi.ru или позвоните на 8 (800) 250-17-00 &#8212; отправим TWS или накладные наушники через СДЭК в любой город России. Самовывоз доступен из шести точек в Крыму: четыре магазина в Севастополе, Симферополь (ТЦ Меганом) и Ялта (ТЦ Дом Торговли). По Крыму доставку часто выполняет собственная служба GOODMi &#8212; уточните сроки и способ при оформлении заказа.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Какая гарантия на беспроводные наушники в GOODMi?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">На новые беспроводные наушники Xiaomi, Redmi и брендов-партнёров в GOODMi распространяется официальная гарантия 1 год на оригинальную технику. Сохраняйте чек и гарантийный талон; при вопросах по сервису обратитесь в магазин в Севастополе (ТЦ «Муссон», ул. Вакуленчука, 29) или по бесплатному номеру 8 (800) 250-17-00.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Как сдать старое устройство по программе трейд-ин в GOODMi?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Принесите смартфон, наушники или другой гаджет в любой магазин GOODMi в Крыму &#8212; специалист оценит состояние и зачтёт сумму в счёт новой покупки. Программа трейд-ин снижает цену новых TWS без лишней суеты; актуальные правила и примеры оценки смотрите на странице трейд-ин на goodmi.ru.</p>
-          </div>
-        </div>
-
-        <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-          <p class="gm-faq-question" itemprop="name">Чем TWS Xiaomi Buds отличаются от Redmi Buds?</p>
-          <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <p itemprop="text">Серия Xiaomi Buds ориентирована на флагманское звучание, продвинутые кодеки и премиальные материалы кейса; Redmi Buds &#8212; на сбалансированное соотношение цены и функций: шумоподавление, автономность и удобство для ежедневных сценариев. Конкретные отличия по кодекам, ANC и времени работы смотрите в карточках моделей в каталоге GOODMi.</p>
-          </div>
-        </div>
-
-      </section>
-
-      <div class="gm-cta" role="complementary" aria-label="Контакты для заказа беспроводных наушников">
+<div class="gm-cta" role="complementary" aria-label="Контакты для заказа беспроводных наушников">
         <div class="gm-cta-text">
           <h3>Нужна помощь с выбором TWS?</h3>
           <p>Напишите в чат &#8212; подберём формат (вкладыши, вакуумные, накладные), шумоподавление и бренд под ваш бюджет. Или позвоните бесплатно по России.</p>
@@ -294,13 +298,12 @@
           </a>
         </div>
       </div>
-
-    </div><!-- /.gm-block -->
+    </div><!-- /.gm-block (коллапс-блок: карточки + преимущества + CTA) -->
     <div class="gm-collapse-fade"></div>
   </div><!-- /.gm-collapse-content -->
   <div class="gm-collapse-trigger">
     <button class="gm-collapse-btn" onclick="gmBlockToggle(this)" aria-expanded="false">
-      <span class="gm-collapse-btn-text">Показать больше</span>
+      <span class="gm-collapse-btn-text">Популярные модели и условия покупки</span>
       <span class="gm-collapse-chevron" aria-hidden="true">
         <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
           <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2"
@@ -310,7 +313,6 @@
     </button>
   </div>
 </div><!-- /.gm-collapse-wrapper -->
-
 <script>
 (function () {
   var allContents = document.querySelectorAll('.gm-collapse-content');
@@ -354,7 +356,7 @@ function gmBlockToggle(btn) {
     if (fade) { fade.style.transition = 'opacity 0.3s ease 0.2s'; fade.style.opacity = '1'; }
     btn.classList.remove('gm-is-expanded');
     btn.setAttribute('aria-expanded', 'false');
-    if (label) label.textContent = 'Показать больше';
+    if (label) label.textContent = 'Популярные модели и условия покупки';
     setTimeout(function () {
       wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 120);
