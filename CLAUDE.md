@@ -11,7 +11,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 - Phone: `8 (800) 250-17-00` / `href="tel:+78002501700"`
 - Email: `store@goodmi.ru`
 - Hours: daily 10:00–21:00
-- Since: 2015
+- Since: 2016
 - Speciality: «фирменный магазин техники Xiaomi в Крыму»
 - Prohibited: «официальный», «авторизованный» when describing the store
 - Commercial terms: use «кредит», never «рассрочка без переплат»
@@ -67,7 +67,7 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 - Cyrillic brand variants (Сяоми, Редми, Поко) — only include if confirmed present in competitors' top-5 titles
 
 ### Approved USPs
-`гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2015 года` · `бонусная программа GOODMi`
+`гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2016 года` · `бонусная программа GOODMi`
 
 ## Skills (Cursor / Claude workflows)
 
