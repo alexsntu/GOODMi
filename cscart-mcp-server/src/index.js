@@ -354,6 +354,96 @@ class CSCartMCPServer {
             },
           },
           
+          // PixelPlus SEO Project Tools
+          {
+            name: 'pixelplus_get_project',
+            description: 'Get info about a PixelPlus SEO project (domain, status)',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                project_id: {
+                  type: 'number',
+                  description: 'PixelPlus project ID',
+                },
+              },
+              required: ['project_id'],
+            },
+          },
+          {
+            name: 'pixelplus_get_groups',
+            description: 'Get list of query groups in a PixelPlus SEO project',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                project_id: {
+                  type: 'number',
+                  description: 'PixelPlus project ID',
+                },
+              },
+              required: ['project_id'],
+            },
+          },
+          {
+            name: 'pixelplus_get_queries',
+            description: 'Get all search queries (semantic core) of a PixelPlus SEO project',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                project_id: {
+                  type: 'number',
+                  description: 'PixelPlus project ID',
+                },
+              },
+              required: ['project_id'],
+            },
+          },
+          {
+            name: 'pixelplus_add_queries',
+            description: 'Add search queries to a PixelPlus SEO project with group assignment and target URL',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                project_id: {
+                  type: 'number',
+                  description: 'PixelPlus project ID',
+                },
+                queries: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description: 'List of search queries to add',
+                },
+                group: {
+                  type: 'string',
+                  description: 'Group name to assign the queries to',
+                },
+                url: {
+                  type: 'string',
+                  description: 'Target (promoted) URL for these queries',
+                },
+              },
+              required: ['project_id', 'queries', 'group', 'url'],
+            },
+          },
+          {
+            name: 'pixelplus_delete_queries',
+            description: 'Delete search queries from a PixelPlus SEO project by their IDs',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                project_id: {
+                  type: 'number',
+                  description: 'PixelPlus project ID',
+                },
+                query_ids: {
+                  type: 'array',
+                  items: { type: 'number' },
+                  description: 'List of query IDs to delete (get IDs from pixelplus_get_queries)',
+                },
+              },
+              required: ['project_id', 'query_ids'],
+            },
+          },
+
           // Statistics Tools
           {
             name: 'get_sales_statistics',
@@ -411,6 +501,16 @@ class CSCartMCPServer {
             return await this.getUsers(args);
           case 'get_sales_statistics':
             return await this.getSalesStatistics(args);
+          case 'pixelplus_get_project':
+            return await this.pixelplusGetProject(args);
+          case 'pixelplus_get_groups':
+            return await this.pixelplusGetGroups(args);
+          case 'pixelplus_get_queries':
+            return await this.pixelplusGetQueries(args);
+          case 'pixelplus_add_queries':
+            return await this.pixelplusAddQueries(args);
+          case 'pixelplus_delete_queries':
+            return await this.pixelplusDeleteQueries(args);
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
@@ -555,6 +655,58 @@ class CSCartMCPServer {
     const endpoint = `/statistics/sales${queryString ? `?${queryString}` : ''}`;
     
     const result = await this.makeRequest('GET', endpoint);
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+
+  // PixelPlus API helper
+  async makePixelPlusRequest(group, method, params = {}) {
+    const token = process.env.PIXELPLUS_API_TOKEN;
+    if (!token) {
+      throw new Error('PIXELPLUS_API_TOKEN is not set in environment variables');
+    }
+    const searchParams = new URLSearchParams({ token, ...params });
+    const url = `https://tools.pixelplus.ru/projects/api/v1/${group}/${method}?${searchParams}`;
+    const response = await axios.get(url);
+    return response.data;
+  }
+
+  // PixelPlus Methods
+  async pixelplusGetProject(args) {
+    const result = await this.makePixelPlusRequest('project', 'get', {
+      project_id: args.project_id,
+    });
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+
+  async pixelplusGetGroups(args) {
+    const result = await this.makePixelPlusRequest('groups', 'get', {
+      project_id: args.project_id,
+    });
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+
+  async pixelplusGetQueries(args) {
+    const result = await this.makePixelPlusRequest('queries', 'get', {
+      project_id: args.project_id,
+    });
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+
+  async pixelplusAddQueries(args) {
+    const result = await this.makePixelPlusRequest('queries', 'set', {
+      project_id: args.project_id,
+      queries: args.queries.join('|'),
+      group: args.group,
+      url: args.url,
+    });
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+
+  async pixelplusDeleteQueries(args) {
+    const result = await this.makePixelPlusRequest('queries', 'delete', {
+      project_id: args.project_id,
+      ids: args.query_ids.join('|'),
+    });
     return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
   }
 

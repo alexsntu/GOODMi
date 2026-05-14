@@ -154,7 +154,7 @@ Compile internally (do NOT output to user):
 | Доставка | доставка СДЭК по России, самовывоз Севастополь |
 | Условия | гарантия 1 год, трейд-ин, рассрочка, кредит |
 | LSI модели | конкретные модели из топа продаж категории |
-| Доверие | с 2015 года, фирменный магазин техники Xiaomi в Крыму |
+| Доверие | с 2016 года, фирменный магазин техники Xiaomi в Крыму |
 | **Кириллика** | **купить Сяоми [Категория], Редми [Модель], Поко [Модель] — кириллические написания бренда** |
 
 Distribute: H2 (1 ключ) → лид-абзац (2–3, вкл. кириллику в скобках) → одна карточка (кириллика) → один FAQ (кириллика в вопросе) → JSON-LD alternateName (полный список кириллических вариантов).
@@ -225,10 +225,11 @@ Distribute: H2 (1 ключ) → лид-абзац (2–3, вкл. кирилли
 Первое фото в сетке: добавить `fetchpriority="high"` и убрать `loading="lazy"`.
 Карточки в `.gm-services-grid` генерировать **без** `itemscope itemtype="https://schema.org/Product"` и без `itemprop`.
 
-**Если пользователь написал «пропустить»** — использовать Вариант Б (эмодзи-иконка):
+**Если пользователь написал «пропустить»** — использовать Вариант Б (символ-иконка):
 ```html
-<span class="gm-service-card-icon" aria-hidden="true">&#x1F4BB;</span>
+<span class="gm-service-card-icon" aria-hidden="true">&#x26A1;</span>
 ```
+Использовать символ, семантически близкий к карточке (⚡ для техники, ✔ универсальный, ↺ для обмена и т.п.) — строго из BMP-таблицы ниже.
 
 **См. также:** правило `seo--for-shop-html-block.mdc` — раздел «Обязательный запрос изображений для блока карточек (highlights grid)».
 
@@ -333,7 +334,7 @@ Follow **all** rules in `seo--for-shop-html-block.mdc` strictly.
 <li class="gm-advantage-item" role="listitem">
   <span class="gm-advantage-icon" aria-hidden="true">&#x2B50;</span>
   <div class="gm-advantage-body">
-    <strong>Более 500 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2015 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
+    <strong>Более 500 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:#F9F9F9;border-radius:10px;border:1px solid #EEEEEE;">
       <iframe src="https://yandex.ru/sprav/widget/rating-badge/81345582117?type=rating"
               width="150" height="50" frameborder="0"
@@ -433,7 +434,7 @@ If the URL is unknown — use `href="#"` with `<!-- TODO: вставить URL -
 - [ ] **Step 4 выполнен:** пользователь прислал N URL под N карточек, или явно написал «пропустить» (фото), или эти данные были в первом сообщении; нет самовольных URL с каталога и нет иконок без явного «пропустить»
 - [ ] No `<style>` tags inside the block
 - [ ] No concrete prices in ₽
-- [ ] No emoji — only HTML entities
+- [ ] Иконки в `.gm-advantage-icon` и кнопках CTA — **только inline SVG** (чистый ASCII, не корруптируется редактором CS-Cart); HTML-сущности Unicode (`&#x1F...`, `&#x2714;` и т.п.) **запрещены** — TinyMCE декодирует их до сохранения, база данных заменяет на `???`
 - [ ] Cards count is exactly 3 or 6
 - [ ] Highlights cards do **not** use `itemscope itemtype="https://schema.org/Product"` and do not contain `itemprop` (to avoid GSC Product errors `offers/review/aggregateRating`)
 - [ ] Every card has a `.gm-service-link` with a valid internal URL
@@ -478,7 +479,7 @@ If the URL is unknown — use `href="#"` with `<!-- TODO: вставить URL -
 - [ ] Кириллика отсутствует в `alt` и `title` изображений
 
 **E-E-A-T checklist:**
-- [ ] **Experience**: «с 2015 года», «более 10 лет», конкретные факты
+- [ ] **Experience**: «с 2016 года», «более 9 лет», конкретные факты
 - [ ] **Expertise**: «фирменный магазин техники Xiaomi», технические детали → выгоды
 - [ ] **Authoritativeness**: «крупнейший магазин Xiaomi в Крыму», рейтинг «5.0 / 500+ отзывов»
 - [ ] **Trustworthiness**: гарантия 1 год, трейд-ин, бонусная программа GOODMi, реальный адрес
@@ -556,7 +557,7 @@ Delivery:    СДЭК по всей России
 Pickup:      Севастополь (ТЦ Муссон, Остров, ТЦ Мандарин, Адм. Октябрьского)
              Симферополь (ТЦ Меганом) · Ялта (ТЦ Дом Торговли)
 Rating:      5.0 / 500+ отзывов
-Since:       2015
+Since:       2016
 Speciality:  фирменный магазин техники Xiaomi в Крыму
 ```
 
@@ -601,12 +602,72 @@ Always use the two-level label structure — CSS `.gm-trust-label strong` bolds 
 
 | Icon | `<strong>` text | Plain suffix |
 |---|---|---|
-| `&#x1F6E1;` | Гарантия 1 год | на новую технику |
-| `&#x1F69A;` | Доставка СДЭК | по всей России |
-| `&#x1F504;` | Трейд-ин | сдайте старое |
-| `&#x1F4F1;` | GOODMi | с 2015 года |
-| `&#x1F50D;` | Фирменный магазин | техники Xiaomi |
-| `&#x1F381;` | Бонусная программа | GOODMi |
+| `&#x2714;` | Гарантия 1 год | на новую технику |
+| `&#x26A1;` | Доставка СДЭК | по всей России |
+| `&#x21BA;` | Трейд-ин | сдайте старое |
+| `&#x260E;` | GOODMi | с 2016 года |
+| `&#x2714;` | Фирменный магазин | техники Xiaomi |
+| `&#x2B50;` | Бонусная программа | GOODMi |
+
+## Иконки в блоках GOODMi — SVG-стандарт (обязательно)
+
+**Критическое ограничение CS-Cart:** редактор TinyMCE декодирует HTML-сущности в реальные Unicode-символы **до сохранения**. При записи в базу данных любые символы выше U+00FF (включая все `&#x1F...` и многие `&#x2...`) заменяются на `???`. Это проявляется сразу в редакторе при сохранении.
+
+**Единственное надёжное решение — inline SVG.** SVG содержит только ASCII-символы (path data), которые сохраняются без искажений в любой конфигурации CS-Cart/MySQL.
+
+**Запрещено использовать HTML-сущности для иконок** (кроме `&#8212;`, `&#8594;`, `&#160;` и других чисто текстовых сущностей в теле абзацев):
+- `&#x1F...` — 4-байтовые emoji → `????`
+- `&#x2714;`, `&#x26A1;`, `&#x21BA;` и другие Unicode-символы → `???`
+
+### SVG-иконки для блока преимуществ `.gm-advantages-list`
+
+Вставлять внутрь `<span class="gm-advantage-icon" aria-hidden="true">...</span>`:
+
+**Гарантия (галочка):**
+```html
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="3,10 8,16 17,5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+```
+
+**Доставка (молния):**
+```html
+<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="11,2 5,11 10,11 9,18 15,9 10,9"/></svg>
+```
+
+**Трейд-ин (стрелки обмена):**
+```html
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6h12M14 6l-3-3m3 3l-3 3M18 14H6m0 0l3-3m-3 3l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+```
+
+**Кредит (галочка, та же что гарантия):**
+```html
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="3,10 8,16 17,5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+```
+
+**Отзывы/рейтинг (звезда):**
+```html
+<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="10,2 12.5,7.5 18.5,8.2 14,12.5 15.5,18.5 10,15.5 4.5,18.5 6,12.5 1.5,8.2 7.5,7.5"/></svg>
+```
+
+### SVG-иконки для кнопок CTA
+
+Вставлять перед текстом кнопки вместо HTML-сущности:
+
+**Написать в чат:**
+```html
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 2h12v8H9.5l-2.5 3V10H2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+```
+
+**Позвонить:**
+```html
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 2h3l1.5 3.5-1.5 1a8 8 0 0 0 3.5 3.5l1-1.5L14 10v3a1 1 0 0 1-1 1C5.5 14 2 7.5 2 3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+```
+
+**Правила SVG-иконок:**
+- Размер для `.gm-advantage-icon`: `width="20" height="20"`
+- Размер для кнопок CTA: `width="16" height="16"`
+- Цвет: `stroke="currentColor"` или `fill="currentColor"` — наследует цвет от родителя
+- Атрибут `xmlns` обязателен для корректного рендера в CS-Cart
+- `aria-hidden="true"` на SVG внутри `aria-hidden` span — не обязательно, но допустимо
 
 ## Reference
 
