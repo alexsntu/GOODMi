@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../Downloads/Скилы отправить в гудми/seo-shop-page-builder"
+		},
+		{
+			"path": "../Downloads/Скилы отправить в гудми/seo-meta-builder"
 		}
 	],
 	"settings": {}

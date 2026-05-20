@@ -23,8 +23,8 @@ Extract from the user's message:
 - **Competitor URLs** — if provided, flag for Step 2b analysis
 - **Collapse** — управление двухблочной структурой вывода:
   - Стандарт (по умолчанию и при **«с коллапсом»**): два раздельных блока —
-    1. **SEO-блок** (всегда видим): `<div class="gm-block">` → intro-секция + FAQ
-    2. **Визуальный блок** (коллапс): `.gm-collapse-wrapper` → `<div class="gm-block">` → highlights grid + преимущества + CTA
+    1. **SEO-блок** (всегда видим): `<div class="gm-block">` → intro-секция + trust strip + highlights grid
+    2. **Визуальный блок** (коллапс): `.gm-collapse-wrapper` → `<div class="gm-block">` → преимущества + FAQ + CTA
   - Если пользователь говорит **«без коллапса»** или **«no collapse»** → оба блока выводятся как обычные `<div class="gm-block">` без `.gm-collapse-wrapper` и без `<script>` toggle
   - Разделение на два блока обязательно при любом варианте — меняется только наличие collapse-обёртки вокруг второго блока
 
@@ -184,8 +184,7 @@ Distribute: H2 (1 ключ) → лид-абзац (2–3, вкл. кирилли
   4. **Выбор модели** — «Чем [Модель A] отличается от [Модель B]?»
 - Первое предложение каждого ответа = прямой ответ (не вводное слово, не «мы»)
 - Длина ответа: **40–80 слов** — оптимум для Featured Snippet
-- JSON-LD `FAQPage` содержит **те же 4 вопроса**, что и HTML (строго совпадают)
-- На странице должен быть только один `FAQPage`: в JSON-LD. В HTML-секции FAQ не использовать `itemscope itemtype="https://schema.org/FAQPage"`.
+- В HTML-секции FAQ **не использовать** `itemscope`, `itemtype`, `itemprop` — FAQPage разметка не применяется (Google с 2023 г. не показывает FAQ rich results для коммерческих сайтов)
 
 ### Step 4 — ОБЯЗАТЕЛЬНЫЙ запрос фото для карточек highlights grid (блокирующий шаг)
 
@@ -237,49 +236,64 @@ Distribute: H2 (1 ключ) → лид-абзац (2–3, вкл. кирилли
 
 Follow **all** rules in `seo--for-shop-html-block.mdc` strictly.
 
-**Обязательная двухблочная структура (стандарт SEO-разделения 2026):**
+**Два файла на каждую страницу (архитектура CS-Cart):**
+
+CS-Cart дважды рендерит `<script>` из wysiwyg-описания категории → дублирование JSON-LD в GSC.
+Поэтому каждая SEO-страница генерируется как **два отдельных файла**:
+
+| Файл | Куда в CS-Cart | Что содержит |
+|---|---|---|
+| `[slug].html` | Wysiwyg-описание категории | Только HTML (Блок 1 + Блок 2 + `<script>` collapse) |
+| `[slug]-jsonld.html` | Дизайн → Макеты → HTML-блок | Только JSON-LD (отдельные `<script>` per type, без `@graph`, без `WebPage`) |
+
+**Обязательная структура `[slug].html` (без JSON-LD):**
 
 ```
-1. JSON-LD
-2. Блок 1 — SEO-блок (всегда видимый)
-3. Блок 2 — Визуальный блок (collapse ON/OFF)
-4. <script> — только при collapse ON
+1. Блок 1 — SEO-блок (всегда видимый)
+2. Блок 2 — Визуальный блок (collapse ON/OFF)
+3. <script> — только при collapse ON
 ```
 
 **Блок 1 — SEO-блок (всегда видимый, никогда не оборачивать в коллапс):**
 
 ```html
-<!-- Блок 1: Всегда видимый — SEO-критичный (интро + FAQ) -->
+<!-- Блок 1: Всегда видимый — SEO-критичный (интро + trust strip + карточки) -->
 <div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
   <section class="gm-section gm-intro" aria-labelledby="[id]-heading">
     <!-- H2 + .gm-intro-text -->
   </section>
-  <section class="gm-faq" aria-labelledby="faq-heading">
-    <!-- 4 FAQ-вопроса -->
+  <div class="gm-trust-strip" role="list" aria-label="Преимущества GOODMi">
+    <!-- 4 trust items -->
+  </div>
+  <section class="gm-section" aria-labelledby="models-heading">
+    <!-- h3 + gm-section-lead + gm-services-scroll-wrap → gm-services-grid (3 или 6 карточек) -->
   </section>
 </div><!-- /.gm-block (SEO-блок: всегда видим) -->
 ```
 
 Содержит строго:
 - **Intro**: `<section class="gm-section gm-intro" aria-labelledby="...">` (НЕ `<header>`!) → H2 + `.gm-intro-text`
-- **FAQ**: `<section class="gm-faq">` → `<h3 class="gm-section-title">` → 4 вопроса (delivery, guarantee, trade-in, model choice)
+- **Trust strip**: `<div class="gm-trust-strip" role="list">` → 4 иконки с подписями: гарантия, доставка, трейд-ин, GOODMi с 2016 года
+- **Highlights grid**: strictly **3 or 6** `<article>` cards; секция начинается с **`<h3 class="gm-section-title">`** + обязательный **`<p class="gm-section-lead">`**; сетка обёрнута в `.gm-services-scroll-wrap` с кнопками `gm-scroll-btn--prev` / `gm-scroll-btn--next`
+
+> **Правило:** все карточки моделей/подкатегорий (3 или 6) — ВСЕГДА целиком в Block 1. Не разрезать сетку. Внутренние ссылки в карточках обязательны — они всегда должны быть видимы.
 
 **Блок 2 — Визуальный блок (collapse ON по умолчанию):**
 
 ```html
-<!-- Блок 2: Коллапс — визуальные секции (карточки, преимущества, CTA) -->
+<!-- Блок 2: Коллапс — преимущества + FAQ + CTA -->
 <div class="gm-collapse-wrapper">
   <div class="gm-collapse-content">
-    <div class="gm-block">
-      <!-- highlights grid -->
+    <div class="gm-block">  <!-- без itemscope! -->
       <!-- advantages -->
+      <!-- FAQ -->
       <!-- CTA -->
     </div><!-- /.gm-block -->
     <div class="gm-collapse-fade"></div>
   </div><!-- /.gm-collapse-content -->
   <div class="gm-collapse-trigger">
     <button class="gm-collapse-btn" onclick="gmBlockToggle(this)" aria-expanded="false">
-      <span class="gm-collapse-btn-text">Популярные модели и условия покупки</span>
+      <span class="gm-collapse-btn-text">Читать подробнее</span>
       <span class="gm-collapse-chevron" aria-hidden="true">
         <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
           <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2"
@@ -292,14 +306,14 @@ Follow **all** rules in `seo--for-shop-html-block.mdc` strictly.
 ```
 
 Содержит строго:
-- **Highlights grid**: strictly **3 or 6** `<article>` cards; секция начинается с **`<h3 class="gm-section-title">`** + обязательный **`<p class="gm-section-lead">`**; сетка обёрнута в `.gm-services-scroll-wrap` с кнопками `gm-scroll-btn--prev` / `gm-scroll-btn--next`
 - **Advantages**: **`<ul class="gm-advantages-list" role="list">`** (атрибут `role="list"` обязателен!); секция с **`<h3 class="gm-section-title">`**; последний пункт — Яндекс-виджет рейтинга
+- **FAQ**: `<section class="gm-faq">` → `<h3 class="gm-section-title">` → 4 вопроса (delivery, guarantee, trade-in, model choice). Без `itemscope`/`itemtype`/`itemprop` — FAQPage разметка не используется.
 - **CTA**: dark gradient block, 2 buttons — **кнопка 1 (оранжевая): JivoChat** (`jivo_api.open()`), **кнопка 2 (белая): телефон 8-800-250-17-00**
 
 **Текст кнопки коллапса:**
-- Свёрнуто: `«Популярные модели и условия покупки»`
+- Свёрнуто: `«Читать подробнее»`
 - Развёрнуто (JS): `«Скрыть»`
-- При сворачивании JS восстанавливает: `«Популярные модели и условия покупки»`
+- При сворачивании JS восстанавливает: `«Читать подробнее»`
 
 **Collapse condition (from Step 1):**
 - **Collapse ON** (default): Блок 2 обёрнут в `.gm-collapse-wrapper → .gm-collapse-content`, добавить `.gm-collapse-fade`, `.gm-collapse-trigger`, `<script>` в конце файла
@@ -307,8 +321,8 @@ Follow **all** rules in `seo--for-shop-html-block.mdc` strictly.
 - **Блок 1 (SEO)** — всегда обычный `<div class="gm-block">` без коллапса, независимо от настройки
 
 **Логика разделения (почему именно так):**
-- Блок 1 (intro + FAQ) — приоритет индексации: `speakable` целевые элементы (`.gm-intro-text`, `.gm-faq`) всегда в DOM без JS-барьеров; Featured Snippets и AEO требуют немедленной доступности
-- Блок 2 (карточки + преимущества + CTA) — приоритет UX: визуальный и объёмный; коллапс даёт пользователю выбор без ущерба для SEO текстового контента
+- Блок 1 (intro + trust strip + карточки) — приоритет индексации: `speakable` целевой элемент `.gm-intro-text` всегда в DOM без JS-барьеров; коммерческие названия моделей в H3 и внутренние ссылки карточек всегда видимы и индексируются
+- Блок 2 (преимущества + FAQ + CTA) — FAQ текст полезен для ранжирования; скрытие за collapse не критично для индексации
 
 **`<script>` блок (только при collapse ON):** добавляется после Блока 2 и содержит IIFE-инициализацию + `gmBlockToggle` + JS горизонтального скроллера карточек
 
@@ -332,9 +346,9 @@ Follow **all** rules in `seo--for-shop-html-block.mdc` strictly.
 
 ```html
 <li class="gm-advantage-item" role="listitem">
-  <span class="gm-advantage-icon" aria-hidden="true">&#x2B50;</span>
+  <span class="gm-advantage-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="10,2 12.5,7.5 18.5,8.2 14,12.5 15.5,18.5 10,15.5 4.5,18.5 6,12.5 1.5,8.2 7.5,7.5"/></svg></span>
   <div class="gm-advantage-body">
-    <strong>Более 500 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
+    <strong>Более 2000 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:#F9F9F9;border-radius:10px;border:1px solid #EEEEEE;">
       <iframe src="https://yandex.ru/sprav/widget/rating-badge/81345582117?type=rating"
               width="150" height="50" frameborder="0"
@@ -419,15 +433,23 @@ If the URL is unknown — use `href="#"` with `<!-- TODO: вставить URL -
 
 ### Step 6 — Self-check before outputting
 
+**Два файла (обязательная проверка):**
+- [ ] Сгенерировано **два файла**: `[slug].html` (HTML-контент) и `[slug]-jsonld.html` (JSON-LD)
+- [ ] В `[slug].html` **нет** ни одного `<script type="application/ld+json">` тега
+- [ ] В `[slug]-jsonld.html` нет `@graph` — каждый тип в отдельном `<script>` блоке
+- [ ] В `[slug]-jsonld.html` **нет** `WebPage` (CS-Cart генерирует сам)
+
 **Двухблочная структура (обязательная проверка):**
 - [ ] **Блок 1 (SEO)** выводится как обычный `<div class="gm-block">` — без `.gm-collapse-wrapper`, без JS-инициализации
-- [ ] **Блок 1** содержит строго: intro-секция (`gm-section gm-intro`) + FAQ-секция (`gm-faq`) — и только их
-- [ ] **Блок 2 (визуальный)** содержит: highlights grid + преимущества + CTA — без FAQ и без intro
+- [ ] **Блок 1** содержит строго: intro-секция (`gm-section gm-intro`) + trust strip (`gm-trust-strip`) + highlights grid (`gm-services-grid`) — и только их
+- [ ] **Блок 2** содержит: преимущества + FAQ + CTA — без карточек и без intro
 - [ ] При collapse ON — Блок 2 обёрнут в `.gm-collapse-wrapper`, Блок 1 — нет
 - [ ] При collapse OFF — оба блока обычные `<div class="gm-block">`, `<script>` toggle отсутствует
-- [ ] Текст кнопки collapse-trigger: `«Популярные модели и условия покупки»` (не «Показать больше»)
-- [ ] JS `gmBlockToggle` при сворачивании восстанавливает текст `«Популярные модели и условия покупки»`
-- [ ] FAQ-секция находится в Блоке 1 (SEO), а не в Блоке 2 (коллапс)
+- [ ] Текст кнопки collapse-trigger: `«Читать подробнее»` (не «Показать больше», не «Популярные модели»)
+- [ ] JS `gmBlockToggle` при сворачивании восстанавливает текст `«Читать подробнее»`
+- [ ] FAQ-секция находится в Блоке 2 (коллапс), а не в Блоке 1 (SEO)
+- [ ] `itemscope itemtype="https://schema.org/WebPage"` только на `.gm-block` Блока 1
+- [ ] В Блоке 2's `.gm-block` **нет** `itemscope`/`itemtype`/`itemprop`
 
 **Structure & code:**
 - [ ] **Step 1b выполнен:** пользователь ответил по гарантии или в первом сообщении были срок / «нет гарантии» / явное «пропусти гарантию»; нет самовольной подстановки «Гарантия качества» без явного разрешения
@@ -464,24 +486,23 @@ If the URL is unknown — use `href="#"` with `<!-- TODO: вставить URL -
 - [ ] Преимущества конкретны (не «быстро», а «через СДЭК»; не «официально», а «гарантия 1 год»)
 
 **AEO checklist:**
-- [ ] FAQ обёрнут в `<section class="gm-faq" ...>`
+- [ ] FAQ обёрнут в `<section class="gm-faq" ...>` и находится в **Блоке 2**
 - [ ] 4 вопроса покрывают 4 интента: доставка · гарантия · трейд-ин · выбор модели
 - [ ] Первое предложение каждого ответа = прямой ответ
 - [ ] Длина каждого ответа: 40–80 слов
-- [ ] JSON-LD FAQPage содержит те же 4 вопроса, что и HTML (строго совпадают)
-- [ ] В HTML нет `itemtype="https://schema.org/FAQPage"` (чтобы не дублировать JSON-LD FAQPage)
+- [ ] В HTML FAQ нет `itemscope`, `itemtype`, `itemprop`
 
 **Кириллические LSI-запросы (обязательная проверка — Step 2c):**
 - [ ] JSON-LD `LocalBusiness.alternateName` содержит массив с кириллическими вариантами бренда (Сяоми, Редми, Поко — по контексту категории)
 - [ ] Лид `.gm-intro-text` содержит кириллику в скобках рядом с латинским брендом: «Xiaomi (Сяоми)»
-- [ ] Один вопрос FAQ переформулирован с кириллическим написанием бренда — вопрос в JSON-LD FAQPage совпадает с HTML
+- [ ] Один вопрос FAQ переформулирован с кириллическим написанием бренда
 - [ ] Описание одной карточки `.gm-service-card` содержит кириллический вариант бренда — не более одной карточки
 - [ ] Кириллика отсутствует в `alt` и `title` изображений
 
 **E-E-A-T checklist:**
 - [ ] **Experience**: «с 2016 года», «более 9 лет», конкретные факты
 - [ ] **Expertise**: «фирменный магазин техники Xiaomi», технические детали → выгоды
-- [ ] **Authoritativeness**: «крупнейший магазин Xiaomi в Крыму», рейтинг «5.0 / 500+ отзывов»
+- [ ] **Authoritativeness**: «крупнейший магазин Xiaomi в Крыму», рейтинг «5.0 / 2000+ отзывов»
 - [ ] **Trustworthiness**: гарантия 1 год, трейд-ин, бонусная программа GOODMi, реальный адрес
 - [ ] Ни один E-E-A-T сигнал не выглядит как рекламный лозунг
 
@@ -540,7 +561,12 @@ Repair photo:  gm-repair-photo
 
 ### Step 7 — Output
 
-Output **only** the final HTML in a single code block. No commentary before or after.
+Output **two** code blocks, clearly labelled:
+
+1. **`[slug].html`** — HTML-контент (Блок 1 + Блок 2 + collapse script). Без JSON-LD.
+2. **`[slug]-jsonld.html`** — только JSON-LD (отдельные `<script>` per type, без `@graph`, без `WebPage`).
+
+No other commentary before or after the code blocks.
 
 ---
 
@@ -556,7 +582,7 @@ Site:        https://goodmi.ru
 Delivery:    СДЭК по всей России
 Pickup:      Севастополь (ТЦ Муссон, Остров, ТЦ Мандарин, Адм. Октябрьского)
              Симферополь (ТЦ Меганом) · Ялта (ТЦ Дом Торговли)
-Rating:      5.0 / 500+ отзывов
+Rating:      5.0 / 2000+ отзывов
 Since:       2016
 Speciality:  фирменный магазин техники Xiaomi в Крыму
 ```
@@ -602,12 +628,12 @@ Always use the two-level label structure — CSS `.gm-trust-label strong` bolds 
 
 | Icon | `<strong>` text | Plain suffix |
 |---|---|---|
-| `&#x2714;` | Гарантия 1 год | на новую технику |
-| `&#x26A1;` | Доставка СДЭК | по всей России |
-| `&#x21BA;` | Трейд-ин | сдайте старое |
-| `&#x260E;` | GOODMi | с 2016 года |
-| `&#x2714;` | Фирменный магазин | техники Xiaomi |
-| `&#x2B50;` | Бонусная программа | GOODMi |
+| галочка (checkmark SVG) | Гарантия 1 год | на новую технику |
+| молния (lightning SVG) | Доставка СДЭК | по всей России |
+| стрелки обмена (exchange SVG) | Трейд-ин | сдайте старое |
+| галочка (checkmark SVG) | GOODMi | с 2016 года |
+| галочка (checkmark SVG) | Фирменный магазин | техники Xiaomi |
+| звезда (star SVG) | Бонусная программа | GOODMi |
 
 ## Иконки в блоках GOODMi — SVG-стандарт (обязательно)
 

@@ -13,14 +13,25 @@ alwaysApply: false
 - Сайт: `https://goodmi.ru` · Блог: `https://goodmi.ru/blog-xiaomi-na-russkom/`
 - Логотип: `https://goodmi.ru/images/logos/goodmi-logo.png`
 - Специализация: фирменный магазин техники Xiaomi в Крыму с 2015 года
-- Рейтинг: 5.0 / 500+ отзывов на Яндексе
+- Рейтинг: 5.0 / 2000+ отзывов на Яндексе
 
 ---
 
-## Структура файла (строго в порядке)
+## Архитектура двух файлов (CS-Cart)
 
-1. `<script type="application/ld+json">` — JSON-LD
-2. `<div class="gm-block gm-article" itemscope itemtype="https://schema.org/Article">`
+> **Критично:** CS-Cart дважды рендерит `<script>` теги из wysiwyg-описания страницы →
+> дублирование JSON-LD в GSC (ошибки «BlogPosting дублируется», «FAQPage дублируется»).
+
+Каждая статья = **два файла**:
+
+| Файл | Куда в CS-Cart | Содержимое |
+|---|---|---|
+| `[slug].html` | Wysiwyg-описание статьи | Только HTML-контент — **без `<script>` тегов** |
+| `[slug]-jsonld.html` | Дизайн → Макеты → HTML-блок | Только JSON-LD (отдельные `<script>` per type, без `@graph`) |
+
+## Структура `[slug].html` (строго в порядке)
+
+1. `<div class="gm-block gm-article" itemscope itemtype="https://schema.org/Article">`
    - **Article header** `.gm-article-header`
    - **Key Facts box** `.gm-article-key-facts` ← GEO: первичный цитируемый элемент
    - **TOC** `.gm-article-toc` *(только если 4+ секций H2)*
@@ -34,49 +45,62 @@ alwaysApply: false
 
 ---
 
-## JSON-LD — обязательные типы
+## JSON-LD — структура `[slug]-jsonld.html`
 
-`@graph` содержит:
-- `BlogPosting` — headline, description (150–160 chars), datePublished, dateModified, author, publisher с logo, image (если есть), url, inLanguage: `"ru"`, keywords (3–7 слов), speakable, mainEntityOfPage
+Каждый тип — **отдельный** `<script>` блок. `@graph` **запрещён**.
+
+Обязательные типы:
+- `BlogPosting` — headline, description (150–160 chars), datePublished, dateModified, author, publisher с logo, inLanguage: `"ru"`, keywords, speakable, mainEntityOfPage
 - `BreadcrumbList` — 3 уровня: Главная → Блог → Заголовок статьи
-- `FAQPage` — те же 4 вопроса, что и HTML-секция FAQ (должны совпадать)
+- `FAQPage` — те же 4 вопроса, что и HTML-секция FAQ (строго совпадают); обязательны `@id` и `mainEntity`
 
-```json
+```html
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BlogPosting",
-      "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/#article",
-      "headline": "ЗАГОЛОВОК",
-      "description": "ОПИСАНИЕ 150–160 СИМВОЛОВ",
-      "datePublished": "YYYY-MM-DD",
-      "dateModified": "YYYY-MM-DD",
-      "inLanguage": "ru",
-      "url": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/",
-      "keywords": ["ключевое слово", "Xiaomi", "GOODMi"],
-      "author": { "@type": "Organization", "name": "GOODMi", "url": "https://goodmi.ru" },
-      "publisher": {
-        "@type": "Organization",
-        "name": "GOODMi",
-        "logo": { "@type": "ImageObject", "url": "https://goodmi.ru/images/logos/goodmi-logo.png" }
-      },
-      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/" },
-      "speakable": {
-        "@type": "SpeakableSpecification",
-        "cssSelector": [".gm-article-key-facts", ".gm-faq"]
-      }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://goodmi.ru/" },
-        { "@type": "ListItem", "position": 2, "name": "Блог", "item": "https://goodmi.ru/blog-xiaomi-na-russkom/" },
-        { "@type": "ListItem", "position": 3, "name": "ЗАГОЛОВОК", "item": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/" }
-      ]
-    }
+  "@type": "BlogPosting",
+  "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/#article",
+  "headline": "ЗАГОЛОВОК",
+  "description": "ОПИСАНИЕ 150–160 СИМВОЛОВ",
+  "datePublished": "YYYY-MM-DD",
+  "dateModified": "YYYY-MM-DD",
+  "inLanguage": "ru",
+  "url": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/",
+  "keywords": ["ключевое слово", "Xiaomi", "GOODMi"],
+  "author": { "@type": "Organization", "name": "GOODMi", "url": "https://goodmi.ru" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "GOODMi",
+    "logo": { "@type": "ImageObject", "url": "https://goodmi.ru/images/logos/goodmi-logo.png" }
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/" },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".gm-article-key-facts", ".gm-faq"]
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://goodmi.ru/" },
+    { "@type": "ListItem", "position": 2, "name": "Блог", "item": "https://goodmi.ru/blog-xiaomi-na-russkom/" },
+    { "@type": "ListItem", "position": 3, "name": "ЗАГОЛОВОК", "item": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/" }
   ]
 }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/#faq",
+  "mainEntity": [...]
+}
+</script>
 ```
 
 ---
@@ -269,7 +293,7 @@ alwaysApply: false
 |---|---|
 | Experience | «с 2015 года», «более 10 лет», конкретные цифры |
 | Expertise | «фирменный магазин техники Xiaomi», технические факты |
-| Authoritativeness | «крупнейший магазин Xiaomi в Крыму», рейтинг 5.0 / 500+ отзывов |
+| Authoritativeness | «крупнейший магазин Xiaomi в Крыму», рейтинг 5.0 / 2000+ отзывов |
 | Trustworthiness | Реальный адрес, дата публикации, официальная гарантия |
 
 > E-E-A-T — только как фактические утверждения, не рекламные лозунги.
