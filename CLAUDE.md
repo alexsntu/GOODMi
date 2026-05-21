@@ -11,7 +11,8 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 - Phone: `8 (800) 250-17-00` / `href="tel:+78002501700"`
 - Email: `store@goodmi.ru`
 - Hours: daily 10:00–21:00
-- Since: 2016
+- Main address: `г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»`; self-pickup at 6 points in Crimea (Sevastopol 4×, Simferopol, Yalta)
+- Since: copywriting uses `«с 2015 года»` / `«более 10 лет на рынке»`; JSON-LD `LocalBusiness.description` uses `«с 2016 года»` — do not change either without user confirmation
 - Speciality: «фирменный магазин техники Xiaomi в Крыму»
 - Prohibited: «официальный», «авторизованный» when describing the store
 - Commercial terms: use «кредит», never «рассрочка без переплат»
@@ -26,7 +27,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 Быстрые ссылки/        # Quick-links blocks (separate files, never embedded in category files)
 CSS/                   # goodmi-styles.css (shared), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
-tools/                 # Utility scripts (restructure_category_two_block.py)
+tools/                 # Utility scripts: restructure_category_two_block.py, fix_faq_mass.py, fix_faq_schema.py
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 .cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards
 .cursor/skills/        # Reusable skill definitions for content generation workflows
@@ -38,8 +39,10 @@ All category and page blocks follow a shared structure:
 
 1. **JSON-LD schema** (top) — `LocalBusiness`, `WebPage`, `FAQPage`, `BreadcrumbList`, and optionally `ItemList` for product schemas. Every `Review` entity must include `"itemReviewed": { "@id": "https://goodmi.ru/#organization" }`.
 2. **CSS classes** — all styles come from `goodmi-styles.css`; never write `<style>` tags inline.
-3. **Quick-links blocks** — always saved as separate files (`[category]-quick-links.html`, `[category]-quick-links-top.html`), never embedded in the category SEO file.
-4. **No emojis** — use HTML entities instead (`&#8211;`, `&#215;`, etc.).
+3. **Two-file split per page** — `[slug].html` (wysiwyg HTML only, no `<script>`) + `[slug]-jsonld.html` (JSON-LD only, placed in a separate Layout block). **Reason:** CS-Cart duplicates every `<script>` tag in wysiwyg descriptions, causing GSC duplicate-schema errors.
+4. **Quick-links blocks** — always saved as separate files (`[category]-quick-links.html`, `[category]-quick-links-top.html`), never embedded in the category SEO file.
+5. **No emojis** — use HTML entities instead (`&#8211;`, `&#215;`, etc.). Use inline SVG for all icons — TinyMCE in CS-Cart corrupts Unicode entities above U+00FF (renders as `???` in DB).
+6. **Block 1 / Block 2 split** — Block 1 (intro + trust strip + cards grid) is always visible; Block 2 (advantages + FAQ + CTA) is wrapped in `.gm-collapse-wrapper` with `max-height: 350px`. Only Block 1 carries `itemscope itemtype="https://schema.org/WebPage"`.
 
 ### Key CSS Classes
 - `.gm-section`, `.gm-section-title` — section wrappers
@@ -50,6 +53,13 @@ All category and page blocks follow a shared structure:
 - `.gm-intro-text`, `.gm-faq` — referenced in `speakable.cssSelector` JSON-LD
 
 ## SEO Standards
+
+### Hard prohibitions
+- `@graph` in JSON-LD — **never use** (CS-Cart incompatible)
+- `FAQPage` JSON-LD schema — **prohibited** (Google dropped FAQ rich results for commercial sites Sept 2023; causes GSC errors with no ranking benefit)
+- `itemscope itemtype="Product"` on `.gm-services-grid` cards — **prohibited** (triggers GSC critical errors for missing `offers`/`review`/`aggregateRating`)
+- `WebPage` in JSON-LD — **prohibited** (CS-Cart generates it automatically)
+- Prices in card descriptions or JSON-LD `description` fields — **prohibited**
 
 Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 
@@ -76,11 +86,17 @@ Skills in `.cursor/skills/` define step-by-step workflows. Always follow their w
 | Skill | Trigger use case |
 |---|---|
 | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
+| `seo-shop-page-builder` | Full category HTML block (competitor research → GEO/AEO → HTML + JSON-LD) |
+| `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
 | `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
 | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
 | `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
 
 All skills: **ask for input first, show analysis, wait for confirmation, then generate HTML.**
+
+**`seo-shop-page-builder` mandatory blocking steps** (do not skip):
+- **Step 1b** — ask warranty duration before generating any HTML; no default assumed
+- **Step 4** — ask for card image URLs (or explicit «пропустить») before generating `.gm-services-grid`
 
 ## MCP Server (`cscart-mcp-server/`)
 
