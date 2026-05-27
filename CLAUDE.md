@@ -11,11 +11,16 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 - Phone: `8 (800) 250-17-00` / `href="tel:+78002501700"`
 - Email: `store@goodmi.ru`
 - Hours: daily 10:00–21:00
-- Main address: `г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»`; self-pickup at 6 points in Crimea (Sevastopol 4×, Simferopol, Yalta)
+- Main address: `г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»`
+- Pickup points (6 total): Sevastopol ТЦ Муссон · Остров · ТЦ Мандарин · Адм. Октябрьского; Simferopol ТЦ Меганом; Yalta ТЦ Дом Торговли
 - Since: copywriting uses `«с 2015 года»` / `«более 10 лет на рынке»`; JSON-LD `LocalBusiness.description` uses `«с 2016 года»` — do not change either without user confirmation
+- `sameAs`: `https://yandex.ru/maps/org/goodmi/81345582117/`
+- Yandex rating widget iframe ID: `81345582117`
 - Speciality: «фирменный магазин техники Xiaomi в Крыму»
 - Prohibited: «официальный», «авторизованный» when describing the store
-- Commercial terms: use «кредит», never «рассрочка без переплат»
+- Commercial terms: use «кредит», never «рассрочка без переплат» or «беспроцентная рассрочка»
+
+**Traffic split (informs meta-tag prioritization):** Yandex ≈ 58% organic traffic / conversion 2× higher than Google; Google ≈ 41%. Optimize for Yandex first.
 
 ## Repository Structure
 
@@ -27,22 +32,38 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 Быстрые ссылки/        # Quick-links blocks (separate files, never embedded in category files)
 CSS/                   # goodmi-styles.css (shared), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
-tools/                 # Utility scripts: restructure_category_two_block.py, fix_faq_mass.py, fix_faq_schema.py
+tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 .cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards
 .cursor/skills/        # Reusable skill definitions for content generation workflows
 ```
 
+**Utility scripts in `tools/`:**
+- `restructure_category_two_block.py` — splits single-block category HTML into the two-block (Block 1 / Block 2) structure
+- `fix_faq_mass.py` — bulk removes FAQPage itemscope/itemtype/itemprop attributes from HTML files
+- `fix_faq_schema.py` — removes FAQPage JSON-LD blocks from jsonld HTML files
+
 ## HTML Block Architecture
 
 All category and page blocks follow a shared structure:
 
-1. **JSON-LD schema** (top) — `LocalBusiness`, `WebPage`, `FAQPage`, `BreadcrumbList`, and optionally `ItemList` for product schemas. Every `Review` entity must include `"itemReviewed": { "@id": "https://goodmi.ru/#organization" }`.
+1. **JSON-LD schema** (top) — `LocalBusiness`, `BreadcrumbList`, and optionally `ItemList`. Every `Review` entity must include `"itemReviewed": { "@id": "https://goodmi.ru/#organization" }`.
 2. **CSS classes** — all styles come from `goodmi-styles.css`; never write `<style>` tags inline.
 3. **Two-file split per page** — `[slug].html` (wysiwyg HTML only, no `<script>`) + `[slug]-jsonld.html` (JSON-LD only, placed in a separate Layout block). **Reason:** CS-Cart duplicates every `<script>` tag in wysiwyg descriptions, causing GSC duplicate-schema errors.
 4. **Quick-links blocks** — always saved as separate files (`[category]-quick-links.html`, `[category]-quick-links-top.html`), never embedded in the category SEO file.
 5. **No emojis** — use HTML entities instead (`&#8211;`, `&#215;`, etc.). Use inline SVG for all icons — TinyMCE in CS-Cart corrupts Unicode entities above U+00FF (renders as `???` in DB).
-6. **Block 1 / Block 2 split** — Block 1 (intro + trust strip + cards grid) is always visible; Block 2 (advantages + FAQ + CTA) is wrapped in `.gm-collapse-wrapper` with `max-height: 350px`. Only Block 1 carries `itemscope itemtype="https://schema.org/WebPage"`.
+6. **Block 1 / Block 2 split** — Block 1 is always visible; Block 2 is wrapped in `.gm-collapse-wrapper` with `max-height`. Only Block 1 carries `itemscope itemtype="https://schema.org/WebPage"`.
+
+### Block 1 / Block 2 content split (v1 vs v2)
+
+| Section | v1 (seo-shop-page-builder) | v2 (seo-shop-page-builder-v2) |
+|---|---|---|
+| Block 1 (always visible) | intro + trust strip + cards grid | intro + trust strip + cards grid + **FAQ** |
+| Block 2 (collapse, 350px) | advantages + **FAQ** + CTA | advantages + CTA |
+| FAQ questions | 4 | **5** (adds informational question first) |
+| Block 2 initial height | 350px | 400px |
+
+**v2 is preferred for new pages** targeting neural answer visibility (Яндекс Нейро, Google AI Overviews).
 
 ### Key CSS Classes
 - `.gm-section`, `.gm-section-title` — section wrappers
@@ -51,6 +72,8 @@ All category and page blocks follow a shared structure:
 - `.gm-quick-links-top`, `.gm-quick-links-top-inner` — top quick-links variant (section 12c)
 - `.gm-ql-hidden`, `.gm-ql-btn`, `.gm-ql-chevron` — row-overflow JS mechanism
 - `.gm-intro-text`, `.gm-faq` — referenced in `speakable.cssSelector` JSON-LD
+- `.gm-trust-strip` — 4-icon USP strip
+- `.gm-advantages-list` — must use selector `.gm-block .gm-advantages-list` (not just `.gm-advantages-list`) to override CS-Cart's `ul` padding
 
 ## SEO Standards
 
@@ -60,11 +83,13 @@ All category and page blocks follow a shared structure:
 - `itemscope itemtype="Product"` on `.gm-services-grid` cards — **prohibited** (triggers GSC critical errors for missing `offers`/`review`/`aggregateRating`)
 - `WebPage` in JSON-LD — **prohibited** (CS-Cart generates it automatically)
 - Prices in card descriptions or JSON-LD `description` fields — **prohibited**
+- `<style>` tags inside any HTML block — **prohibited**
+- `transform` on hover buttons — **prohibited** (Chrome bug with `overflow: hidden`)
 
 Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 
 - **`seo--meta-tags.mdc`** — H1/title/description templates and length rules
-- **`seo--for-shop-html-block.mdc`** — full HTML block generation standard (research → GEO → E-E-A-T → structure)
+- **`seo--for-shop-html-block.mdc`** — full HTML block generation standard (research → GEO → E-E-A-T → structure); includes all SVG icon templates, CSS color palette, collapse JS
 - **`quick-links-seo-block.mdc`** — quick-links block markup and JS
 - **`quick-links-top.mdc`** — top quick-links variant (no H3, bordered, inline button)
 - **`seo--for-blog-article.mdc`** — blog SEO block standard
@@ -79,6 +104,25 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 ### Approved USPs
 `гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2016 года` · `бонусная программа GOODMi`
 
+### Canonical URL patterns
+```
+Смартфоны:     https://goodmi.ru/smartfony/
+Планшеты:      https://goodmi.ru/planshety/
+Ноутбуки:      https://goodmi.ru/noutbuki/
+Смарт-часы:    https://goodmi.ru/smart-chasy/
+Наушники:      https://goodmi.ru/naushniki-i-kolonki/
+Пылесосы:      https://goodmi.ru/pylesos/
+Телевизоры:    https://goodmi.ru/tv-foto-video/
+Умный дом:     https://goodmi.ru/umnyj-dom/
+Аксессуары:    https://goodmi.ru/aksessuary/
+Гарантия:      https://goodmi.ru/info/guarantee/
+Возврат:       https://goodmi.ru/info/vozvrat-ru/
+Доставка:      https://goodmi.ru/info/delivery/
+Трейд-ин:      https://goodmi.ru/treyd-in-goodmi/
+Кредит:        https://goodmi.ru/credit/
+Бонусы:        https://goodmi.ru/bonusnaya-programma/
+```
+
 ## Skills (Cursor / Claude workflows)
 
 Skills in `.cursor/skills/` define step-by-step workflows. Always follow their workflow order:
@@ -86,17 +130,20 @@ Skills in `.cursor/skills/` define step-by-step workflows. Always follow their w
 | Skill | Trigger use case |
 |---|---|
 | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
-| `seo-shop-page-builder` | Full category HTML block (competitor research → GEO/AEO → HTML + JSON-LD) |
+| `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
+| `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
+| `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
 | `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
 | `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
 | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
 | `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
+| `seo-blog-poster-builder` | Generate branded blog post header in Xiaomi/GOODMi style |
 
 All skills: **ask for input first, show analysis, wait for confirmation, then generate HTML.**
 
-**`seo-shop-page-builder` mandatory blocking steps** (do not skip):
-- **Step 1b** — ask warranty duration before generating any HTML; no default assumed
-- **Step 4** — ask for card image URLs (or explicit «пропустить») before generating `.gm-services-grid`
+**Mandatory blocking steps (do not skip for any shop-page-builder variant):**
+- **Step 1b** — ask warranty duration before generating any HTML; no default assumed. Waiting for user answer = block; do not generate final HTML until answered.
+- **Step 4** — ask for card image URLs (or explicit «пропустить») before generating `.gm-services-grid`. Silence ≠ «пропустить».
 
 ## MCP Server (`cscart-mcp-server/`)
 
@@ -109,4 +156,4 @@ npm run dev      # nodemon watch mode
 npm test         # Jest tests
 ```
 
-Requires `.env` with `CSCART_API_URL`, `CSCART_API_EMAIL`, `CSCART_API_KEY`.
+Requires `.env` with `CSCART_API_URL`, `CSCART_API_EMAIL`, `CSCART_API_KEY`. PixelPlus SEO tools also require `PIXELPLUS_API_TOKEN`.

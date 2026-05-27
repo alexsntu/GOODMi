@@ -1,0 +1,741 @@
+<style>
+/* ─── GOODMi:club ─ бонусная программа ─── */
+.bp-highlights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 28px 0 36px;
+}
+.bp-highlight {
+  background: #FFF0E6;
+  border-radius: 14px;
+  padding: 20px 14px;
+  text-align: center;
+}
+.bp-highlight__num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #FF6900;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.bp-highlight__label {
+  font-size: 12px;
+  color: #3D3D3D;
+  line-height: 1.45;
+}
+
+/* ─── Блок регистрации (шаг 1) ─── */
+.bp-register {
+  background: linear-gradient(135deg, #FFF0E6 0%, #ffffff 60%);
+  border: 2px solid #FF6900;
+  border-radius: 16px;
+  padding: 28px;
+  margin: 24px 0 32px;
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+.bp-register__info { flex: 1; }
+.bp-register__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1C1C1C;
+  margin-bottom: 10px;
+}
+.bp-register__text {
+  font-size: 14px;
+  color: #3D3D3D;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+.bp-register__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 22px;
+  background: #FF6900;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  transition: background 0.18s;
+}
+.bp-register__btn:hover { background: #E55A00; }
+.bp-register__qr {
+  flex-shrink: 0;
+  text-align: center;
+}
+.bp-register__qr-img {
+  width: 148px;
+  height: 148px;
+  border-radius: 10px;
+  border: 1px solid #E5E5E5;
+  display: block;
+}
+.bp-register__qr-label {
+  font-size: 11px;
+  color: #6B6B6B;
+  margin-top: 7px;
+}
+
+/* ─── Подсказка: скачать Wallet ─── */
+.bp-wallet-tip {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #F5F5F5;
+  border: 1px solid #E0E0E0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: -16px 0 28px;
+}
+.bp-wallet-tip__icon { flex-shrink: 0; }
+.bp-wallet-tip__body { flex: 1; }
+.bp-wallet-tip__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C1C1C;
+  margin-bottom: 3px;
+}
+.bp-wallet-tip__text {
+  font-size: 13px;
+  color: #6B6B6B;
+  line-height: 1.5;
+  margin: 0;
+}
+.bp-wallet-tip__btns {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bp-wallet-tip__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: #1C1C1C;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.18s;
+}
+.bp-wallet-tip__btn:hover { background: #3D3D3D; }
+
+/* ─── Сетка шагов ─── */
+.bp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 8px 0 36px;
+}
+.bp-step {
+  display: flex;
+  flex-direction: column;
+  background: #F5F5F5;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.bp-step__header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 16px 8px;
+}
+.bp-step__num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #FF6900;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+}
+.bp-step__num--done { background: #27AE60; }
+.bp-step__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1C1C1C;
+  line-height: 1.3;
+  margin: 0;
+}
+.bp-step__text {
+  font-size: 13px;
+  color: #6B6B6B;
+  line-height: 1.6;
+  margin: 0;
+  padding: 4px 16px 14px;
+}
+.bp-step__img {
+  width: 100%;
+  height: 600px;
+  object-fit: contain;
+  object-position: center center;
+  background: #EBEBEB;
+  display: block;
+  margin-top: auto;
+  border-top: 1px solid #DEDEDE;
+}
+
+/* ─── Уровни участников ─── */
+.bp-tiers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 24px 0 36px;
+}
+.bp-tier {
+  border: 2px solid #E5E5E5;
+  border-radius: 14px;
+  text-align: center;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.bp-tier--top { border-color: #FF6900; }
+.bp-tier__img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.bp-tier__body {
+  padding: 14px 12px 16px;
+}
+.bp-tier__name {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1C1C1C;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+.bp-tier__pct {
+  font-size: 28px;
+  font-weight: 800;
+  color: #FF6900;
+  line-height: 1;
+}
+.bp-tier__pct-sub {
+  font-size: 11px;
+  color: #6B6B6B;
+  margin-bottom: 10px;
+}
+.bp-tier__range {
+  font-size: 11px;
+  color: #3D3D3D;
+  background: #F5F5F5;
+  border-radius: 6px;
+  padding: 5px 8px;
+  line-height: 1.4;
+  display: inline-block;
+}
+.bp-tier--top .bp-tier__range { background: #FFE0CC; }
+.bp-tier__link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FF6900;
+  text-decoration: none;
+}
+.bp-tier__link:hover { text-decoration: underline; }
+
+/* ─── Списки правил ─── */
+.bp-rules {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.bp-rules li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  font-size: 15px;
+  color: #3D3D3D;
+  line-height: 1.6;
+}
+.bp-rules li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  background: #FF6900;
+  border-radius: 50%;
+  margin-top: 8px;
+}
+
+/* ─── День рождения ─── */
+.bp-birthday {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: #FFF0E6;
+  border-radius: 14px;
+  padding: 24px 22px;
+  margin: 0 0 36px;
+}
+.bp-birthday__icon { flex-shrink: 0; }
+.bp-birthday__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1C1C1C;
+  margin-bottom: 6px;
+}
+.bp-birthday__text {
+  font-size: 14px;
+  color: #3D3D3D;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ─── CTA ─── */
+.bp-cta {
+  text-align: center;
+  padding: 8px 0 4px;
+  font-size: 14px;
+  color: #6B6B6B;
+  line-height: 1.6;
+}
+.bp-cta a {
+  color: #FF6900;
+  font-weight: 600;
+  text-decoration: none;
+}
+.bp-cta a:hover { text-decoration: underline; }
+
+/* ─── Адаптив ─── */
+@media (max-width: 960px) {
+  .bp-steps { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 820px) {
+  .bp-tiers { grid-template-columns: repeat(2, 1fr); }
+  .bp-steps { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 680px) {
+  .bp-highlights { grid-template-columns: repeat(2, 1fr); }
+  .bp-register {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  .bp-register__info { text-align: center; }
+  .bp-register__btn { justify-content: center; width: 100%; max-width: 280px; }
+  .bp-register__qr { align-self: center; width: 100%; }
+  .bp-register__qr-img { width: 100%; max-width: 220px; height: auto; margin: 0 auto; }
+  .bp-wallet-tip { flex-direction: column; text-align: center; gap: 12px; margin: -8px 0 24px; }
+  .bp-wallet-tip__btns { width: 100%; }
+  .bp-wallet-tip__btn { width: 100%; justify-content: center; }
+  .bp-steps {
+    grid-template-columns: 1fr;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media (max-width: 480px) {
+  .bp-tiers { grid-template-columns: 1fr; }
+  .bp-tier { flex-direction: column; }
+  .bp-tier__img { width: 100%; height: auto; object-fit: fill; border-radius: 12px 12px 0 0; }
+  .bp-tier__body { padding: 14px 16px 18px; text-align: center; }
+  .bp-tier__name { font-size: 22px; }
+  .bp-highlight__num { font-size: 22px; }
+  .bp-tier__pct { font-size: 24px; }
+}
+</style>
+
+<!-- ─── Главный блок ─── -->
+<div class="gm-block" itemscope itemtype="https://schema.org/WebPage">
+
+  <!-- Intro -->
+  <section class="gm-section gm-intro" aria-labelledby="bonus-h1">
+    <h1 id="bonus-h1">Бонусная программа GOODMi:club</h1>
+    <p class="gm-intro-text">
+      <strong>GOODMi:club</strong> &#8212; программа лояльности для покупателей фирменного магазина техники
+      Xiaomi в Крыму. Совершайте покупки в магазине GOODMi или на goodmi.ru &#8212; получайте кешбэк
+      бонусами на карту лояльности и оплачивайте ими следующие покупки. Карта всегда под рукой
+      в приложении Wallet на вашем смартфоне.
+    </p>
+  </section>
+
+  <!-- Ключевые цифры -->
+  <div class="bp-highlights" role="list">
+    <div class="bp-highlight" role="listitem">
+      <div class="bp-highlight__num">до 10%</div>
+      <div class="bp-highlight__label">кешбэк бонусами с каждой покупки</div>
+    </div>
+    <div class="bp-highlight" role="listitem">
+      <div class="bp-highlight__num">до 25%</div>
+      <div class="bp-highlight__label">от стоимости покупки оплачивается бонусами</div>
+    </div>
+    <div class="bp-highlight" role="listitem">
+      <div class="bp-highlight__num">500</div>
+      <div class="bp-highlight__label">бонусов в подарок в день рождения</div>
+    </div>
+    <div class="bp-highlight" role="listitem">
+      <div class="bp-highlight__num">1 год</div>
+      <div class="bp-highlight__label">срок действия начисленных бонусов</div>
+    </div>
+  </div>
+
+  <!-- ─── Как зарегистрироваться ─── -->
+  <section class="gm-section" aria-labelledby="register-heading">
+    <h2 id="register-heading" class="gm-section-title">Как зарегистрироваться в GOODMi:club</h2>
+    <p class="gm-section-lead">
+      Для участия нужен только номер телефона. Регистрация занимает 1&#8211;2 минуты.
+      Карта лояльности хранится в приложении Wallet на вашем смартфоне &#8212; всегда доступна без интернета.
+    </p>
+
+    <!-- Шаг 1: ссылка + QR -->
+    <div class="bp-register">
+      <div class="bp-register__info">
+        <div class="bp-register__title">Шаг 1 &#8212; Перейдите по ссылке или отсканируйте QR-код</div>
+        <p class="bp-register__text">
+          Нажмите кнопку ниже или наведите камеру смартфона на QR-код &#8212;
+          откроется страница регистрации в программе GOODMi:club.
+        </p>
+        <a href="https://k.bonusplus.pro/!2M229UZX" class="bp-register__btn" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="6" width="20" height="13" rx="2.5" stroke="#ffffff" stroke-width="2"/>
+            <path d="M2 11h20" stroke="#ffffff" stroke-width="2"/>
+            <circle cx="17" cy="16" r="1.5" fill="#ffffff"/>
+          </svg>
+          Зарегистрироваться
+        </a>
+      </div>
+      <div class="bp-register__qr">
+        <img src="https://goodmi.ru/images/Bonus/QR-bonus-goodmi.png"
+             alt="QR-код для регистрации в бонусной программе GOODMi:club"
+             class="bp-register__qr-img"
+             loading="lazy">
+        <div class="bp-register__qr-label">Сканировать камерой</div>
+      </div>
+    </div>
+
+    <!-- Нет приложения Wallet? -->
+    <div class="bp-wallet-tip">
+      <div class="bp-wallet-tip__icon" aria-hidden="true">
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="46" height="46" rx="12" fill="#1C1C1C"/>
+          <rect x="10" y="15" width="26" height="17" rx="3" stroke="#ffffff" stroke-width="1.8"/>
+          <path d="M10 21h26" stroke="#ffffff" stroke-width="1.8"/>
+          <circle cx="31" cy="28" r="2" fill="#ffffff"/>
+        </svg>
+      </div>
+      <div class="bp-wallet-tip__body">
+        <div class="bp-wallet-tip__title">Нет приложения Wallet?</div>
+        <p class="bp-wallet-tip__text">
+          Скачайте бесплатно из RuStore или Google Play &#8212; Wallet хранит карты лояльности, посадочные талоны и&nbsp;другие цифровые документы.
+        </p>
+      </div>
+      <div class="bp-wallet-tip__btns">
+        <a href="https://www.rustore.ru/catalog/app/io.walletpasses.android"
+           class="bp-wallet-tip__btn"
+           target="_blank"
+           rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13M12 16l-4-4m4 4l4-4" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 20h16" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          Скачать из RuStore
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=io.walletpasses.android"
+           class="bp-wallet-tip__btn"
+           target="_blank"
+           rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13M12 16l-4-4m4 4l4-4" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 20h16" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          Скачать из Google Play
+        </a>
+      </div>
+    </div>
+
+    <!-- Шаги 2–5 в сетке карточек -->
+    <div class="bp-steps">
+
+      <div class="bp-step">
+        <div class="bp-step__header">
+          <div class="bp-step__num" aria-hidden="true">2</div>
+          <div class="bp-step__title">Введите номер телефона</div>
+        </div>
+        <p class="bp-step__text">На открывшейся странице введите ваш номер мобильного телефона.</p>
+        <img src="https://goodmi.ru/images/Bonus/reg.jpg"
+             alt="Ввод номера телефона при регистрации в GOODMi:club"
+             class="bp-step__img"
+             loading="lazy">
+      </div>
+
+      <div class="bp-step">
+        <div class="bp-step__header">
+          <div class="bp-step__num" aria-hidden="true">3</div>
+          <div class="bp-step__title">Подтвердите номер через СМС</div>
+        </div>
+        <p class="bp-step__text">На указанный номер придёт СМС с кодом подтверждения. Введите его в поле.</p>
+        <img src="https://goodmi.ru/images/Bonus/sms.jpg"
+             alt="Подтверждение номера телефона через СМС в GOODMi:club"
+             class="bp-step__img"
+             loading="lazy">
+      </div>
+
+      <div class="bp-step">
+        <div class="bp-step__header">
+          <div class="bp-step__num" aria-hidden="true">4</div>
+          <div class="bp-step__title">Сохраните карту лояльности в телефон</div>
+        </div>
+        <p class="bp-step__text">После подтверждения нажмите &#171;Сохранить в телефон&#187; &#8212; появится карта GOODMi:club для добавления в Wallet.</p>
+        <img src="https://goodmi.ru/images/Bonus/Wallet.jpg"
+             alt="Сохранение карты лояльности GOODMi в телефон"
+             class="bp-step__img"
+             loading="lazy">
+      </div>
+
+      <div class="bp-step">
+        <div class="bp-step__header">
+          <div class="bp-step__num" aria-hidden="true">5</div>
+          <div class="bp-step__title">Добавьте карту в приложение Wallet</div>
+        </div>
+        <p class="bp-step__text">В открывшемся окне нажмите &#171;Добавить&#187; &#8212; карта сохранится в приложении Wallet на вашем смартфоне.</p>
+        <img src="https://goodmi.ru/images/Bonus/add.jpg"
+             alt="Добавление карты GOODMi:club в приложение Wallet"
+             class="bp-step__img"
+             loading="lazy">
+      </div>
+
+      <div class="bp-step">
+        <div class="bp-step__header">
+          <div class="bp-step__num bp-step__num--done" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12l5 5 9-9" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="bp-step__title">Карта готова &#8212; начните пользоваться!</div>
+        </div>
+        <p class="bp-step__text">Карта лояльности сохранена в Wallet. Баланс бонусов виден прямо на карте &#8212; показывайте её на кассе при каждой покупке.</p>
+        <img src="https://goodmi.ru/images/Bonus/card.jpg"
+             alt="Карта лояльности GOODMi:club в приложении Wallet"
+             class="bp-step__img"
+             loading="lazy">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Уровни участников ─── -->
+  <section class="gm-section" aria-labelledby="tiers-heading">
+    <h2 id="tiers-heading" class="gm-section-title">Уровни участников программы</h2>
+    <p class="gm-section-lead">
+      Уровень зависит от суммы всех ваших покупок в GOODMi. Чем выше уровень &#8212;
+      тем больше кешбэк с каждой новой покупки.
+    </p>
+
+    <div class="bp-tiers" role="list">
+
+      <div class="bp-tier" role="listitem">
+        <img src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/112/%D0%A4%D0%BE%D0%BD%D0%BE%D0%B2%D0%BE%D0%B5_%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B7%D0%BE%D0%BD%D1%8B_2-%D1%81%D0%B8%D0%BD%D0%B8%D0%B9-%D1%83%D0%B6%D0%B0%D1%82%D1%8B%D0%B9_43jn-x0_png.webp"
+             alt="Уровень Start &#8212; бонусная программа GOODMi:club"
+             class="bp-tier__img"
+             loading="lazy">
+        <div class="bp-tier__body">
+          <div class="bp-tier__name">Start</div>
+          <div class="bp-tier__pct">до 4%</div>
+          <div class="bp-tier__pct-sub">кешбэк</div>
+          <div class="bp-tier__range">покупки до 90 000 руб.</div>
+          <a href="https://goodmi.ru/uroven-privilegiy-start/" class="bp-tier__link" target="_blank" rel="noopener">Подробнее &#8594;</a>
+        </div>
+      </div>
+
+      <div class="bp-tier" role="listitem">
+        <img src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/112/%D0%BC%D0%B8_%D1%8E%D0%B7%D0%B5_1125_-_%D1%83%D0%B6%D0%B0%D1%82%D0%B0%D1%8F_lwjz-4b_png.webp"
+             alt="Уровень User &#8212; бонусная программа GOODMi:club"
+             class="bp-tier__img"
+             loading="lazy">
+        <div class="bp-tier__body">
+          <div class="bp-tier__name">User</div>
+          <div class="bp-tier__pct">до 6%</div>
+          <div class="bp-tier__pct-sub">кешбэк</div>
+          <div class="bp-tier__range">от 90 000 до 150 000 руб.</div>
+          <a href="https://goodmi.ru/uroven-privilegiy-user/" class="bp-tier__link" target="_blank" rel="noopener">Подробнее &#8594;</a>
+        </div>
+      </div>
+
+      <div class="bp-tier" role="listitem">
+        <img src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/112/%D0%BC%D0%B8_%D0%B3%D0%B8%D0%BA_1125-%D1%83%D0%B6%D0%B0%D1%82%D0%B0%D1%8F_png.webp"
+             alt="Уровень Mi Geek &#8212; бонусная программа GOODMi:club"
+             class="bp-tier__img"
+             loading="lazy">
+        <div class="bp-tier__body">
+          <div class="bp-tier__name">Mi Geek</div>
+          <div class="bp-tier__pct">до 8%</div>
+          <div class="bp-tier__pct-sub">кешбэк</div>
+          <div class="bp-tier__range">от 150 000 до 250 000 руб.</div>
+          <a href="https://goodmi.ru/uroven-privilegiy-mi-geek/" class="bp-tier__link" target="_blank" rel="noopener">Подробнее &#8594;</a>
+        </div>
+      </div>
+
+      <div class="bp-tier bp-tier--top" role="listitem">
+        <img src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/112/%D0%BC%D0%B8_%D1%84%D0%B0%D0%BD_1125_432__2_-%D1%83%D0%B6%D0%B0%D1%82%D0%B0%D1%8F_png.webp"
+             alt="Уровень Mi Fan &#8212; бонусная программа GOODMi:club"
+             class="bp-tier__img"
+             loading="lazy">
+        <div class="bp-tier__body">
+          <div class="bp-tier__name">Mi Fan</div>
+          <div class="bp-tier__pct">до 10%</div>
+          <div class="bp-tier__pct-sub">кешбэк</div>
+          <div class="bp-tier__range">от 250 000 руб.</div>
+          <a href="https://goodmi.ru/uroven-privilegiy-mi-fan/" class="bp-tier__link" target="_blank" rel="noopener">Подробнее &#8594;</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Как копить бонусы ─── -->
+  <section class="gm-section" aria-labelledby="earn-heading">
+    <h2 id="earn-heading" class="gm-section-title">Как копить бонусы</h2>
+    <ul class="bp-rules">
+      <li>Кешбэк начисляется на каждую покупку в магазине GOODMi и на goodmi.ru</li>
+      <li>Процент кешбэка зависит от вашего уровня &#8212; от 1% на Start до 10% на Mi Fan</li>
+      <li>Бонусы поступают на карту в течение 7 дней после совершения покупки</li>
+      <li>1 бонус равен 1 рублю при оплате следующей покупки</li>
+      <li>Начисленные бонусы действуют 1 год с даты зачисления</li>
+      <li>Уровень в программе повышается автоматически при достижении накопленной суммы покупок</li>
+    </ul>
+  </section>
+
+  <!-- ─── Как использовать бонусы ─── -->
+  <section class="gm-section" aria-labelledby="spend-heading">
+    <h2 id="spend-heading" class="gm-section-title">Как использовать бонусы при покупке</h2>
+    <ul class="bp-rules">
+      <li>При покупке откройте приложение Wallet на смартфоне и покажите карту GOODMi:club кассиру</li>
+      <li>Сообщите, что хотите списать бонусы &#8212; кассир применит их к вашему чеку</li>
+      <li>Бонусами можно оплатить до 25% от стоимости покупки, остаток &#8212; любым удобным способом</li>
+      <li>Списание доступно в любой точке GOODMi в Крыму и при заказах на goodmi.ru</li>
+    </ul>
+  </section>
+
+  <!-- ─── День рождения ─── -->
+  <div class="bp-birthday" role="note" aria-label="Подарок ко дню рождения">
+    <div class="bp-birthday__icon" aria-hidden="true">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="56" height="56" rx="14" fill="#FFE0CC"/>
+        <path d="M14 29h28v13a2 2 0 01-2 2H16a2 2 0 01-2-2V29z" fill="#FF6900" opacity="0.15"/>
+        <rect x="14" y="23" width="28" height="6" rx="2" stroke="#FF6900" stroke-width="1.8"/>
+        <path d="M14 34c3.5-3 7-3 10.5 0s7 3 10.5 0" stroke="#FF6900" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="20" y1="23" x2="20" y2="19" stroke="#FF6900" stroke-width="2" stroke-linecap="round"/>
+        <line x1="28" y1="23" x2="28" y2="19" stroke="#FF6900" stroke-width="2" stroke-linecap="round"/>
+        <line x1="36" y1="23" x2="36" y2="19" stroke="#FF6900" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="20" cy="18" r="2" fill="#FF6900" opacity="0.5"/>
+        <circle cx="28" cy="18" r="2" fill="#FF6900" opacity="0.5"/>
+        <circle cx="36" cy="18" r="2" fill="#FF6900" opacity="0.5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="bp-birthday__title">500 бонусов в подарок на день рождения</div>
+      <p class="bp-birthday__text">
+        Участники GOODMi:club получают 500 бонусов в честь дня рождения.
+        Бонусы начисляются за 7 дней до праздника и действуют 14 дней.
+        Не забудьте показать карту &#8212; кассир поздравит вас при следующей покупке.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── FAQ ─── -->
+  <section class="gm-faq" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы о GOODMi:club</h2>
+
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Как зарегистрироваться в программе лояльности GOODMi:club?</p>
+      <div class="gm-faq-answer">
+        <p>
+          Перейдите по ссылке регистрации или отсканируйте QR-код на этой странице.
+          Введите номер телефона, подтвердите его через СМС, затем нажмите
+          &#171;Сохранить в телефон&#187; и добавьте карту в приложение Wallet на вашем смартфоне.
+          Регистрация занимает 1&#8211;2 минуты, после чего карта всегда доступна офлайн в Wallet.
+        </p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Когда начисляются бонусы после покупки?</p>
+      <div class="gm-faq-answer">
+        <p>
+          Бонусный кешбэк зачисляется в течение 7 дней с момента покупки.
+          Актуальный баланс отображается прямо на карте в приложении Wallet &#8212;
+          вы всегда видите, сколько бонусов доступно.
+        </p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Как повысить уровень в программе?</p>
+      <div class="gm-faq-answer">
+        <p>
+          Уровень повышается автоматически по мере накопления суммы покупок:
+          User &#8212; от 90&#160;000 руб., Mi Geek &#8212; от 150&#160;000 руб.,
+          Mi Fan &#8212; от 250&#160;000 руб. При переходе на новый уровень кешбэк
+          увеличивается на все последующие покупки.
+        </p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Можно ли оплатить бонусами всю покупку?</p>
+      <div class="gm-faq-answer">
+        <p>
+          Нет, бонусами можно оплатить не более 25% от стоимости покупки.
+          Оставшуюся часть вы оплачиваете наличными, банковской картой или в кредит.
+        </p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Что делать, если я сменил номер телефона?</p>
+      <div class="gm-faq-answer">
+        <p>
+          Обратитесь в любой магазин GOODMi с паспортом &#8212; сотрудники перевяжут
+          карту на новый номер. Накопленные бонусы и уровень участника при этом сохраняются.
+          По всем вопросам также можно позвонить по бесплатному номеру
+          <a href="tel:+78002501700">8 (800) 250-17-00</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Срок действия бонусов &#8212; как не потерять накопленное?</p>
+      <div class="gm-faq-answer">
+        <p>
+          Бонусы действуют 1 год с момента начисления. Следите за балансом
+          на карте в приложении Wallet и используйте бонусы до истечения срока.
+          При совершении любой покупки срок уже начисленных бонусов не продлевается &#8212;
+          каждое начисление имеет собственную дату сгорания.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+  <p class="bp-cta">
+    Полные условия программы GOODMi:club изложены в публичной оферте на сайте goodmi.ru.<br>
+    Есть вопросы? Звоните: <a href="tel:+78002501700">8 (800) 250-17-00</a> (бесплатно, ежедневно 10:00&#8211;21:00)
+    или пишите на <a href="mailto:store@goodmi.ru">store@goodmi.ru</a>.
+  </p>
+
+</div><!-- /.gm-block -->
