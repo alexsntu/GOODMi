@@ -25,6 +25,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 ## Repository Structure
 
 ```
+Категории/Новые/       # In-progress / skill-generated HTML (skills always save here)
 Категории/Готовые/     # Ready-to-deploy category SEO HTML blocks
 Акции/                 # Promotion page HTML
 Блог/                  # Blog article SEO blocks
@@ -32,6 +33,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 Быстрые ссылки/        # Quick-links blocks (separate files, never embedded in category files)
 CSS/                   # goodmi-styles.css (shared), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
+_DEV/                  # Development artifacts and task trackers (untracked)
 tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 .cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards
@@ -106,38 +108,44 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 
 ### Canonical URL patterns
 ```
-Смартфоны:     https://goodmi.ru/smartfony/
-Планшеты:      https://goodmi.ru/planshety/
-Ноутбуки:      https://goodmi.ru/noutbuki/
-Смарт-часы:    https://goodmi.ru/smart-chasy/
-Наушники:      https://goodmi.ru/naushniki-i-kolonki/
-Пылесосы:      https://goodmi.ru/pylesos/
-Телевизоры:    https://goodmi.ru/tv-foto-video/
-Умный дом:     https://goodmi.ru/umnyj-dom/
-Аксессуары:    https://goodmi.ru/aksessuary/
-Гарантия:      https://goodmi.ru/info/guarantee/
-Возврат:       https://goodmi.ru/info/vozvrat-ru/
-Доставка:      https://goodmi.ru/info/delivery/
-Трейд-ин:      https://goodmi.ru/treyd-in-goodmi/
-Кредит:        https://goodmi.ru/credit/
-Бонусы:        https://goodmi.ru/bonusnaya-programma/
+Смартфоны:         https://goodmi.ru/smartfony/
+Планшеты:          https://goodmi.ru/planshety/
+Ноутбуки:          https://goodmi.ru/noutbuki/
+Смарт-часы:        https://goodmi.ru/smart-chasy/
+Наушники:          https://goodmi.ru/naushniki-i-kolonki/
+Пылесосы:          https://goodmi.ru/pylesos/
+Роботы-пылесосы:   https://goodmi.ru/roboty-pylesosy/
+Телевизоры:        https://goodmi.ru/televizory-xiaomi/
+Умный дом:         https://goodmi.ru/umnyj-dom/
+Аксессуары:        https://goodmi.ru/aksessuary/
+Мониторы:          https://goodmi.ru/monitory-xiaomi/
+Повербанки:        https://goodmi.ru/power-banks/
+Аэрогриль:         https://goodmi.ru/gril/
+Гарантия:          https://goodmi.ru/info/guarantee/
+Возврат:           https://goodmi.ru/info/vozvrat-ru/
+Доставка:          https://goodmi.ru/info/delivery/
+Трейд-ин:          https://goodmi.ru/treyd-in-goodmi/
+Кредит:            https://goodmi.ru/credit/
+Бонусы:            https://goodmi.ru/bonusnaya-programma/
 ```
 
 ## Skills (Cursor / Claude workflows)
 
-Skills in `.cursor/skills/` define step-by-step workflows. Always follow their workflow order:
+Skills in `.cursor/skills/` define step-by-step workflows. Always follow their workflow order.
 
-| Skill | Trigger use case |
-|---|---|
-| `seo-meta-builder` | Generate H1 / title / meta description for any store page |
-| `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
-| `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
-| `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
-| `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
-| `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
-| `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
-| `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
-| `seo-blog-poster-builder` | Generate branded blog post header in Xiaomi/GOODMi style |
+**Claude Code invocation shortcuts** (use `/skill-name` syntax in Claude Code):
+
+| Slash command | Skill | Trigger use case |
+|---|---|---|
+| `/seo-meta` | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
+| `/seo-meta2` | `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
+| `/seo-shop2` | `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
+| — | `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
+| — | `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
+| — | `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
+| — | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
+| — | `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
+| — | `seo-blog-poster-builder` | Generate branded blog post header in Xiaomi/GOODMi style |
 
 All skills: **ask for input first, show analysis, wait for confirmation, then generate HTML.**
 
@@ -157,3 +165,5 @@ npm test         # Jest tests
 ```
 
 Requires `.env` with `CSCART_API_URL`, `CSCART_API_EMAIL`, `CSCART_API_KEY`. PixelPlus SEO tools also require `PIXELPLUS_API_TOKEN`.
+
+**PixelPlus project for goodmi.ru:** `project_id = 63589`. Used in `seo-meta-builder-v2` Step 6a to submit the semantic core after user confirmation. Tier 0 (informational/neural queries) are NOT submitted to PixelPlus — tracked separately via the Step 6b monitoring checklist.

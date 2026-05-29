@@ -566,7 +566,7 @@ Output **two** code blocks, clearly labelled:
 1. **`[slug].html`** — HTML-контент (Блок 1 + Блок 2 + collapse script). Без JSON-LD.
 2. **`[slug]-jsonld.html`** — только JSON-LD (отдельные `<script>` per type, без `@graph`, без `WebPage`).
 
-No other commentary before or after the code blocks.
+**После вывода code blocks — сохранить оба файла** в папку `C:\Users\Алекс\GOODMi\Категории\Новые\` с именами `[slug].html` и `[slug]-jsonld.html`.
 
 ---
 
