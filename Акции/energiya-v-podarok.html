@@ -1,0 +1,730 @@
+{literal}
+<style>
+    /* --- Настройки стиля HyperOS --- */
+    :root {
+        --mi-orange: #FF6900;
+        --mi-black: #191919;
+        --mi-gray: #F7F7F7;
+        --mi-purple: #815AF8;
+        --mi-text-gray: #8c8c8c;
+        --hyper-radius: 24px;
+        --card-radius: 20px;
+        --img-box-radius: 16px;
+        --mi-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    /* Главный контейнер */
+    .hyperos-promo-wrapper {
+        font-family: var(--mi-font);
+        background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+        border-radius: var(--hyper-radius);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 50px 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        position: relative;
+        overflow: hidden;
+        color: var(--mi-black);
+    }
+
+    /* Декоративные пятна */
+    .hyperos-blob {
+        position: absolute;
+        filter: blur(100px);
+        opacity: 0.6;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .blob-1 { top: -100px; left: -100px; width: 40%; height: 400px; background: #e0eaff; }
+    .blob-2 { bottom: -100px; right: -100px; width: 30%; height: 350px; background: #ffece0; }
+
+    .hyperos-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* --- ВЕРХНИЙ БАННЕР --- */
+    .hyperos-top-banner {
+        max-width: 1000px;
+        margin: 0 auto 40px auto;
+        background: #fff;
+        padding: 10px;
+        border-radius: var(--card-radius);
+        /* ПК: Серый цвет рамки */
+        border: 2px solid var(--mi-border-gray);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .hyperos-top-banner img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+    }
+
+    /* --- ЗАГОЛОВОК H1 --- */
+    .hyperos-header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin: 0 0 15px 0;
+        letter-spacing: -1px;
+        color: var(--mi-black);
+        line-height: 1.2;
+    }
+
+    /* --- ПЛАШКА С ДАТОЙ --- */
+    .hyperos-date-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: rgba(255, 105, 0, 0.08);
+        color: var(--mi-orange);
+        border: 1px solid rgba(255, 105, 0, 0.2);
+        padding: 8px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 25px;
+        backdrop-filter: blur(5px);
+    }
+
+    .hyperos-date-badge svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
+
+    /* --- БЛОК ПРАЗДНИКОВ --- */
+    .hyperos-holidays-wrapper {
+        margin: 0 auto 45px auto;
+        max-width: 900px;
+    }
+
+    .holidays-title {
+        font-size: 0.95rem;
+        color: var(--mi-text-gray);
+        margin-bottom: 12px;
+        font-weight: 500;
+    }
+
+    .holidays-grid {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    /* ШИРОКАЯ КАРТОЧКА ПРАЗДНИКА (ПК) */
+    .holiday-card {
+        background: rgba(255,255,255,0.8);
+        border: 1px solid #eee;
+        border-radius: 20px;
+        padding: 15px 25px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 15px;
+        width: 260px;
+        height: 130px;
+        box-sizing: border-box;
+        transition: transform 0.2s, background 0.2s;
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    .holiday-card:hover {
+        transform: translateY(-5px);
+        background: #fff;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    /* Анимация частиц */
+    @keyframes fallDown {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(80px) rotate(180deg); opacity: 0; }
+    }
+
+    .promo-particle {
+        position: absolute;
+        top: -10px;
+        font-size: 20px;
+        pointer-events: none;
+        z-index: 10;
+        animation: fallDown 1s linear forwards;
+        font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+    }
+
+    .holiday-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #f0f4ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--mi-purple);
+        z-index: 2;
+        position: relative;
+        flex-shrink: 0;
+        margin-bottom: 0;
+    }
+
+    .holiday-icon svg { width: 26px; height: 26px; fill: currentColor; }
+
+    .holiday-text {
+        text-align: left;
+        z-index: 2;
+        position: relative;
+    }
+
+    .holiday-date {
+        font-weight: 700;
+        color: var(--mi-black);
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .holiday-name {
+        font-size: 0.85rem;
+        color: var(--mi-text-gray);
+        line-height: 1.2;
+        display: block;
+    }
+
+    /* Описание */
+    .hyperos-header p.main-desc {
+        font-size: 1.25rem;
+        color: var(--mi-text-gray);
+        margin-bottom: 45px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+    .promo-highlight {
+        color: var(--mi-orange);
+        font-weight: 700;
+        display: block;
+        margin-top: 5px;
+        font-size: 1.35rem;
+    }
+
+    /* СЕТКА ТОВАРОВ (Desktop) */
+    .hyperos-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        width: 100%;
+    }
+
+    /* Карточка товара */
+    .hyperos-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: var(--card-radius);
+        padding: 20px;
+        flex: 0 1 250px;
+        min-width: 230px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+    }
+
+    .hyperos-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        background: #fff;
+        z-index: 2;
+    }
+
+    .hyperos-img-box {
+        background: #ffffff;
+        width: 190px;
+        height: 190px;
+        border-radius: var(--img-box-radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        border: 2px solid var(--mi-border-gray);
+        transition: border-color 0.3s ease;
+    }
+
+    .hyperos-card:hover .hyperos-img-box {
+        border-color: var(--mi-orange);
+    }
+
+    .hyperos-img-box img {
+        width: auto;
+        height: auto;
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+    }
+
+    .hyperos-series-label {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #aaa;
+        font-weight: 600;
+        margin-bottom: 4px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .hyperos-card-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        line-height: 1.2;
+    }
+
+    .hyperos-card-badge {
+        font-size: 0.75rem;
+        background: var(--mi-gray);
+        padding: 5px 12px;
+        border-radius: 20px;
+        color: var(--mi-text-gray);
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    .hyperos-mini-btn {
+        display: inline-block;
+        padding: 8px 28px;
+        background: transparent;
+        border: 1px solid var(--mi-orange);
+        border-radius: 20px;
+        color: var(--mi-orange);
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-top: auto;
+    }
+
+    .hyperos-mini-btn:hover {
+        background: var(--mi-orange);
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
+    }
+
+    .hyperos-operator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #d1d1d1;
+        font-weight: 200;
+        margin: 0 10px;
+        align-self: center;
+    }
+
+    .hyperos-gift-card {
+        background: linear-gradient(145deg, #fff, #fff9f4);
+        border: 1px solid #ffe0cc;
+        flex: 0 1 250px;
+    }
+
+    .hyperos-gift-card .hyperos-img-box {
+        border-color: var(--mi-orange);
+    }
+
+    .hyperos-gift-card .gift-label {
+        color: var(--mi-orange);
+        font-weight: bold;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 10px;
+    }
+
+    .hyperos-disclaimer {
+        margin-top: 30px;
+        padding: 20px 30px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 16px;
+        color: #555;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    /* --- МОБИЛЬНАЯ ВЕРСИЯ (АДАПТИРОВАННАЯ) --- */
+    @media (max-width: 768px) {
+        .hyperos-promo-wrapper {
+            padding: 30px 10px;
+        }
+
+        .hyperos-header h1 { font-size: 1.8rem; }
+
+        .hyperos-date-badge {
+            margin-bottom: 20px;
+            display: inline-flex;
+        }
+
+        /* --- ПРАЗДНИКИ (Квадраты в ряд) --- */
+        .hyperos-holidays-wrapper {
+            display: block;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .holidays-grid {
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .holiday-card {
+            width: auto;
+            flex: 1;
+            height: auto;
+            min-height: auto;
+            aspect-ratio: 1 / 1;
+            padding: 10px 4px;
+
+            /* Возвращаем вертикальное выравнивание для моб */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .holiday-icon {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 0;
+        }
+        .holiday-icon svg { width: 18px; height: 18px; }
+
+        .holiday-text {
+            text-align: center;
+        }
+
+        .holiday-date {
+            font-size: 0.75rem;
+            margin-bottom: 0;
+        }
+
+        .holiday-name {
+            display: block;
+            font-size: 0.65rem;
+            line-height: 1.1;
+            margin-top: 2px;
+        }
+
+        /* --- СЕТКА ТЕЛЕФОНОВ --- */
+        .hyperos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .hyperos-card {
+            min-width: 0;
+            width: auto;
+            flex: none;
+            padding: 10px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* УВЕЛИЧИВАЕМ ИКОНКИ СМАРТФОНОВ */
+        .hyperos-img-box {
+            width: 100%; /* Растягиваем на всю ширину ячейки */
+            height: auto;
+            aspect-ratio: 1 / 1; /* Сохраняем квадрат */
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+
+        .hyperos-img-box img {
+            max-width: 85%; /* Чуть больше заполнения внутри */
+            max-height: 85%;
+        }
+
+        .card-text-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hyperos-series-label { text-align: center; font-size: 0.6rem; }
+        .hyperos-card-title { font-size: 0.9rem; height: 35px; display: flex; align-items: center; justify-content: center; }
+        .hyperos-card-badge { font-size: 0.65rem; padding: 3px 8px; margin-bottom: 10px; }
+        .hyperos-mini-btn { padding: 5px 10px; font-size: 0.8rem; width: 100%; box-sizing: border-box; text-align: center;}
+
+        /* Скрываем оператор + между сеткой и подарком, если нужно, или поворачиваем */
+        .hyperos-operator {
+            grid-column: 1 / -1;
+            font-size: 2.5rem;
+            margin: 5px 0;
+            transform: rotate(0deg);
+        }
+
+        /* --- КОМПАКТНЫЙ БЛОК ПОДАРКА --- */
+        .hyperos-card.hyperos-gift-card {
+            grid-column: 1 / -1; /* На всю ширину */
+            flex-direction: row; /* Горизонтально */
+            align-items: center;
+            text-align: left;
+            padding: 15px;
+            gap: 15px;
+        }
+
+        .hyperos-gift-card .hyperos-img-box {
+            /* Уменьшаем картинку подарка для компактности */
+            width: 90px;
+            height: 90px;
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+
+        /* Контейнер текста в подарке */
+        .hyperos-gift-card .card-text-wrap {
+            align-items: flex-start; /* Выравнивание влево */
+        }
+
+        .hyperos-gift-card .gift-label {
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* Крупный текст названия */
+        .hyperos-gift-card .hyperos-card-title {
+            font-size: 1.2rem; /* Увеличили */
+            height: auto;
+            justify-content: flex-start;
+            margin-bottom: 5px;
+        }
+
+        /* Крупный бейдж */
+        .hyperos-gift-card .hyperos-card-badge {
+            font-size: 0.85rem;
+            padding: 5px 12px;
+        }
+
+        .promo-highlight { display: inline; font-size: 1.1rem; }
+        .hyperos-disclaimer { font-size: 0.85rem; padding: 15px; text-align: left; }
+        .hyperos-top-banner { margin-bottom: 25px; padding: 5px; }
+    }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const holidayCards = document.querySelectorAll('.holiday-card[data-effect]');
+
+    holidayCards.forEach(card => {
+        let interval;
+        const effectType = card.getAttribute('data-effect');
+        let symbol = '';
+
+        if (effectType === 'hearts') {
+             symbol = '❤'; // Сердце
+        } else if (effectType === 'stars') {
+             symbol = '⭐'; // Звезда
+        } else if (effectType === 'flowers') {
+             symbol = '🌷'; // Тюльпан
+        }
+
+        const createParticle = () => {
+            const particle = document.createElement('div');
+            particle.classList.add('promo-particle');
+            particle.textContent = symbol;
+            const randomLeft = Math.random() * 80 + 10;
+            particle.style.left = randomLeft + '%';
+            const randomSize = Math.random() * 10 + 10;
+            particle.style.fontSize = randomSize + 'px';
+            particle.style.animationDuration = (Math.random() * 0.5 + 0.8) + 's';
+            card.appendChild(particle);
+            setTimeout(() => { particle.remove(); }, 1500);
+        };
+
+        card.addEventListener('mouseenter', () => {
+            createParticle();
+            interval = setInterval(createParticle, 200);
+        });
+        card.addEventListener('mouseleave', () => { clearInterval(interval); });
+    });
+});
+</script>
+{/literal}
+
+<div class="hyperos-promo-wrapper">
+    <!-- Фоновые эффекты -->
+    <div class="hyperos-blob blob-1"></div>
+    <div class="hyperos-blob blob-2"></div>
+
+    <div class="hyperos-content">
+
+        <!-- Верхняя картинка-баннер -->
+        <div class="hyperos-top-banner">
+            <img src="https://goodmi.ru/images/ab__webp/promotion/141/power_smart10_jpg.webp" alt="Акция Энергия в подарок">
+        </div>
+
+        <!-- Заголовок и Текст -->
+        <div class="hyperos-header">
+            <h1>Энергия в подарок</h1>
+
+            <!-- Плашка с датой -->
+            <div class="hyperos-date-badge">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                <span>с 04.02 по 08.03</span>
+            </div>
+
+            <!-- БЛОК ПРАЗДНИКОВ (Интерактивный) -->
+            <div class="hyperos-holidays-wrapper">
+                <div class="holidays-title">Не забудьте порадовать ваших близких:</div>
+                <div class="holidays-grid">
+
+                    <!-- 14 Февраля -->
+                    <div class="holiday-card" data-effect="hearts">
+                        <div class="holiday-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="holiday-text">
+                            <span class="holiday-date">14 Февраля</span>
+                            <span class="holiday-name">День влюбленных</span>
+                        </div>
+                    </div>
+
+                    <!-- 23 Февраля -->
+                    <div class="holiday-card" data-effect="stars">
+                        <div class="holiday-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="holiday-text">
+                            <span class="holiday-date">23 Февраля</span>
+                            <span class="holiday-name">День защитника</span>
+                        </div>
+                    </div>
+
+                    <!-- 8 Марта (Тюльпан) -->
+                    <div class="holiday-card" data-effect="flowers">
+                        <div class="holiday-icon">
+                            <!-- Иконка Тюльпана -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M12 8.3C8 4 6 5.5 6 9c0 2.2 2 4.1 6 5.1 4-1 6-2.9 6-5.1 0-3.5-2-5-6-5.7z"/>
+                              <path d="M12 14.1v7.9"/>
+                              <path d="M12 19c-3 0-4-3-4-3"/>
+                              <path d="M12 19c3 0 4-3 4-3"/>
+                            </svg>
+                        </div>
+                        <div class="holiday-text">
+                            <span class="holiday-date">8 Марта</span>
+                            <span class="holiday-name">Женский день</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="main-desc">
+                Купите любой смартфон из акционных серий и получите мощный Power Bank на
+                <span class="promo-highlight">10 000 мАч абсолютно бесплатно</span>
+            </p>
+        </div>
+
+        <!-- Сетка товаров -->
+        <div class="hyperos-grid">
+
+            <!-- 1. Redmi Note 15 -->
+            <div class="hyperos-card">
+                <div class="hyperos-img-box">
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/140/8_n7u1-1l_jpg.webp" alt="Redmi Note 15">
+                </div>
+                <div class="card-text-wrap">
+                    <div class="hyperos-series-label">СЕРИЯ</div>
+                    <div class="hyperos-card-title">Redmi Note 15</div>
+                    <div class="hyperos-card-badge">Народный выбор</div>
+                    <a href="https://goodmi.ru/smartfonyi/redmi-note-15-series/" class="hyperos-mini-btn">Посмотреть</a>
+                </div>
+            </div>
+
+            <!-- 2. Xiaomi 15 -->
+            <div class="hyperos-card">
+                <div class="hyperos-img-box">
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/134/5_23dr-us_jpg.webp" alt="Xiaomi 15">
+                </div>
+                <div class="card-text-wrap">
+                    <div class="hyperos-series-label">СЕРИЯ</div>
+                    <div class="hyperos-card-title">Xiaomi 15</div>
+                    <div class="hyperos-card-badge">Премиум</div>
+                    <a href="https://goodmi.ru/smartfonyi/xiaomi-15-series/" class="hyperos-mini-btn">Посмотреть</a>
+                </div>
+            </div>
+
+            <!-- 3. POCO F8 -->
+            <div class="hyperos-card">
+                <div class="hyperos-img-box">
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/139/5_1jko-sz_jpg.webp" alt="POCO F8">
+                </div>
+                <div class="card-text-wrap">
+                    <div class="hyperos-series-label">СЕРИЯ</div>
+                    <div class="hyperos-card-title">POCO F8</div>
+                    <div class="hyperos-card-badge">Флагман скорости</div>
+                    <a href="https://goodmi.ru/smartfonyi/poco-f8-series/" class="hyperos-mini-btn">Посмотреть</a>
+                </div>
+            </div>
+
+            <!-- 4. POCO M8 -->
+            <div class="hyperos-card">
+                <div class="hyperos-img-box">
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/140/27_xyk4-ny_jpg.webp" alt="POCO M8">
+                </div>
+                <div class="card-text-wrap">
+                    <div class="hyperos-series-label">СЕРИЯ</div>
+                    <div class="hyperos-card-title">POCO M8</div>
+                    <div class="hyperos-card-badge">Стиль и польза</div>
+                    <a href="https://goodmi.ru/smartfonyi/poco-m8-series/" class="hyperos-mini-btn">Посмотреть</a>
+                </div>
+            </div>
+
+            <!-- Знак Плюс -->
+            <div class="hyperos-operator">+</div>
+
+            <!-- Подарок -->
+            <div class="hyperos-card hyperos-gift-card">
+                <div class="hyperos-img-box">
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/125/VneshnijakkumulyatorDeespiDP1010000mAh2_jpg.webp" alt="Xiaomi Power Bank">
+                </div>
+                <div class="card-text-wrap">
+                    <div class="gift-label">Ваш подарок</div>
+                    <div class="hyperos-card-title">Power Bank</div>
+                    <div class="hyperos-card-badge" style="background:#fff2e8; color:#FF6900;">10 000 мАч</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Условия акции (Footer) -->
+        <div class="hyperos-disclaimer">
+            Добавляйте новый акционный смартфон в корзину и подарок применится автоматически.<br>
+            Акция действует пока подарки есть в наличии. Бонусы не списываются при получении подарка, но начисляются в полном объеме.
+        </div>
+    </div>
+</div>
