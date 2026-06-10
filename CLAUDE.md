@@ -44,6 +44,7 @@ cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 - `restructure_category_two_block.py` — splits single-block category HTML into the two-block (Block 1 / Block 2) structure
 - `fix_faq_mass.py` — bulk removes FAQPage itemscope/itemtype/itemprop attributes from HTML files
 - `fix_faq_schema.py` — removes FAQPage JSON-LD blocks from jsonld HTML files
+- `crop_image_for_tg.py` — center-crops an image to 1080×1080 px for Telegram (requires Pillow); edit input/output paths directly in the script before running
 
 ## HTML Block Architecture
 
@@ -87,6 +88,7 @@ All category and page blocks follow a shared structure:
 - Prices in card descriptions or JSON-LD `description` fields — **prohibited**
 - `<style>` tags inside any HTML block — **prohibited**
 - `transform` on hover buttons — **prohibited** (Chrome bug with `overflow: hidden`)
+- Em dash `—` / `&#8212;` — **prohibited** in all HTML content; use en dash `–` / `&#8211;` instead
 
 Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 
@@ -95,11 +97,13 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 - **`quick-links-seo-block.mdc`** — quick-links block markup and JS
 - **`quick-links-top.mdc`** — top quick-links variant (no H3, bordered, inline button)
 - **`seo--for-blog-article.mdc`** — blog SEO block standard
+- **`seo-html-copywriting.mdc`** *(alwaysApply)* — premium copywriting rules for product descriptions; governs GEO/AEO style and CSS-only HTML structure
+- **`seo-internal-linking-longevity.mdc`** *(alwaysApply)* — internal linking standard for blog: evergreen articles must link only to categories/collections, never to individual product cards
 
 ### Meta Tag Rules (summary)
 - **H1 (category):** 15–45 chars, UX-first, no geo, no "Купить". Example: `Планшеты Xiaomi`
 - **H1 (product page):** 45–70 chars, SEO-commercial, with geo. Example: `Купить Xiaomi 15 Pro в Севастополе — GOODMi`
-- **title:** 50–65 chars, format `[Query] — [geo] | GOODMi`; geo in title ≠ geo in H1
+- **title:** 50–70 chars, format `[Query] — [geo] | GOODMi`; geo in title ≠ geo in H1. Yandex (58% traffic) shows up to ~70 chars fully; Google may truncate `| GOODMi` in the tail — acceptable since the brand is visible in the URL. Default to double-geo `«в Севастополе, Крыму»`; fall back to single geo only when title would exceed ~70 chars.
 - **description:** 150–250 chars; first ~155 = key message (USP + models + CTA); 155–250 = extended for AI Overviews
 - Cyrillic brand variants (Сяоми, Редми, Поко) — only include if confirmed present in competitors' top-5 titles
 
@@ -127,6 +131,7 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 Трейд-ин:          https://goodmi.ru/treyd-in-goodmi/
 Кредит:            https://goodmi.ru/credit/
 Бонусы:            https://goodmi.ru/bonusnaya-programma/
+Блог:              https://goodmi.ru/blog-xiaomi-na-russkom/
 ```
 
 ## Skills (Cursor / Claude workflows)
@@ -146,6 +151,7 @@ Skills in `.cursor/skills/` define step-by-step workflows. Always follow their w
 | — | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
 | — | `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
 | — | `seo-blog-poster-builder` | Generate branded blog post header in Xiaomi/GOODMi style |
+| `/seo-blog-rewrite` | `seo-blog-rewriter` | Rewrite an existing article preserving keyword density; outputs two-file blog HTML |
 
 All skills: **ask for input first, show analysis, wait for confirmation, then generate HTML.**
 

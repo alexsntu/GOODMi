@@ -578,7 +578,7 @@ function gmBlockToggle(btn) {
 <li class="gm-advantage-item" role="listitem">
   <span class="gm-advantage-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="10,2 12.5,7.5 18.5,8.2 14,12.5 15.5,18.5 10,15.5 4.5,18.5 6,12.5 1.5,8.2 7.5,7.5"/></svg></span>
   <div class="gm-advantage-body">
-    <strong>Более 2000 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
+    <strong>Более 2000 отзывов на Яндексе</strong> &#8211; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:#F9F9F9;border-radius:10px;border:1px solid #EEEEEE;">
       <iframe src="https://yandex.ru/sprav/widget/rating-badge/81345582117?type=rating"
               width="150" height="50" frameborder="0"

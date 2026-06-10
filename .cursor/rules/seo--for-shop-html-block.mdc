@@ -437,7 +437,9 @@ Google с сентября 2023 г. не показывает FAQ rich results �
 
 **Единственное решение — inline SVG.** SVG-атрибуты содержат только ASCII, не искажаются никакой кодировкой.
 
-**Допустимы в теле текста** (не в icon-спанах): `&#8212;` — · `&#183;` · `&#8381;` ₽ · `&#160;` · `&#8594;` → · `&#8592;` ← — они остаются как entity-текст и браузер декодирует их корректно.
+**Допустимы в теле текста** (не в icon-спанах): `&#8211;` – · `&#183;` · `&#8381;` ₽ · `&#160;` · `&#8594;` → · `&#8592;` ← — они остаются как entity-текст и браузер декодирует их корректно.
+
+> **Тире:** использовать только `&#8211;` (en dash, короткое тире). `&#8211;` (em dash) — **запрещено**.
 
 ### SVG-иконки — готовые шаблоны
 
@@ -607,7 +609,7 @@ font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
 <li class="gm-advantage-item" role="listitem">
   <span class="gm-advantage-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="3,10 8,16 17,5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
   <div class="gm-advantage-body">
-    <a href="https://goodmi.ru/info/guarantee/" class="gm-advantage-link"><strong>Официальная гарантия 1 год</strong></a> &#8212; текст описания.
+    <a href="https://goodmi.ru/info/guarantee/" class="gm-advantage-link"><strong>Официальная гарантия 1 год</strong></a> &#8211; текст описания.
   </div>
 </li>
 ```
@@ -617,7 +619,7 @@ font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
 <li class="gm-advantage-item" role="listitem">
   <span class="gm-advantage-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6h12M14 6l-3-3m3 3l-3 3M18 14H6m0 0l3-3m-3 3l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
   <div class="gm-advantage-body">
-    <a href="https://goodmi.ru/treyd-in-goodmi/" class="gm-advantage-link"><strong>Трейд-ин</strong></a> и <a href="https://goodmi.ru/bonusnaya-programma/" class="gm-advantage-link"><strong>бонусная программа GOODMi</strong></a> &#8212; текст описания.
+    <a href="https://goodmi.ru/treyd-in-goodmi/" class="gm-advantage-link"><strong>Трейд-ин</strong></a> и <a href="https://goodmi.ru/bonusnaya-programma/" class="gm-advantage-link"><strong>бонусная программа GOODMi</strong></a> &#8211; текст описания.
   </div>
 </li>
 ```
@@ -636,7 +638,7 @@ font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
 <li class="gm-advantage-item" role="listitem">
   <span class="gm-advantage-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="10,2 12.5,7.5 18.5,8.2 14,12.5 15.5,18.5 10,15.5 4.5,18.5 6,12.5 1.5,8.2 7.5,7.5"/></svg></span>
   <div class="gm-advantage-body">
-    <strong>Более 2000 отзывов на Яндексе</strong> &#8212; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
+    <strong>Более 2000 отзывов на Яндексе</strong> &#8211; GOODMi работает с 2016 года и является крупнейшим фирменным магазином техники Xiaomi в Крыму.
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:#F9F9F9;border-radius:10px;border:1px solid #EEEEEE;">
       <iframe src="https://yandex.ru/sprav/widget/rating-badge/81345582117?type=rating"
               width="150" height="50" frameborder="0"
@@ -859,7 +861,7 @@ JSON-LD для витрины отзывов:
 <div class="gm-cta" role="complementary" aria-label="Контакты для заказа [Категория]">
   <div class="gm-cta-text">
     <h3>Готовы сделать заказ?</h3>
-    <p>Напишите в чат &#8212; поможем выбрать модель и оформить покупку онлайн. Или звоните бесплатно.</p>
+    <p>Напишите в чат &#8211; поможем выбрать модель и оформить покупку онлайн. Или звоните бесплатно.</p>
   </div>
   <div class="gm-cta-actions">
     <button type="button" class="gm-btn gm-btn-primary"
