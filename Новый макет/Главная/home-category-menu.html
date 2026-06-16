@@ -1,0 +1,159 @@
+<style>
+.gm-hm-nav { padding: 20px 0; overflow: visible; }
+.gm-hm-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible;
+  align-items: flex-end;
+}
+.gm-hm-item {
+  list-style: none !important;
+  width: 12.5%;
+  text-align: center;
+  padding: 12px 8px;
+  box-sizing: border-box;
+  transform-origin: bottom center;
+  transition: transform 0.12s ease;
+  will-change: transform;
+  position: relative;
+  z-index: 1;
+}
+.gm-hm-item::before,
+.gm-hm-item::marker {
+  display: none !important;
+  content: none !important;
+}
+.gm-hm-link {
+  display: block;
+  text-decoration: none;
+  color: #222;
+  transition: color 0.2s;
+}
+.gm-hm-link:hover { color: #ff6900; }
+.gm-hm-img {
+  display: block;
+  margin: 0 auto 12px;
+  width: 85%;
+  max-width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+.gm-hm-name {
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 400;
+}
+@media (max-width: 900px) {
+  .gm-hm-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+    overflow: visible;
+  }
+  .gm-hm-item {
+    width: auto;
+    padding: 8px 4px;
+  }
+  .gm-hm-name {
+    font-size: 12px;
+    hyphens: none;
+    -webkit-hyphens: none;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .gm-hm-img {
+    width: auto;
+    max-width: 90%;
+    height: 72px;
+    margin-bottom: 8px;
+  }
+}
+</style>
+
+<nav class="gm-hm-nav">
+  <ul class="gm-hm-list">
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/smartfonyi/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/1-phones.webp" alt="&#1057;&#1084;&#1072;&#1088;&#1090;&#1092;&#1086;&#1085;&#1099; Xiaomi">
+        <span class="gm-hm-name">&#1057;&#1084;&#1072;&#1088;&#1090;&#1092;&#1086;&#1085;&#1099;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/televizory-xiaomi/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/2-TV.webp" alt="&#1058;&#1077;&#1083;&#1077;&#1074;&#1080;&#1079;&#1086;&#1088;&#1099; Xiaomi">
+        <span class="gm-hm-name">&#1058;&#1077;&#1083;&#1077;&#1074;&#1080;&#1079;&#1086;&#1088;&#1099;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/planshetyi/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/3-pads.webp" alt="&#1055;&#1083;&#1072;&#1085;&#1096;&#1077;&#1090;&#1099; Xiaomi">
+        <span class="gm-hm-name">&#1055;&#1083;&#1072;&#1085;&#1096;&#1077;&#1090;&#1099;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/gadjety/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/4-watch.webp" alt="&#1059;&#1084;&#1085;&#1099;&#1077; &#1095;&#1072;&#1089;&#1099; Xiaomi">
+        <span class="gm-hm-name">&#1059;&#1084;&#1085;&#1099;&#1077; &#1095;&#1072;&#1089;&#1099;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/audio/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/5-audio.webp" alt="&#1053;&#1072;&#1091;&#1096;&#1085;&#1080;&#1082;&#1080; &#1080; &#1082;&#1086;&#1083;&#1086;&#1085;&#1082;&#1080; Xiaomi">
+        <span class="gm-hm-name">&#1053;&#1072;&#1091;&#1096;&#1085;&#1080;&#1082;&#1080; &#1080; &#1082;&#1086;&#1083;&#1086;&#1085;&#1082;&#1080;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/aksessuaryi/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/6-acs.webp" alt="&#1040;&#1082;&#1089;&#1077;&#1089;&#1089;&#1091;&#1072;&#1088;&#1099; Xiaomi">
+        <span class="gm-hm-name">&#1040;&#1082;&#1089;&#1077;&#1089;&#1089;&#1091;&#1072;&#1088;&#1099;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/aktsii/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/7-sale.webp" alt="&#1040;&#1082;&#1094;&#1080;&#1080; &#1080; &#1089;&#1082;&#1080;&#1076;&#1082;&#1080; GOODMi">
+        <span class="gm-hm-name">&#1040;&#1082;&#1094;&#1080;&#1080; &#1080; &#1089;&#1082;&#1080;&#1076;&#1082;&#1080;</span>
+      </a>
+    </li>
+    <li class="gm-hm-item">
+      <a href="https://goodmi.ru/podarochnye-sertifikaty-ru/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/8-gift-sert.webp" alt="&#1055;&#1086;&#1076;&#1072;&#1088;&#1086;&#1095;&#1085;&#1099;&#1077; &#1089;&#1077;&#1088;&#1090;&#1080;&#1092;&#1080;&#1082;&#1072;&#1090;&#1099; GOODMi">
+        <span class="gm-hm-name">&#1055;&#1086;&#1076;&#1072;&#1088;&#1086;&#1095;&#1085;&#1099;&#1077; &#1089;&#1077;&#1088;&#1090;&#1080;&#1092;&#1080;&#1082;&#1072;&#1090;&#1099;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<script>
+(function () {
+  var nav = document.querySelector('.gm-hm-nav');
+  if (!nav) return;
+  var items = Array.prototype.slice.call(nav.querySelectorAll('.gm-hm-item'));
+  var MAX_SCALE = 1.35;
+  var FALLOFF = 150;
+
+  function update(mouseX) {
+    items.forEach(function (item) {
+      var rect = item.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var dist = Math.abs(mouseX - cx);
+      var ratio = Math.max(0, 1 - dist / FALLOFF);
+      var scale = 1 + (MAX_SCALE - 1) * ratio;
+      item.style.transform = 'scale(' + scale.toFixed(3) + ')';
+      item.style.zIndex = ratio > 0.01 ? '10' : '1';
+    });
+  }
+
+  function reset() {
+    items.forEach(function (item) {
+      item.style.transform = 'scale(1)';
+      item.style.zIndex = '1';
+    });
+  }
+
+  nav.addEventListener('mousemove', function (e) { update(e.clientX); });
+  nav.addEventListener('mouseleave', reset);
+})();
+</script>

@@ -112,8 +112,8 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 
 ### Canonical URL patterns
 ```
-Смартфоны:         https://goodmi.ru/smartfony/
-Планшеты:          https://goodmi.ru/planshety/
+Смартфоны:         https://goodmi.ru/smartfonyi/
+Планшеты:          https://goodmi.ru/planshetyi/
 Ноутбуки:          https://goodmi.ru/noutbuki/
 Смарт-часы:        https://goodmi.ru/smart-chasy/
 Наушники:          https://goodmi.ru/naushniki-i-kolonki/

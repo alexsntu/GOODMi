@@ -1,0 +1,219 @@
+<style>
+.gm-promo { padding: 30px 0; }
+
+.gm-promo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.gm-promo-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.gm-promo-title:hover { color: #ff6900; }
+
+.gm-promo-nav { display: flex; gap: 8px; flex-shrink: 0; }
+.gm-promo-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #ccc;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: border-color 0.2s, color 0.2s;
+}
+.gm-promo-btn:hover:not(:disabled) { border-color: #ff6900; color: #ff6900; }
+.gm-promo-btn:disabled { opacity: 0.3; cursor: default; }
+.gm-promo-btn svg { display: block; }
+
+.gm-promo-wrap { overflow: hidden; }
+.gm-promo-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.gm-promo-track::-webkit-scrollbar { display: none; }
+
+.gm-promo-card {
+  flex: 0 0 calc(31% - 8px);
+  scroll-snap-align: start;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: #222;
+  background: #f5f5f5;
+  display: block;
+  transition: box-shadow 0.2s;
+}
+.gm-promo-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+.gm-promo-card:hover .gm-promo-name { color: #ff6900; }
+
+.gm-promo-img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #e8e8e8;
+}
+.gm-promo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.gm-promo-card:hover .gm-promo-img { transform: scale(1.04); }
+
+.gm-promo-info { padding: 14px 16px 16px; }
+.gm-promo-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #222;
+  transition: color 0.2s;
+}
+
+@media (max-width: 768px) {
+  .gm-promo-title { font-size: 18px; }
+  .gm-promo-card { flex: 0 0 calc(85% - 8px); }
+}
+</style>
+
+<section class="gm-promo">
+  <div class="gm-promo-head">
+    <a href="https://goodmi.ru/aktsii/" class="gm-promo-title">&#1040;&#1082;&#1094;&#1080;&#1080; &#1080; &#1089;&#1082;&#1080;&#1076;&#1082;&#1080;</a>
+    <div class="gm-promo-nav">
+      <button class="gm-promo-btn gm-promo-prev" aria-label="&#1053;&#1072;&#1079;&#1072;&#1076;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="gm-promo-btn gm-promo-next" aria-label="&#1042;&#1087;&#1077;&#1088;&#1105;&#1076;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="gm-promo-wrap">
+    <div class="gm-promo-track">
+
+      <a href="https://goodmi.ru/poverbank-v-podarok-k-smartfonam/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/promotion/153/power-xiaomi17-site_jpg.webp" alt="&#1069;&#1085;&#1077;&#1088;&#1075;&#1080;&#1103; &#1074; &#1087;&#1086;&#1076;&#1072;&#1088;&#1086;&#1082; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1069;&#1085;&#1077;&#1088;&#1075;&#1080;&#1103; &#1074; &#1087;&#1086;&#1076;&#1072;&#1088;&#1086;&#1082;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/operaciya-otzovis/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/promotion/153/%D0%BE%D1%82%D0%B7%D1%80%D0%B2%D0%B8%D1%81%D1%8C-%D1%81%D0%B0%D0%B9%D1%825001-1.jpg" alt="&#1055;&#1086;&#1076;&#1072;&#1088;&#1082;&#1080; &#1079;&#1072; &#1086;&#1090;&#1079;&#1099;&#1074;&#1099; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1055;&#1086;&#1076;&#1072;&#1088;&#1082;&#1080; &#1079;&#1072; &#1086;&#1090;&#1079;&#1099;&#1074;&#1099;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/treyd-in-goodmi/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/124/Trade-in-%D0%B0%D0%BA%D1%86%D0%B8%D1%8F_1_jpg.webp" alt="&#1055;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1072; &#1058;&#1088;&#1077;&#1081;&#1076;-&#1080;&#1085; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1055;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1072; &#1058;&#1088;&#1077;&#1081;&#1076;-&#1080;&#1085;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/skidki-na-pokupki/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/promotion/116/300_-_%D0%BF%D0%B5%D1%80%D0%B2%D0%B0%D1%8F_%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%BA%D0%B0_jpg.webp" alt="&#1044;&#1077;&#1085;&#1100;&#1075;&#1080; &#1085;&#1072; &#1087;&#1086;&#1082;&#1091;&#1087;&#1082;&#1091; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1044;&#1077;&#1085;&#1100;&#1075;&#1080; &#1085;&#1072; &#1087;&#1086;&#1082;&#1091;&#1087;&#1082;&#1091;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/skidki-v-den-rozhdeniya/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/promotion/116/%D0%B4%D1%80_%D0%B0%D0%BA%D1%86%D0%B8%D1%8F-500jpg_jpg.webp" alt="&#1041;&#1086;&#1085;&#1091;&#1089;&#1099; &#1085;&#1072; &#1044;&#1077;&#1085;&#1100; &#1056;&#1086;&#1078;&#1076;&#1077;&#1085;&#1080;&#1077; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1041;&#1086;&#1085;&#1091;&#1089;&#1099; &#1085;&#1072; &#1044;&#1077;&#1085;&#1100; &#1056;&#1086;&#1078;&#1076;&#1077;&#1085;&#1080;&#1077;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/idealnaya-para-skidka-10-na-zaschitnoe-steklo/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/promotion/112/%D0%98%D0%B4%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%D1%87_%D0%BF%D0%B0%D1%80%D0%B0_%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%BE-%D0%B0%D0%BA%D1%86%D0%B8%D1%8F_jpeg.webp" alt="&#1057;&#1082;&#1080;&#1076;&#1082;&#1072; &#1085;&#1072; &#1089;&#1090;&#1077;&#1082;&#1083;&#1086; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1057;&#1082;&#1080;&#1076;&#1082;&#1072; &#1085;&#1072; &#1089;&#1090;&#1077;&#1082;&#1083;&#1086;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/sale-ru/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/51/Rasprod_jpg.webp" alt="&#1056;&#1072;&#1089;&#1087;&#1088;&#1086;&#1076;&#1072;&#1078;&#1072; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1056;&#1072;&#1089;&#1087;&#1088;&#1086;&#1076;&#1072;&#1078;&#1072;</span>
+        </div>
+      </a>
+
+      <a href="https://goodmi.ru/bonusnaya-programma/" class="gm-promo-card">
+        <div class="gm-promo-img-wrap">
+          <img class="gm-promo-img" src="https://goodmi.ru/images/ab__webp/abt__ut2/banners/all/124/bonus_jpg.webp" alt="&#1041;&#1086;&#1085;&#1091;&#1089;&#1085;&#1072;&#1103; &#1087;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1072; GOODMi">
+        </div>
+        <div class="gm-promo-info">
+          <span class="gm-promo-name">&#1041;&#1086;&#1085;&#1091;&#1089;&#1085;&#1072;&#1103; &#1087;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1072;</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var track = document.querySelector('.gm-promo-track');
+  var prev = document.querySelector('.gm-promo-prev');
+  var next = document.querySelector('.gm-promo-next');
+  if (!track || !prev || !next) return;
+
+  function cardStep() {
+    var card = track.querySelector('.gm-promo-card');
+    if (!card) return 300;
+    var gap = parseFloat(window.getComputedStyle(track).gap) || 16;
+    return card.offsetWidth + gap;
+  }
+
+  function updateBtns() {
+    prev.disabled = track.scrollLeft <= 1;
+    next.disabled = track.scrollLeft >= track.scrollWidth - track.offsetWidth - 1;
+  }
+
+  prev.addEventListener('click', function () {
+    track.scrollBy({ left: -cardStep(), behavior: 'smooth' });
+  });
+  next.addEventListener('click', function () {
+    track.scrollBy({ left: cardStep(), behavior: 'smooth' });
+  });
+
+  track.addEventListener('scroll', updateBtns);
+  updateBtns();
+})();
+</script>
