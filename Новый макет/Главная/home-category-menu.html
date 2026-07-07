@@ -42,7 +42,7 @@
   object-fit: contain;
 }
 .gm-hm-name {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.35;
   font-weight: 400;
 }
@@ -73,6 +73,7 @@
 }
 </style>
 
+<h2 class="gm-section-title">&#1055;&#1086;&#1087;&#1091;&#1083;&#1103;&#1088;&#1085;&#1099;&#1077; &#1082;&#1072;&#1090;&#1077;&#1075;&#1086;&#1088;&#1080;&#1080;</h2>
 <nav class="gm-hm-nav">
   <ul class="gm-hm-list">
     <li class="gm-hm-item">
@@ -112,9 +113,9 @@
       </a>
     </li>
     <li class="gm-hm-item">
-      <a href="https://goodmi.ru/aktsii/" class="gm-hm-link">
-        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/7-sale.webp" alt="&#1040;&#1082;&#1094;&#1080;&#1080; &#1080; &#1089;&#1082;&#1080;&#1076;&#1082;&#1080; GOODMi">
-        <span class="gm-hm-name">&#1040;&#1082;&#1094;&#1080;&#1080; &#1080; &#1089;&#1082;&#1080;&#1076;&#1082;&#1080;</span>
+      <a href="https://goodmi.ru/tovary-dlya-doma-ru/" class="gm-hm-link">
+        <img class="gm-hm-img" src="https://goodmi.ru/images/companies/2/Menu/Home-page-menu/7-for-home.png" alt="&#1058;&#1077;&#1093;&#1085;&#1080;&#1082;&#1072; &#1076;&#1083;&#1103; &#1076;&#1086;&#1084;&#1072; Xiaomi">
+        <span class="gm-hm-name">&#1058;&#1077;&#1093;&#1085;&#1080;&#1082;&#1072; &#1076;&#1083;&#1103; &#1076;&#1086;&#1084;&#1072;</span>
       </a>
     </li>
     <li class="gm-hm-item">
@@ -130,8 +131,9 @@
 (function () {
   var nav = document.querySelector('.gm-hm-nav');
   if (!nav) return;
+  if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   var items = Array.prototype.slice.call(nav.querySelectorAll('.gm-hm-item'));
-  var MAX_SCALE = 1.35;
+  var MAX_SCALE = 1.18;
   var FALLOFF = 150;
 
   function update(mouseX) {
