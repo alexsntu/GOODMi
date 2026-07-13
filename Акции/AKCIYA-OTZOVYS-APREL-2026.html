@@ -260,39 +260,6 @@
     .hyperos-vk-info a { color: #0077FF; text-decoration: underline; }
     .hyperos-vk-info a:hover { text-decoration: none; }
 
-.prev-month-toggle-wrapper { max-width: 900px; margin: 30px auto; text-align: center; }
-    .prev-month-toggle-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: #fff;
-        border: 1.5px solid var(--mi-purple);
-        color: var(--mi-purple);
-        font-family: var(--mi-font);
-        font-weight: 600;
-        font-size: 0.95rem;
-        padding: 12px 26px;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: background 0.2s, color 0.2s;
-    }
-    .prev-month-toggle-btn:hover { background: rgba(129, 90, 248, 0.08); }
-    .prev-month-toggle-btn .prev-month-chevron { transition: transform 0.25s ease; }
-    .prev-month-toggle-btn.active .prev-month-chevron { transform: rotate(180deg); }
-    .prev-month-block { display: none; }
-    .prev-month-block.open { display: block; }
-    .prev-month-label {
-        display: inline-block;
-        background: rgba(129, 90, 248, 0.08);
-        color: var(--mi-purple);
-        border: 1px solid rgba(129, 90, 248, 0.2);
-        border-radius: 50px;
-        padding: 4px 16px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        margin-bottom: 18px;
-    }
-
 .participants-wrapper { margin-top: 40px; text-align: center; }
     .participants-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: var(--mi-black); }
     .participants-subtitle { font-size: 0.9rem; color: var(--mi-text-gray); margin-bottom: 20px; }
@@ -432,102 +399,6 @@
         border-bottom-color: var(--mi-orange);
     }
 
-.winners-section {
-        max-width: 800px;
-        margin: 0 auto 40px auto;
-        text-align: center;
-    }
-    .winners-banner {
-        background: linear-gradient(135deg, var(--mi-purple) 0%, #a07cfa 100%);
-        border-radius: var(--card-radius);
-        padding: 30px 25px 20px;
-        margin-bottom: 20px;
-        color: #fff;
-        box-shadow: 0 10px 35px rgba(129, 90, 248, 0.3);
-    }
-    .winners-banner-title {
-        font-size: 1.6rem;
-        font-weight: 800;
-        margin-bottom: 6px;
-        letter-spacing: -0.3px;
-    }
-    .winners-banner-sub {
-        font-size: 0.95rem;
-        opacity: 0.85;
-        margin-bottom: 22px;
-    }
-    .winners-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-    }
-    .winner-card {
-        background: rgba(255, 255, 255, 0.15);
-        border: 1.5px solid rgba(255, 255, 255, 0.4);
-        border-radius: 16px;
-        padding: 22px 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        backdrop-filter: blur(6px);
-    }
-    .winner-num-wrap {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.25);
-        border: 2px solid rgba(255, 255, 255, 0.6);
-        margin-bottom: 6px;
-    }
-    .winner-num {
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: #fff;
-        line-height: 1;
-    }
-    .winner-num-label {
-        font-size: 0.72rem;
-        opacity: 0.7;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    .winner-name {
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #fff;
-    }
-    .winner-prize-name {
-        font-size: 0.88rem;
-        color: rgba(255, 255, 255, 0.85);
-        font-weight: 500;
-        line-height: 1.4;
-        text-align: center;
-    }
-    .winners-vk-link {
-        margin-top: 14px;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 22px;
-        background: rgba(255, 255, 255, 0.2);
-        border: 1.5px solid rgba(255, 255, 255, 0.5);
-        border-radius: 50px;
-        color: #fff;
-        font-size: 0.9rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background 0.25s;
-    }
-    .winners-vk-link:hover {
-        background: rgba(255, 255, 255, 0.35);
-        text-decoration: none;
-        color: #fff;
-    }
-
 .hyperos-table tr.winner-row td {
         background-color: rgba(129, 90, 248, 0.07) !important;
         color: var(--mi-purple);
@@ -591,10 +462,6 @@
 
         .promo-rules-block { padding: 25px 18px; }
         .promo-rules-title { font-size: 1.05rem; }
-
-        .winners-banner-title { font-size: 1.3rem; }
-        .winners-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-        .winner-card { padding: 16px 10px; }
     }
 </style>
 {/literal}
@@ -698,391 +565,147 @@
 
 <div class="participants-wrapper">
             <div class="participants-title">Список участников</div>
-            <div class="participants-subtitle">оставивших отзывы с 1 июля по 31 июля 2026<br>Акция только началась – список пока пуст</div>
+            <div class="participants-subtitle">оставивших отзывы с 1 июля по 31 июля 2026<br>Данные актуальны на 13.07.2026</div>
 
             <div class="participants-scroll-box">
-                <div class="table-empty-notice">Пока никто не оставил отзыв в этом месяце. Будьте первым – оставьте отзыв и попадите в список участников!</div>
-            </div>
-        </div>
-
-<div class="prev-month-toggle-wrapper">
-            <button type="button" class="prev-month-toggle-btn" onclick="gmTogglePrevMonth(this)" aria-expanded="false" aria-controls="gm-prev-month-block">
-                <span>Посмотреть участников и победителя прошлого месяца</span>
-                <svg class="prev-month-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-        </div>
-
-<div class="prev-month-block" id="gm-prev-month-block">
-            <div class="winners-section">
-                <div class="prev-month-label">Итоги июня 2026</div>
-                <div class="winners-banner">
-                    <div class="winners-banner-title">&#127881; Победитель определён!</div>
-                    <div class="winners-banner-sub">Спасибо всем, кто оставил отзыв в июне – розыгрыш прошёл честно и открыто</div>
-                    <div class="winners-grid" style="grid-template-columns: 1fr; max-width: 300px; margin: 0 auto;">
-                        <div class="winner-card">
-                            <div class="winner-num-wrap">
-                                <span class="winner-num">14</span>
-                            </div>
-                            <div class="winner-num-label">Счастливый номер</div>
-                            <div class="winner-name"><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/?ll=33.489215%2C44.588848&utm_source=my_review&z=15" target="_blank" rel="nofollow noopener" style="color: inherit; text-decoration: underline;">Ольга Волкова</a></div>
-                            <div class="winner-prize-name">Фотопринтер Xiaomi Portable Photo Printer 1S</div>
-                        </div>
-                    </div>
-                    <a href="https://vk.com/goodmi_ru?z=video-126411469_456243801" target="_blank" class="winners-vk-link">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        Смотреть запись эфира с определением победителя
-                    </a>
-                </div>
-            </div>
-
-            <div class="participants-wrapper">
-                <div class="participants-title">Список участников</div>
-                <div class="participants-subtitle">оставивших отзывы с 1 июня по 30 июня 2026<br>Данные актуальны на 30.06.2026</div>
-
-                <div class="participants-scroll-box">
-                    <table class="hyperos-table">
-                        <thead>
-                            <tr>
-                                <th>№</th>
-                                <th>ФИО</th>
-                                <th>Источник</th>
-                                <th>Дата</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Евгений</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/183196216973/reviews/?ll=34.076998%2C44.971134&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>03.06</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Виктория Сеитаблаева</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/?ll=33.525243%2C44.566324&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>04.06</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Нюся Ямпольская</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/?ll=33.525243%2C44.566324&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>05.06</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Алексей Крымский</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/?ll=33.489215%2C44.588848&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>06.06</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Alekx92</td>
-                                <td><a href="https://otzovik.com/review_18409758.html" target="_blank" rel="nofollow noopener">Отзовик</a></td>
-                                <td>08.06</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Юлия Г</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/183196216973/reviews/?ll=34.076998%2C44.971134&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>13.06</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>Камилла Колобанова</td>
-                                <td><a href="https://vk.com/topic-126411469_34667727?post=4676" target="_blank" rel="nofollow noopener">ВКонтакте</a></td>
-                                <td>13.06</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>Guns_82</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/?ll=33.525243%2C44.566324&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>15.06</td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>Вероника Богушевская</td>
-                                <td><a href="https://goodmi.ru/besprovodnye-naushniki-xiaomi-buds-6-bhr08oggl-white/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>Ольга Волкова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/183196216973/reviews/?ll=34.076998%2C44.971134&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>11</td>
-                                <td>Никит Гол</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/?ll=33.489215%2C44.588848&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>12</td>
-                                <td>Евгений И</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/?ll=33.489215%2C44.588848&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>13</td>
-                                <td>Евгений И</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/41033084263/reviews/?ll=33.520664%2C44.603137&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr class="winner-row">
-                                <td>14</td>
-                                <td>Ольга Волкова <span class="winner-row-badge">Победитель</span></td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/?ll=33.489215%2C44.588848&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>15</td>
-                                <td>Татьяна Сидорина</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/63307304488/reviews/?ll=34.168796%2C44.499234&z=14" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>16</td>
-                                <td>Надя Гараган</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/?ll=33.489502%2C44.588360&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>17</td>
-                                <td>SV</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/?ll=33.525243%2C44.566324&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>17.06</td>
-                            </tr>
-                            <tr>
-                                <td>18</td>
-                                <td>Яковлева Э</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/?ll=33.489502%2C44.588360&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>18.06</td>
-                            </tr>
-                            <tr>
-                                <td>19</td>
-                                <td>Юлия Серикова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/183196216973/reviews/?ll=34.076998%2C44.971134&z=16" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>18.06</td>
-                            </tr>
-                            <tr>
-                                <td>20</td>
-                                <td>Юлия Серикова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/?ll=33.489215%2C44.588848&z=15" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>18.06</td>
-                            </tr>
-                            <tr>
-                                <td>21</td>
-                                <td>Елена</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>18.06</td>
-                            </tr>
-                            <tr>
-                                <td>22</td>
-                                <td>Вероника Гумерова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>19.06</td>
-                            </tr>
-                            <tr>
-                                <td>23</td>
-                                <td>Ирина С</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>19.06</td>
-                            </tr>
-                            <tr>
-                                <td>24</td>
-                                <td>irinaigorevna007</td>
-                                <td><a href="https://otzovik.com/review_18439057.html" target="_blank" rel="nofollow noopener">Отзовик</a></td>
-                                <td>19.06</td>
-                            </tr>
-                            <tr>
-                                <td>25</td>
-                                <td>Соня Оболонская</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/41033084263/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>20.06</td>
-                            </tr>
-                            <tr>
-                                <td>26</td>
-                                <td>Соня Оболонская</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>20.06</td>
-                            </tr>
-                            <tr>
-                                <td>27</td>
-                                <td>Татьяна Белоусова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>20.06</td>
-                            </tr>
-                            <tr>
-                                <td>28</td>
-                                <td>Татьяна Белосова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/41033084263/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>20.06</td>
-                            </tr>
-                            <tr>
-                                <td>29</td>
-                                <td>Dinako_13</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/41033084263/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>20.06</td>
-                            </tr>
-                            <tr>
-                                <td>30</td>
-                                <td>Elvira Dzhumalieva</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/41033084263/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>21.06</td>
-                            </tr>
-                            <tr>
-                                <td>31</td>
-                                <td>Игорь</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>21.06</td>
-                            </tr>
-                            <tr>
-                                <td>32</td>
-                                <td>Марина Васильева</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>21.06</td>
-                            </tr>
-                            <tr>
-                                <td>33</td>
-                                <td>Андрей Репин</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>21.06</td>
-                            </tr>
-                            <tr>
-                                <td>34</td>
-                                <td>Александра Емец</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>22.06</td>
-                            </tr>
-                            <tr>
-                                <td>35</td>
-                                <td>Роман Якимчук</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>22.06</td>
-                            </tr>
-                            <tr>
-                                <td>36</td>
-                                <td>Андрей</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>22.06</td>
-                            </tr>
-                            <tr>
-                                <td>37</td>
-                                <td>Дарья</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>23.06</td>
-                            </tr>
-                            <tr>
-                                <td>38</td>
-                                <td>Olyaaa Olyaaa</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>26.06</td>
-                            </tr>
-                            <tr>
-                                <td>39</td>
-                                <td>Кристина Атаманчук</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/183196216973/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>26.06</td>
-                            </tr>
-                            <tr>
-                                <td>40</td>
-                                <td>Елена Афендикова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>27.06</td>
-                            </tr>
-                            <tr>
-                                <td>41</td>
-                                <td>Светлана К</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>28.06</td>
-                            </tr>
-                            <tr>
-                                <td>42</td>
-                                <td>Светлана Косенко</td>
-                                <td><a href="https://vk.com/reviews-126411469" target="_blank" rel="nofollow noopener">ВКонтакте</a></td>
-                                <td>28.06</td>
-                            </tr>
-                            <tr>
-                                <td>43</td>
-                                <td>Александра Гоженко</td>
-                                <td><a href="https://goodmi.ru/robot-pylesos-xiaomi-robot-vacuum-s40c-bhr9664eu-white/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
-                                <td>28.06</td>
-                            </tr>
-                            <tr>
-                                <td>44</td>
-                                <td>Александра Гоженко</td>
-                                <td><a href="https://goodmi.ru/besprovodnye-naushniki-redmi-buds-6-lite-m2349e1-black/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
-                                <td>28.06</td>
-                            </tr>
-                            <tr>
-                                <td>45</td>
-                                <td>Валерия Петрова</td>
-                                <td><a href="https://goodmi.ru/umnye-chasy-redmi-watch-5-gray/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>46</td>
-                                <td>Елена</td>
-                                <td><a href="https://goodmi.ru/besprovodnye-naushniki-redmi-buds-6-active-white/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>47</td>
-                                <td>Александра Ковалева</td>
-                                <td><a href="https://goodmi.ru/fitnes-braslet-xiaomi-smart-band-10-black/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>48</td>
-                                <td>volodya.boyko.95</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>49</td>
-                                <td>Владислава Терентьева</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/41033084263/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>50</td>
-                                <td>Наталья Савельева</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>51</td>
-                                <td>Юлия Могилёвская</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>52</td>
-                                <td>Ирина Колобанова</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>53</td>
-                                <td>Ирина Мардерос_Ваш психолог</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>29.06</td>
-                            </tr>
-                            <tr>
-                                <td>54</td>
-                                <td>Ключников Евгений</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>30.06</td>
-                            </tr>
-                            <tr>
-                                <td>55</td>
-                                <td>Анастасия Г</td>
-                                <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
-                                <td>30.06</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="hyperos-table">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>ФИО</th>
+                            <th>Источник</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Олег Иванов</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>06.07</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Яна Мельник</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>07.07</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Дмитрий Морозов</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/63307304488/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>08.07</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Александр Н</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>08.07</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Вадим Шовкопляс</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>08.07</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Вика Карпенко</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>09.07</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Вероника Драчева</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>09.07</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>ГАУ ХО Дом молодежи</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/183196216973/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>09.07</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Галина Карпенко</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>10.07</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Андрей Короткий</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>10.07</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Сергей Легецкий</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>11.07</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Мария</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/95861137013/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>11.07</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Никита</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>12.07</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>Dmitrii</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/81345582117/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>12.07</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Сергей Сергеевич</td>
+                            <td><a href="https://yandex.ru/maps/org/goodmi/219323553091/reviews/" target="_blank" rel="nofollow noopener">Яндекс Карты</a></td>
+                            <td>12.07</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>Александра Гоженко</td>
+                            <td><a href="https://goodmi.ru/podarochnyy-sertifikat-5000-rub/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
+                            <td>09.07</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>Александра Гоженко</td>
+                            <td><a href="https://goodmi.ru/podarochnyy-sertifikat-10000-rub/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
+                            <td>09.07</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>Александра Гоженко</td>
+                            <td><a href="https://goodmi.ru/xiaomi-15-pro-16-512gb-silver-cn/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
+                            <td>10.07</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>Юрий Попов</td>
+                            <td><a href="https://goodmi.ru/umnye-chasy-redmi-watch-5-lite-black-bhr8789gl/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
+                            <td>10.07</td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td>Александра Гоженко</td>
+                            <td><a href="https://goodmi.ru/avtomobilnyy-aromatizator-dokiy/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
+                            <td>11.07</td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>Виталий Зубко</td>
+                            <td><a href="https://goodmi.ru/router-xiaomi-wi-fi-router-be5000/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
+                            <td>13.07</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -1140,18 +763,3 @@
 
     </div>
 </div>
-
-<script>
-{literal}
-function gmTogglePrevMonth(btn) {
-    var block = document.getElementById('gm-prev-month-block');
-    var isOpen = block.classList.toggle('open');
-    btn.classList.toggle('active', isOpen);
-    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    var label = btn.querySelector('span');
-    if (label) {
-        label.textContent = isOpen ? 'Скрыть участников и победителя прошлого месяца' : 'Посмотреть участников и победителя прошлого месяца';
-    }
-}
-{/literal}
-</script>
