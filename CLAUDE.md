@@ -31,12 +31,14 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 Блог/                  # Blog article SEO blocks
 Страницы/              # Standalone page HTML (trade-in, VPN, reviews, etc.)
 Быстрые ссылки/        # Quick-links blocks (separate files, never embedded in category files)
+Описания товаров/Готовые/  # Rewritten product description blocks (OPISANIE-[BRAND]-[MODEL]-GOODMI.html)
+Новый макет/            # Homepage/menu redesign mockups (in-progress, not yet deployed)
 CSS/                   # goodmi-styles.css (shared), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
 _DEV/                  # Development artifacts and task trackers (untracked)
 tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
-.cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards
+.cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards + workflow shortcuts
 .cursor/skills/        # Reusable skill definitions for content generation workflows
 ```
 
@@ -158,6 +160,27 @@ All skills: **ask for input first, show analysis, wait for confirmation, then ge
 **Mandatory blocking steps (do not skip for any shop-page-builder variant):**
 - **Step 1b** — ask warranty duration before generating any HTML; no default assumed. Waiting for user answer = block; do not generate final HTML until answered.
 - **Step 4** — ask for card image URLs (or explicit «пропустить») before generating `.gm-services-grid`. Silence ≠ «пропустить».
+
+### Text-shortcut triggers
+
+A bare one-word message (with or without trailing `.`) launches the corresponding workflow end-to-end — gather missing inputs, generate, save the file, and reply in chat with only a short confirmation + file path (no need to restate the whole skill output):
+
+| Shortcut | Rule | Skill invoked | Saves to |
+|---|---|---|---|
+| `Категория` | `category-shortcut-trigger.mdc` | `seo-shop-page-builder` | `Категории/Новые/` |
+| `Описание` | `description-shortcut-trigger.mdc` | `seo-product-description-builder` | `Описания товаров/OPISANIE-[BRAND]-[MODEL]-GOODMI.html` |
+| `Отзывы` | `reviews-shortcut-trigger.mdc` | `seo-homepage-reviews-block-builder` | `Страницы/HOMEPAGE-REVIEWS-SHORT-BLOCK-2026-03-24.html` |
+| `блог` | `blog-shortcut-trigger.mdc` | blog article workflow | `Блог/` |
+
+If the triggering message already includes the needed data (category/model, competitor links, warranty terms, image URLs, etc.), skip straight to generation and only ask for genuinely missing required fields — but the blocking steps above (warranty, card images) still apply for `Категория`.
+
+## Git Commit Messages
+
+Enforced by `AGENTS.md` and `.cursor/rules/git-commit-language.mdc` (`alwaysApply: true`):
+
+- Always write commit messages **in Russian**, 1–2 sentences, no English text in the body — even if the diff/filenames are in English.
+- Focus on *why*, not a file-by-file listing.
+- No Conventional Commits prefixes (`feat:`, `fix:`, etc.); if a prefix is needed, use Russian (`Добавлено:`, `Исправлено:`).
 
 ## MCP Server (`cscart-mcp-server/`)
 
