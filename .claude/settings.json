@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__wordstat-mcp__wordstat_top",
+      "mcp__wordstat-mcp__wordstat_bulk",
+      "mcp__wordstat-mcp__wordstat_regions",
+      "mcp__pixelplus-mcp__pixelplus_get_groups",
+      "mcp__pixelplus__pixelplus_get_groups",
+      "mcp__pixelplus-mcp__pixelplus_get_positions",
+      "mcp__pixelplus-mcp__pixelplus_get_queries",
+      "mcp__pixelplus__pixelplus_get_queries"
+    ]
+  }
+}
