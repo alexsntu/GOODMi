@@ -1,5 +1,5 @@
 ---
-name: seo-shop2
+name: user:seo-shop2
 description: "Генерация полного SEO HTML-блока категории v2 (FAQ в Блоке 1, 5 вопросов, sameAs) для GOODMi. Используй, когда пользователь просит сгенерировать HTML-блок категории/модели для goodmi.ru."
 ---
 

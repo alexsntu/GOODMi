@@ -140,20 +140,22 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 
 Skills in `.cursor/skills/` define step-by-step workflows. Always follow their workflow order.
 
-**Claude Code invocation shortcuts** (use `/skill-name` syntax in Claude Code):
+**Claude Code invocation shortcuts** (use `/user:skill-name` syntax in Claude Code — the `user:` prefix groups all GOODMi commands together in the `/` autocomplete list).
+
+Each entry below is a thin proxy `SKILL.md` under `.claude/skills/user:<name>/` that reads the full workflow from `.cursor/skills/<skill>/SKILL.md` and executes it step by step.
 
 | Slash command | Skill | Trigger use case |
 |---|---|---|
-| `/seo-meta` | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
-| `/seo-meta2` | `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
-| `/seo-shop2` | `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
-| — | `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
-| — | `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
-| — | `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
-| — | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
-| — | `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
-| — | `seo-blog-poster-builder` | Generate branded blog post header in Xiaomi/GOODMi style |
-| `/seo-blog-rewrite` | `seo-blog-rewriter` | Rewrite an existing article preserving keyword density; outputs two-file blog HTML |
+| `/user:seo-meta` | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
+| `/user:seo-meta2` | `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
+| `/user:seo-shop` | `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
+| `/user:seo-shop2` | `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
+| `/user:seo-description` | `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
+| `/user:seo-quick-links` | `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
+| `/user:seo-quick-links-top` | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
+| `/user:seo-reviews` | `seo-homepage-reviews-block-builder` | Update homepage reviews витрина (exactly 6 cards) |
+| `/user:seo-blog-poster` | `seo-blog-poster-builder` | Generate branded blog post header in Xiaomi/GOODMi style |
+| `/user:seo-blog-rewrite` | `seo-blog-rewriter` | Rewrite an existing article preserving keyword density; outputs two-file blog HTML |
 
 All skills: **ask for input first, show analysis, wait for confirmation, then generate HTML.**
 
