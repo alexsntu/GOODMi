@@ -31,9 +31,10 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 Блог/                  # Blog article SEO blocks
 Страницы/              # Standalone page HTML (trade-in, VPN, reviews, etc.)
 Быстрые ссылки/        # Quick-links blocks (separate files, never embedded in category files)
+Меню/                   # Site navigation blocks (desktop catalog menu, footer columns) — see "Navigation / Footer Menu Blocks"
 Описания товаров/Готовые/  # Rewritten product description blocks (OPISANIE-[BRAND]-[MODEL]-GOODMI.html)
 Новый макет/            # Homepage/menu redesign mockups (in-progress, not yet deployed)
-CSS/                   # goodmi-styles.css (shared), maxmobiles-styles.css
+CSS/                   # goodmi-styles.css (shared, documented — edit this one), goodmi-styles.min.css (generated, no comments — upload this one), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
 _DEV/                  # Development artifacts and task trackers (untracked)
 tools/                 # Utility scripts (see below)
@@ -53,7 +54,7 @@ cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 All category and page blocks follow a shared structure:
 
 1. **JSON-LD schema** (top) — `LocalBusiness`, `BreadcrumbList`, and optionally `ItemList`. Every `Review` entity must include `"itemReviewed": { "@id": "https://goodmi.ru/#organization" }`.
-2. **CSS classes** — all styles come from `goodmi-styles.css`; never write `<style>` tags inline.
+2. **CSS classes** — all styles come from `goodmi-styles.css`; never write `<style>` tags inline. Two files are kept in sync: `CSS/goodmi-styles.css` is the documented source (header protocol, palette, section comments — **edit this one**) and `CSS/goodmi-styles.min.css` is a generated copy with all comments stripped (**upload this one** to Дизайн → Темы → Свой CSS — smaller payload, nothing else differs). After any edit to `goodmi-styles.css`, regenerate the `.min.css` copy (strip `/* ... */` comments and collapse the resulting blank lines) before deploying.
 3. **Two-file split per page** — `[slug].html` (wysiwyg HTML only, no `<script>`) + `[slug]-jsonld.html` (JSON-LD only, placed in a separate Layout block). **Reason:** CS-Cart duplicates every `<script>` tag in wysiwyg descriptions, causing GSC duplicate-schema errors.
 4. **Quick-links blocks** — always saved as separate files (`[category]-quick-links.html`, `[category]-quick-links-top.html`), never embedded in the category SEO file.
 5. **No emojis** — use HTML entities instead (`&#8211;`, `&#215;`, etc.). Use inline SVG for all icons — TinyMCE in CS-Cart corrupts Unicode entities above U+00FF (renders as `???` in DB).
@@ -79,6 +80,27 @@ All category and page blocks follow a shared structure:
 - `.gm-intro-text`, `.gm-faq` — referenced in `speakable.cssSelector` JSON-LD
 - `.gm-trust-strip` — 4-icon USP strip
 - `.gm-advantages-list` — must use selector `.gm-block .gm-advantages-list` (not just `.gm-advantages-list`) to override CS-Cart's `ul` padding
+
+## Navigation / Footer Menu Blocks
+
+`Меню/` holds site-chrome HTML (not SEO content blocks) — deployed as separate CS-Cart Design → Layouts HTML blocks, one per file/location. Different architecture from the category/page blocks above: these files carry **no inline `<style>`** — all their CSS lives in `CSS/goodmi-styles.css` (sections 16–17, `.goodmi-*` classes), loaded globally via Дизайн → Темы → Свой CSS. Footer files use Smarty template syntax for links (`{"..."|fn_url}`, `page_id=N`) but no longer need `{literal}...{/literal}` since there's no `<style>` block left to protect from the Smarty parser.
+
+`Контакты.html` (desktop) and `Контакты МОБ.html` (mobile) share the base class `.goodmi-footer-contacts` but render on the same page simultaneously (theme toggles visibility via CSS breakpoints) — the mobile file adds a `.goodmi-footer-contacts--mobile` modifier class on its wrapper `<div>` so the two don't collide in the shared stylesheet. Keep that modifier when editing either file.
+
+```
+Меню/Дополнительное меню/menu-desktop.html   # Desktop catalog nav — 10 flat items + adaptive "ещё" overflow menu; CSS/JS scaffolding for mega-panels ready (add via data-mega-trigger/data-mega-panel, no script changes needed)
+Меню/Футер/Информация.html                    # Legal links (оферта, конфиденциальность, карта сайта) + Yandex Maps rating widget
+Меню/Футер/Контакты.html                      # Desktop footer contacts: phone, email, socials (MAX/VK/TG/Zen/Rutube/YouTube), address
+Меню/Футер/Контакты МОБ.html                  # Mobile variant of the above — always expanded, not collapsed into an accordion
+Меню/Футер/О нас.html                         # Footer column: отзывы, почему мы, о нас, бренды, сервис, контакты, как оставить отзыв
+Меню/Футер/Покупателям.html                   # Footer column: каталог, блог, акции, бонусы, доставка, возврат, гарантия, кредит, трейд-ин, FAQ
+```
+
+Shared conventions across all files in `Меню/`:
+- CSS custom properties `--goodmi-text-link` (#a1a1a6), `--goodmi-accent` (#ff6900), `--goodmi-font` — scoped per block, dark-footer-background palette
+- Underline-on-hover link effect (`::before` pseudo-element, orange, left-to-right)
+- Store constants (phone, email, address, socials, `sameAs`) must match the verbatim values in Project Overview above
+- Em dash prohibition applies to visible copy, not CSS/JS comments — comments in `menu-desktop.html` use `—` freely and that's fine
 
 ## SEO Standards
 

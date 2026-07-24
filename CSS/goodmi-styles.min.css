@@ -1,81 +1,3 @@
-/*
-=======================================================================
-  GOODMi — Стили SEO HTML-блоков
-  Сайт: goodmi.ru — фирменный магазин техники Xiaomi в Крыму
-  Подключение: Дизайн → Темы → Редактировать → Свой CSS
-  Все стили изолированы в .gm-block и не влияют на тему CS-Cart
-  Дизайн-язык: Xiaomi / HyperOS 2
-  Версия: 1.1
-=======================================================================
-
-  ⚠️  ПРОТОКОЛ ПРОВЕРКИ ПЕРЕД РЕДАКТИРОВАНИЕМ CSS
-  ─────────────────────────────────────────────────
-  Этот файл подключён глобально и влияет на ВСЕ страницы ниже.
-  Перед любым изменением селектора или удалением правила — запустить
-  проверку: grep по папке GOODMi на затрагиваемый класс.
-
-  Файлы, использующие этот CSS (обновлять список при добавлении новых):
-  • Категории/televizory-xiaomi-category.html
-  • Категории/planshety-category.html
-  • Блог/obzor-fena-laifen-swift-4.html
-  • Быстрые ссылки/televizory-xiaomi-quick-links-top.html
-  • Меню/Дополнительное меню/menu-desktop.html
-  • Меню/Футер/Информация.html
-  • Меню/Футер/Контакты.html
-  • Меню/Футер/Контакты МОБ.html
-  • Меню/Футер/О нас.html
-  • Меню/Футер/Покупателям.html
-
-  Правила безопасного редактирования:
-  1. Сужение селектора (напр. `.gm-btn` → `.gm-block .gm-btn`) —
-     проверить, что класс встречается ТОЛЬКО внутри .gm-block
-     во всех файлах выше.
-  2. Переименование класса — найти и обновить все HTML-файлы.
-  3. Удаление правила — убедиться, что класс не используется нигде.
-  4. Добавление !important — допустимо только для борьбы с CS-Cart
-     overrides; не применять к layout-свойствам (display, position).
-  ─────────────────────────────────────────────────
-
-  Цветовая палитра Xiaomi:
-  --gm-orange:       #FF6900   (primary brand)
-  --gm-orange-dark:  #E55A00   (hover)
-  --gm-orange-light: #FFF0E6   (surface tint)
-  --gm-black:        #1C1C1C   (text primary)
-  --gm-gray-1:       #3D3D3D   (text secondary)
-  --gm-gray-2:       #6B6B6B   (text tertiary)
-  --gm-gray-3:       #ADADAD   (placeholder)
-  --gm-surface:      #F5F5F5   (card bg)
-  --gm-surface-2:    #EBEBEB   (card bg hover)
-  --gm-border:       #E5E5E5   (dividers)
-  --gm-white:        #FFFFFF
-
-  Содержание:
-  1. Основа
-  2. Intro (H2, лид, бейдж)
-  3. Trust strip
-  4. Section
-  5. Service cards
-  6. Advantages
-  7. Highlight box
-  8. FAQ
-  9. CTA + кнопки
-  10. Responsive (≤640px)
-  11. Collapse / Expand механизм
-  12. Quick Links — быстрые ссылки
-  12b. Quick Links — Row Overflow (кнопка «Показать ещё»)
-  12c. Quick Links Top — быстрые ссылки вверху
-  13. Badge item — двухстрочный бейдж
-  14. Repair photo — фото устройств
-  15. Blog Article — типографика статей блога
-  16. Navigation — десктопное меню каталога
-  17. Footer — меню, контакты, соцсети (Меню/Футер/*)
-=======================================================================
-*/
-
-
-/* ================================================================
-   1. Основа
-================================================================ */
 .gm-block {
   font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
                system-ui, -apple-system, Arial, sans-serif;
@@ -91,10 +13,6 @@
   padding: 0;
 }
 
-
-/* ================================================================
-   2. Intro
-================================================================ */
 .gm-intro {
   margin-bottom: 48px;
 }
@@ -115,7 +33,6 @@
   max-width: 740px;
 }
 
-/* Бейдж-таблетка — оранжевый градиент Xiaomi */
 .gm-stat-badge {
   display: inline-flex;
   align-items: center;
@@ -133,10 +50,6 @@
   line-height: 1.4;
 }
 
-
-/* ================================================================
-   3. Trust strip
-================================================================ */
 .gm-trust-strip {
   display: flex;
   flex-wrap: wrap;
@@ -181,10 +94,6 @@
   margin-bottom: 2px;
 }
 
-
-/* ================================================================
-   4. Section
-================================================================ */
 .gm-section {
   margin-bottom: 48px;
 }
@@ -207,10 +116,6 @@
   line-height: 1.65;
 }
 
-
-/* ================================================================
-   5. Service cards
-================================================================ */
 .gm-services-scroll-wrap {
   position: relative;
 }
@@ -228,7 +133,6 @@
   padding: 20px;
 }
 
-/* Одиночная карточка в последней строке — центрируем */
 .gm-services-grid > article:last-child:nth-child(3n + 1) {
   grid-column: 2;
 }
@@ -280,10 +184,6 @@
   line-height: 1.6;
 }
 
-
-/* ================================================================
-   6. Advantages
-================================================================ */
 .gm-block .gm-advantages-list {
   list-style: none;
   display: flex;
@@ -293,7 +193,6 @@
   margin: 0;
 }
 
-/* Пункты 1–4: строго по 2 в строку, одинаковая ширина и высота */
 .gm-advantages-list > li {
   flex: 1 0 calc(50% - 4px);
   max-width: calc(50% - 4px);
@@ -303,12 +202,10 @@
   flex-direction: column;
 }
 
-/* Последний пункт (виджет Яндекс) — на всю ширину */
 .gm-advantages-list > li:last-child {
   flex: 0 0 100%;
   max-width: 100%;
 }
-
 
 .gm-advantage-item {
   display: flex;
@@ -383,10 +280,6 @@
   text-decoration-color: #FF6900;
 }
 
-
-/* ================================================================
-   7. Highlight box
-================================================================ */
 .gm-highlight {
   background: linear-gradient(135deg, #FFF7F0 0%, #FFF0E6 100%);
   border: 1px solid #FFD4AD;
@@ -414,10 +307,6 @@
   margin-top: 10px;
 }
 
-
-/* ================================================================
-   8. FAQ
-================================================================ */
 .gm-faq {
   margin-bottom: 48px;
 }
@@ -446,10 +335,6 @@
   line-height: 1.65;
 }
 
-
-/* ================================================================
-   9. CTA + кнопки
-================================================================ */
 .gm-cta {
   background: linear-gradient(145deg, #1C1C1C 0%, #2D2D2D 100%);
   border-radius: 24px;
@@ -463,7 +348,6 @@
   overflow: hidden;
 }
 
-/* Декоративный оранжевый акцент — левая полоса */
 .gm-cta::before {
   content: "";
   position: absolute;
@@ -509,7 +393,7 @@
   cursor: pointer;
   border: none;
   white-space: nowrap;
-  /* transform на hover ЗАПРЕЩЁН — вызывает баг Chrome с overflow:hidden */
+
   transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -537,12 +421,6 @@
   box-shadow: 0 4px 16px rgba(255, 255, 255, 0.08);
 }
 
-
-/* ================================================================
-   10. Responsive
-================================================================ */
-
-/* Планшет: 641px–900px → 2 колонки карточек */
 @media (max-width: 900px) and (min-width: 641px) {
   .gm-services-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -553,9 +431,8 @@
   }
 }
 
-/* Мобильный: ≤640px → 1 колонка */
 @media (max-width: 640px) {
-  /* Единый боковой отступ для всего блока — все секции отступают от края экрана */
+
   .gm-block {
     padding-left: 12px;
     padding-right: 12px;
@@ -563,10 +440,8 @@
 
   .gm-intro h2 { font-size: 22px; }
 
-  /* CTA: достаточный отступ слева, чтобы контент не прилипал к оранжевой полосе */
   .gm-cta { padding: 24px 20px; }
 
-  /* Горизонтальный скроллер на мобильном */
   .gm-services-grid {
     display: flex;
     grid-template-columns: unset;
@@ -581,12 +456,10 @@
     gap: 12px;
   }
 
-  /* Блок отзывов на главной: даём больше ширины карточкам */
   .gm-block .gm-homepage-reviews-short .gm-services-grid {
     padding: 14px 12px;
     padding-left: 12px;
-    /* Уменьшаем "выглядывание" следующего отзыва:
-       увеличенный right-padding даёт больше фактической ширины первой карточке. */
+
     padding-right: 96px;
     scroll-padding-left: 12px;
     scroll-padding-right: 96px;
@@ -608,18 +481,15 @@
   }
 
   .gm-block .gm-homepage-reviews-short .gm-homepage-review-card {
-    min-height: 335px; /* было 420px; уменьшаем на 85px */
+    min-height: 335px;
     height: 335px;
   }
 
-  /* При разворачивании текста карточке нужно расти, иначе контент выйдет
-     за границы и перекроет низ (иконку источника и ссылку). */
   .gm-block .gm-homepage-reviews-short .gm-homepage-review-card.gm-review-card--expanded {
     height: auto;
     min-height: 335px;
   }
 
-  /* Кнопки-стрелки */
   .gm-scroll-btn {
     display: flex;
     align-items: center;
@@ -646,24 +516,20 @@
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
   }
 
-  /* Кнопки внутри серого контейнера — не обрезаются overflow:hidden родителя */
   .gm-scroll-btn--prev { left: 8px; }
   .gm-scroll-btn--next { right: 8px; }
 
-  /* Для блока отзывов: уводим стрелки от контента карточек */
   .gm-block .gm-homepage-reviews-short .gm-scroll-btn--prev { left: -6px; }
   .gm-block .gm-homepage-reviews-short .gm-scroll-btn--next { right: -6px; }
 
   .gm-trust-strip { gap: 16px; }
   .gm-trust-item:not(:last-child) { border-right: none; margin-right: 0; }
 
-  /* Преимущества — 1 колонка на мобильном */
   .gm-advantages-list > li,
   .gm-advantages-list > li:last-child {
     flex: 0 0 100%;
     max-width: 100%;
   }
-
 
   .gm-advantage-item {
     padding: 12px 14px;
@@ -696,8 +562,6 @@
     gap: 6px;
   }
 
-  /* Многострочный бейдж: вертикальная укладка
-     Фолбэк-класс для браузеров без :has() */
   .gm-stat-badge:has(.gm-badge-sep),
   .gm-stat-badge.gm-stat-badge--mobile-2line {
     flex-direction: column;
@@ -709,10 +573,6 @@
   .gm-badge-sep { display: none; }
 }
 
-
-/* ================================================================
-   10b. Ссылка внутри карточки услуги
-================================================================ */
 .gm-service-link {
   display: inline-block;
   margin-top: auto;
@@ -730,9 +590,6 @@
   text-decoration: underline;
 }
 
-/* ================================================================
-   Homepage reviews (avatars + source icons)
-================================================================ */
 .gm-block .gm-homepage-reviews-short {
   margin-bottom: 48px;
 }
@@ -750,7 +607,6 @@
   letter-spacing: -0.2px;
 }
 
-/* Рейтинг над блоком источников (витрина отзывов) */
 .gm-block .gm-reviews-rating-summary {
   margin: 0 0 14px;
 }
@@ -865,7 +721,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 8px; /* сверху/снизу 5px от иконки */
+  padding: 5px 8px;
   background: #fff;
   border: none;
   border-radius: 100px;
@@ -878,7 +734,6 @@
   transition: color 0.18s ease;
 }
 
-/* Убираем оранжевую полосу (border-bottom) у заголовка витрины отзывов на главной */
 .gm-block .gm-homepage-reviews-short .gm-section-title {
   border-bottom: none;
   padding-bottom: 0;
@@ -898,7 +753,6 @@
   transform-origin: center;
 }
 
-/* Фиксация верстки карточек отзывов (чтобы "Открыть источник" был в одном месте) */
 .gm-block .gm-homepage-review-card {
   display: flex;
   flex-direction: column;
@@ -910,7 +764,7 @@
 }
 
 .gm-block .gm-review-source-title {
-  display: none; /* на новом дизайне источник показываем через "Открыть источник" */
+  display: none;
 }
 
 .gm-block .gm-review-text {
@@ -937,12 +791,10 @@
   line-height: 1.2;
 }
 
-/* Источник внутри карточки больше не нужен (скрываем заголовок) */
 .gm-block .gm-review-source-title {
   display: none;
 }
 
-/* Скрытие длинного текста отзывов на мобильной версии */
 .gm-block .gm-review-text-collapsed {
   flex: 0 0 auto;
   overflow: hidden;
@@ -954,7 +806,7 @@
 }
 
 .gm-block .gm-review-text-collapsed::after {
-  /* Небольшой "хвостик" облачка */
+
   content: "";
   position: absolute;
   left: 26px;
@@ -1061,20 +913,16 @@
     margin: 6px 0 0;
   }
 
-  /* Чтобы кнопки не сливались и в них было удобно попадать */
   .gm-block .gm-review-source-anchor {
     margin-top: auto !important;
     margin-bottom: 0;
   }
 
-  /* На развёрнутом отзыве добавляем зазор 20px
-     между текстом (и его хвостиком) и иконкой источника. */
   .gm-block .gm-homepage-reviews-short .gm-homepage-review-card.gm-review-card--expanded .gm-review-text-collapsed {
     margin-bottom: 20px !important;
-    padding-bottom: 34px !important; /* хвостик облачка больше не наезжает вниз */
+    padding-bottom: 34px !important;
   }
 
-  /* Название источника в карточке: строго 1 строка */
   .gm-block .gm-review-source-title {
     white-space: nowrap;
     overflow: visible;
@@ -1085,7 +933,6 @@
   }
 }
 
-/* Desktop: витрина отзывов как горизонтальный скроллер */
 @media (min-width: 641px) {
   .gm-block .gm-homepage-reviews-short .gm-services-grid {
     display: flex;
@@ -1099,7 +946,6 @@
     padding-right: 12px;
   }
 
-  /* Стрелки для десктопа (видимы и работают вместе со скроллом) */
   .gm-block .gm-homepage-reviews-short .gm-scroll-btn {
     display: flex;
     align-items: center;
@@ -1138,7 +984,6 @@
     scroll-snap-align: start;
   }
 
-  /* Серый блок с текстом должен отделяться минимум 20px от иконки источника */
   .gm-block .gm-homepage-reviews-short .gm-review-text-collapsed {
     flex: 1 1 auto;
     max-height: 170px;
@@ -1146,7 +991,6 @@
     margin-bottom: 20px;
   }
 
-  /* На развёрнутой карточке даём высоте расти, иначе текст перекроет источник */
   .gm-block .gm-homepage-reviews-short .gm-homepage-review-card.gm-review-card--expanded {
     height: auto;
     min-height: 360px;
@@ -1157,15 +1001,10 @@
   }
 }
 
-/* Развести блок карточек отзывов и CTA */
 .gm-block .gm-homepage-reviews-short .gm-cta {
   margin-top: 24px;
 }
 
-
-/* ================================================================
-   10c. HowTo-шаги (нумерованный список процесса)
-================================================================ */
 .gm-howto-steps {
   list-style: none;
   counter-reset: gm-step;
@@ -1222,21 +1061,15 @@
   line-height: 1.6;
 }
 
-
-/* ================================================================
-   11. Collapse / Expand — собственный механизм
-================================================================ */
 .gm-collapse-wrapper {
   position: relative;
 }
 
-/* overflow:hidden + position:relative нужны для fade-шторки */
 .gm-collapse-content {
   overflow: hidden;
   position: relative;
 }
 
-/* Градиент-шторка — абсолютно позиционирована внутри .gm-collapse-content */
 .gm-collapse-fade {
   position: absolute;
   bottom: 0;
@@ -1249,7 +1082,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* Кнопка «Показать больше / Скрыть» */
 .gm-collapse-trigger {
   text-align: center;
   padding: 20px 0 8px;
@@ -1278,7 +1110,6 @@
   border-color: #FF6900;
 }
 
-/* Шеврон: вращается на 180° при раскрытии */
 .gm-collapse-chevron {
   display: inline-flex;
   align-items: center;
@@ -1290,10 +1121,6 @@
   transform: rotate(180deg);
 }
 
-
-/* ================================================================
-   12. Quick Links — быстрые ссылки / фасетная навигация
-================================================================ */
 .gm-quick-links {
   margin-bottom: 48px;
 }
@@ -1325,15 +1152,10 @@
   color: #FF6900;
 }
 
-/* Скрытый тег (управляется JS) */
 .gm-ql-hidden {
   display: none !important;
 }
 
-
-/* ================================================================
-   12b. Quick Links — Row Overflow (кнопка «Показать ещё»)
-================================================================ */
 .gm-ql-trigger {
   margin-top: 10px;
   display: flex;
@@ -1370,10 +1192,6 @@
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
-/* ================================================================
-   12c. Quick Links Top — быстрые ссылки вверху (без заголовка, кнопка в строку)
-================================================================ */
 .gm-quick-links-top {
   margin-bottom: 24px;
   border: 1px solid #E5E5E5;
@@ -1382,7 +1200,6 @@
   background: #fff;
 }
 
-/* Сетка: ссылки в первой колонке (переносятся), кнопка — во второй, всегда в одной строке */
 .gm-quick-links-top-inner {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -1403,28 +1220,15 @@
   flex-shrink: 0;
 }
 
-
-/* ================================================================
-   13. Badge item — двухстрочный бейдж
-================================================================ */
-
-/* .gm-badge-item — flex-дочерний элемент .gm-stat-badge.
-   Используется для разделения двух тезисов внутри бейджа.
-   Стилизация через родительский flex-контейнер — отдельные правила не нужны. */
 .gm-badge-item {
-  display: contents; /* прозрачная обёртка — не ломает flex родителя */
+  display: contents;
 }
 
-/* .gm-badge-sep — разделитель «·» между тезисами, скрывается на мобильном */
 .gm-badge-sep {
   flex-shrink: 0;
   opacity: 0.6;
 }
 
-
-/* ================================================================
-   14. Repair photo — фото устройств (страницы сервиса/категорий)
-================================================================ */
 .gm-repair-photo {
   margin-bottom: 32px;
 }
@@ -1443,17 +1247,10 @@
   }
 }
 
-
-/* ================================================================
-   15. Blog Article — типографика и структура статей блога
-================================================================ */
-
-/* ── Article header ── */
 .gm-article-header {
   margin-bottom: 32px;
 }
 
-/* Теги / категории */
 .gm-article-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1483,7 +1280,6 @@
   text-decoration: none;
 }
 
-/* Заголовок статьи H1 (если выводится внутри HTML-блока) */
 .gm-article-title {
   font-size: clamp(22px, 4vw, 32px);
   font-weight: 700;
@@ -1494,7 +1290,6 @@
   margin-bottom: 16px;
 }
 
-/* Мета: автор · дата · время чтения */
 .gm-article-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1515,7 +1310,6 @@
   color: #6B6B6B;
 }
 
-/* Вводный текст статьи перед Key Facts */
 .gm-article .gm-intro-text {
   max-width: none;
   background: #F7F7F7;
@@ -1529,8 +1323,6 @@
   margin: 0;
 }
 
-
-/* ── Key Facts box (GEO — primary AI citation target) ── */
 .gm-article-key-facts {
   background: linear-gradient(135deg, #FFF7F0 0%, #FFF0E6 100%);
   border: 1px solid #FFD4AD;
@@ -1580,8 +1372,6 @@
   font-size: 14px;
 }
 
-
-/* ── Table of Contents ── */
 .gm-article-toc {
   background: #F5F5F5;
   border-radius: 16px;
@@ -1620,8 +1410,6 @@
   text-underline-offset: 3px;
 }
 
-
-/* ── Article body — prose typography ── */
 .gm-article-body {
   font-size: 17px;
   color: #1C1C1C;
@@ -1669,7 +1457,6 @@
   margin-bottom: 0;
 }
 
-/* Списки — переопределяем CS-Cart ul с отступом слева */
 .gm-article-body ul,
 .gm-article-body ol {
   margin-bottom: 20px;
@@ -1733,7 +1520,6 @@
   color: #3D3D3D;
 }
 
-/* Изображения и подписи */
 .gm-article-body figure {
   margin: 32px 0;
 }
@@ -1754,10 +1540,6 @@
   line-height: 1.5;
 }
 
-/* Разделитель секций */
-/* (правило временно оставлено без деклараций, чтобы не вмешиваться в отступы) */
-
-/* ── Pull-quote / цитата ── */
 .gm-article-pullquote {
   border-left: 4px solid #FF6900;
   background: #FFF0E6;
@@ -1775,8 +1557,6 @@
   margin: 0;
 }
 
-
-/* ── Author box (E-E-A-T) ── */
 .gm-article-author {
   display: flex;
   align-items: flex-start;
@@ -1817,8 +1597,6 @@
   margin: 0;
 }
 
-
-/* ── Responsive ≤640px ── */
 @media (max-width: 640px) {
   .gm-article-body {
     font-size: 16px;
@@ -1865,17 +1643,6 @@
   }
 }
 
-
-/* ================================================================
-   16. Navigation — десктопное меню каталога (Меню/Дополнительное меню/menu-desktop.html)
-================================================================ */
-
-/* .r-h-menu — обёртка CS-Cart для этой секции меню, сама
-   является flex-контейнером (изначально под нативное меню).
-   Её дочерние элементы по умолчанию получают min-width:auto
-   и отказываются сжиматься меньше "естественной" ширины
-   нашего контента — из-за этого блок не сужался вместе с
-   окном. Разрешаем сжатие по всей цепочке внутри обёртки. */
 .r-h-menu > div,
 .r-h-menu > div > .ty-wysiwyg-content {
   min-width: 0 !important;
@@ -1935,7 +1702,6 @@
   color: #ff6900;
 }
 
-/* Подчёркивание "выезжает" слева направо при наведении */
 .goodmi-desktop-nav__link::before {
   content: '';
   position: absolute;
@@ -1951,7 +1717,6 @@
   width: 100%;
 }
 
-/* ── Кнопка "ещё" (три точки) ── */
 .goodmi-desktop-nav__more {
   position: relative;
   display: none;
@@ -1979,7 +1744,6 @@
   color: #ff6900;
 }
 
-/* ── Дроп-даун с оставшимися пунктами ── */
 .goodmi-desktop-nav__dropdown {
   display: none;
   position: absolute;
@@ -2021,7 +1785,6 @@
   color: #ff6900;
 }
 
-/* ── Мега-панель (задел на будущее — выпадающий список с категориями) ── */
 .goodmi-desktop-mega {
   display: none;
   position: absolute;
@@ -2141,25 +1904,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   border-radius: 16px;
 }
 
-
-/* ================================================================
-   17. Footer — меню, контакты, соцсети (Меню/Футер/*)
-   Общие переменные --goodmi-text-link / --goodmi-accent / --goodmi-font
-   объявлены на каждом корневом классе блока отдельно (не в :root) —
-   у блоков футера нет общего DOM-родителя на странице.
-
-   ⚠️  .goodmi-footer-contacts используется ОДНОВРЕМЕННО двумя блоками
-   (Контакты.html — десктоп, Контакты МОБ.html — мобильный, видимость
-   переключает тема через CSS-медиазапросы, оба блока присутствуют
-   в DOM). Раньше стили были изолированы по отдельным <style> в каждом
-   файле; после переноса в общий файл базовые правила — десктопные,
-   а мобильные отличия вынесены в модификатор
-   .goodmi-footer-contacts--mobile (добавлен на wrapper в Контакты МОБ.html),
-   иначе оба варианта получили бы одинаковые правила и порядок
-   объявления в файле решал бы, какой размер победит.
-================================================================ */
-
-/* ── Информация.html: юридические ссылки + виджет Яндекс.Карт ── */
 .goodmi-footer-info {
   --goodmi-text-link: #a1a1a6;
   --goodmi-accent: #ff6900;
@@ -2217,7 +1961,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   display: block;
 }
 
-/* ── Контакты.html / Контакты МОБ.html: телефон + соцсети + адрес ── */
 .goodmi-footer-contacts {
   --goodmi-text-main: #f5f5f7;
   --goodmi-text-link: #a1a1a6;
@@ -2292,7 +2035,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   background: rgba(255, 105, 0, 0.16);
 }
 
-/* Мобильный вариант: крупнее (для тач-таргетов), реагирует и на :active */
 .goodmi-footer-contacts--mobile .goodmi-social-icon-link {
   width: 48px;
   height: 48px;
@@ -2311,7 +2053,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   background: rgba(255, 105, 0, 0.16);
 }
 
-/* ── О нас.html / Покупателям.html: колонки ссылок футера ── */
 .goodmi-footer-menu {
   --goodmi-text-link: #a1a1a6;
   --goodmi-accent: #ff6900;
@@ -2322,7 +2063,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   width: 100%;
 }
 
-/* ── Список ссылок — общий для Информация / Контакты (десктоп) / О нас / Покупателям ── */
 .goodmi-menu-list {
   list-style: none !important;
   padding: 0 !important;
@@ -2349,7 +2089,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   line-height: 1.3;
 }
 
-/* Подчёркивание "выезжает" слева направо при наведении */
 .goodmi-menu-item a::before {
   content: '';
   position: absolute;
@@ -2370,7 +2109,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   width: 100%;
 }
 
-/* Мобильный вариант (Контакты МОБ.html): чуть плотнее список, выше line-height */
 .goodmi-footer-contacts--mobile .goodmi-menu-list {
   gap: 8px;
 }
@@ -2378,7 +2116,6 @@ a.goodmi-desktop-mega__heading:hover::before {
   line-height: 1.4;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .goodmi-footer-info,
   .goodmi-footer-menu {
@@ -2396,3 +2133,4 @@ a.goodmi-desktop-mega__heading:hover::before {
     font-size: 24px;
   }
 }
+

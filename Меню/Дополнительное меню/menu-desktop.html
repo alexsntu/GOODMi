@@ -1,0 +1,217 @@
+<!--
+  Desktop catalog menu — GOODMi
+  Размещение: Design → Layouts → HTML block
+  Стили: CSS/goodmi-styles.css, раздел 16 "Navigation — десктопное меню каталога"
+
+  Плоский список из 10 корневых пунктов + адаптивное скрытие лишних
+  пунктов за кнопкой "ещё" (три точки) при сужении окна.
+
+  Мега-панели (выпадающие списки с категориями) пока не добавлены ни
+  к одному пункту, но CSS/JS для них уже готовы: чтобы добавить
+  дропдаун к пункту меню, нужно —
+    1) добавить атрибут data-mega-trigger="key" на <li> нужного пункта;
+    2) добавить блок
+       <div class="goodmi-desktop-mega" data-mega-panel="key" role="menu" aria-hidden="true">
+         <div class="goodmi-desktop-mega__panel"> ... колонки .goodmi-desktop-mega__col ... </div>
+       </div>
+  JS сам найдёт пару по совпадающему key и навесит открытие/закрытие
+  по hover/focus — переписывать скрипт не нужно.
+-->
+
+<nav class="goodmi-desktop-nav" aria-label="Каталог">
+  <div class="goodmi-desktop-nav__inner">
+    <ul class="goodmi-desktop-nav__list" id="goodmiDesktopNavList">
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/shops/">Весь каталог</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/sale-ru/">Скидки</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/ucenka/">Уценка</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/poslednie-novinki/">Новинки</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/testimonials/">Отзывы</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/bonusnaya-programma/">Бонусы</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/why-us/">Почему мы</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/info/remont-xiaomi/">Сервис</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/treyd-in-goodmi/">Трейд-ин</a></li>
+      <li class="goodmi-desktop-nav__item"><a class="goodmi-desktop-nav__link" href="https://goodmi.ru/contacts/">Контакты</a></li>
+    </ul>
+
+    <div class="goodmi-desktop-nav__more" id="goodmiNavMore">
+      <button type="button" class="goodmi-desktop-nav__more-btn" id="goodmiNavMoreBtn" aria-haspopup="true" aria-expanded="false" aria-label="Ещё разделы каталога">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="4" cy="10" r="1.8" fill="currentColor"/>
+          <circle cx="10" cy="10" r="1.8" fill="currentColor"/>
+          <circle cx="16" cy="10" r="1.8" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="goodmi-desktop-nav__dropdown" id="goodmiNavDropdown" role="menu">
+        <ul class="goodmi-desktop-nav__dropdown-list" id="goodmiNavDropdownList"></ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+(function () {
+  var GAP = 32;
+
+  function recalc() {
+    var list = document.getElementById('goodmiDesktopNavList');
+    var moreItem = document.getElementById('goodmiNavMore');
+    var moreBtn = document.getElementById('goodmiNavMoreBtn');
+    var dropdown = document.getElementById('goodmiNavDropdown');
+    var dropdownList = document.getElementById('goodmiNavDropdownList');
+    if (!list || !moreItem) return;
+
+    var items = Array.prototype.slice.call(list.children);
+
+    // Сброс перед пересчётом
+    items.forEach(function (el) { el.style.display = ''; });
+    moreItem.style.display = 'none';
+    moreBtn.setAttribute('aria-expanded', 'false');
+    dropdown.classList.remove('goodmi-desktop-nav__dropdown--open');
+    dropdownList.innerHTML = '';
+
+    // Реально ли что-то не помещается (учитывает и паддинги, и особенности
+    // родительской сетки — сравниваются два измерения одного и того же блока)
+    if (list.scrollWidth <= list.clientWidth) {
+      return;
+    }
+
+    moreItem.style.display = 'flex';
+    // После показа кнопки список сам сжался за счёт flex — его текущая
+    // ширина уже честно учитывает место, оставшееся под пункты
+    var available = list.clientWidth;
+
+    var used = 0;
+    var visibleCount = 0;
+    for (var i = 0; i < items.length; i++) {
+      var w = items[i].getBoundingClientRect().width;
+      var next = used + (visibleCount > 0 ? GAP : 0) + w;
+      if (next > available) break;
+      used = next;
+      visibleCount++;
+    }
+
+    var fragment = document.createDocumentFragment();
+    for (var j = visibleCount; j < items.length; j++) {
+      items[j].style.display = 'none';
+      var link = items[j].querySelector('a');
+      if (link) {
+        var li = document.createElement('li');
+        var a = link.cloneNode(true);
+        a.className = 'goodmi-desktop-nav__dropdown-link';
+        li.appendChild(a);
+        fragment.appendChild(li);
+      }
+    }
+    dropdownList.appendChild(fragment);
+  }
+
+  function toggleDropdown(e) {
+    e.stopPropagation();
+    var dropdown = document.getElementById('goodmiNavDropdown');
+    var moreBtn = document.getElementById('goodmiNavMoreBtn');
+    var isOpen = dropdown.classList.toggle('goodmi-desktop-nav__dropdown--open');
+    moreBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  function closeDropdown() {
+    var dropdown = document.getElementById('goodmiNavDropdown');
+    var moreBtn = document.getElementById('goodmiNavMoreBtn');
+    if (dropdown) dropdown.classList.remove('goodmi-desktop-nav__dropdown--open');
+    if (moreBtn) moreBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  // Таймер закрытия хранится на самой панели (panel._megaCloseTimer), а не в
+  // одной общей переменной — при нескольких мега-панелях общий таймер
+  // приводил бы к тому, что открытие одной панели могло случайно отменить
+  // отложенное закрытие другой, и обе оставались бы видны одновременно.
+  function openMega(panel) {
+    clearTimeout(panel._megaCloseTimer);
+    document.querySelectorAll('.goodmi-desktop-mega--open').forEach(function (open) {
+      if (open !== panel) closeMega(open);
+    });
+    panel.classList.add('goodmi-desktop-mega--open');
+    panel.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMega(panel) {
+    panel.classList.remove('goodmi-desktop-mega--open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  function scheduleMegaClose(panel) {
+    clearTimeout(panel._megaCloseTimer);
+    panel._megaCloseTimer = setTimeout(function () { closeMega(panel); }, 150);
+  }
+
+  function initMega() {
+    // Пункты пока не имеют data-mega-trigger — сработает автоматически,
+    // как только он появится у нужного <li>, вместе с парным
+    // data-mega-panel в одноимённом блоке .goodmi-desktop-mega
+    var triggers = document.querySelectorAll('[data-mega-trigger]');
+    triggers.forEach(function (trigger) {
+      var key = trigger.getAttribute('data-mega-trigger');
+      var panel = document.querySelector('[data-mega-panel="' + key + '"]');
+      if (!panel) return;
+
+      trigger.addEventListener('mouseenter', function () { openMega(panel); });
+      trigger.addEventListener('mouseleave', function () { scheduleMegaClose(panel); });
+      panel.addEventListener('mouseenter', function () { clearTimeout(panel._megaCloseTimer); });
+      panel.addEventListener('mouseleave', function () { scheduleMegaClose(panel); });
+
+      trigger.addEventListener('focusin', function () { openMega(panel); });
+      trigger.addEventListener('focusout', function (e) {
+        if (!trigger.contains(e.relatedTarget) && !panel.contains(e.relatedTarget)) scheduleMegaClose(panel);
+      });
+      panel.addEventListener('focusout', function (e) {
+        if (!trigger.contains(e.relatedTarget) && !panel.contains(e.relatedTarget)) scheduleMegaClose(panel);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('.goodmi-desktop-mega--open').forEach(closeMega);
+    });
+  }
+
+  function init() {
+    var moreBtn = document.getElementById('goodmiNavMoreBtn');
+    if (moreBtn) moreBtn.addEventListener('click', toggleDropdown);
+
+    initMega();
+
+    document.addEventListener('click', function (e) {
+      var moreItem = document.getElementById('goodmiNavMore');
+      if (moreItem && !moreItem.contains(e.target)) closeDropdown();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeDropdown();
+    });
+
+    var resizeTimer;
+    var scheduleRecalc = function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(recalc, 120);
+    };
+
+    window.addEventListener('resize', scheduleRecalc);
+
+    if (window.ResizeObserver) {
+      var nav = document.querySelector('.goodmi-desktop-nav');
+      if (nav) new ResizeObserver(scheduleRecalc).observe(nav);
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(recalc);
+    }
+
+    recalc();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
