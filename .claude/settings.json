@@ -10,5 +10,20 @@
       "mcp__pixelplus-mcp__pixelplus_get_queries",
       "mcp__pixelplus__pixelplus_get_queries"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/session-start-git-pull.sh",
+            "shell": "bash",
+            "timeout": 30,
+            "statusMessage": "Синхронизация с GitHub (git pull)..."
+          }
+        ]
+      }
+    ]
   }
 }

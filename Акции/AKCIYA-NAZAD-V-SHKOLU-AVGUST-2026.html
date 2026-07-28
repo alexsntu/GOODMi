@@ -1,0 +1,500 @@
+<!-- AKCIYA-NAZAD-V-SHKOLU V.9.26 TIME-CIRCUIT (период 03.08.2026-31.08.2026) -->
+{literal}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Share+Tech+Mono&family=Manrope:wght@400;500;700&display=swap');
+
+    .btts-wrap {
+        --navy-deep: #080B1A;
+        --navy-panel: #0F1530;
+        --navy-card: #141C3D;
+        --cyan: #4FE3F5;
+        --orange: #FF6B35;
+        --amber: #FFC93C;
+        --text-main: #F2F4F8;
+        --text-mute: #8C93B0;
+        --line: rgba(79,227,245,0.25);
+        position: relative;
+        max-width: 100%;
+        margin: 0 auto 30px auto;
+        background:
+            radial-gradient(ellipse at 20% 0%, rgba(79,227,245,0.10), transparent 55%),
+            radial-gradient(ellipse at 85% 15%, rgba(255,107,53,0.12), transparent 50%),
+            var(--navy-deep);
+        border-radius: 24px;
+        padding: 50px 40px;
+        box-sizing: border-box;
+        overflow: hidden;
+        font-family: 'Manrope', Arial, sans-serif;
+        color: var(--text-main);
+        box-shadow: 0 10px 50px rgba(0,0,0,0.4);
+        text-align: left;
+    }
+    .btts-wrap * { box-sizing: border-box; }
+
+.btts-stars {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+            radial-gradient(1.5px 1.5px at 10% 12%, rgba(255,255,255,0.6), transparent),
+            radial-gradient(1.5px 1.5px at 30% 30%, rgba(255,255,255,0.4), transparent),
+            radial-gradient(1px 1px at 60% 8%, rgba(255,255,255,0.5), transparent),
+            radial-gradient(1.5px 1.5px at 80% 22%, rgba(255,255,255,0.35), transparent),
+            radial-gradient(1px 1px at 92% 5%, rgba(255,255,255,0.5), transparent),
+            radial-gradient(1.5px 1.5px at 45% 18%, rgba(255,255,255,0.3), transparent);
+        opacity: 0.8;
+        z-index: 0;
+    }
+
+    .btts-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+
+.btts-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--cyan);
+        margin-bottom: 16px;
+    }
+    .btts-eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 8px 2px rgba(79,227,245,0.7);
+        flex-shrink: 0;
+    }
+
+    .btts-header h1 {
+        font-family: 'Chakra Petch', Arial, sans-serif;
+        font-style: italic;
+        font-weight: 700;
+        font-size: 2.8rem;
+        line-height: 1.1;
+        margin: 0 0 12px 0;
+        background: linear-gradient(90deg, var(--amber), var(--orange) 60%, #FF9466);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .btts-sub {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--cyan);
+        max-width: 560px;
+        margin: 0 0 32px 0;
+        text-shadow: 0 0 18px rgba(79,227,245,0.35);
+    }
+
+.btts-circuit {
+        display: flex;
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 40px;
+    }
+    .btts-circuit .cell { flex: 1; background: var(--navy-panel); padding: 14px 18px; }
+    .btts-circuit .label {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 10.5px;
+        letter-spacing: 1.5px;
+        color: var(--text-mute);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+    .btts-circuit .value {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 1.15rem;
+        color: var(--cyan);
+        text-shadow: 0 0 6px rgba(79,227,245,0.5);
+    }
+
+.btts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 44px; }
+
+    .btts-card {
+        background: var(--navy-card);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 22px 22px 24px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+    .btts-card:hover { transform: translateY(-4px); }
+    .btts-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .btts-card.c1::before, .btts-card.c4::before { background: var(--cyan); }
+    .btts-card.c2::before { background: var(--orange); }
+    .btts-card.c3::before { background: var(--amber); }
+    .btts-card.c1:hover, .btts-card.c4:hover { border-color: rgba(79,227,245,0.4); }
+    .btts-card.c2:hover { border-color: rgba(255,107,53,0.4); }
+    .btts-card.c3:hover { border-color: rgba(255,201,60,0.4); }
+
+    .btts-tag {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 10.5px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 3px 9px;
+        border-radius: 4px;
+        display: inline-block;
+        align-self: flex-start;
+        margin-bottom: 14px;
+    }
+    .btts-card.c1 .btts-tag, .btts-card.c4 .btts-tag { color: var(--cyan); background: rgba(79,227,245,0.12); }
+    .btts-card.c2 .btts-tag { color: var(--orange); background: rgba(255,107,53,0.14); }
+    .btts-card.c3 .btts-tag { color: var(--amber); background: rgba(255,201,60,0.14); }
+
+    .btts-card h3 {
+        font-family: 'Chakra Petch', Arial, sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        font-size: 1.25rem;
+        line-height: 1.28;
+        margin: 0 0 10px 0;
+        color: #fff;
+    }
+    .btts-card p { font-size: 0.9rem; color: var(--text-mute); line-height: 1.55; margin: 0 0 16px 0; flex-grow: 1; }
+
+    .btts-card .num {
+        position: absolute;
+        right: 18px;
+        bottom: 14px;
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 2.4rem;
+        color: rgba(255,255,255,0.05);
+        line-height: 1;
+    }
+
+    .btts-card-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        text-decoration: none;
+        align-self: flex-start;
+        transition: opacity 0.2s ease;
+    }
+    .btts-card.c1 .btts-card-link, .btts-card.c4 .btts-card-link { color: var(--cyan); }
+    .btts-card.c2 .btts-card-link { color: var(--orange); }
+    .btts-card.c3 .btts-card-link { color: var(--amber); }
+    .btts-card-link:hover { opacity: 0.65; text-decoration: none; }
+
+.btts-bags-title {
+        font-family: 'Chakra Petch', Arial, sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #fff;
+        margin: 0 0 6px 0;
+    }
+    .btts-bags-sub { font-size: 0.9rem; color: var(--text-mute); margin-bottom: 22px; }
+
+    .btts-bags-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 44px; }
+
+    .btts-bag-card {
+        background: var(--navy-card);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+    .btts-bag-card:hover { transform: translateY(-4px); border-color: rgba(79,227,245,0.4); }
+
+    .btts-bag-img {
+        background: #f2f0eb;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+    .btts-bag-img img { max-width: 88%; max-height: 88%; object-fit: contain; }
+
+    .btts-bag-title { font-size: 0.8rem; font-weight: 600; line-height: 1.35; color: var(--text-main); margin-bottom: 10px; min-height: 34px; }
+
+    .btts-bag-btn {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        border: 1px solid var(--cyan);
+        color: var(--cyan);
+        border-radius: 6px;
+        padding: 5px 14px;
+        text-decoration: none;
+        margin-top: auto;
+        transition: all 0.25s ease;
+    }
+    .btts-bag-btn:hover { background: var(--cyan); color: var(--navy-deep); text-decoration: none; }
+
+.btts-rules {
+        background: var(--navy-panel);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 28px 30px;
+    }
+    .btts-rules-title {
+        font-family: 'Chakra Petch', Arial, sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #fff;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btts-rules-title svg { color: var(--amber); flex-shrink: 0; }
+    .btts-rules-intro { font-size: 0.85rem; color: var(--text-mute); line-height: 1.6; margin: 0 0 14px 0; }
+    .btts-rules-intro a, .btts-rules-list a { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed rgba(79,227,245,0.4); }
+    .btts-rules-intro a:hover, .btts-rules-list a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+    .btts-rules-list { margin: 0; padding: 0; list-style: none; }
+    .btts-rules-list li { border-top: 1px dashed rgba(255,255,255,0.1); padding: 13px 0; font-size: 0.85rem; color: var(--text-mute); line-height: 1.6; }
+    .btts-rules-list li:first-child { border-top: none; }
+    .btts-rules-list strong { color: var(--cyan); }
+
+.btts-footer {
+        margin-top: 36px;
+        padding-top: 22px;
+        border-top: 1px dashed rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+    .btts-footer-brand { font-family: 'Chakra Petch', Arial, sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: 1px; color: #fff; }
+    .btts-footer-brand span { color: var(--orange); }
+    .btts-footer-cta {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--navy-deep);
+        background: var(--amber);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 700;
+    }
+
+@media (max-width: 768px) {
+        .btts-wrap { padding: 32px 18px; }
+        .btts-header h1 { font-size: 2rem; }
+        .btts-sub { font-size: 1rem; margin-bottom: 24px; }
+        .btts-circuit { flex-direction: column; }
+        .btts-grid { grid-template-columns: 1fr; gap: 14px; }
+        .btts-card { padding: 20px; }
+        .btts-bags-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btts-bag-title { font-size: 0.75rem; min-height: 0; }
+        .btts-rules { padding: 22px 18px; }
+        .btts-footer { flex-direction: column; align-items: flex-start; }
+    }
+</style>
+{/literal}
+
+<div class="btts-wrap">
+    <div class="btts-stars"></div>
+
+    <div class="btts-content">
+
+        <div class="btts-header">
+            <div class="btts-eyebrow">Акция активна</div>
+            <h1>Назад в школу</h1>
+            <p class="btts-sub">Гигаватты скидок и подарков</p>
+        </div>
+
+<div class="btts-circuit">
+            <div class="cell">
+                <div class="label">Старт акции</div>
+                <div class="value">03.08.26</div>
+            </div>
+            <div class="cell">
+                <div class="label">Пункт назначения</div>
+                <div class="value">01.09.26</div>
+            </div>
+            <div class="cell">
+                <div class="label">Финиш акции</div>
+                <div class="value">31.08.26</div>
+            </div>
+        </div>
+
+<div class="btts-grid">
+
+            <div class="btts-card c1">
+                <span class="btts-tag">Рюкзаки &#183; 12 моделей</span>
+                <h3>Экипировка на 5<br>с плюсом</h3>
+                <p>1000 бонусов на счёт GOODMi при покупке любого из 12 рюкзаков, участвующих в акции.</p>
+                <a href="#backschool-bags" class="btts-card-link">&#8594; Смотреть рюкзаки</a>
+                <div class="num">01</div>
+            </div>
+
+            <div class="btts-card c2">
+                <span class="btts-tag">Заказ от 25 000 &#8381;</span>
+                <h3>Будь заряжен<br>к учебе</h3>
+                <p>Power Bank 10 000 мАч в подарок к любому заказу от 25 000 &#8381;. Пока подарки в наличии.</p>
+                <a href="https://goodmi.ru/" target="_blank" class="btts-card-link">&#8594; В каталог</a>
+                <div class="num">02</div>
+            </div>
+
+            <div class="btts-card c3">
+                <span class="btts-tag">Скидка до 40%</span>
+                <h3>Выгода,<br>которую заметно</h3>
+                <p>Скидки до 40% на специальную подборку товаров к учебному году &#8211; успей забрать по выгодной цене.</p>
+                <a href="https://goodmi.ru/vozmi-s-soboy-v-shkolu/" target="_blank" class="btts-card-link">&#8594; Смотреть подборку</a>
+                <div class="num">03</div>
+            </div>
+
+            <div class="btts-card c4">
+                <span class="btts-tag">Покупка от 5000 &#8381;</span>
+                <h3>Забирай меня<br>скорее</h3>
+                <p>Крутите лототрон в магазине и забирайте приз: один из 10 суперпризов, бонусы или фирменный мерч GOODMi.</p>
+                <a href="#backschool-rules" class="btts-card-link">&#8594; Условия акции</a>
+                <div class="num">04</div>
+            </div>
+
+        </div>
+
+<div id="backschool-bags">
+            <div class="btts-bags-title">12 моделей рюкзаков к акции</div>
+            <div class="btts-bags-sub">Купи любой из них и получи 1000 бонусов на счёт GOODMi</div>
+
+            <div class="btts-bags-grid">
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-dinosaur-125-155cm/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/107/O1CN01YyFi4s28vJ0VAlLbR___725677994_jpg.webp" alt="Рюкзак школьный Kalay Dinosaur 125-155 см">
+                    </a>
+                    <div class="btts-bag-title">Kalay Dinosaur 125&#8211;155 см</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-dinosaur-125-155cm/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-unicorn-110-145cm/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/71/756dea8c_6abc_40d5_9bae_ebb36b51eaf0_jpeg.webp" alt="Рюкзак школьный Kalay Unicorn 110-145 см">
+                    </a>
+                    <div class="btts-bag-title">Kalay Unicorn 110&#8211;145 см</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-unicorn-110-145cm/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-18l-135cm-rose/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/108/6_mtou-4w_jpg.webp" alt="Рюкзак школьный Kalay 18л 135 см Rose">
+                    </a>
+                    <div class="btts-bag-title">Kalay 18Л 135 см Rose</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-18l-135cm-rose/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-160cm-5-9-klass-blue/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/108/6_gr6l-yt_jpg.webp" alt="Рюкзак школьный Kalay 160 см 5-9 класс Blue">
+                    </a>
+                    <div class="btts-bag-title">Kalay 160 см 5&#8211;9 класс Blue</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-160cm-5-9-klass-blue/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-160cm-5-9-klass-purple/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/108/2_jq3k-k3_jpg.webp" alt="Рюкзак школьный Kalay 160 см 5-9 класс Purple">
+                    </a>
+                    <div class="btts-bag-title">Kalay 160 см 5&#8211;9 класс Purple</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-160cm-5-9-klass-purple/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-detskiy-tanjiezhe-blue-20l/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/116/11_j0ch-8z_jpg.webp" alt="Рюкзак детский Tanjiezhe 20л Blue">
+                    </a>
+                    <div class="btts-bag-title">Tanjiezhe 20Л Blue</div>
+                    <a href="https://goodmi.ru/ryukzak-detskiy-tanjiezhe-blue-20l/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-160cm-5-9-klass-bluepurple/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/108/3_l7mp-59_jpg.webp" alt="Рюкзак школьный Kalay 160 см 5-9 класс Blue/Purple">
+                    </a>
+                    <div class="btts-bag-title">Kalay 160 см 5&#8211;9 класс Blue/Purple</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalay-160cm-5-9-klass-bluepurple/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-detskiy-tanjiezhe-violet-20l/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/116/12_avth-zd_jpg.webp" alt="Рюкзак детский Tanjiezhe 20л Violet">
+                    </a>
+                    <div class="btts-bag-title">Tanjiezhe 20Л Violet</div>
+                    <a href="https://goodmi.ru/ryukzak-detskiy-tanjiezhe-violet-20l/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-temno-siniy/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/119/1_yewl-ri_jpg.webp" alt="Рюкзак Sunshine с ортопедической спинкой, тёмно-синий">
+                    </a>
+                    <div class="btts-bag-title">Sunshine ортопедический, тёмно-синий</div>
+                    <a href="https://goodmi.ru/ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-temno-siniy/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-fioletovyy/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/119/4_u1n5-k9_jpg.webp" alt="Рюкзак Sunshine с ортопедической спинкой, фиолетовый">
+                    </a>
+                    <div class="btts-bag-title">Sunshine ортопедический, фиолетовый</div>
+                    <a href="https://goodmi.ru/ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-fioletovyy/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-svetlo-siniy/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/119/3_1j0j-wg_jpg.webp" alt="Рюкзак Sunshine с ортопедической спинкой, светло-синий">
+                    </a>
+                    <div class="btts-bag-title">Sunshine ортопедический, светло-синий</div>
+                    <a href="https://goodmi.ru/ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-svetlo-siniy/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+                <div class="btts-bag-card">
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalayang-siniy/" target="_blank" class="btts-bag-img">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/132/Screenshot_2_2e2x-if_png.webp" alt="Рюкзак школьный Kalayang синий">
+                    </a>
+                    <div class="btts-bag-title">Kalayang синий</div>
+                    <a href="https://goodmi.ru/ryukzak-shkolnyy-kalayang-siniy/" target="_blank" class="btts-bag-btn">Купить</a>
+                </div>
+
+            </div>
+        </div>
+
+<div id="backschool-rules" class="btts-rules">
+            <div class="btts-rules-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Условия акции «Назад в школу»
+            </div>
+            <p class="btts-rules-intro">Акция действует <strong>с 03.08.26 по 31.08.26</strong> во всех магазинах GOODMi в Крыму (Севастополь, Симферополь, Ялта) и при заказе на сайте <a href="https://goodmi.ru/" target="_blank">goodmi.ru</a>.</p>
+            <ul class="btts-rules-list">
+                <li><strong>Рюкзаки:</strong> 1000 бонусов начисляются автоматически при покупке любой из 12 моделей рюкзаков, участвующих в акции.</li>
+                <li><strong>Повербанк в подарок:</strong> Power Bank 10 000 мАч дарится при оформлении заказа от 25 000 &#8381;. Количество подарков ограничено, акция действует до её окончания или пока подарки в наличии.</li>
+                <li><strong>Скидка до 40%:</strong> распространяется на товары из специальной подборки «Возьми с собой в школу». Скидка не суммируется с другими акциями и специальными предложениями.</li>
+                <li><strong>Лототрон:</strong> розыгрыш проводится офлайн в магазинах GOODMi при предъявлении чека на покупку от 5000 &#8381;. Один чек &#8211; одна попытка. Призовой фонд: 10 суперпризов, бонусные баллы, фирменный мерч GOODMi. Приз в денежном эквиваленте не выдаётся и не пересылается доставкой.</li>
+            </ul>
+        </div>
+
+<div class="btts-footer">
+            <div class="btts-footer-brand">GOOD<span>Mi</span></div>
+            <div class="btts-footer-cta">До 31 августа</div>
+        </div>
+
+    </div>
+</div>
