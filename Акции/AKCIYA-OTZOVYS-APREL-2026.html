@@ -1,4 +1,4 @@
-﻿<!-- AKCIYA-OTZOVYS V.7.26 (период 01.07.2026-31.07.2026) -->
+﻿<!-- AKCIYA-OTZOVYS V.8.26 (период 01.08.2026-31.08.2026) -->
 {literal}
 <style>
     
@@ -119,6 +119,12 @@
         max-width: 760px;
         margin: 0 auto;
     }
+    .prizes-grid-1 {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+        margin: 0 auto;
+    }
+    .prizes-grid-1 .hyperos-prize-img { width: 220px; }
     .prize-card {
         background: #ffffff;
         border: 1px solid #efe5ff;
@@ -330,6 +336,45 @@
         color: var(--mi-text-gray);
         font-size: 0.95rem;
         text-align: center;
+    }
+
+.participants-archive {
+        max-width: 900px;
+        margin: 24px auto 0 auto;
+        text-align: left;
+    }
+    .participants-archive summary {
+        cursor: pointer;
+        list-style: none;
+        font-weight: 600;
+        color: var(--mi-purple);
+        background: #f8f5ff;
+        border: 1px solid #efe5ff;
+        border-radius: 12px;
+        padding: 14px 20px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .participants-archive summary::-webkit-details-marker { display: none; }
+    .participants-archive summary::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid var(--mi-purple);
+        transition: transform 0.2s;
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+    .participants-archive[open] summary::after {
+        transform: rotate(180deg);
+    }
+    .participants-archive .participants-subtitle {
+        text-align: center;
+        margin-top: 16px;
     }
 
 .promo-rules-block {
@@ -573,7 +618,7 @@
     <div class="hyperos-content">
         
         <div class="hyperos-top-banner">
-            <img src="https://goodmi.ru/images/promotion/153/otziv-07-26.jpg" alt="Акция Отзовись">
+            <img src="https://goodmi.ru/images/promotion/155/%D0%BE%D1%82%D0%B7%D0%BE%D0%B2%D0%B8%D1%81%D1%8C-%D0%B0%D0%BA%D1%86%D0%B8%D1%8F-%D0%B0%D0%B2%D0%B3%D1%83%D1%81%D1%8226.jpg" alt="Акция Отзовись">
         </div>
 
 <div class="hyperos-header">
@@ -581,36 +626,24 @@
 
             <div class="hyperos-date-badge">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-                <span>с 01.07.26 по 31.07.26</span>
+                <span>с 01.08.26 по 31.08.26</span>
             </div>
 
             <div class="hyperos-date-badge" style="background-color: rgba(255, 105, 0, 0.08); color: var(--mi-orange); border-color: rgba(255, 105, 0, 0.2); margin-left: 10px;">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.24 14.24L11 13V7h1.5v5.25l4.5 2.67-.76 1.32z"/></svg>
-                <span>Розыгрыш 04.08.26 в 16:00</span>
+                <span>Розыгрыш 04.09.26 в 16:00</span>
             </div>
 
             <p>Поделись мнением о покупке и прими участие в ежемесячном розыгрыше подарков!</p>
         </div>
 
 <div class="hyperos-prizes-section">
-            <div class="prizes-section-label">Призы этого месяца</div>
-            <div class="prizes-grid prizes-grid-3">
+            <div class="prizes-section-label">Главный приз месяца</div>
+            <div class="prizes-grid prizes-grid-1">
                 <div class="prize-card">
-                    <div class="prize-card-name"><a href="https://goodmi.ru/vneshniy-akkumulyator-power-bank-xiaomi-lite-10000-mah-22-5w-p16zm/" target="_blank" style="color: inherit; text-decoration: none;">Повербанк Xiaomi 10000 мАч</a></div>
-                    <a href="https://goodmi.ru/vneshniy-akkumulyator-power-bank-xiaomi-lite-10000-mah-22-5w-p16zm/" target="_blank">
-                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/105/1_69xm-n5_p739-ba_png.webp" alt="Повербанк Xiaomi 10000 мАч" class="hyperos-prize-img">
-                    </a>
-                </div>
-                <div class="prize-card">
-                    <div class="prize-card-name"><a href="https://goodmi.ru/vneshniy-akkumulyator-xiaomi-22-5w-20000mah-pb2020mi-chernyy/" target="_blank" style="color: inherit; text-decoration: none;">Повербанк Xiaomi 20000 мАч</a></div>
-                    <a href="https://goodmi.ru/vneshniy-akkumulyator-xiaomi-22-5w-20000mah-pb2020mi-chernyy/" target="_blank">
-                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/135/8_e3dy-nd_jpg.webp" alt="Повербанк Xiaomi 20000 мАч" class="hyperos-prize-img">
-                    </a>
-                </div>
-                <div class="prize-card">
-                    <div class="prize-card-name"><a href="https://goodmi.ru/vneshniy-akkumulyator-perfeo-waterfall-50000mah-black/" target="_blank" style="color: inherit; text-decoration: none;">Повербанк Perfeo 50000 мАч</a></div>
-                    <a href="https://goodmi.ru/vneshniy-akkumulyator-perfeo-waterfall-50000mah-black/" target="_blank">
-                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/153/19_btk2-dx_jpg.webp" alt="Повербанк Perfeo 50000 мАч" class="hyperos-prize-img">
+                    <div class="prize-card-name"><a href="https://goodmi.ru/umnaya-kolonka-yandeks-stanciya-layt-2-sinyaya-yndx-00026/" target="_blank" style="color: inherit; text-decoration: none;">Умная колонка Яндекс Станция Лайт 2</a></div>
+                    <a href="https://goodmi.ru/umnaya-kolonka-yandeks-stanciya-layt-2-sinyaya-yndx-00026/" target="_blank">
+                        <img src="https://goodmi.ru/images/thumbnails/450/450/detailed/109/7_0wlq-60.jpg" alt="Умная колонка Яндекс Станция Лайт 2" class="hyperos-prize-img">
                     </a>
                 </div>
             </div>
@@ -702,7 +735,7 @@
 
 <div class="participants-wrapper">
             <div class="participants-title">Список участников</div>
-            <div class="participants-subtitle">оставивших отзывы с 1 июля по 31 июля 2026<br>Данные актуальны на 31.07.2026</div>
+            <div class="participants-subtitle">оставивших отзывы с 1 августа по 31 августа 2026<br>Данные актуальны на 05.08.2026</div>
 
             <div class="participants-scroll-box">
                 <table class="hyperos-table">
@@ -715,6 +748,27 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td colspan="4" class="table-empty-notice">Участников пока нет &#8211; станьте первым! Оставьте отзыв и получите шанс выиграть умную колонку Яндекс Станция Лайт 2.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <details class="participants-archive">
+                <summary>Архив: участники акции за июль 2026 (93 человека)</summary>
+                <div class="participants-subtitle">оставивших отзывы с 1 июля по 31 июля 2026<br>Данные актуальны на 31.07.2026</div>
+                <div class="participants-scroll-box">
+                    <table class="hyperos-table">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>ФИО</th>
+                                <th>Источник</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <tr>
                             <td>1</td>
                             <td>Олег Иванов</td>
@@ -1273,9 +1327,10 @@
                             <td><a href="https://goodmi.ru/vneshniy-akkumulyator-hoco-j142-100000mah-22-5w-black/" target="_blank" rel="nofollow noopener">Товар на сайте</a></td>
                             <td>31.07</td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
         </div>
 
 <div class="promo-rules-block">
@@ -1283,8 +1338,8 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Условия участия в акции
             </div>
-            <p class="promo-rules-intro">Чтобы участвовать в розыгрыше акции «Отзовись» в период с <strong>01.07.26 по 31.07.26</strong> необходимо оставить отзыв на одном из следующих ресурсов:</p>
-            <p class="promo-rules-intro">Розыгрыш призов состоится <strong>04 августа 2026 года в 16:00</strong> в прямом эфире группы ВКонтакте.</p>
+            <p class="promo-rules-intro">Чтобы участвовать в розыгрыше акции «Отзовись» в период с <strong>01.08.26 по 31.08.26</strong> необходимо оставить отзыв на одном из следующих ресурсов:</p>
+            <p class="promo-rules-intro">Розыгрыш призов состоится <strong>04 сентября 2026 года в 16:00</strong> в прямом эфире группы ВКонтакте.</p>
             <ul class="promo-rules-list">
                 <li>Яндекс Карты</li>
                 <li>Авито</li>
