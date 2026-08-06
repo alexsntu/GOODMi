@@ -81,6 +81,75 @@
     }
     .b2s-date-badge svg { width: 18px; height: 18px; fill: currentColor; }
 
+.b2s-cta-teaser {
+        --ctq-navy: #0a0e1e;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        text-align: left;
+        background:
+            radial-gradient(ellipse at 10% -20%, rgba(79,227,245,0.22), transparent 55%),
+            radial-gradient(ellipse at 95% 120%, rgba(255,201,60,0.18), transparent 55%),
+            var(--ctq-navy);
+        border: 1px solid rgba(79,227,245,0.35);
+        color: #eaf6ff;
+        border-radius: var(--b2s-card-radius);
+        padding: 20px 26px;
+        max-width: 820px;
+        margin: 0 auto 30px auto;
+        box-shadow: 0 12px 34px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.02) inset;
+        cursor: pointer;
+        transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .b2s-cta-teaser:hover { border-color: rgba(255,201,60,0.5); box-shadow: 0 16px 40px rgba(0,0,0,0.34); }
+    .b2s-cta-teaser-icon {
+        flex-shrink: 0;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(79,227,245,0.12);
+        border: 1px solid rgba(79,227,245,0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: b2sCtaPulse 2.2s ease-in-out infinite;
+    }
+    .b2s-cta-teaser-icon svg { width: 26px; height: 26px; fill: #ffc93c; }
+    @keyframes b2sCtaPulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(79,227,245,0.35); }
+        50% { box-shadow: 0 0 0 8px rgba(79,227,245,0); }
+    }
+    .b2s-cta-teaser-text { flex-grow: 1; }
+    .b2s-cta-teaser-title { font-size: 1.05rem; font-weight: 700; margin: 0 0 4px 0; color: #fff; }
+    .b2s-cta-teaser-title span { color: #ffc93c; }
+    .b2s-cta-teaser-sub { font-size: 0.88rem; line-height: 1.5; margin: 0; color: #8c93b0; }
+    .b2s-cta-teaser-btn {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #ff6b35, #ffc93c);
+        color: #14101a;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 12px 20px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(255,107,53,0.35);
+        transition: filter 0.2s ease;
+        white-space: nowrap;
+    }
+    .b2s-cta-teaser-btn:hover { filter: brightness(1.1); }
+    .b2s-cta-teaser-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .b2s-quiz.is-highlighted { animation: b2sQuizFlash 1.4s ease; }
+    @keyframes b2sQuizFlash {
+        0%, 100% { box-shadow: 0 20px 50px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.03); }
+        30% { box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,201,60,0.5); }
+    }
+
 .b2s-raffle-banner {
         display: flex;
         align-items: center;
@@ -422,6 +491,9 @@
         .b2s-wrap { padding: 32px 15px; }
         .b2s-header h1 { font-size: 2rem; }
         .b2s-header p { font-size: 1rem; }
+        .b2s-cta-teaser { flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 20px 18px; }
+        .b2s-cta-teaser-icon { display: none; }
+        .b2s-cta-teaser-btn { width: 100%; justify-content: center; }
         .b2s-raffle-banner { flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 14px 18px 16px 18px; }
         .b2s-raffle-icon { display: none; }
         .b2s-raffle-title { font-size: 0.95rem; margin: 0 0 4px 0; }
@@ -454,6 +526,17 @@
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
                 <span>Акция действует с 03.08.26 по 31.08.26</span>
             </div>
+        </div>
+
+<div class="b2s-cta-teaser" id="b2s-cta-teaser" role="button" tabindex="0">
+            <div class="b2s-cta-teaser-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.11C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg>
+            </div>
+            <div class="b2s-cta-teaser-text">
+                <p class="b2s-cta-teaser-title">Проверь себя и получи <span>до 1000 бонусов</span> на покупки</p>
+                <p class="b2s-cta-teaser-sub">Мини-игра из 5 вопросов ниже на странице &#8211; 1 минута, и бонус GOODMi у вас на счету</p>
+            </div>
+            <button type="button" class="b2s-cta-teaser-btn" id="b2s-cta-teaser-btn">Проверить себя <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h14.17l-4.88-4.88a1 1 0 011.42-1.41l6.59 6.58a1 1 0 010 1.42l-6.59 6.58a1 1 0 01-1.42-1.41L18.17 14H4a1 1 0 010-2z"/></svg></button>
         </div>
 
 <div class="b2s-raffle-banner">
@@ -1390,5 +1473,22 @@
             showStep('quiz');
         });
     });
+
+    var ctaTeaser = document.getElementById('b2s-cta-teaser');
+    if (ctaTeaser) {
+        var scrollToQuiz = function() {
+            root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            root.classList.remove('is-highlighted');
+            void root.offsetWidth;
+            root.classList.add('is-highlighted');
+        };
+        ctaTeaser.addEventListener('click', scrollToQuiz);
+        ctaTeaser.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                scrollToQuiz();
+            }
+        });
+    }
 })();
 </script>
