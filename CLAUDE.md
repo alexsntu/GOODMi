@@ -83,24 +83,7 @@ All category and page blocks follow a shared structure:
 
 ## Navigation / Footer Menu Blocks
 
-`Меню/` holds site-chrome HTML (not SEO content blocks) — deployed as separate CS-Cart Design → Layouts HTML blocks, one per file/location. Different architecture from the category/page blocks above: these files carry **no inline `<style>`** — all their CSS lives in `CSS/goodmi-styles.css` (sections 16–17, `.goodmi-*` classes), loaded globally via Дизайн → Темы → Свой CSS. Footer files use Smarty template syntax for links (`{"..."|fn_url}`, `page_id=N`) but no longer need `{literal}...{/literal}` since there's no `<style>` block left to protect from the Smarty parser.
-
-`Контакты.html` (desktop) and `Контакты МОБ.html` (mobile) share the base class `.goodmi-footer-contacts` but render on the same page simultaneously (theme toggles visibility via CSS breakpoints) — the mobile file adds a `.goodmi-footer-contacts--mobile` modifier class on its wrapper `<div>` so the two don't collide in the shared stylesheet. Keep that modifier when editing either file.
-
-```
-Меню/Дополнительное меню/menu-desktop.html   # Desktop catalog nav — 10 flat items + adaptive "ещё" overflow menu; CSS/JS scaffolding for mega-panels ready (add via data-mega-trigger/data-mega-panel, no script changes needed)
-Меню/Футер/Информация.html                    # Legal links (оферта, конфиденциальность, карта сайта) + Yandex Maps rating widget
-Меню/Футер/Контакты.html                      # Desktop footer contacts: phone, email, socials (MAX/VK/TG/Zen/Rutube/YouTube), address
-Меню/Футер/Контакты МОБ.html                  # Mobile variant of the above — always expanded, not collapsed into an accordion
-Меню/Футер/О нас.html                         # Footer column: отзывы, почему мы, о нас, бренды, сервис, контакты, как оставить отзыв
-Меню/Футер/Покупателям.html                   # Footer column: каталог, блог, акции, бонусы, доставка, возврат, гарантия, кредит, трейд-ин, FAQ
-```
-
-Shared conventions across all files in `Меню/`:
-- CSS custom properties `--goodmi-text-link` (#a1a1a6), `--goodmi-accent` (#ff6900), `--goodmi-font` — scoped per block, dark-footer-background palette
-- Underline-on-hover link effect (`::before` pseudo-element, orange, left-to-right)
-- Store constants (phone, email, address, socials, `sameAs`) must match the verbatim values in Project Overview above
-- Em dash prohibition applies to visible copy, not CSS/JS comments — comments in `menu-desktop.html` use `—` freely and that's fine
+`Меню/` holds site-chrome HTML (not SEO content blocks), deployed as separate CS-Cart Design → Layouts HTML blocks. See `Меню/CLAUDE.md` for file list and conventions.
 
 ## SEO Standards
 
@@ -140,12 +123,15 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 Планшеты:          https://goodmi.ru/planshetyi/
 Ноутбуки:          https://goodmi.ru/noutbuki/
 Смарт-часы:        https://goodmi.ru/smart-chasy/
-Наушники:          https://goodmi.ru/naushniki-i-kolonki/
-Пылесосы:          https://goodmi.ru/pylesos/
+Наушники (беспроводные): https://goodmi.ru/besprovodnye-naushniki/
+Наушники (проводные):    https://goodmi.ru/provodnye-naushniki/
+Колонки:           https://goodmi.ru/akustika-i-kolonki/
+Пылесосы:          https://goodmi.ru/pylesosy-i-uborka/
 Роботы-пылесосы:   https://goodmi.ru/roboty-pylesosy/
+Вертикальные пылесосы: https://goodmi.ru/vertikalnye-pylesosy/
 Телевизоры:        https://goodmi.ru/televizory-xiaomi/
-Умный дом:         https://goodmi.ru/umnyj-dom/
-Аксессуары:        https://goodmi.ru/aksessuary/
+Умный дом:         https://goodmi.ru/smart-ustroystva-i-umnyiy-dom/
+Аксессуары:        https://goodmi.ru/aksessuaryi/
 Мониторы:          https://goodmi.ru/monitory-xiaomi/
 Повербанки:        https://goodmi.ru/power-banks/
 Аэрогриль:         https://goodmi.ru/gril/
@@ -208,14 +194,7 @@ Enforced by `AGENTS.md` and `.cursor/rules/git-commit-language.mdc` (`alwaysAppl
 
 ## MCP Server (`cscart-mcp-server/`)
 
-Node.js MCP server exposing CS-Cart API as MCP tools. See `cscart-mcp-server/CLAUDE.md` for full details.
-
-```bash
-cd cscart-mcp-server
-npm start        # production
-npm run dev      # nodemon watch mode
-npm test         # Jest tests
-```
+Node.js MCP server exposing CS-Cart API as MCP tools. See `cscart-mcp-server/CLAUDE.md` for full details and dev commands.
 
 Requires `.env` with `CSCART_API_URL`, `CSCART_API_EMAIL`, `CSCART_API_KEY`. PixelPlus SEO tools also require `PIXELPLUS_API_TOKEN`.
 

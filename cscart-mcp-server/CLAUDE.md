@@ -2,40 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Development Commands
-
-### Core Development
-```bash
-npm start              # Run the MCP server in production mode
-npm run dev            # Run the server with nodemon for development
-npm test               # Run Jest tests
-npm run setup          # Initial project setup (creates directories, copies .env)
-```
-
-### Docker Operations
-```bash
-npm run docker:build       # Build standard Docker image
-npm run docker:build:prod  # Build optimized production image
-npm run docker:run         # Start with docker-compose
-npm run docker:stop        # Stop docker-compose services
-npm run docker:logs        # View container logs
-```
-
 ## Architecture
 
-### Core Structure
-This is a **Model Context Protocol (MCP) server** that provides tools for managing CS-Cart e-commerce stores. The server uses the `@modelcontextprotocol/sdk` to expose CS-Cart API functionality as MCP tools.
-
-**Main entry point**: `src/index.js` - Contains the `CSCartMCPServer` class that implements the MCP protocol
+This is a **Model Context Protocol (MCP) server** that provides tools for managing CS-Cart e-commerce stores, using `@modelcontextprotocol/sdk`.
 
 ### Key Components
 
-1. **CSCartMCPServer Class** (`src/index.js:21-566`)
-   - Implements MCP server using `@modelcontextprotocol/sdk`
-   - Handles tool registration and execution
-   - Makes authenticated requests to CS-Cart API using Basic Auth
-
-2. **Tool Categories**:
+1. **Tool Categories**:
    - **Product Management**: CRUD operations for products, stock management
    - **Order Management**: Retrieve orders, update order status
    - **Category Management**: Get product categories
@@ -43,7 +16,7 @@ This is a **Model Context Protocol (MCP) server** that provides tools for managi
    - **Analytics**: Sales statistics
    - **PixelPlus SEO**: Manage semantic core in PixelPlus projects (queries, groups)
 
-3. **Authentication**:
+2. **Authentication**:
    - CS-Cart uses Basic Auth from environment variables:
      - `CSCART_API_URL` - CS-Cart store API endpoint
      - `CSCART_API_EMAIL` - Admin email for API access
@@ -74,24 +47,6 @@ Five MCP tools for managing semantic core in [tools.pixelplus.ru](https://tools.
 
 **Note on `delete`:** The `queries/delete` endpoint follows the standard PixelPlus pattern with `ids` param (pipe-separated). If the API returns an error, verify the endpoint with PixelPlus support.
 
-### API Integration Pattern
-- **CS-Cart** uses `makeRequest(method, endpoint, data)` — Basic Auth, supports GET/POST/PUT/DELETE
-- **PixelPlus** uses `makePixelPlusRequest(group, method, params)` — token in query string, always GET
-
-Both helpers format responses as MCP tool results: `{ content: [{ type: 'text', text: JSON.stringify(result) }] }`
-
-### Configuration System
-- `project.config.js` - Central configuration for project structure, Docker settings, and CS-Cart status codes
-- Environment variables required for CS-Cart API connection
-- `.env.example` template for environment setup
-
-### Setup Automation
-`scripts/setup.js` - Automated setup script that:
-- Verifies Node.js version (requires >=18)
-- Creates necessary directories (logs, tests, config)
-- Copies `.env.example` to `.env`
-- Validates required project files
-
 ### CS-Cart Status Codes
 The system uses single-letter status codes throughout:
 - **Products**: A=Active, D=Disabled, H=Hidden
@@ -99,21 +54,9 @@ The system uses single-letter status codes throughout:
 - **Users**: A=Active, D=Disabled
 - **User Types**: A=Admin, V=Vendor, C=Customer
 
-### Docker Support
-Two Docker configurations:
-- `Dockerfile` - Standard development image
-- `Dockerfile.production` - Multi-stage optimized production build with security hardening
-- Resource limits configured in `docker-compose.yml`
-
 ## Integration with AnythingLLM
 
-For AnythingLLM integration, configuration is available in the README.md file at lines 220-268. Key points:
-
-1. **Configuration Location**: AnythingLLM Settings → Integrations → MCP Servers
-2. **Required Paths**: Use absolute paths for both `node` executable and `src/index.js`
-3. **Environment Variables**: Set `CSCART_API_URL`, `CSCART_API_EMAIL`, and `CSCART_API_KEY`
-4. **Docker Considerations**: Mount directories as volumes if AnythingLLM runs in Docker
-5. **Testing**: Restart AnythingLLM after configuration and test CS-Cart tools
+Configuration steps are in `README.md` lines 220-268.
 
 ## Important Notes
 

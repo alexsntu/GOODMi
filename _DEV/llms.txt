@@ -1,0 +1,57 @@
+# GOODMi
+
+> Фирменный магазин техники Xiaomi в Крыму (Севастополь, Симферополь, Ялта) с доставкой СДЭК по всей России. Работает с 2016 года.
+
+## Docs
+
+- [Главная](https://goodmi.ru/): Интернет-магазин оригинальной техники Xiaomi — каталог, акции, доставка, самовывоз в 6 точках Крыма.
+- [О нас](https://goodmi.ru/about-us/): История и специализация магазина GOODMi как фирменного продавца техники Xiaomi в Крыму.
+- [Почему мы](https://goodmi.ru/why-us/): Преимущества покупки в GOODMi — гарантия, сервис, локальное присутствие в Крыму.
+- [FAQ](https://goodmi.ru/faq/): Ответы на частые вопросы о заказе, оплате, доставке и гарантии.
+- [Отзывы](https://goodmi.ru/testimonials/): Отзывы покупателей о технике и сервисе GOODMi.
+
+## Products
+
+- [Смартфоны Xiaomi](https://goodmi.ru/smartfonyi/): Смартфоны Xiaomi, Redmi и POCO — актуальные серии, разный объём памяти и цвета.
+- [Планшеты](https://goodmi.ru/planshetyi/): Планшеты Xiaomi Pad и Redmi Pad, диагонали 11-12 дюймов.
+- [Ноутбуки](https://goodmi.ru/noutbuki/): Ноутбуки и ультрабуки в ассортименте магазина.
+- [Телевизоры Xiaomi](https://goodmi.ru/televizory-xiaomi/): Телевизоры диагональю от 81 до 190 см, включая 4K и QLED модели.
+- [Мониторы Xiaomi](https://goodmi.ru/monitory-xiaomi/): Игровые и офисные мониторы с частотой от 144 до 200 Гц.
+- [Смарт-часы](https://goodmi.ru/smart-chasy/): Xiaomi Watch, Redmi Watch и Amazfit с GPS, NFC, защитой от воды.
+- [Фитнес-браслеты Xiaomi](https://goodmi.ru/fitnes-braslety-xiaomi/): Xiaomi Smart Band актуальных поколений.
+- [Беспроводные наушники](https://goodmi.ru/besprovodnye-naushniki/): Xiaomi, Redmi, Marshall, JBL — вкладыши и накладные модели.
+- [Колонки и акустика](https://goodmi.ru/akustika-i-kolonki/): Портативные и умные колонки, включая Яндекс.Станция.
+- [Роботы-пылесосы](https://goodmi.ru/roboty-pylesosy/): Модели с лидаром, самоочисткой и голосовым управлением Алиса.
+- [Повербанки](https://goodmi.ru/power-banks/): Внешние аккумуляторы с быстрой и беспроводной зарядкой.
+- [Умный дом](https://goodmi.ru/smart-ustroystva-i-umnyiy-dom/): Умные розетки, замки, датчики и освещение Xiaomi.
+- [IP-камеры](https://goodmi.ru/ip-kamery/): Камеры видеонаблюдения для дома и улицы.
+- [Электросамокаты](https://goodmi.ru/elektrosamokaty/): Электротранспорт Xiaomi и Ninebot.
+
+## Services
+
+- [Гарантия](https://goodmi.ru/info/guarantee/): Условия гарантии на технику, купленную в GOODMi.
+- [Доставка](https://goodmi.ru/info/delivery/): Доставка СДЭК по всей России и самовывоз в 6 точках Крыма.
+- [Трейд-ин](https://goodmi.ru/treyd-in-goodmi/): Обмен старой техники на новую с доплатой.
+- [Кредит](https://goodmi.ru/credit/): Оформление покупки техники в кредит.
+- [Бонусная программа](https://goodmi.ru/bonusnaya-programma/): Накопительные уровни привилегий для постоянных покупателей.
+- [Возврат товара](https://goodmi.ru/info/vozvrat-ru/): Условия и порядок возврата купленного товара.
+- [Ремонт Xiaomi](https://goodmi.ru/info/remont-xiaomi/): Сервисный ремонт техники Xiaomi в Крыму.
+
+## Blog
+
+- [Блог о технике Xiaomi](https://goodmi.ru/blog-xiaomi-na-russkom/): Новости, обзоры и дайджесты новинок Xiaomi на русском языке.
+
+## Key Facts
+
+- Фирменный магазин техники Xiaomi в Крыму, работает с 2016 года
+- 6 точек самовывоза: 4 в Севастополе, по 1 в Симферополе и Ялте
+- Доставка СДЭК по всей России
+- Гарантия 1 год, трейд-ин, покупка в кредит, бонусная программа GOODMi
+- Специализация: смартфоны, планшеты, носимая электроника, умный дом, бытовая техника Xiaomi
+
+## Contact
+
+- Website: https://goodmi.ru
+- Email: store@goodmi.ru
+- Phone: 8 (800) 250-17-00
+- Address: г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»
