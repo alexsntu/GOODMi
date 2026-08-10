@@ -36,6 +36,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 Новый макет/            # Homepage/menu redesign mockups (in-progress, not yet deployed)
 CSS/                   # goodmi-styles.css (shared, documented — edit this one), goodmi-styles.min.css (generated, no comments — upload this one), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
+Расширение семантики/  # seo-core-expansion skill output — one-off working files, user deletes after reviewing
 _DEV/                  # Development artifacts and task trackers (untracked)
 tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
@@ -156,6 +157,7 @@ Each entry below is a thin proxy `SKILL.md` under `.claude/skills/user:<name>/` 
 |---|---|---|
 | `/user:seo-meta` | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
 | `/user:seo-meta2` | `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
+| `/user:seo-core-expansion` | `seo-core-expansion` | Expand a category's semantic core via Wordstat (broad+quoted) LSI/word-form discovery, cross-checked against PixelPlus for dupes |
 | `/user:seo-shop` | `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
 | `/user:seo-shop2` | `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
 | `/user:seo-description` | `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
