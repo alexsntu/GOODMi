@@ -1,6 +1,4 @@
 {
   "user_chat_id": null,
-  "telegram_update_offset": 0,
-  "seen_novelties": [],
-  "drafts": []
+  "seen_novelties": []
 }
