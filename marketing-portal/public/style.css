@@ -1,0 +1,180 @@
+:root {
+  --orange: #FF6900;
+  --orange-dark: #E55A00;
+  --orange-tint: #FFF0E6;
+  --black: #1C1C1C;
+  --gray-1: #3D3D3D;
+  --gray-2: #6B6B6B;
+  --gray-3: #ADADAD;
+  --surface: #F5F5F5;
+  --border: #E5E5E5;
+  --white: #FFFFFF;
+  --ok: #2E7D46;
+  --danger: #C0392B;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--surface);
+  color: var(--black);
+  line-height: 1.5;
+}
+
+a { color: var(--orange-dark); }
+
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.topbar h1 span { color: var(--orange); }
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.routines {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.routine-link {
+  display: inline-block;
+  padding: 10px 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.routine-link:hover { border-color: var(--orange); }
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  color: var(--gray-1);
+  background: var(--white);
+}
+
+.filters a.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--white);
+}
+
+.draft {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.draft-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--gray-2);
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--orange-tint);
+  color: var(--orange-dark);
+  font-weight: 600;
+}
+
+.draft-text {
+  white-space: pre-wrap;
+  font-size: 14.5px;
+  color: var(--gray-1);
+  margin-bottom: 14px;
+  border-left: 3px solid var(--border);
+  padding-left: 12px;
+}
+
+.draft-actions {
+  display: flex;
+  gap: 8px;
+}
+
+button, .btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-copy { background: var(--surface); color: var(--black); border: 1px solid var(--border); }
+.btn-posted { background: var(--ok); color: var(--white); }
+.btn-dismiss { background: var(--white); color: var(--danger); border: 1px solid var(--border); }
+
+.empty {
+  color: var(--gray-2);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.login-box {
+  max-width: 320px;
+  margin: 80px auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+}
+
+.login-box h1 { font-size: 18px; margin-top: 0; }
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.login-box button {
+  width: 100%;
+  background: var(--orange);
+  color: var(--white);
+  padding: 10px;
+}
+
+.login-error { color: var(--danger); font-size: 13px; margin-bottom: 12px; }

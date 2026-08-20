@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Маркетинг-портал GOODMi</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+  </div>
+
+  <div class="container">
+    <div class="routines">
+      <% routines.forEach(r => { %>
+        <a class="routine-link" href="<%= r.url %>" target="_blank" rel="noopener">Запустить: <%= r.name %> →</a>
+      <% }) %>
+    </div>
+
+    <div class="filters">
+      <a href="?status=new" class="<%= status === 'new' ? 'active' : '' %>">Новые</a>
+      <a href="?status=posted" class="<%= status === 'posted' ? 'active' : '' %>">Опубликованные</a>
+      <a href="?status=dismissed" class="<%= status === 'dismissed' ? 'active' : '' %>">Отклонённые</a>
+      <a href="?status=all" class="<%= status === 'all' ? 'active' : '' %>">Все</a>
+    </div>
+
+    <% if (drafts.length === 0) { %>
+      <div class="empty">Черновиков пока нет — запустите проверку сверху или дождитесь расписания.</div>
+    <% } %>
+
+    <% drafts.forEach(d => { %>
+      <div class="draft" id="draft-<%= d.id %>">
+        <div class="draft-meta">
+          <span class="tag"><%= sourceLabels[d.source] || d.source %></span>
+          <% if (d.category) { %><span><%= d.category %></span><% } %>
+          <span><%= d.created_at %></span>
+          <% if (d.source_url) { %><a href="<%= d.source_url %>" target="_blank" rel="noopener">открыть товар</a><% } %>
+        </div>
+        <div class="draft-text"><%= d.title %>
+
+<%- d.text.replace(/</g, '&lt;') %></div>
+        <div class="draft-actions">
+          <button type="button" class="btn-copy" onclick="copyDraft(<%= d.id %>)">Скопировать</button>
+          <% if (d.status !== 'posted') { %>
+            <form method="post" action="/drafts/<%= d.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="posted">
+              <button type="submit" class="btn-posted">Опубликовано</button>
+            </form>
+          <% } %>
+          <% if (d.status !== 'dismissed') { %>
+            <form method="post" action="/drafts/<%= d.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="dismissed">
+              <button type="submit" class="btn-dismiss">Отклонить</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <script>
+    function copyDraft(id) {
+      const el = document.querySelector(`#draft-${id} .draft-text`);
+      navigator.clipboard.writeText(el.innerText);
+    }
+  </script>
+</body>
+</html>

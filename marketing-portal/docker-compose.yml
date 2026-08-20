@@ -1,0 +1,14 @@
+services:
+  portal:
+    build: .
+    container_name: goodmi-marketing-portal
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - portal-data:/app/data
+
+volumes:
+  portal-data:
