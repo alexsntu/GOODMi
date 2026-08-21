@@ -1,8 +1,21 @@
 import { Router } from 'express';
 import { requireApiToken } from '../auth.js';
-import { getSeen, addSeen, createDraft } from '../db.js';
+import {
+  getSeen,
+  addSeen,
+  createDraft,
+  listDrafts,
+  createTopic,
+  listTopics,
+  setTopicStatus,
+  getDueTasks,
+  markTaskReminded,
+  listPlanItems,
+  createPromoIdea,
+  listPromoIdeas,
+} from '../db.js';
 
-const ALLOWED_KEYS = new Set(['novinki', 'aktsii', 'ucenka']);
+const ALLOWED_KEYS = new Set(['novinki', 'aktsii', 'ucenka', 'blog', 'friday', 'competitor']);
 
 export const apiRouter = Router();
 apiRouter.use(requireApiToken);
@@ -28,4 +41,59 @@ apiRouter.post('/drafts', (req, res) => {
   }
   const id = createDraft({ source, title, text, source_url, category });
   res.json({ ok: true, id });
+});
+
+apiRouter.get('/drafts', (req, res) => {
+  const { source, category, status, limit } = req.query;
+  res.json({ drafts: listDrafts({ source, category, status, limit: limit ? Number(limit) : 20 }) });
+});
+
+const TOPIC_STATUSES = new Set(['pending', 'approved', 'rejected', 'generated']);
+
+apiRouter.post('/topics', (req, res) => {
+  const { title, pitch, source_url, category } = req.body || {};
+  if (!title || !pitch) {
+    return res.status(400).json({ error: 'title and pitch are required' });
+  }
+  const id = createTopic({ title, pitch, source_url, category });
+  res.json({ ok: true, id });
+});
+
+apiRouter.get('/topics', (req, res) => {
+  const { status } = req.query;
+  if (status && !TOPIC_STATUSES.has(status)) return res.status(400).json({ error: 'unknown status' });
+  res.json({ topics: listTopics({ status }) });
+});
+
+apiRouter.post('/topics/:id/generated', (req, res) => {
+  setTopicStatus(req.params.id, 'generated');
+  res.json({ ok: true });
+});
+
+apiRouter.get('/tasks/due', (req, res) => {
+  res.json({ tasks: getDueTasks() });
+});
+
+apiRouter.post('/tasks/:id/reminded', (req, res) => {
+  markTaskReminded(req.params.id);
+  res.json({ ok: true });
+});
+
+apiRouter.get('/plan', (req, res) => {
+  const { status } = req.query;
+  res.json({ items: listPlanItems({ status }) });
+});
+
+apiRouter.post('/promo-ideas', (req, res) => {
+  const { title, rationale, mechanic, category } = req.body || {};
+  if (!title || !rationale) {
+    return res.status(400).json({ error: 'title and rationale are required' });
+  }
+  const id = createPromoIdea({ title, rationale, mechanic, category });
+  res.json({ ok: true, id });
+});
+
+apiRouter.get('/promo-ideas', (req, res) => {
+  const { status, limit } = req.query;
+  res.json({ ideas: listPromoIdeas({ status, limit: limit ? Number(limit) : 20 }) });
 });

@@ -8,15 +8,80 @@
 <body>
   <div class="topbar">
     <h1>Маркетинг-портал <span>GOODMi</span></h1>
-    <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/topics">Темы статей →<% if (navCounts.topics > 0) { %><span class="nav-badge"><%= navCounts.topics %></span><% } %></a>
+      <a class="routine-link" href="/tasks">Задачи →</a>
+      <a class="routine-link" href="/plan">План →</a>
+      <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/help">Хелп →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
   </div>
 
   <div class="container">
+    <h2 class="section-title">Требует внимания</h2>
+    <div class="attention-grid">
+      <a class="attention-card <%= navCounts.drafts > 0 ? 'attention-card--hot' : '' %>" href="/?status=new">
+        <span class="attention-count"><%= navCounts.drafts %></span>
+        <span class="attention-label">новых черновиков</span>
+      </a>
+      <a class="attention-card <%= navCounts.topics > 0 ? 'attention-card--hot' : '' %>" href="/topics">
+        <span class="attention-count"><%= navCounts.topics %></span>
+        <span class="attention-label">тем блога на рассмотрении</span>
+      </a>
+      <a class="attention-card <%= navCounts.promoIdeas > 0 ? 'attention-card--hot' : '' %>" href="/promo-ideas">
+        <span class="attention-count"><%= navCounts.promoIdeas %></span>
+        <span class="attention-label">идей акций на рассмотрении</span>
+      </a>
+    </div>
+
+    <h2 class="section-title">Сбор данных</h2>
+
     <div class="routines">
       <% routines.forEach(r => { %>
-        <a class="routine-link" href="<%= r.url %>" target="_blank" rel="noopener">Запустить: <%= r.name %> →</a>
+        <a class="routine-link" href="<%= r.url %>" target="_blank" rel="noopener">
+          Запустить: <%= r.name %> →
+          <span class="routine-cadence"><%= r.cadence %></span>
+        </a>
       <% }) %>
     </div>
+
+    <div class="stats-table-wrap">
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Источник</th>
+            <th>Последний сбор</th>
+            <th>Всего</th>
+            <th>Новых</th>
+            <th>Опубл.</th>
+            <th>Откл.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sourceStats.forEach(s => { %>
+            <tr>
+              <td><%= s.label %></td>
+              <td><%= s.last_at || '—' %></td>
+              <td><%= s.total %></td>
+              <td><%= s.new_count %></td>
+              <td><%= s.posted_count %></td>
+              <td><%= s.dismissed_count %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="topics-summary">
+      Темы блога: ожидают <strong><%= topicStats.pending %></strong> ·
+      одобрено <strong><%= topicStats.approved %></strong> ·
+      отклонено <strong><%= topicStats.rejected %></strong> ·
+      готово статей <strong><%= topicStats.generated %></strong> —
+      <a href="/topics">открыть →</a>
+    </p>
+
+    <h2 class="section-title">Черновики</h2>
 
     <div class="filters">
       <a href="?status=new" class="<%= status === 'new' ? 'active' : '' %>">Новые</a>

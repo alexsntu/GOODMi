@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs';
 
-export function checkPassword(password) {
+export function checkCredentials(username, password) {
+  const expectedUsername = process.env.ADMIN_USERNAME;
   const hash = process.env.ADMIN_PASSWORD_HASH;
-  if (!hash) return false;
+  if (!expectedUsername || !hash) return false;
+  if (username !== expectedUsername) return false;
   return bcrypt.compareSync(password, hash);
 }
 

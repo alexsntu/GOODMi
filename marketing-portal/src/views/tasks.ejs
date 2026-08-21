@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Задачи — Маркетинг-портал GOODMi</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/">← Черновики<% if (navCounts.drafts > 0) { %><span class="nav-badge"><%= navCounts.drafts %></span><% } %></a>
+      <a class="routine-link" href="/plan">План →</a>
+      <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/help">Хелп →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Новая задача</h2>
+    <form method="post" action="/tasks" class="task-form">
+      <input type="text" name="title" placeholder="Что нужно сделать" required>
+      <textarea name="description" placeholder="Подробности (необязательно)" rows="2"></textarea>
+      <div class="task-form-row">
+        <label>Срок<input type="datetime-local" name="due_at"></label>
+        <label>Напомнить в Telegram<input type="datetime-local" name="remind_at"></label>
+      </div>
+      <button type="submit" class="btn-posted">Добавить задачу</button>
+    </form>
+
+    <h2 class="section-title">Задачи</h2>
+    <div class="filters">
+      <a href="?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Открытые</a>
+      <a href="?status=done" class="<%= status === 'done' ? 'active' : '' %>">Сделанные</a>
+      <a href="?status=all" class="<%= status === 'all' ? 'active' : '' %>">Все</a>
+    </div>
+
+    <% if (tasks.length === 0) { %>
+      <div class="empty">Задач пока нет.</div>
+    <% } %>
+
+    <% tasks.forEach(t => { %>
+      <div class="draft" id="task-<%= t.id %>">
+        <div class="draft-meta">
+          <% if (t.due_at_display) { %><span class="tag">Срок: <%= t.due_at_display %> МСК</span><% } %>
+          <% if (t.remind_at_display) { %><span>Напоминание: <%= t.remind_at_display %> МСК<%= t.reminded ? ' (отправлено)' : '' %></span><% } %>
+        </div>
+        <div class="draft-text"><%= t.title %><% if (t.description) { %>
+
+<%- t.description.replace(/</g, '&lt;') %><% } %></div>
+        <div class="draft-actions">
+          <% if (t.status !== 'done') { %>
+            <form method="post" action="/tasks/<%= t.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="done">
+              <button type="submit" class="btn-posted">Сделано</button>
+            </form>
+          <% } else { %>
+            <form method="post" action="/tasks/<%= t.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="pending">
+              <button type="submit" class="btn-copy">Вернуть в открытые</button>
+            </form>
+          <% } %>
+          <form method="post" action="/tasks/<%= t.id %>/delete" style="display:inline">
+            <button type="submit" class="btn-dismiss">Удалить</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

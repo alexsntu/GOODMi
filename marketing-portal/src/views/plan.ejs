@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Маркетинговый план — Маркетинг-портал GOODMi</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/">← Черновики<% if (navCounts.drafts > 0) { %><span class="nav-badge"><%= navCounts.drafts %></span><% } %></a>
+      <a class="routine-link" href="/tasks">Задачи →</a>
+      <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/help">Хелп →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Новое мероприятие</h2>
+    <form method="post" action="/plan" class="task-form">
+      <input type="text" name="title" placeholder="Название (например «Акция ко Дню знаний»)" required>
+      <div class="task-form-row">
+        <label>Тип
+          <select name="type">
+            <% Object.entries(typeLabels).forEach(([key, label]) => { %>
+              <option value="<%= key %>"><%= label %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Начало<input type="date" name="start_date"></label>
+        <label>Конец<input type="date" name="end_date"></label>
+        <label>Каналы<input type="text" name="channels" placeholder="сайт, Telegram"></label>
+      </div>
+      <textarea name="description" placeholder="Что делаем, какие товары, цели (необязательно)" rows="2"></textarea>
+      <button type="submit" class="btn-posted">Добавить в план</button>
+    </form>
+
+    <h2 class="section-title">Маркетинговый план</h2>
+
+    <div class="filters">
+      <a href="?view=list&status=<%= status %>" class="<%= view === 'list' ? 'active' : '' %>">Список</a>
+      <a href="?view=calendar&status=<%= status %>" class="<%= view === 'calendar' ? 'active' : '' %>">Календарь</a>
+    </div>
+
+    <div class="filters">
+      <a href="?view=<%= view %>&status=planned<%= month ? '&month=' + month : '' %>" class="<%= status === 'planned' ? 'active' : '' %>">Запланировано</a>
+      <a href="?view=<%= view %>&status=in_progress<%= month ? '&month=' + month : '' %>" class="<%= status === 'in_progress' ? 'active' : '' %>">В работе</a>
+      <a href="?view=<%= view %>&status=done<%= month ? '&month=' + month : '' %>" class="<%= status === 'done' ? 'active' : '' %>">Готово</a>
+      <a href="?view=<%= view %>&status=cancelled<%= month ? '&month=' + month : '' %>" class="<%= status === 'cancelled' ? 'active' : '' %>">Отменено</a>
+      <a href="?view=<%= view %>&status=all<%= month ? '&month=' + month : '' %>" class="<%= status === 'all' ? 'active' : '' %>">Все</a>
+    </div>
+
+    <% if (view === 'calendar') { %>
+      <% const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+         const [calYear, calMonthNum] = month.split('-').map(Number); %>
+      <div class="cal-nav">
+        <a class="routine-link" href="?view=calendar&status=<%= status %>&month=<%= prevMonth %>">← Пред.</a>
+        <strong><%= monthNames[calMonthNum - 1] %> <%= calYear %></strong>
+        <a class="routine-link" href="?view=calendar&status=<%= status %>&month=<%= nextMonth %>">След. →</a>
+      </div>
+      <div class="cal-table-wrap">
+        <table class="cal-table">
+          <thead>
+            <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+          </thead>
+          <tbody>
+            <% weeks.forEach(week => { %>
+              <tr>
+                <% week.forEach(cell => { %>
+                  <% if (!cell) { %>
+                    <td class="cal-empty"></td>
+                  <% } else { %>
+                    <td class="cal-day">
+                      <div class="cal-day-num"><%= cell.day %></div>
+                      <% cell.items.forEach(it => { %>
+                        <a class="cal-pill" href="?view=list&status=all#plan-<%= it.id %>" title="<%= it.title %>"><%= it.title %></a>
+                      <% }) %>
+                    </td>
+                  <% } %>
+                <% }) %>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+
+      <% if (items.length === 0) { %>
+        <div class="empty">В плане пока пусто — добавьте первое мероприятие выше.</div>
+      <% } %>
+
+      <% items.forEach(i => { %>
+        <div class="draft" id="plan-<%= i.id %>">
+          <div class="draft-meta">
+            <% if (i.type) { %><span class="tag"><%= typeLabels[i.type] || i.type %></span><% } %>
+            <% if (i.start_date) { %><span><%= i.start_date %><%= i.end_date ? ' – ' + i.end_date : '' %></span><% } %>
+            <% if (i.channels) { %><span><%= i.channels %></span><% } %>
+            <span><%= statusLabels[i.status] || i.status %></span>
+          </div>
+          <div class="draft-text"><%= i.title %><% if (i.description) { %>
+
+<%- i.description.replace(/</g, '&lt;') %><% } %></div>
+          <div class="draft-actions">
+            <% ['planned','in_progress','done','cancelled'].filter(s => s !== i.status).forEach(s => { %>
+              <form method="post" action="/plan/<%= i.id %>/status" style="display:inline">
+                <input type="hidden" name="status" value="<%= s %>">
+                <button type="submit" class="btn-copy"><%= statusLabels[s] %></button>
+              </form>
+            <% }) %>
+            <form method="post" action="/plan/<%= i.id %>/delete" style="display:inline">
+              <button type="submit" class="btn-dismiss">Удалить</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</body>
+</html>

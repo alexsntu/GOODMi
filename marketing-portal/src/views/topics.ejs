@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Темы статей — Маркетинг-портал GOODMi</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/">← Черновики<% if (navCounts.drafts > 0) { %><span class="nav-badge"><%= navCounts.drafts %></span><% } %></a>
+      <a class="routine-link" href="/tasks">Задачи →</a>
+      <a class="routine-link" href="/plan">План →</a>
+      <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/help">Хелп →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="filters">
+      <a href="?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Ожидают</a>
+      <a href="?status=approved" class="<%= status === 'approved' ? 'active' : '' %>">Одобренные</a>
+      <a href="?status=rejected" class="<%= status === 'rejected' ? 'active' : '' %>">Отклонённые</a>
+      <a href="?status=generated" class="<%= status === 'generated' ? 'active' : '' %>">Уже статьи</a>
+      <a href="?status=all" class="<%= status === 'all' ? 'active' : '' %>">Все</a>
+    </div>
+
+    <% if (topics.length === 0) { %>
+      <div class="empty">Тем пока нет — дождитесь утреннего запуска routine или запустите вручную.</div>
+    <% } %>
+
+    <% topics.forEach(t => { %>
+      <div class="draft" id="topic-<%= t.id %>">
+        <div class="draft-meta">
+          <% if (t.category) { %><span class="tag"><%= t.category %></span><% } %>
+          <span><%= t.created_at %></span>
+          <% if (t.source_url) { %><a href="<%= t.source_url %>" target="_blank" rel="noopener">источник</a><% } %>
+        </div>
+        <div class="draft-text"><%= t.title %>
+
+<%- t.pitch.replace(/</g, '&lt;') %></div>
+        <div class="draft-actions">
+          <% if (t.status !== 'approved') { %>
+            <form method="post" action="/topics/<%= t.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="approved">
+              <button type="submit" class="btn-posted">Одобрить</button>
+            </form>
+          <% } %>
+          <% if (t.status !== 'rejected') { %>
+            <form method="post" action="/topics/<%= t.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="rejected">
+              <button type="submit" class="btn-dismiss">Отклонить</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

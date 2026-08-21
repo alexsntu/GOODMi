@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Идеи акций — Маркетинг-портал GOODMi</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/">← Черновики<% if (navCounts.drafts > 0) { %><span class="nav-badge"><%= navCounts.drafts %></span><% } %></a>
+      <a class="routine-link" href="/topics">Темы статей →<% if (navCounts.topics > 0) { %><span class="nav-badge"><%= navCounts.topics %></span><% } %></a>
+      <a class="routine-link" href="/plan">План →</a>
+      <a class="routine-link" href="/help">Хелп →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Идеи акций</h2>
+    <div class="filters">
+      <a href="?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Ожидают</a>
+      <a href="?status=approved" class="<%= status === 'approved' ? 'active' : '' %>">Одобренные</a>
+      <a href="?status=rejected" class="<%= status === 'rejected' ? 'active' : '' %>">Отклонённые</a>
+      <a href="?status=all" class="<%= status === 'all' ? 'active' : '' %>">Все</a>
+    </div>
+
+    <% if (ideas.length === 0) { %>
+      <div class="empty">Идей пока нет — дождитесь еженедельного запуска routine или запустите вручную.</div>
+    <% } %>
+
+    <% ideas.forEach(idea => { %>
+      <div class="draft" id="idea-<%= idea.id %>">
+        <div class="draft-meta">
+          <% if (idea.category) { %><span class="tag"><%= idea.category %></span><% } %>
+          <% if (idea.mechanic) { %><span>Механика: <%= idea.mechanic %></span><% } %>
+          <span><%= idea.created_at %></span>
+        </div>
+        <div class="draft-text"><%= idea.title %>
+
+<%- idea.rationale.replace(/</g, '&lt;') %></div>
+        <div class="draft-actions">
+          <% if (idea.status !== 'approved') { %>
+            <form method="post" action="/promo-ideas/<%= idea.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="approved">
+              <button type="submit" class="btn-posted">Одобрить</button>
+            </form>
+          <% } %>
+          <% if (idea.status !== 'rejected') { %>
+            <form method="post" action="/promo-ideas/<%= idea.id %>/status" style="display:inline">
+              <input type="hidden" name="status" value="rejected">
+              <button type="submit" class="btn-dismiss">Отклонить</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
