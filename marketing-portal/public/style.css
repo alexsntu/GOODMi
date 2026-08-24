@@ -419,7 +419,8 @@ button, .btn {
 
 .login-box h1 { font-size: 18px; margin-top: 0; }
 
-.login-box input {
+.login-box input[type="text"],
+.login-box input[type="password"] {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--border);
@@ -427,6 +428,17 @@ button, .btn {
   margin-bottom: 12px;
   font-size: 14px;
 }
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.login-remember input { margin: 0; }
 
 .login-box button {
   width: 100%;

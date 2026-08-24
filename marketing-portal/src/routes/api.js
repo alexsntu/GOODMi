@@ -13,9 +13,11 @@ import {
   listPlanItems,
   createPromoIdea,
   listPromoIdeas,
+  createRepostSuggestion,
+  listRepostSuggestions,
 } from '../db.js';
 
-const ALLOWED_KEYS = new Set(['novinki', 'aktsii', 'ucenka', 'blog', 'friday', 'competitor']);
+const ALLOWED_KEYS = new Set(['novinki', 'aktsii', 'ucenka', 'blog', 'friday', 'competitor', 'repost']);
 
 export const apiRouter = Router();
 apiRouter.use(requireApiToken);
@@ -96,4 +98,18 @@ apiRouter.post('/promo-ideas', (req, res) => {
 apiRouter.get('/promo-ideas', (req, res) => {
   const { status, limit } = req.query;
   res.json({ ideas: listPromoIdeas({ status, limit: limit ? Number(limit) : 20 }) });
+});
+
+apiRouter.post('/repost-suggestions', (req, res) => {
+  const { title, summary, source_channel, source_url } = req.body || {};
+  if (!title || !summary) {
+    return res.status(400).json({ error: 'title and summary are required' });
+  }
+  const id = createRepostSuggestion({ title, summary, source_channel, source_url });
+  res.json({ ok: true, id });
+});
+
+apiRouter.get('/repost-suggestions', (req, res) => {
+  const { status, limit } = req.query;
+  res.json({ suggestions: listRepostSuggestions({ status, limit: limit ? Number(limit) : 20 }) });
 });

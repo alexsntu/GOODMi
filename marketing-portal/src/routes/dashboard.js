@@ -17,6 +17,8 @@ import {
   deletePlanItem,
   listPromoIdeas,
   setPromoIdeaStatus,
+  listRepostSuggestions,
+  setRepostSuggestionStatus,
   getNavCounts,
 } from '../db.js';
 
@@ -95,6 +97,7 @@ const ROUTINES = [
   { name: 'Пятничный пост', cadence: 'пятница 09:54', url: 'https://claude.ai/code/routines/trig_01VC6LnZDdtvLKEEYQAN1VBu' },
   { name: 'Мониторинг конкурентов', cadence: 'будни 08:30', url: 'https://claude.ai/code/routines/trig_0173oTYyg2LY1yaLJQGXfm2c' },
   { name: 'Идеи акций', cadence: 'понедельник 08:00', url: 'https://claude.ai/code/routines/trig_016TWCLzCrq4bA9QdUXY1xsB' },
+  { name: 'Предложение постов', cadence: 'будни, каждый час 10:30–17:30', url: 'https://claude.ai/code/routines/trig_01A6iRVBPDPaH2Q1UEQ9R11P' },
 ];
 
 const SOURCES = ['novinki', 'aktsii', 'ucenka', 'blog', 'friday', 'competitor'];
@@ -113,9 +116,12 @@ dashboardRouter.get('/login', (req, res) => {
 });
 
 dashboardRouter.post('/login', (req, res) => {
-  const { username, password } = req.body || {};
+  const { username, password, remember } = req.body || {};
   if (checkCredentials(username || '', password || '')) {
     req.session.authenticated = true;
+    if (remember) {
+      req.session.cookie.maxAge = 90 * 24 * 60 * 60 * 1000;
+    }
     return res.redirect('/');
   }
   res.render('login', { error: 'Неверный логин или пароль' });
@@ -274,4 +280,19 @@ dashboardRouter.post('/promo-ideas/:id/status', requireSession, (req, res) => {
   }
   setPromoIdeaStatus(req.params.id, status);
   res.redirect(req.get('referer') || '/promo-ideas');
+});
+
+dashboardRouter.get('/repost-suggestions', requireSession, (req, res) => {
+  const status = req.query.status || 'pending';
+  const suggestions = listRepostSuggestions({ status: status === 'all' ? undefined : status });
+  res.render('repost-suggestions', { suggestions, status });
+});
+
+dashboardRouter.post('/repost-suggestions/:id/status', requireSession, (req, res) => {
+  const { status } = req.body || {};
+  if (!['approved', 'rejected', 'pending'].includes(status)) {
+    return res.status(400).send('bad status');
+  }
+  setRepostSuggestionStatus(req.params.id, status);
+  res.redirect(req.get('referer') || '/repost-suggestions');
 });

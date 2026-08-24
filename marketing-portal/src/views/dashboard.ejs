@@ -2,17 +2,18 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Маркетинг-портал GOODMi</title>
+  <title>Портал</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="topbar">
-    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <h1><span>Портал</span></h1>
     <div class="topbar-actions">
       <a class="routine-link" href="/topics">Темы статей →<% if (navCounts.topics > 0) { %><span class="nav-badge"><%= navCounts.topics %></span><% } %></a>
       <a class="routine-link" href="/tasks">Задачи →</a>
       <a class="routine-link" href="/plan">План →</a>
       <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/repost-suggestions">Репост →<% if (navCounts.repostSuggestions > 0) { %><span class="nav-badge"><%= navCounts.repostSuggestions %></span><% } %></a>
       <a class="routine-link" href="/help">Хелп →</a>
       <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
     </div>
@@ -32,6 +33,10 @@
       <a class="attention-card <%= navCounts.promoIdeas > 0 ? 'attention-card--hot' : '' %>" href="/promo-ideas">
         <span class="attention-count"><%= navCounts.promoIdeas %></span>
         <span class="attention-label">идей акций на рассмотрении</span>
+      </a>
+      <a class="attention-card <%= navCounts.repostSuggestions > 0 ? 'attention-card--hot' : '' %>" href="/repost-suggestions">
+        <span class="attention-count"><%= navCounts.repostSuggestions %></span>
+        <span class="attention-label">предложений постов на рассмотрении</span>
       </a>
     </div>
 

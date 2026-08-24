@@ -2,16 +2,17 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Маркетинговый план — Маркетинг-портал GOODMi</title>
+  <title>Маркетинговый план — Портал</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="topbar">
-    <h1>Маркетинг-портал <span>GOODMi</span></h1>
+    <h1><span>Портал</span></h1>
     <div class="topbar-actions">
       <a class="routine-link" href="/">← Черновики<% if (navCounts.drafts > 0) { %><span class="nav-badge"><%= navCounts.drafts %></span><% } %></a>
       <a class="routine-link" href="/tasks">Задачи →</a>
       <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/repost-suggestions">Репост →<% if (navCounts.repostSuggestions > 0) { %><span class="nav-badge"><%= navCounts.repostSuggestions %></span><% } %></a>
       <a class="routine-link" href="/help">Хелп →</a>
       <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
     </div>

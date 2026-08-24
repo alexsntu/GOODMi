@@ -69,6 +69,16 @@ db.exec(`
     status TEXT NOT NULL DEFAULT 'pending',
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS repost_suggestions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    source_channel TEXT,
+    source_url TEXT,
+    status TEXT NOT NULL DEFAULT 'pending',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `);
 
 export function getSeen(key) {
@@ -215,7 +225,10 @@ export function getNavCounts() {
   const drafts = db.prepare(`SELECT COUNT(*) AS c FROM drafts WHERE status = 'new'`).get().c;
   const topics = db.prepare(`SELECT COUNT(*) AS c FROM topics WHERE status = 'pending'`).get().c;
   const promoIdeas = db.prepare(`SELECT COUNT(*) AS c FROM promo_ideas WHERE status = 'pending'`).get().c;
-  return { drafts, topics, promoIdeas };
+  const repostSuggestions = db
+    .prepare(`SELECT COUNT(*) AS c FROM repost_suggestions WHERE status = 'pending'`)
+    .get().c;
+  return { drafts, topics, promoIdeas, repostSuggestions };
 }
 
 export function createPlanItem({ title, type, start_date, end_date, channels, description }) {
@@ -278,4 +291,31 @@ export function listPromoIdeas({ status, limit } = {}) {
 
 export function setPromoIdeaStatus(id, status) {
   db.prepare('UPDATE promo_ideas SET status = ? WHERE id = ?').run(status, id);
+}
+
+export function createRepostSuggestion({ title, summary, source_channel, source_url }) {
+  const stmt = db.prepare(
+    `INSERT INTO repost_suggestions (title, summary, source_channel, source_url) VALUES (?, ?, ?, ?)`
+  );
+  const info = stmt.run(title, summary, source_channel || null, source_url || null);
+  return info.lastInsertRowid;
+}
+
+export function listRepostSuggestions({ status, limit } = {}) {
+  let query = 'SELECT * FROM repost_suggestions WHERE 1=1';
+  const params = [];
+  if (status) {
+    query += ' AND status = ?';
+    params.push(status);
+  }
+  query += ' ORDER BY created_at DESC';
+  if (limit) {
+    query += ' LIMIT ?';
+    params.push(limit);
+  }
+  return db.prepare(query).all(...params);
+}
+
+export function setRepostSuggestionStatus(id, status) {
+  db.prepare('UPDATE repost_suggestions SET status = ? WHERE id = ?').run(status, id);
 }

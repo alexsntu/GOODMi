@@ -34,7 +34,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+    cookie: {},
   })
 );
 
@@ -45,5 +45,5 @@ app.get('/healthz', (req, res) => res.json({ ok: true }));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`GOODMi marketing portal listening on :${port}`);
+  console.log(`Marketing portal listening on :${port}`);
 });
