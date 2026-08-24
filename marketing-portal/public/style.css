@@ -48,9 +48,9 @@ a { color: var(--orange-dark); }
 }
 
 .container {
-  max-width: 880px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px 32px;
 }
 
 .routines {
