@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать мероприятие — Портал</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1><span>Портал</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/plan">← К плану</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Редактировать мероприятие</h2>
+    <form method="post" action="/plan/<%= item.id %>/update" class="task-form">
+      <input type="text" name="title" value="<%= item.title %>" placeholder="Название (например «Акция ко Дню знаний»)" required>
+      <div class="task-form-row">
+        <label>Тип
+          <select name="type">
+            <% Object.entries(typeLabels).forEach(([key, label]) => { %>
+              <option value="<%= key %>" <%= item.type === key ? 'selected' : '' %>><%= label %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Начало<input type="date" name="start_date" value="<%= item.start_date || '' %>"></label>
+        <label>Конец<input type="date" name="end_date" value="<%= item.end_date || '' %>"></label>
+        <label>Каналы<input type="text" name="channels" value="<%= item.channels || '' %>" placeholder="сайт, Telegram"></label>
+      </div>
+      <textarea name="description" placeholder="Что делаем, какие товары, цели (необязательно)" rows="2"><%= item.description || '' %></textarea>
+      <div class="draft-actions">
+        <button type="submit" class="btn-posted">Сохранить</button>
+        <a class="btn-dismiss" href="/plan" style="text-decoration:none; display:inline-flex; align-items:center; padding:8px 14px;">Отмена</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

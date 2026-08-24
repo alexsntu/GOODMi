@@ -76,7 +76,7 @@
                     <td class="cal-day">
                       <div class="cal-day-num"><%= cell.day %></div>
                       <% cell.items.forEach(it => { %>
-                        <a class="cal-pill" href="?view=list&status=all#plan-<%= it.id %>" title="<%= it.title %>"><%= it.title %></a>
+                        <a class="cal-pill plan-item <%= it.colorClass %>" href="?view=list&status=all#plan-<%= it.id %>" title="<%= it.title %>"><%= it.title %></a>
                       <% }) %>
                     </td>
                   <% } %>
@@ -93,7 +93,7 @@
       <% } %>
 
       <% items.forEach(i => { %>
-        <div class="draft" id="plan-<%= i.id %>">
+        <div class="draft plan-item <%= i.colorClass %>" id="plan-<%= i.id %>">
           <div class="draft-meta">
             <% if (i.type) { %><span class="tag"><%= typeLabels[i.type] || i.type %></span><% } %>
             <% if (i.start_date) { %><span><%= i.start_date %><%= i.end_date ? ' – ' + i.end_date : '' %></span><% } %>
@@ -104,6 +104,7 @@
 
 <%- i.description.replace(/</g, '&lt;') %><% } %></div>
           <div class="draft-actions">
+            <a class="btn-copy" style="text-decoration:none; display:inline-flex; align-items:center;" href="/plan/<%= i.id %>/edit">Редактировать</a>
             <% ['planned','in_progress','done','cancelled'].filter(s => s !== i.status).forEach(s => { %>
               <form method="post" action="/plan/<%= i.id %>/status" style="display:inline">
                 <input type="hidden" name="status" value="<%= s %>">

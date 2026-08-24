@@ -15,6 +15,8 @@ import {
   createPlanItem,
   setPlanItemStatus,
   deletePlanItem,
+  getPlanItem,
+  updatePlanItem,
   listPromoIdeas,
   setPromoIdeaStatus,
   listRepostSuggestions,
@@ -60,6 +62,12 @@ function shiftMonth(monthStr, delta) {
   while (month > 12) { month -= 12; year += 1; }
   while (month < 1) { month += 12; year -= 1; }
   return `${year}-${pad2(month)}`;
+}
+
+const PLAN_COLOR_COUNT = 12;
+
+function planColorClass(id) {
+  return `plan-c${((Number(id) % PLAN_COLOR_COUNT) + PLAN_COLOR_COUNT) % PLAN_COLOR_COUNT}`;
 }
 
 function buildCalendarWeeks(monthStr, items) {
@@ -221,7 +229,8 @@ dashboardRouter.post('/tasks/:id/delete', requireSession, (req, res) => {
 dashboardRouter.get('/plan', requireSession, (req, res) => {
   const status = req.query.status || 'planned';
   const view = req.query.view === 'calendar' ? 'calendar' : 'list';
-  const items = listPlanItems({ status: status === 'all' ? undefined : status });
+  const items = listPlanItems({ status: status === 'all' ? undefined : status })
+    .map((i) => ({ ...i, colorClass: planColorClass(i.id) }));
 
   let month = null;
   let prevMonth = null;
@@ -266,6 +275,19 @@ dashboardRouter.post('/plan/:id/status', requireSession, (req, res) => {
 dashboardRouter.post('/plan/:id/delete', requireSession, (req, res) => {
   deletePlanItem(req.params.id);
   res.redirect(req.get('referer') || '/plan');
+});
+
+dashboardRouter.get('/plan/:id/edit', requireSession, (req, res) => {
+  const item = getPlanItem(req.params.id);
+  if (!item) return res.status(404).send('not found');
+  res.render('plan-edit', { item, typeLabels: PLAN_TYPE_LABELS });
+});
+
+dashboardRouter.post('/plan/:id/update', requireSession, (req, res) => {
+  const { title, type, start_date, end_date, channels, description } = req.body || {};
+  if (!title) return res.status(400).send('title is required');
+  updatePlanItem(req.params.id, { title, type, start_date, end_date, channels, description });
+  res.redirect('/plan');
 });
 
 dashboardRouter.get('/help', requireSession, (req, res) => {

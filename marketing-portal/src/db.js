@@ -262,6 +262,25 @@ export function setPlanItemStatus(id, status) {
   db.prepare('UPDATE plan_items SET status = ? WHERE id = ?').run(status, id);
 }
 
+export function getPlanItem(id) {
+  return db.prepare('SELECT * FROM plan_items WHERE id = ?').get(id);
+}
+
+export function updatePlanItem(id, { title, type, start_date, end_date, channels, description }) {
+  db.prepare(
+    `UPDATE plan_items SET title = ?, type = ?, start_date = ?, end_date = ?, channels = ?, description = ?
+     WHERE id = ?`
+  ).run(
+    title,
+    type || null,
+    start_date || null,
+    end_date || null,
+    channels || null,
+    description || null,
+    id
+  );
+}
+
 export function deletePlanItem(id) {
   db.prepare('DELETE FROM plan_items WHERE id = ?').run(id);
 }

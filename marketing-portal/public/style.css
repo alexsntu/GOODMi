@@ -448,3 +448,31 @@ button, .btn {
 }
 
 .login-error { color: var(--danger); font-size: 13px; margin-bottom: 12px; }
+
+/* Plan item colors — each campaign/event gets its own distinct color (id-based, cycles through 12) so calendar and list don't blend together */
+.plan-c0  { --pc-bg: #FFF0E6; --pc-fg: #E55A00; }
+.plan-c1  { --pc-bg: #E8F0FE; --pc-fg: #2F6FED; }
+.plan-c2  { --pc-bg: #E6F4EA; --pc-fg: #2E7D46; }
+.plan-c3  { --pc-bg: #F1E8FE; --pc-fg: #7C3AED; }
+.plan-c4  { --pc-bg: #FCE8F1; --pc-fg: #D6336C; }
+.plan-c5  { --pc-bg: #E1F5F3; --pc-fg: #0E9488; }
+.plan-c6  { --pc-bg: #FEF3E0; --pc-fg: #B7791F; }
+.plan-c7  { --pc-bg: #E9E9FB; --pc-fg: #4C51BF; }
+.plan-c8  { --pc-bg: #F5E9DC; --pc-fg: #92400E; }
+.plan-c9  { --pc-bg: #E0F7FA; --pc-fg: #0891B2; }
+.plan-c10 { --pc-bg: #F8E1FB; --pc-fg: #A21CAF; }
+.plan-c11 { --pc-bg: #E7EBF0; --pc-fg: #475569; }
+
+.draft.plan-item {
+  border-left: 4px solid var(--pc-fg);
+}
+
+.cal-pill.plan-item {
+  background: var(--pc-bg);
+  color: var(--pc-fg);
+}
+
+.cal-pill.plan-item:hover {
+  background: var(--pc-fg);
+  color: var(--white);
+}
