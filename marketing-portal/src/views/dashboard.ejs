@@ -67,7 +67,7 @@
           <% sourceStats.forEach(s => { %>
             <tr>
               <td><%= s.label %></td>
-              <td><%= s.last_at || '—' %></td>
+              <td><%= s.last_at ? s.last_at + ' МСК' : '—' %></td>
               <td><%= s.total %></td>
               <td><%= s.new_count %></td>
               <td><%= s.posted_count %></td>
@@ -104,7 +104,7 @@
         <div class="draft-meta">
           <span class="tag"><%= sourceLabels[d.source] || d.source %></span>
           <% if (d.category) { %><span><%= d.category %></span><% } %>
-          <span><%= d.created_at %></span>
+          <span><%= d.created_at %> МСК</span>
           <% if (d.source_url) { %><a href="<%= d.source_url %>" target="_blank" rel="noopener">открыть товар</a><% } %>
         </div>
         <div class="draft-text"><%= d.title %>

@@ -36,7 +36,7 @@
       <div class="draft" id="topic-<%= t.id %>">
         <div class="draft-meta">
           <% if (t.category) { %><span class="tag"><%= t.category %></span><% } %>
-          <span><%= t.created_at %></span>
+          <span><%= t.created_at %> МСК</span>
           <% if (t.source_url) { %><a href="<%= t.source_url %>" target="_blank" rel="noopener">источник</a><% } %>
         </div>
         <div class="draft-text"><%= t.title %>

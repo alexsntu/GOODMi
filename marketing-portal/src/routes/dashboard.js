@@ -137,13 +137,17 @@ dashboardRouter.get('/', requireSession, (req, res) => {
   const drafts = listDrafts({
     status: status === 'all' ? undefined : status,
     source: source || undefined,
-  });
+  }).map((d) => ({ ...d, created_at: utcSqlToMskDisplay(d.created_at) }));
   const draftStats = getDraftStatsBySource();
-  const sourceStats = SOURCES.map((key) => ({
-    key,
-    label: SOURCE_LABELS[key],
-    ...(draftStats[key] || { total: 0, new_count: 0, posted_count: 0, dismissed_count: 0, last_at: null }),
-  }));
+  const sourceStats = SOURCES.map((key) => {
+    const stats = draftStats[key] || { total: 0, new_count: 0, posted_count: 0, dismissed_count: 0, last_at: null };
+    return {
+      key,
+      label: SOURCE_LABELS[key],
+      ...stats,
+      last_at: utcSqlToMskDisplay(stats.last_at),
+    };
+  });
   res.render('dashboard', {
     drafts,
     status,
@@ -166,7 +170,8 @@ dashboardRouter.post('/drafts/:id/status', requireSession, (req, res) => {
 
 dashboardRouter.get('/topics', requireSession, (req, res) => {
   const status = req.query.status || 'pending';
-  const topics = listTopics({ status: status === 'all' ? undefined : status });
+  const topics = listTopics({ status: status === 'all' ? undefined : status })
+    .map((t) => ({ ...t, created_at: utcSqlToMskDisplay(t.created_at) }));
   res.render('topics', { topics, status });
 });
 
@@ -269,7 +274,8 @@ dashboardRouter.get('/help', requireSession, (req, res) => {
 
 dashboardRouter.get('/promo-ideas', requireSession, (req, res) => {
   const status = req.query.status || 'pending';
-  const ideas = listPromoIdeas({ status: status === 'all' ? undefined : status });
+  const ideas = listPromoIdeas({ status: status === 'all' ? undefined : status })
+    .map((idea) => ({ ...idea, created_at: utcSqlToMskDisplay(idea.created_at) }));
   res.render('promo-ideas', { ideas, status });
 });
 
@@ -284,7 +290,8 @@ dashboardRouter.post('/promo-ideas/:id/status', requireSession, (req, res) => {
 
 dashboardRouter.get('/repost-suggestions', requireSession, (req, res) => {
   const status = req.query.status || 'pending';
-  const suggestions = listRepostSuggestions({ status: status === 'all' ? undefined : status });
+  const suggestions = listRepostSuggestions({ status: status === 'all' ? undefined : status })
+    .map((s) => ({ ...s, created_at: utcSqlToMskDisplay(s.created_at) }));
   res.render('repost-suggestions', { suggestions, status });
 });
 
