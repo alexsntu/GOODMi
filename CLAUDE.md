@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi specialty store in Crimea (Sevastopol, Simferopol, Yalta) with Russia-wide CDEK delivery. The repo contains HTML SEO blocks deployed into a CS-Cart e-commerce platform, plus a companion MCP server (`cscart-mcp-server/`) for programmatic CS-Cart API access.
+This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a multibrand gadgets & smart electronics store in Crimea (Sevastopol, Simferopol, Yalta) with Russia-wide CDEK delivery. Xiaomi/Redmi/POCO remain part of the assortment but are **not** the store's default or primary brand — GOODMi carries multiple brands within the same product categories (see "Skills" below: `-multibrand` skills are the current standard for new pages; `-v1`/`-v2` skills reflect the retired Xiaomi-specialist positioning and are kept only for reference on already-published pages). The repo contains HTML SEO blocks deployed into a CS-Cart e-commerce platform, plus a companion MCP server (`cscart-mcp-server/`) for programmatic CS-Cart API access.
 
 **Store constants (use verbatim in all content):**
 - Brand: `GOODMi` (never Goodmi, never GOODMI)
@@ -14,10 +14,11 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a Xiaomi spe
 - Main address: `г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»`
 - Pickup points (6 total): Sevastopol ТЦ Муссон · Остров · ТЦ Мандарин · Адм. Октябрьского; Simferopol ТЦ Меганом; Yalta ТЦ Дом Торговли
 - Since: copywriting uses `«с 2015 года»` / `«более 10 лет на рынке»`; JSON-LD `LocalBusiness.description` uses `«с 2016 года»` — do not change either without user confirmation
-- `sameAs`: `https://yandex.ru/maps/org/goodmi/81345582117/`
-- Yandex rating widget iframe ID: `81345582117`
-- Speciality: «фирменный магазин техники Xiaomi в Крыму»
-- Prohibited: «официальный», «авторизованный» when describing the store
+- `sameAs` (full set, 9 sources — Yandex Maps has 6 separate branch profiles, GOODMi runs two stores at the flagship ТЦ Муссон address): `https://yandex.ru/maps/org/goodmi/81345582117/`, `https://yandex.ru/maps/org/goodmi/219323553091/`, `https://yandex.ru/maps/org/goodmi/41033084263/`, `https://yandex.ru/maps/org/goodmi/95861137013/`, `https://yandex.ru/maps/org/goodmi/183196216973/`, `https://yandex.ru/maps/org/goodmi/63307304488/`, `https://vk.ru/reviews-126411469`, `https://www.avito.ru/brands/i155162702/all?sellerId=557ad28f61641d9114ad5ca6531fa735`, `https://otzovik.com/reviews/mi92_ru-internet-magazin_tehniki_xiaomi`
+- Yandex rating widget iframe ID (flagship store, largest of the two Муссон profiles — also the one JSON-LD `aggregateRating` must match, not the summed total below): `81345582117`
+- Reviews: **7500+ оценок и отзывов** across all sources above (Yandex Maps 6 profiles ≈7598 + VK + Avito + Otzovik) — use this summed figure only in free-text copy (description, USPs), never in structured `aggregateRating.reviewCount`, which must reflect only the flagship Yandex Maps profile (`81345582117`)
+- Speciality: «магазин гаджетов и умной техники в Крыму» — multibrand positioning; no brand (including Xiaomi) is described as the store's specialty or primary brand
+- Prohibited: «официальный», «авторизованный», «фирменный» — when describing the store **or any brand in the assortment**, without exception
 - Commercial terms: use «кредит», never «рассрочка без переплат» or «беспроцентная рассрочка»
 
 **Traffic split (informs meta-tag prioritization):** Yandex ≈ 58% organic traffic / conversion 2× higher than Google; Google ≈ 41%. Optimize for Yandex first.
@@ -116,7 +117,7 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 - Cyrillic brand variants (Сяоми, Редми, Поко) — only include if confirmed present in competitors' top-5 titles
 
 ### Approved USPs
-`гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2016 года` · `бонусная программа GOODMi`
+`гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2016 года` · `бонусная программа GOODMi` · `магазин гаджетов и умной техники в Крыму` · `7500+ оценок и отзывов` · `100% оригинальная техника, без подделок`
 
 ### Canonical URL patterns
 ```
@@ -155,11 +156,13 @@ Each entry below is a thin proxy `SKILL.md` under `.claude/skills/user:<name>/` 
 
 | Slash command | Skill | Trigger use case |
 |---|---|---|
-| `/user:seo-meta` | `seo-meta-builder` | Generate H1 / title / meta description for any store page |
-| `/user:seo-meta2` | `seo-meta-builder-v2` | Same, but with neural answer targeting (Яндекс Нейро / AI Overviews) |
+| `/user:seo-meta-multibrand` | `seo-meta-builder-multibrand` | Generate H1 / title / meta description — multibrand positioning, no default brand (incl. Xiaomi) — **current standard for new pages** |
+| `/user:seo-shop-multibrand` | `seo-shop-page-builder-multibrand` | Full category HTML block — multibrand positioning, no default brand — **current standard for new pages** |
+| `/user:seo-meta` | `seo-meta-builder` | Generate H1 / title / meta description for any store page — legacy Xiaomi-specialist positioning, reference only |
+| `/user:seo-meta2` | `seo-meta-builder-v2` | Same, with neural answer targeting (Яндекс Нейро / AI Overviews) — legacy Xiaomi-specialist positioning, reference only |
 | `/user:seo-core-expansion` | `seo-core-expansion` | Expand a category's semantic core via Wordstat (broad+quoted) LSI/word-form discovery, cross-checked against PixelPlus for dupes |
-| `/user:seo-shop` | `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) |
-| `/user:seo-shop2` | `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — preferred |
+| `/user:seo-shop` | `seo-shop-page-builder` | Full category HTML block v1 (FAQ in Block 2) — legacy Xiaomi-specialist positioning, reference only |
+| `/user:seo-shop2` | `seo-shop-page-builder-v2` | Full category HTML block v2 (FAQ in Block 1, 5 questions, `sameAs`) — legacy Xiaomi-specialist positioning, reference only |
 | `/user:seo-description` | `seo-product-description-builder` | Rewrite product description into SEO/GEO/AEO optimized CS-Cart block |
 | `/user:seo-quick-links` | `seo-quick-links-builder` | Generate `gm-quick-links` section block (with H3, orange strip) |
 | `/user:seo-quick-links-top` | `seo-quick-links-top-builder` | Generate `gm-quick-links-top` block (no title, inline button, bordered) |
