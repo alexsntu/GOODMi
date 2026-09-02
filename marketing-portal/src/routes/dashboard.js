@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { checkCredentials, requireSession } from '../auth.js';
+import { bonusesRouter } from './bonuses.js';
 import {
   listDrafts,
   setDraftStatus,
@@ -96,6 +97,8 @@ dashboardRouter.use((req, res, next) => {
   res.locals.navCounts = getNavCounts();
   next();
 });
+
+dashboardRouter.use('/bonuses', bonusesRouter);
 
 const ROUTINES = [
   { name: 'Новинки', cadence: 'будни 09:33', url: 'https://claude.ai/code/routines/trig_01J15fDUaLRqpm14TxzLZs5d' },

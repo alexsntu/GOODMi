@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Журнал бонусов — Портал</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1><span>Портал</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/bonuses">← Бонусы</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Журнал операций с бонусами</h2>
+
+    <form method="get" action="/bonuses/log" class="task-form" style="flex-direction:row;align-items:center;gap:8px;">
+      <input type="text" name="phone" value="<%= phone %>" placeholder="Поиск по телефону">
+      <button type="submit" class="btn-copy">Найти</button>
+      <% if (phone || batchId) { %><a class="routine-link" href="/bonuses/log">Сбросить</a><% } %>
+    </form>
+
+    <% if (entries.length === 0) { %>
+      <div class="empty">Записей не найдено.</div>
+    <% } %>
+
+    <div class="stats-table-wrap">
+      <table class="stats-table">
+        <thead>
+          <tr><th>Когда (МСК)</th><th>Партия</th><th>Телефон</th><th>Действие</th><th>Сумма</th><th>Детали</th></tr>
+        </thead>
+        <tbody>
+          <% entries.forEach(e => { %>
+            <tr>
+              <td><%= e.created_at_display %></td>
+              <td><a href="/bonuses/<%= e.batch_id %>">#<%= e.batch_id %></a></td>
+              <td><%= e.phone || '—' %></td>
+              <td><%= e.action %></td>
+              <td><%= e.amount != null ? Math.round(e.amount) : '—' %></td>
+              <td><%= e.details || '' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

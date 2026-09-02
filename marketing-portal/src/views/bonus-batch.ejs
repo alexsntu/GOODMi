@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Партия #<%= batch.id %> — Бонусы — Портал</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1><span>Портал</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/bonuses">← Бонусы</a>
+      <a class="routine-link" href="/bonuses/log?batch=<%= batch.id %>">Журнал этой партии →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">
+      Партия #<%= batch.id %> — <%= batch.created_at_display %> МСК —
+      <%= batch.status === 'preview' ? 'превью, не списано' : (batch.status === 'executed' ? 'ждём активации части клиентов' : 'завершено') %>
+    </h2>
+
+    <% if (dupItems.length > 0) { %>
+      <div class="empty">
+        Во входном списке были повторяющиеся телефоны — суммы сложены в одно списание:
+        <% dupItems.forEach(it => { %>
+          <div><%= it.phone %> (<%= it.name || 'без имени' %>): <%= it.dup_count %> строк → <%= Math.round(it.requested_deduct) %></div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <p class="topics-summary">
+      Запрошено списать: <strong><%= Math.round(totals.requested) %></strong> ·
+      Реально списано: <strong><%= Math.round(totals.deducted) %></strong> ·
+      Осталось недосписано: <strong><%= Math.round(totals.remaining) %></strong>
+    </p>
+
+    <% if (batch.status === 'preview') { %>
+      <form method="post" action="/bonuses/<%= batch.id %>/execute">
+        <button type="submit" class="btn-posted" onclick="return confirm('Списать по этому превью? Это правки по живым клиентским счетам.');">
+          Списать по плану
+        </button>
+      </form>
+    <% } %>
+
+    <% if (needsActivationPartial.length > 0 || needsActivationZero.length > 0) { %>
+      <h2 class="section-title">Нужна ручная активация в БонусПлюс</h2>
+      <p class="topics-summary">
+        У этих клиентов не хватает активного баланса, но есть «ожидающие» бонусы — API не умеет их активировать,
+        только руками: <strong>bonusplus.pro/lk_new/ → Клиенты → карточка клиента → блок «Бонусы» →
+        клик по числу под «Неактивные» → «Да»</strong>. Активируйте всех ниже, затем нажмите кнопку внизу страницы.
+      </p>
+
+      <% if (needsActivationPartial.length > 0) { %>
+        <h3 style="margin:16px 0 8px;">Список 1 — уже частично списали, остался хвост (<%= needsActivationPartial.length %>)</h3>
+        <div class="stats-table-wrap">
+          <table class="stats-table">
+            <thead><tr><th>Телефон</th><th>Имя</th><th>Недосписано</th><th>Ожидает (активируйте)</th></tr></thead>
+            <tbody>
+              <% needsActivationPartial.forEach(it => { %>
+                <tr>
+                  <td><%= it.phone %></td>
+                  <td><%= it.name || '—' %></td>
+                  <td><%= Math.round(it.shortfall) %></td>
+                  <td><%= Math.round(it.pending_at_preview) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+
+      <% if (needsActivationZero.length > 0) { %>
+        <h3 style="margin:16px 0 8px;">Список 2 — баланс был 0, не списывали ничего (<%= needsActivationZero.length %>)</h3>
+        <div class="stats-table-wrap">
+          <table class="stats-table">
+            <thead><tr><th>Телефон</th><th>Имя</th><th>Нужно списать</th><th>Ожидает (активируйте)</th></tr></thead>
+            <tbody>
+              <% needsActivationZero.forEach(it => { %>
+                <tr>
+                  <td><%= it.phone %></td>
+                  <td><%= it.name || '—' %></td>
+                  <td><%= Math.round(it.shortfall) %></td>
+                  <td><%= Math.round(it.pending_at_preview) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+
+      <form method="post" action="/bonuses/<%= batch.id %>/followup" style="margin-top:16px;">
+        <button type="submit" class="btn-posted" onclick="return confirm('Подтвердите, что вы уже активировали ожидающие бонусы этим клиентам в админке БонусПлюс.');">
+          Бонусы активированы — списать по списку
+        </button>
+      </form>
+    <% } %>
+
+    <% if (uncollectible.length > 0) { %>
+      <h2 class="section-title">Недосписано и больше нечего активировать</h2>
+      <p class="topics-summary">У этих клиентов нет ни активного, ни ожидающего баланса — остаток можно будет доудержать только при новых начислениях.</p>
+      <div class="stats-table-wrap">
+        <table class="stats-table">
+          <thead><tr><th>Телефон</th><th>Имя</th><th>Недосписано</th></tr></thead>
+          <tbody>
+            <% uncollectible.forEach(it => { %>
+              <tr><td><%= it.phone %></td><td><%= it.name || '—' %></td><td><%= Math.round(it.shortfall) %></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+
+    <h2 class="section-title">Все клиенты партии</h2>
+    <div class="stats-table-wrap">
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Телефон</th><th>Имя</th><th>Запрошено</th><th>Баланс на момент превью</th>
+            <th>Списано</th><th>Осталось недосписано</th><th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(it => { %>
+            <tr>
+              <td><%= it.phone %></td>
+              <td><%= it.name || '—' %></td>
+              <td><%= Math.round(it.requested_deduct) %></td>
+              <td><%= Math.round(it.balance_at_preview || 0) %></td>
+              <td><%= Math.round(it.total_deducted) %></td>
+              <td><%= Math.round(Math.max(0, it.shortfall)) %></td>
+              <td>
+                <% if (batch.status === 'preview') { %>не списано (превью)
+                <% } else if (it.error) { %>ошибка: <%= it.error %>
+                <% } else if (it.still_pending) { %>ждём активации
+                <% } else if (it.shortfall > 0.5) { %>недосписано, активации нет
+                <% } else { %>списано полностью<% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

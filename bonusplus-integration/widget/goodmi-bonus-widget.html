@@ -1,0 +1,152 @@
+<div class="gm-bonus-widget" id="gm-bonus-widget" data-gm-bonus-widget>
+  <div class="gm-bonus-widget__state" data-gm-bonus-state>Загружаем ваши бонусы&#8230;</div>
+</div>
+
+<script>
+(function () {
+  if (window.__gmBonusWidgetInit) return;
+  window.__gmBonusWidgetInit = true;
+
+  /* TODO: заменить на реальный адрес прокси после деплоя на VPS */
+  var PROXY_URL = 'https://bonusplus-proxy.goodmi.ru';
+
+  var PHONE_SELECTOR = 'input[name="user_data[phone]"]';
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = String(str == null ? '' : str);
+    return div.innerHTML;
+  }
+
+  function formatNumber(n) {
+    return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Number(n) || 0);
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    var dd = String(d.getDate()).padStart(2, '0');
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    return dd + '.' + mm + '.' + d.getFullYear();
+  }
+
+  function normalizePhone(raw) {
+    var digits = String(raw || '').replace(/\D/g, '');
+    if (digits.length === 11 && digits.charAt(0) === '8') return '7' + digits.slice(1);
+    if (digits.length === 10) return '7' + digits;
+    return digits;
+  }
+
+  function renderState(root, text, isError) {
+    root.innerHTML =
+      '<div class="gm-bonus-widget__state' + (isError ? ' gm-bonus-widget__state--error' : '') + '">' +
+        escapeHtml(text) +
+      '</div>';
+  }
+
+  function iconCoin() {
+    return '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<circle cx="20" cy="20" r="18" stroke="#FF6900" stroke-width="2.5"/>' +
+      '<path d="M20 12v16M16 15.5c0-1.9 1.8-3.5 4-3.5s4 1.4 4 3.2c0 3.8-8 2.6-8 6.4 0 1.8 1.8 3.2 4 3.2s4-1.6 4-3.5" stroke="#FF6900" stroke-width="2" stroke-linecap="round"/>' +
+    '</svg>';
+  }
+
+  function renderWidget(root, data) {
+    var statsHtml = '';
+    if (data.pendingBonuses > 0) {
+      statsHtml +=
+        '<div class="gm-bonus-widget__stat">' +
+          '<div class="gm-bonus-widget__stat-value">' + formatNumber(data.pendingBonuses) + '</div>' +
+          '<div class="gm-bonus-widget__stat-label">Ожидают начисления</div>' +
+        '</div>';
+    }
+    if (data.expiringAmount > 0) {
+      statsHtml +=
+        '<div class="gm-bonus-widget__stat">' +
+          '<div class="gm-bonus-widget__stat-value">' + formatNumber(data.expiringAmount) + '</div>' +
+          '<div class="gm-bonus-widget__stat-label">Сгорят' + (data.expiringDate ? ' ' + escapeHtml(formatDate(data.expiringDate)) : '') + '</div>' +
+        '</div>';
+    }
+
+    var tierHtml = '';
+    if (data.tier) {
+      tierHtml =
+        '<div class="gm-bonus-widget__tier">' +
+          '<div class="gm-bonus-widget__tier-head">' +
+            '<span class="gm-bonus-widget__tier-name">' + escapeHtml(data.tier) + '</span>' +
+            (data.nextTier ? '<span class="gm-bonus-widget__tier-next">следующий: «' + escapeHtml(data.nextTier) + '»</span>' : '') +
+          '</div>' +
+          (data.nextTier && data.purchasesSumToNextCard > 0
+            ? '<div class="gm-bonus-widget__stat-label">Нужно покупок на ' + formatNumber(data.purchasesSumToNextCard) + ' &#8381;</div>'
+            : '') +
+        '</div>';
+    }
+
+    var historyRows = (data.history || []).map(function (row) {
+      var amountHtml = '';
+      if (row.credit > 0) {
+        amountHtml = '<span class="gm-bonus-widget__amount--credit">+' + formatNumber(row.credit) + '</span>';
+      } else if (row.debit > 0) {
+        amountHtml = '<span class="gm-bonus-widget__amount--debit">&#8211;' + formatNumber(row.debit) + '</span>';
+      }
+      return (
+        '<tr>' +
+          '<td class="gm-bonus-widget__date">' + escapeHtml(formatDate(row.date)) + '</td>' +
+          '<td>' + escapeHtml(row.type || row.description || '') + '</td>' +
+          '<td>' + amountHtml + '</td>' +
+        '</tr>'
+      );
+    }).join('');
+
+    var historyHtml =
+      '<div class="gm-bonus-widget__history-title">История операций</div>' +
+      (historyRows
+        ? '<table class="gm-bonus-widget__table"><thead><tr><th>Дата</th><th>Операция</th><th>Бонусы</th></tr></thead><tbody>' + historyRows + '</tbody></table>'
+        : '<div class="gm-bonus-widget__state">Операций пока нет</div>');
+
+    root.innerHTML =
+      '<div class="gm-bonus-widget__balance">' +
+        '<div>' +
+          '<div class="gm-bonus-widget__balance-label">Доступно бонусов</div>' +
+          '<div class="gm-bonus-widget__balance-value">' + formatNumber(data.balance) + '</div>' +
+        '</div>' +
+        '<div class="gm-bonus-widget__balance-icon">' + iconCoin() + '</div>' +
+      '</div>' +
+      (statsHtml ? '<div class="gm-bonus-widget__stats">' + statsHtml + '</div>' : '') +
+      tierHtml +
+      historyHtml;
+  }
+
+  function init() {
+    var root = document.querySelector('[data-gm-bonus-widget]');
+    if (!root) return;
+
+    var phoneInput = document.querySelector(PHONE_SELECTOR);
+    var phone = normalizePhone(phoneInput ? phoneInput.value : '');
+
+    if (!/^7\d{10}$/.test(phone)) {
+      renderState(root, 'Укажите телефон в профиле, чтобы увидеть бонусы', false);
+      return;
+    }
+
+    fetch(PROXY_URL + '/api/bonuses?phone=' + encodeURIComponent(phone))
+      .then(function (res) {
+        if (!res.ok) throw new Error('bad status ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        renderWidget(root, data);
+      })
+      .catch(function () {
+        renderState(root, 'Не удалось загрузить бонусы, попробуйте позже', true);
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

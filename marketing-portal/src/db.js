@@ -79,6 +79,38 @@ db.exec(`
     status TEXT NOT NULL DEFAULT 'pending',
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS bonus_batches (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    status TEXT NOT NULL DEFAULT 'preview',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS bonus_batch_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id INTEGER NOT NULL REFERENCES bonus_batches(id),
+    phone TEXT NOT NULL,
+    name TEXT,
+    dup_count INTEGER NOT NULL DEFAULT 1,
+    requested_deduct REAL NOT NULL,
+    balance_at_preview REAL,
+    pending_at_preview REAL,
+    deducted_step1 REAL,
+    deducted_step2 REAL NOT NULL DEFAULT 0,
+    step2_needed INTEGER NOT NULL DEFAULT 0,
+    step2_done INTEGER NOT NULL DEFAULT 0,
+    error TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS bonus_batch_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id INTEGER NOT NULL REFERENCES bonus_batches(id),
+    phone TEXT,
+    action TEXT NOT NULL,
+    amount REAL,
+    details TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `);
 
 export function getSeen(key) {
@@ -228,7 +260,10 @@ export function getNavCounts() {
   const repostSuggestions = db
     .prepare(`SELECT COUNT(*) AS c FROM repost_suggestions WHERE status = 'pending'`)
     .get().c;
-  return { drafts, topics, promoIdeas, repostSuggestions };
+  const bonusBatchesAwaiting = db
+    .prepare(`SELECT COUNT(*) AS c FROM bonus_batches WHERE status = 'executed'`)
+    .get().c;
+  return { drafts, topics, promoIdeas, repostSuggestions, bonusBatchesAwaiting };
 }
 
 export function createPlanItem({ title, type, start_date, end_date, channels, description }) {
@@ -337,4 +372,99 @@ export function listRepostSuggestions({ status, limit } = {}) {
 
 export function setRepostSuggestionStatus(id, status) {
   db.prepare('UPDATE repost_suggestions SET status = ? WHERE id = ?').run(status, id);
+}
+
+// --- Бонусы (БонусПлюс) ---
+
+export function createBonusBatch() {
+  const info = db.prepare(`INSERT INTO bonus_batches (status) VALUES ('preview')`).run();
+  return info.lastInsertRowid;
+}
+
+export function addBonusBatchItem(batchId, item) {
+  const stmt = db.prepare(
+    `INSERT INTO bonus_batch_items
+       (batch_id, phone, name, dup_count, requested_deduct, balance_at_preview, pending_at_preview)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
+  );
+  const info = stmt.run(
+    batchId,
+    item.phone,
+    item.name || null,
+    item.dup_count || 1,
+    item.requested_deduct,
+    item.balance_at_preview,
+    item.pending_at_preview
+  );
+  return info.lastInsertRowid;
+}
+
+export function listBonusBatches() {
+  return db
+    .prepare(
+      `SELECT b.*,
+              (SELECT COUNT(*) FROM bonus_batch_items i WHERE i.batch_id = b.id) AS items_count,
+              (SELECT COALESCE(SUM(requested_deduct), 0) FROM bonus_batch_items i WHERE i.batch_id = b.id) AS total_requested,
+              (SELECT COALESCE(SUM(deducted_step1), 0) + COALESCE(SUM(deducted_step2), 0)
+                 FROM bonus_batch_items i WHERE i.batch_id = b.id) AS total_deducted
+         FROM bonus_batches b
+        ORDER BY b.created_at DESC`
+    )
+    .all();
+}
+
+export function getBonusBatch(id) {
+  return db.prepare(`SELECT * FROM bonus_batches WHERE id = ?`).get(id);
+}
+
+export function setBonusBatchStatus(id, status) {
+  db.prepare(`UPDATE bonus_batches SET status = ? WHERE id = ?`).run(status, id);
+}
+
+export function listBonusBatchItems(batchId) {
+  return db.prepare(`SELECT * FROM bonus_batch_items WHERE batch_id = ? ORDER BY id`).all(batchId);
+}
+
+export function updateBonusBatchItemStep1(id, { deducted_step1, balance_at_preview, pending_at_preview, step2_needed, error }) {
+  db.prepare(
+    `UPDATE bonus_batch_items
+        SET deducted_step1 = ?, balance_at_preview = ?, pending_at_preview = ?, step2_needed = ?, error = ?
+      WHERE id = ?`
+  ).run(deducted_step1, balance_at_preview, pending_at_preview, step2_needed ? 1 : 0, error || null, id);
+}
+
+export function updateBonusBatchItemStep2(id, { deducted_step2, step2_needed, pending_at_preview, error }) {
+  db.prepare(
+    `UPDATE bonus_batch_items
+        SET deducted_step2 = deducted_step2 + ?, step2_needed = ?, pending_at_preview = ?, step2_done = ?, error = ?
+      WHERE id = ?`
+  ).run(deducted_step2, step2_needed ? 1 : 0, pending_at_preview, step2_needed ? 0 : 1, error || null, id);
+}
+
+export function logBonusEvent(batchId, { phone, action, amount, details }) {
+  db.prepare(
+    `INSERT INTO bonus_batch_log (batch_id, phone, action, amount, details) VALUES (?, ?, ?, ?, ?)`
+  ).run(batchId, phone || null, action, amount ?? null, details || null);
+}
+
+export function listBonusLog({ batchId, phone, limit } = {}) {
+  let query = `SELECT l.*, b.created_at AS batch_created_at
+                 FROM bonus_batch_log l
+                 JOIN bonus_batches b ON b.id = l.batch_id
+                WHERE 1=1`;
+  const params = [];
+  if (batchId) {
+    query += ' AND l.batch_id = ?';
+    params.push(batchId);
+  }
+  if (phone) {
+    query += ' AND l.phone LIKE ?';
+    params.push(`%${phone}%`);
+  }
+  query += ' ORDER BY l.created_at DESC, l.id DESC';
+  if (limit) {
+    query += ' LIMIT ?';
+    params.push(limit);
+  }
+  return db.prepare(query).all(...params);
 }

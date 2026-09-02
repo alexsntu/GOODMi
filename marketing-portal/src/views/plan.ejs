@@ -13,6 +13,7 @@
       <a class="routine-link" href="/tasks">Задачи →</a>
       <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
       <a class="routine-link" href="/repost-suggestions">Репост →<% if (navCounts.repostSuggestions > 0) { %><span class="nav-badge"><%= navCounts.repostSuggestions %></span><% } %></a>
+      <a class="routine-link" href="/bonuses">Бонусы →<% if (navCounts.bonusBatchesAwaiting > 0) { %><span class="nav-badge"><%= navCounts.bonusBatchesAwaiting %></span><% } %></a>
       <a class="routine-link" href="/help">Хелп →</a>
       <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
     </div>

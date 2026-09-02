@@ -1,0 +1,9 @@
+services:
+  bonusplus-proxy:
+    build: .
+    container_name: goodmi-bonusplus-proxy
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3100:3100"
+    env_file:
+      - .env

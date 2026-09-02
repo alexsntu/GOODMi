@@ -1,0 +1,19 @@
+{
+  "name": "goodmi-bonusplus-proxy",
+  "version": "1.0.0",
+  "description": "Прокси-сервис между личным кабинетом goodmi.ru и API БонусПлюс (bonusplus.pro) — скрывает API-ключ на сервере",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Бонусы — Портал</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h1><span>Портал</span></h1>
+    <div class="topbar-actions">
+      <a class="routine-link" href="/">← Черновики<% if (navCounts.drafts > 0) { %><span class="nav-badge"><%= navCounts.drafts %></span><% } %></a>
+      <a class="routine-link" href="/topics">Темы статей →<% if (navCounts.topics > 0) { %><span class="nav-badge"><%= navCounts.topics %></span><% } %></a>
+      <a class="routine-link" href="/tasks">Задачи →</a>
+      <a class="routine-link" href="/plan">План →</a>
+      <a class="routine-link" href="/promo-ideas">Идеи акций →<% if (navCounts.promoIdeas > 0) { %><span class="nav-badge"><%= navCounts.promoIdeas %></span><% } %></a>
+      <a class="routine-link" href="/repost-suggestions">Репост →<% if (navCounts.repostSuggestions > 0) { %><span class="nav-badge"><%= navCounts.repostSuggestions %></span><% } %></a>
+      <a class="routine-link" href="/help">Хелп →</a>
+      <form method="post" action="/logout"><button type="submit" class="btn-dismiss">Выйти</button></form>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Работа с бонусами (БонусПлюс)</h2>
+
+    <% if (!configured) { %>
+      <div class="empty">
+        В `.env` портала не заполнен <code>BONUSPLUS_API_KEY</code> — списание работать не будет.
+        Добавьте <code>BONUSPLUS_API_BASE</code> и <code>BONUSPLUS_API_KEY</code> в `.env` (см. `.env.example`) и перезапустите портал.
+      </div>
+    <% } %>
+
+    <p class="topics-summary">
+      Массовое списание (коррекция) бонусов у списка клиентов — например, отмена ошибочно начисленных бонусов.
+      <a href="/bonuses/log">Журнал всех операций →</a>
+    </p>
+
+    <form method="post" action="/bonuses/preview" class="task-form">
+      <label style="font-weight:600;font-size:13px;">Список: телефон и сумма списания, по одному на строку</label>
+      <textarea name="list" rows="10" placeholder="79991234567 500&#10;79997654321 320" required></textarea>
+      <label class="task-form-row" style="align-items:center;">
+        <span>Или загрузить файл (.txt/.csv, тот же формат)</span>
+        <input type="file" id="bonus-file-input" accept=".txt,.csv">
+      </label>
+      <button type="submit" class="btn-posted">Посчитать превью</button>
+    </form>
+    <script>
+      document.getElementById('bonus-file-input').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function () {
+          document.querySelector('textarea[name="list"]').value = reader.result;
+        };
+        reader.readAsText(file, 'UTF-8');
+      });
+    </script>
+
+    <h2 class="section-title">Партии</h2>
+
+    <% if (batches.length === 0) { %>
+      <div class="empty">Партий пока нет.</div>
+    <% } %>
+
+    <% batches.forEach(b => { %>
+      <a class="draft" href="/bonuses/<%= b.id %>" style="display:block;text-decoration:none;color:inherit;">
+        <div class="draft-meta">
+          <span class="tag">#<%= b.id %></span>
+          <span><%= b.created_at_display %> МСК</span>
+          <span class="tag">
+            <%= b.status === 'preview' ? 'Превью — не списано' : (b.status === 'executed' ? 'Ждём активации части клиентов' : 'Завершено') %>
+          </span>
+        </div>
+        <div class="draft-text">
+          Клиентов: <%= b.items_count %> · запрошено списать: <%= Math.round(b.total_requested) %> · списано: <%= Math.round(b.total_deducted) %>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</body>
+</html>
