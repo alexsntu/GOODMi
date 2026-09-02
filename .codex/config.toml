@@ -1,0 +1,16 @@
+[mcp_servers.pixelplus]
+command = "node"
+args = ['C:\Users\Алекс\GOODMi\cscart-mcp-server\src\pixelplus.js']
+
+[mcp_servers.pixelplus.env]
+PIXELPLUS_API_TOKEN = "5747d00378aa231ad9667bf60a2b4fff"
+
+[mcp_servers.Maxmobiles]
+command = 'C:\Program Files\nodejs\node.exe'
+args = ['c:\Users\Алекс\GOODMi\cscart-mcp-server\src\index.js']
+
+[mcp_servers.Maxmobiles.env]
+CSCART_API_URL = "https://maxmobiles.ru/api"
+CSCART_API_EMAIL = "MCP@maxmobiles.ru"
+CSCART_API_KEY = "m97Z1c2321h8uN4t1J09S61bD59BdJhE"
+LOG_LEVEL = "info"

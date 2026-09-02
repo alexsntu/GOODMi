@@ -41,9 +41,13 @@ CSS/                   # goodmi-styles.css (shared, documented — edit this one
 _DEV/                  # Development artifacts and task trackers (untracked)
 tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
+marketing-portal/      # Node/Express + SQLite internal marketing dashboard (drafts, topics, plan, promo ideas, tasks) — deployed via Docker to the VPS; see MARKETING.md §4
+.agents/               # product-marketing.md — shared context file read by .claude/skills/mk-* marketing skills
 .cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards + workflow shortcuts
 .cursor/skills/        # Reusable skill definitions for content generation workflows
 ```
+
+**Marketing skills & tools catalog:** see [`MARKETING.md`](MARKETING.md) for the full list of installed marketing skills (`.claude/skills/mk-*`, from coreyhaines31/marketingskills), MCP data tools, and marketing-portal upgrade notes — check it before reaching for a marketing skill so the right tool gets used and any conflict with the hard prohibitions below is caught.
 
 **Utility scripts in `tools/`:**
 - `restructure_category_two_block.py` — splits single-block category HTML into the two-block (Block 1 / Block 2) structure
