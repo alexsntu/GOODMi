@@ -115,7 +115,7 @@
 ## 4. Маркетинг-портал — что уже есть и что можно улучшить
 
 ### Как устроен сейчас (`marketing-portal/`, Node/Express + SQLite, деплой в Docker на VPS)
-- **Таблицы**: `drafts` (посты по источникам: новинки/акции/уценка/блог/пятничный/конкуренты — статусы `new/posted/dismissed`), `topics` (темы блога — `pending/approved/rejected/generated`), `plan_items` (маркетинг-план/календарь — `planned/in_progress/done/cancelled`), `promo_ideas` и `repost_suggestions` (аналогично `pending/approved/rejected`), `tasks`.
+- **Таблицы**: `drafts` (посты по источникам: новинки/акции/уценка/блог/пятничный/конкуренты — статусы `new/posted/dismissed`), `topics` (темы блога — `pending/approved/rejected/generated`), `plan_items` (маркетинг-план/календарь — `planned/in_progress/done/cancelled`), `promo_ideas` и `repost_suggestions` (аналогично `pending/approved/rejected`), `tasks`, `bonus_batches`/`bonus_batch_items`/`bonus_batch_log` (раздел «Бонусы» — массовое списание бонусов клиентов в БонусПлюс по списку, с журналом операций; `.env` портала должен содержать `BONUSPLUS_API_BASE`/`BONUSPLUS_API_KEY`, см. `src/routes/bonuses.js`).
 - **8 облачных Claude-рутин** (расписание в `dashboardRouter` → `ROUTINES`), которые пишут в эти таблицы через `marketing-portal/src/routes/api.js`, а вы одобряете/отклоняете результат в UI (`dashboardRouter` → `/topics/:id/status`, `/promo-ideas/:id/status`, `/repost-suggestions/:id/status`).
 - Время везде хранится в UTC, отображается в МСК (`utcSqlToMskDisplay`).
 

@@ -2134,3 +2134,181 @@ a.goodmi-desktop-mega__heading:hover::before {
   }
 }
 
+.gm-bonus-widget {
+  font-family: "MiSans", "PingFang SC", "Helvetica Neue", "Noto Sans SC",
+               system-ui, -apple-system, Arial, sans-serif;
+  color: #1C1C1C;
+  max-width: 640px;
+  margin: 24px 0;
+}
+
+.gm-bonus-widget * {
+  box-sizing: border-box;
+}
+
+.gm-bonus-widget__balance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #FFF0E6;
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.gm-bonus-widget__balance-label {
+  font-size: 14px;
+  color: #6B6B6B;
+  margin-bottom: 4px;
+}
+
+.gm-bonus-widget__balance-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #FF6900;
+  line-height: 1.2;
+}
+
+.gm-bonus-widget__balance-icon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gm-bonus-widget__stats {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.gm-bonus-widget__stat {
+  flex: 1 1 160px;
+  background: #F5F5F5;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.gm-bonus-widget__stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C1C1C;
+}
+
+.gm-bonus-widget__stat-label {
+  font-size: 13px;
+  color: #6B6B6B;
+  margin-top: 2px;
+}
+
+.gm-bonus-widget__tier {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #E5E5E5;
+  border-radius: 12px;
+}
+
+.gm-bonus-widget__tier-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.gm-bonus-widget__tier-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gm-bonus-widget__tier-next {
+  font-size: 13px;
+  color: #6B6B6B;
+}
+
+.gm-bonus-widget__progress-track {
+  height: 6px;
+  background: #EBEBEB;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gm-bonus-widget__progress-fill {
+  height: 100%;
+  background: #FF6900;
+  border-radius: 3px;
+}
+
+.gm-bonus-widget__history-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 24px 0 12px;
+}
+
+.gm-bonus-widget__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.gm-bonus-widget__table th {
+  text-align: left;
+  font-weight: 600;
+  color: #6B6B6B;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 0 8px 8px;
+  border-bottom: 1px solid #E5E5E5;
+}
+
+.gm-bonus-widget__table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #E5E5E5;
+  vertical-align: top;
+}
+
+.gm-bonus-widget__table tr:last-child td {
+  border-bottom: none;
+}
+
+.gm-bonus-widget__amount--credit {
+  color: #2E9E5B;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.gm-bonus-widget__amount--debit {
+  color: #E5484D;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.gm-bonus-widget__date {
+  color: #6B6B6B;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.gm-bonus-widget__state {
+  padding: 16px;
+  color: #6B6B6B;
+  font-size: 14px;
+  text-align: center;
+}
+
+.gm-bonus-widget__state--error {
+  color: #E5484D;
+}
+
+@media (max-width: 640px) {
+  .gm-bonus-widget__table {
+    font-size: 13px;
+  }
+  .gm-bonus-widget__table th:nth-child(2),
+  .gm-bonus-widget__table td:nth-child(2) {
+    display: none;
+  }
+}
+

@@ -17,7 +17,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a multibrand
 - `sameAs` (full set, 9 sources — Yandex Maps has 6 separate branch profiles, GOODMi runs two stores at the flagship ТЦ Муссон address): `https://yandex.ru/maps/org/goodmi/81345582117/`, `https://yandex.ru/maps/org/goodmi/219323553091/`, `https://yandex.ru/maps/org/goodmi/41033084263/`, `https://yandex.ru/maps/org/goodmi/95861137013/`, `https://yandex.ru/maps/org/goodmi/183196216973/`, `https://yandex.ru/maps/org/goodmi/63307304488/`, `https://vk.ru/reviews-126411469`, `https://www.avito.ru/brands/i155162702/all?sellerId=557ad28f61641d9114ad5ca6531fa735`, `https://otzovik.com/reviews/mi92_ru-internet-magazin_tehniki_xiaomi`
 - Yandex rating widget iframe ID (flagship store, largest of the two Муссон profiles — also the one JSON-LD `aggregateRating` must match, not the summed total below): `81345582117`
 - Reviews: **7500+ оценок и отзывов** across all sources above (Yandex Maps 6 profiles ≈7598 + VK + Avito + Otzovik) — use this summed figure only in free-text copy (description, USPs), never in structured `aggregateRating.reviewCount`, which must reflect only the flagship Yandex Maps profile (`81345582117`)
-- Speciality: «магазин гаджетов и умной техники в Крыму» — multibrand positioning; no brand (including Xiaomi) is described as the store's specialty or primary brand
+- Speciality: «магазин электроники и гаджетов в Крыму» — multibrand positioning; no brand (including Xiaomi) is described as the store's specialty or primary brand. `«умная техника»` is not a standalone search term (near-zero regional Wordstat volume) — use it only inside specific IoT/smart-device categories (умный дом, роботы-пылесосы, смарт-часы, IP-камеры) where it accurately describes the product, never as blanket boilerplate
 - Prohibited: «официальный», «авторизованный», «фирменный» — when describing the store **or any brand in the assortment**, without exception
 - Commercial terms: use «кредит», never «рассрочка без переплат» or «беспроцентная рассрочка»
 
@@ -42,6 +42,7 @@ _DEV/                  # Development artifacts and task trackers (untracked)
 tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 marketing-portal/      # Node/Express + SQLite internal marketing dashboard (drafts, topics, plan, promo ideas, tasks) — deployed via Docker to the VPS; see MARKETING.md §4
+bonusplus-integration/ # Прокси-сервис + виджет для стороннего loyalty-сервиса bonusplus.pro (ЛК-баланс + операции с бонусами); см. bonusplus-integration/README.md
 .agents/               # product-marketing.md — shared context file read by .claude/skills/mk-* marketing skills
 .cursor/rules/         # Cursor rules (MDC) defining HTML/SEO standards + workflow shortcuts
 .cursor/skills/        # Reusable skill definitions for content generation workflows
@@ -121,7 +122,7 @@ Rules in `.cursor/rules/` define the authoritative standards. Key rules:
 - Cyrillic brand variants (Сяоми, Редми, Поко) — only include if confirmed present in competitors' top-5 titles
 
 ### Approved USPs
-`гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2016 года` · `бонусная программа GOODMi` · `магазин гаджетов и умной техники в Крыму` · `7500+ оценок и отзывов` · `100% оригинальная техника, без подделок`
+`гарантия 1 год` · `доставка СДЭК` · `самовывоз в Крыму` · `трейд-ин` · `кредит` · `с 2016 года` · `бонусная программа GOODMi` · `магазин электроники и гаджетов в Крыму` · `7500+ оценок и отзывов` · `100% оригинальная техника, без подделок`
 
 ### Canonical URL patterns
 ```
