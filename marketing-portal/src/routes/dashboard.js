@@ -101,14 +101,14 @@ dashboardRouter.use((req, res, next) => {
 dashboardRouter.use('/bonuses', bonusesRouter);
 
 const ROUTINES = [
-  { name: 'Новинки', cadence: 'будни 09:33', url: 'https://claude.ai/code/routines/trig_01J15fDUaLRqpm14TxzLZs5d' },
-  { name: 'Акции и уценка', cadence: 'будни 09:40', url: 'https://claude.ai/code/routines/trig_011Yk3zJWZKLz1ppg3iPDscE' },
-  { name: 'Темы блога (предложить)', cadence: 'будни 07:00', url: 'https://claude.ai/code/routines/trig_013xSmLjQS2QE6yjb7gGs1Zp' },
+  { name: 'Новинки', cadence: 'будни 10:33', url: 'https://claude.ai/code/routines/trig_01J15fDUaLRqpm14TxzLZs5d' },
+  { name: 'Акции и уценка', cadence: 'будни 10:40', url: 'https://claude.ai/code/routines/trig_011Yk3zJWZKLz1ppg3iPDscE' },
+  { name: 'Темы блога (предложить)', cadence: 'будни 10:00 и 17:00', url: 'https://claude.ai/code/routines/trig_013xSmLjQS2QE6yjb7gGs1Zp' },
   { name: 'Блог (генерация статей)', cadence: 'будни 19:00', url: 'https://claude.ai/code/routines/trig_01S3Goi79TaHVVkYgvYTU7CC' },
   { name: 'Пятничный пост', cadence: 'пятница 09:54', url: 'https://claude.ai/code/routines/trig_01VC6LnZDdtvLKEEYQAN1VBu' },
-  { name: 'Мониторинг конкурентов', cadence: 'будни 08:30', url: 'https://claude.ai/code/routines/trig_0173oTYyg2LY1yaLJQGXfm2c' },
-  { name: 'Идеи акций', cadence: 'понедельник 08:00', url: 'https://claude.ai/code/routines/trig_016TWCLzCrq4bA9QdUXY1xsB' },
-  { name: 'Предложение постов', cadence: 'будни, каждый час 10:30–17:30', url: 'https://claude.ai/code/routines/trig_01A6iRVBPDPaH2Q1UEQ9R11P' },
+  { name: 'Мониторинг конкурентов', cadence: 'будни 11:00', url: 'https://claude.ai/code/routines/trig_0173oTYyg2LY1yaLJQGXfm2c' },
+  { name: 'Идеи акций', cadence: 'понедельник 11:30', url: 'https://claude.ai/code/routines/trig_016TWCLzCrq4bA9QdUXY1xsB' },
+  { name: 'Предложение постов', cadence: 'будни, каждые 2 часа 10:30–16:30', url: 'https://claude.ai/code/routines/trig_01A6iRVBPDPaH2Q1UEQ9R11P' },
 ];
 
 const SOURCES = ['novinki', 'aktsii', 'ucenka', 'blog', 'friday', 'competitor'];
