@@ -1,13 +1,15 @@
-<!-- AKCIYA-OTZOVYS V.9.26 (период 01.09.2026-30.09.2026) -->
+<!-- AKCIYA-OTZOVYS YUBILEY-10-LET V.10.26 (период 01.09.2026-30.09.2026) -->
 {literal}
 <style>
-    
+
     :root {
         --mi-orange: #FF6900;
         --mi-purple: #815AF8;
         --mi-black: #191919;
         --mi-gray: #F7F7F7;
         --mi-text-gray: #8c8c8c;
+        --mi-gold: #C9A227;
+        --mi-gold-light: #F0DFA0;
         --hyper-radius: 24px;
         --card-radius: 20px;
         --mi-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -37,6 +39,7 @@
     }
     .blob-1 { top: -100px; left: -100px; width: 40%; height: 400px; background: #e0eaff; }
     .blob-2 { bottom: -100px; right: -100px; width: 30%; height: 350px; background: #f3e0ff; }
+    .blob-3 { top: 30%; right: -140px; width: 32%; height: 320px; background: #faf1d6; }
 
     .hyperos-content {
         position: relative;
@@ -51,14 +54,37 @@
         background: #fff;
         padding: 8px;
         border-radius: var(--card-radius);
-        border: 2px solid var(--mi-purple);
-        box-shadow: 0 15px 40px rgba(129, 90, 248, 0.15);
+        border: 2px solid var(--mi-gold);
+        box-shadow: 0 15px 40px rgba(201, 162, 39, 0.2);
     }
     .hyperos-top-banner img {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 12px;
+    }
+
+/* ==== Юбилейные 10-летие элементы ==== */
+    .anniversary-ribbon {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, var(--mi-gold) 0%, var(--mi-gold-light) 50%, var(--mi-gold) 100%);
+        color: #4a3600;
+        padding: 10px 26px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 1rem;
+        letter-spacing: 0.3px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 24px rgba(201, 162, 39, 0.35);
+    }
+    .anniversary-ribbon svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .hyperos-date-badge.badge-gold {
+        background-color: rgba(201, 162, 39, 0.1);
+        color: #a9822a;
+        border-color: rgba(201, 162, 39, 0.35);
     }
 
 .hyperos-header h1 {
@@ -101,13 +127,19 @@
         border-radius: var(--card-radius);
         padding: 25px;
     }
+    .hyperos-prizes-section.wide { max-width: 1120px; padding: 30px 25px; }
     .prizes-section-label {
         font-size: 0.9rem;
         text-transform: uppercase;
         letter-spacing: 1.5px;
         color: var(--mi-text-gray);
-        margin-bottom: 20px;
+        margin-bottom: 6px;
         font-weight: 600;
+    }
+    .prizes-section-sub {
+        font-size: 0.85rem;
+        color: var(--mi-text-gray);
+        margin-bottom: 22px;
     }
     .prizes-grid {
         display: grid;
@@ -125,6 +157,10 @@
         margin: 0 auto;
     }
     .prizes-grid-1 .hyperos-prize-img { width: 220px; }
+    .prizes-grid-10 {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+    }
     .prize-card {
         background: #ffffff;
         border: 1px solid #efe5ff;
@@ -160,6 +196,62 @@
         animation-delay: -2s;
     }
 
+    .prize-card-sm {
+        background: #ffffff;
+        border: 1px solid #efe5ff;
+        border-radius: 16px;
+        padding: 20px 12px 16px;
+        box-shadow: 0 8px 22px rgba(129, 90, 248, 0.06);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .prize-card-num {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--mi-gold) 0%, var(--mi-gold-light) 100%);
+        color: #4a3600;
+        font-weight: 800;
+        font-size: 0.78rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 10px rgba(201, 162, 39, 0.45);
+    }
+    .prize-card-sm .prize-img-sm {
+        width: 96px;
+        height: 96px;
+        object-fit: contain;
+        display: block;
+        margin: 4px auto 12px;
+    }
+    .prize-card-sm .prize-icon-placeholder {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: #f8f5ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4px auto 12px;
+        color: var(--mi-purple);
+    }
+    .prize-card-name-sm {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--mi-black);
+        text-align: center;
+        line-height: 1.35;
+        text-decoration: none;
+    }
+    .prize-card-sm a.prize-card-name-sm { color: var(--mi-purple); }
+    .prize-card-sm a.prize-card-name-sm:hover { color: var(--mi-orange); }
+
 .platforms-title {
         font-size: 1.2rem;
         font-weight: 700;
@@ -194,9 +286,9 @@
         transform: translateY(-5px);
         background: #fff;
         box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        border-color: var(--mi-purple);
+        border-color: var(--mi-gold);
         text-decoration: none;
-        color: var(--mi-purple);
+        color: #a9822a;
     }
 
     .platform-icon {
@@ -211,18 +303,19 @@
     }
 
 .hyperos-cta-block {
-        background: linear-gradient(135deg, var(--mi-orange) 0%, #ff8a00 100%);
-        color: #fff;
+        background: linear-gradient(135deg, var(--mi-gold) 0%, #e0b73a 100%);
+        color: #3a2a00;
         padding: 30px;
         border-radius: var(--card-radius);
         margin: 0 auto 30px auto;
         max-width: 800px;
-        box-shadow: 0 10px 30px rgba(255, 105, 0, 0.3);
+        box-shadow: 0 10px 30px rgba(201, 162, 39, 0.35);
         transform: scale(1);
         transition: transform 0.3s;
     }
     .hyperos-cta-block:hover { transform: scale(1.02); }
     .hyperos-cta-text { font-size: 1.4rem; font-weight: 700; line-height: 1.3; }
+    .hyperos-cta-sub { font-size: 0.95rem; font-weight: 600; opacity: 0.8; margin-top: 6px; }
 
 .website-review-block {
         background: #fff;
@@ -290,7 +383,7 @@
         width: 100%;
         border-collapse: collapse;
     }
-    
+
     .hyperos-table thead th {
         position: sticky;
         top: 0;
@@ -325,10 +418,10 @@
     }
     .hyperos-table tr:hover td { background-color: #fafafa; }
 
-.hyperos-table th:nth-child(1) { width: 8%; text-align: center; } 
+.hyperos-table th:nth-child(1) { width: 8%; text-align: center; }
     .hyperos-table td:nth-child(1) { text-align: center; }
-    .hyperos-table th:nth-child(2) { width: 37%; } 
-    .hyperos-table th:nth-child(3) { width: 35%; } 
+    .hyperos-table th:nth-child(2) { width: 37%; }
+    .hyperos-table th:nth-child(3) { width: 35%; }
     .hyperos-table th:nth-child(4) { width: 20%; }
 
 .table-empty-notice {
@@ -558,10 +651,15 @@
         color: #fff;
     }
 
+@media (max-width: 900px) {
+        .prizes-grid-10 { grid-template-columns: repeat(3, 1fr); }
+    }
+
 @media (max-width: 768px) {
         .hyperos-promo-wrapper { padding: 30px 15px; }
         .hyperos-header h1 { font-size: 2rem; }
-        
+        .anniversary-ribbon { font-size: 0.85rem; padding: 8px 18px; }
+
         .prizes-grid {
             grid-template-columns: 1fr;
             gap: 15px;
@@ -570,10 +668,11 @@
             grid-template-columns: 1fr;
             max-width: 100%;
         }
+        .prizes-grid-10 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
 .platforms-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; 
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
         .platform-card {
@@ -587,13 +686,13 @@
 
         .hyperos-cta-text { font-size: 1.1rem; }
         .hyperos-vk-info { text-align: center; gap: 10px; padding: 15px; }
-        
+
         .website-review-block { text-align: center; padding: 16px; }
         .website-review-title img { width: auto; height: 40px; }
 
 .participants-scroll-box { max-height: 400px; border-radius: 12px; }
         .hyperos-table th, .hyperos-table td { padding: 8px 5px; font-size: 0.75rem; }
-        
+
         .hyperos-table th:nth-child(1), .hyperos-table th:nth-child(2),
         .hyperos-table th:nth-child(3), .hyperos-table th:nth-child(4) { width: auto; }
 
@@ -614,15 +713,21 @@
 <div class="hyperos-promo-wrapper">
     <div class="hyperos-blob blob-1"></div>
     <div class="hyperos-blob blob-2"></div>
+    <div class="hyperos-blob blob-3"></div>
 
     <div class="hyperos-content">
-        
+
         <div class="hyperos-top-banner">
-            <img src="https://goodmi.ru/images/promotion/156/otzov-0926.jpg" alt="Акция Отзовись">
+            <img src="https://goodmi.ru/images/promotion/156/otzov-0926.jpg" alt="Юбилейная акция Отзовись – 10 лет GOODMi">
         </div>
 
 <div class="hyperos-header">
-            <h1>Акция "Отзовись"</h1>
+            <div class="anniversary-ribbon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"></path><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4"></path><path d="M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"></path></svg>
+                10 лет GOODMi
+            </div>
+
+            <h1>Юбилейная акция "Отзовись"</h1>
 
             <div class="hyperos-date-badge">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
@@ -634,24 +739,99 @@
                 <span>Розыгрыш 05.10.26 в 16:00</span>
             </div>
 
-            <p>Поделись мнением о покупке и прими участие в ежемесячном розыгрыше подарков!</p>
+            <div class="hyperos-date-badge badge-gold" style="margin-left: 10px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                <span>10 победителей &#8211; 10 призов</span>
+            </div>
+
+            <p>В сентябре GOODMi отмечает 10-летие! В честь юбилея разыгрываем сразу 10 подарков среди всех, кто оставит отзыв о покупке. Поделись мнением и получи свой шанс на приз.</p>
         </div>
 
-<div class="hyperos-prizes-section">
-            <div class="prizes-section-label">Главный приз месяца</div>
-            <div class="prizes-grid prizes-grid-1">
-                <div class="prize-card">
-                    <div class="prize-card-name"><a href="https://goodmi.ru/besprovodnye-naushniki-jbl-tune-770nc-purple/" target="_blank" style="color: inherit; text-decoration: none;">Беспроводные наушники JBL Tune 770NC</a></div>
-                    <a href="https://goodmi.ru/besprovodnye-naushniki-jbl-tune-770nc-purple/" target="_blank">
-                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/147/13_fq1m-t2_jpg.webp" alt="Беспроводные наушники JBL Tune 770NC" class="hyperos-prize-img">
+<div class="hyperos-prizes-section wide">
+            <div class="prizes-section-label">10 призов юбилейного розыгрыша</div>
+            <div class="prizes-section-sub">по одному призу каждому из 10 победителей</div>
+            <div class="prizes-grid prizes-grid-10">
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">1</div>
+                    <a href="https://goodmi.ru/umnye-chasy-redmi-watch-5-lite-black-bhr8789gl/" target="_blank">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/147/2_25g9-2z_jpg.webp" alt="Умные часы Redmi Watch 5 Lite" class="prize-img-sm">
                     </a>
+                    <a href="https://goodmi.ru/umnye-chasy-redmi-watch-5-lite-black-bhr8789gl/" target="_blank" class="prize-card-name-sm">Умные часы Redmi Watch 5 Lite</a>
                 </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">2</div>
+                    <a href="https://goodmi.ru/besprovodnye-naushniki-jbl-tune-770nc-purple/" target="_blank">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/147/13_fq1m-t2_jpg.webp" alt="Беспроводные наушники JBL Tune 770NC" class="prize-img-sm">
+                    </a>
+                    <a href="https://goodmi.ru/besprovodnye-naushniki-jbl-tune-770nc-purple/" target="_blank" class="prize-card-name-sm">Наушники JBL Tune 770NC</a>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">3</div>
+                    <a href="https://goodmi.ru/fitnes-braslet-xiaomi-smart-band-11-active-black/" target="_blank">
+                        <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/156/2_7xat-1u_jpg.webp" alt="Фитнес-браслет Xiaomi Smart Band 11 Active" class="prize-img-sm">
+                    </a>
+                    <a href="https://goodmi.ru/fitnes-braslet-xiaomi-smart-band-11-active-black/" target="_blank" class="prize-card-name-sm">Фитнес-браслет Xiaomi Smart Band 11 Active</a>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">4</div>
+                    <img src="https://m-com.kz/image/cache/catalog/Gifts/7229-1-800x800.JPG" alt="Подарочный набор Xiaomi Блендер + дозатор" class="prize-img-sm">
+                    <span class="prize-card-name-sm">Подарочный набор Xiaomi (блендер + дозатор)</span>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">5</div>
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/68/1_n8mi-md_jpg.webp" alt="Рюкзак Roborock" class="prize-img-sm">
+                    <span class="prize-card-name-sm">Рюкзак Roborock</span>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">6</div>
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/83/Screenshot_2_oh66-ib_png.webp" alt="Спортивная бутылка для воды" class="prize-img-sm">
+                    <span class="prize-card-name-sm">Спортивная бутылка для воды</span>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">7</div>
+                    <div class="prize-icon-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="42" height="42"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                    </div>
+                    <span class="prize-card-name-sm">Спортивная сумка-мешок</span>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">8</div>
+                    <div class="prize-icon-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="42" height="42"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                    </div>
+                    <span class="prize-card-name-sm">Спортивная сумка-мешок</span>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">9</div>
+                    <div class="prize-icon-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="42" height="42"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                    </div>
+                    <span class="prize-card-name-sm">Фирменные тапочки Xiaomi</span>
+                </div>
+
+                <div class="prize-card-sm">
+                    <div class="prize-card-num">10</div>
+                    <div class="prize-icon-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="42" height="42"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                    </div>
+                    <span class="prize-card-name-sm">Фирменная подставка под кружку Xiaomi</span>
+                </div>
+
             </div>
         </div>
 
 <div class="platforms-title">Оставьте отзыв на удобной платформе:</div>
         <div class="platforms-grid">
-            
+
             <a href="https://yandex.ru/maps/959/sevastopol/chain/goodmi/3793837384" target="_blank" class="platform-card">
                 <div class="platform-icon">
                     <img src="https://res.smartwidgets.ru/res/review_yandex_map.svg" alt="Яндекс Карты">
@@ -688,7 +868,8 @@
         </div>
 
 <div class="hyperos-cta-block">
-            <div class="hyperos-cta-text">Оставляй отзыв прямо сейчас и становись участником!</div>
+            <div class="hyperos-cta-text">Оставляй отзыв прямо сейчас и участвуй в юбилейном розыгрыше 10 призов!</div>
+            <div class="hyperos-cta-sub">В честь 10-летия GOODMi &#8211; 10 подарков вместо одного</div>
         </div>
 
 <div class="participants-wrapper">
@@ -1385,8 +1566,8 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Условия участия в акции
             </div>
-            <p class="promo-rules-intro">Чтобы участвовать в розыгрыше акции «Отзовись» в период с <strong>01.09.26 по 30.09.26</strong> необходимо оставить отзыв на одном из следующих ресурсов:</p>
-            <p class="promo-rules-intro">Розыгрыш призов состоится <strong>05 октября 2026 года в 16:00</strong> в прямом эфире группы ВКонтакте.</p>
+            <p class="promo-rules-intro">В честь 10-летия GOODMi акция «Отзовись» в сентябре проходит в юбилейном формате: чтобы участвовать в розыгрыше в период с <strong>01.09.26 по 30.09.26</strong> необходимо оставить отзыв на одном из следующих ресурсов:</p>
+            <p class="promo-rules-intro">Розыгрыш <strong>10 призов</strong> среди <strong>10 победителей</strong> состоится <strong>05 октября 2026 года в 16:00</strong> в прямом эфире группы ВКонтакте.</p>
             <ul class="promo-rules-list">
                 <li>Яндекс Карты</li>
                 <li>Авито</li>
