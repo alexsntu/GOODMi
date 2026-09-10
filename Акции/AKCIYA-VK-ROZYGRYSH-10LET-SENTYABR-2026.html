@@ -1,0 +1,514 @@
+<!-- AKCIYA-VK-ROZYGRYSH YUBILEY-10-LET V.09.26 (период 14.09.2026-30.09.2026) -->
+{literal}
+<style>
+
+    :root {
+        --mi-orange: #FF6900;
+        --mi-purple: #815AF8;
+        --mi-black: #191919;
+        --mi-gray: #F7F7F7;
+        --mi-text-gray: #8c8c8c;
+        --mi-gold: #C9A227;
+        --mi-gold-light: #F0DFA0;
+        --mi-vk: #0077FF;
+        --hyper-radius: 24px;
+        --card-radius: 20px;
+        --mi-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+.hyperos-promo-wrapper {
+        font-family: var(--mi-font);
+        background: linear-gradient(135deg, #ffffff 0%, #eef6ff 100%);
+        border-radius: var(--hyper-radius);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 50px 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        position: relative;
+        overflow: hidden;
+        color: var(--mi-black);
+        text-align: center;
+    }
+
+.hyperos-blob {
+        position: absolute;
+        filter: blur(100px);
+        opacity: 0.5;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .blob-1 { top: -100px; left: -100px; width: 40%; height: 400px; background: #dceaff; }
+    .blob-2 { bottom: -100px; right: -100px; width: 30%; height: 350px; background: #f3e0ff; }
+    .blob-3 { top: 30%; right: -140px; width: 32%; height: 320px; background: #faf1d6; }
+
+    .hyperos-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+.hyperos-top-banner {
+        max-width: 800px;
+        margin: 0 auto 35px auto;
+        background: #fff;
+        padding: 8px;
+        border-radius: var(--card-radius);
+        border: 2px solid var(--mi-gold);
+        box-shadow: 0 15px 40px rgba(201, 162, 39, 0.2);
+    }
+    .hyperos-top-banner img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+    }
+
+/* ==== Юбилейные 10-летие элементы ==== */
+    .anniversary-ribbon {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, var(--mi-gold) 0%, var(--mi-gold-light) 50%, var(--mi-gold) 100%);
+        color: #4a3600;
+        padding: 10px 26px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 1rem;
+        letter-spacing: 0.3px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 24px rgba(201, 162, 39, 0.35);
+    }
+    .anniversary-ribbon svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+.hyperos-header h1 {
+        font-size: 2.6rem;
+        font-weight: 700;
+        margin: 0 0 15px 0;
+        color: var(--mi-black);
+        line-height: 1.2;
+    }
+
+    .hyperos-header p {
+        font-size: 1.15rem;
+        color: var(--mi-text-gray);
+        margin-bottom: 25px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+.hyperos-date-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: rgba(0, 119, 255, 0.08);
+        color: var(--mi-vk);
+        border: 1px solid rgba(0, 119, 255, 0.2);
+        padding: 8px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    .hyperos-date-badge svg { width: 18px; height: 18px; fill: currentColor; }
+    .hyperos-date-badge.badge-gold {
+        background-color: rgba(201, 162, 39, 0.1);
+        color: #a9822a;
+        border-color: rgba(201, 162, 39, 0.35);
+    }
+    .hyperos-date-badge.badge-orange {
+        background-color: rgba(255, 105, 0, 0.08);
+        color: var(--mi-orange);
+        border-color: rgba(255, 105, 0, 0.2);
+    }
+
+.hyperos-prizes-section {
+        max-width: 800px;
+        margin: 0 auto 45px auto;
+        background: #ffffff;
+        border-radius: var(--card-radius);
+        padding: 30px 25px;
+    }
+    .prizes-section-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--mi-text-gray);
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    .prizes-section-sub {
+        font-size: 0.85rem;
+        color: var(--mi-text-gray);
+        margin-bottom: 22px;
+    }
+    .prizes-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .prize-card {
+        background: #ffffff;
+        border: 1px solid #dcebff;
+        border-radius: var(--card-radius);
+        padding: 25px 20px;
+        box-shadow: 0 10px 30px rgba(0, 119, 255, 0.06);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .prize-card-winner-tag {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, var(--mi-gold) 0%, var(--mi-gold-light) 100%);
+        color: #4a3600;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 0.3px;
+        padding: 4px 16px;
+        border-radius: 50px;
+        box-shadow: 0 3px 10px rgba(201, 162, 39, 0.4);
+        white-space: nowrap;
+    }
+    .prize-card-name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--mi-vk);
+        margin: 6px 0 4px 0;
+        line-height: 1.4;
+    }
+
+    @keyframes floatPrize {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    .hyperos-prize-img {
+        width: 170px;
+        height: auto;
+        display: block;
+        margin: 14px auto 10px;
+        animation: floatPrize 4s ease-in-out infinite;
+    }
+    .prize-card:nth-child(2) .hyperos-prize-img {
+        animation-delay: -2s;
+    }
+
+.vk-steps-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--mi-black);
+    }
+
+    .vk-steps-list {
+        max-width: 640px;
+        margin: 0 auto 30px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        text-align: left;
+    }
+    .vk-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: #ffffff;
+        border: 1px solid #dcebff;
+        border-radius: 16px;
+        padding: 16px 18px;
+        box-shadow: 0 6px 18px rgba(0, 119, 255, 0.05);
+    }
+    .vk-step-num {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--mi-vk);
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .vk-step-text { font-size: 0.98rem; color: #333; line-height: 1.5; padding-top: 4px; }
+    .vk-step-text strong { color: var(--mi-black); }
+    .vk-step-note { display: block; margin-top: 4px; font-size: 0.85rem; color: var(--mi-text-gray); font-style: italic; }
+
+.hyperos-vk-info {
+        background-color: #eef6ff;
+        border: 1px solid #dcebff;
+        border-radius: 16px;
+        padding: 24px 20px;
+        max-width: 640px;
+        margin: 0 auto 40px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        color: var(--mi-vk);
+        font-weight: 600;
+    }
+    .hyperos-vk-info-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        background: var(--mi-vk);
+        border-radius: 50px;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    .hyperos-vk-info-btn:hover { opacity: 0.85; text-decoration: none; color: #fff; }
+
+.hyperos-cta-block {
+        background: linear-gradient(135deg, var(--mi-vk) 0%, #4da3ff 100%);
+        color: #fff;
+        padding: 30px;
+        border-radius: var(--card-radius);
+        margin: 0 auto 30px auto;
+        max-width: 800px;
+        box-shadow: 0 10px 30px rgba(0, 119, 255, 0.3);
+        transform: scale(1);
+        transition: transform 0.3s;
+    }
+    .hyperos-cta-block:hover { transform: scale(1.02); }
+    .hyperos-cta-text { font-size: 1.35rem; font-weight: 700; line-height: 1.3; }
+    .hyperos-cta-sub { font-size: 0.95rem; font-weight: 600; opacity: 0.85; margin-top: 6px; }
+
+.promo-rules-block {
+        background: #fff;
+        border: 1px solid #dcebff;
+        border-radius: var(--card-radius);
+        padding: 35px 40px;
+        max-width: 900px;
+        margin: 40px auto 0 auto;
+        text-align: left;
+    }
+    .promo-rules-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--mi-black);
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .promo-rules-title svg { color: var(--mi-vk); flex-shrink: 0; }
+    .promo-rules-intro {
+        font-size: 0.95rem;
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 12px;
+    }
+    .promo-rules-list {
+        margin: 0 0 24px 20px;
+        padding: 0;
+        font-size: 0.95rem;
+        color: #444;
+        line-height: 1.8;
+    }
+    .promo-rules-item {
+        border-top: 1px solid #eef6ff;
+        padding: 18px 0 4px 0;
+    }
+    .promo-rules-item-title {
+        margin-bottom: 8px;
+    }
+    .promo-rules-badge {
+        display: inline-block;
+        background: rgba(0, 119, 255, 0.08);
+        color: var(--mi-vk);
+        border: 1px solid rgba(0, 119, 255, 0.2);
+        border-radius: 50px;
+        padding: 3px 14px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+    .promo-rules-item p {
+        font-size: 0.9rem;
+        color: #555;
+        line-height: 1.65;
+        margin: 0 0 10px 0;
+    }
+    .promo-rules-item a {
+        color: var(--mi-vk);
+        text-decoration: none;
+        border-bottom: 1px dashed rgba(0, 119, 255, 0.4);
+        transition: all 0.2s;
+    }
+    .promo-rules-item a:hover {
+        color: var(--mi-orange);
+        border-bottom-color: var(--mi-orange);
+    }
+
+@media (min-width: 769px) {
+        .hyperos-top-banner { max-width: 400px; }
+    }
+
+@media (max-width: 768px) {
+        .hyperos-promo-wrapper { padding: 30px 15px; }
+        .hyperos-header h1 { font-size: 1.9rem; }
+        .anniversary-ribbon { font-size: 0.85rem; padding: 8px 18px; }
+        .hyperos-date-badge { margin-left: 0 !important; margin-top: 6px; }
+
+        .prizes-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .hyperos-cta-text { font-size: 1.1rem; }
+        .hyperos-vk-info { text-align: center; gap: 10px; padding: 18px 15px; }
+
+        .promo-rules-block { padding: 25px 18px; }
+        .promo-rules-title { font-size: 1.05rem; }
+    }
+</style>
+{/literal}
+
+<div class="hyperos-promo-wrapper">
+    <div class="hyperos-blob blob-1"></div>
+    <div class="hyperos-blob blob-2"></div>
+    <div class="hyperos-blob blob-3"></div>
+
+    <div class="hyperos-content">
+
+        <div class="hyperos-top-banner">
+            <img src="https://goodmi.ru/images/companies/2/ForSale/VK-10GOODMi-500.jpg" alt="Розыгрыш ВКонтакте – 10 лет GOODMi">
+        </div>
+
+<div class="hyperos-header">
+            <div class="anniversary-ribbon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"></path><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4"></path><path d="M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"></path></svg>
+                10 лет GOODMi
+            </div>
+
+            <h1>Розыгрыш ВКонтакте в честь 10-летия GOODMi</h1>
+
+            <div>
+                <div class="hyperos-date-badge">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                    <span>Приём заявок с 14.09.26 по 30.09.26</span>
+                </div>
+
+                <div class="hyperos-date-badge badge-orange" style="margin-left: 10px;">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.24 14.24L11 13V7h1.5v5.25l4.5 2.67-.76 1.32z"/></svg>
+                    <span>Итоги 05.10.26 в прямом эфире группы</span>
+                </div>
+
+                <div class="hyperos-date-badge badge-gold" style="margin-left: 10px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                    <span>2 победителя &#8211; 2 суперприза</span>
+                </div>
+            </div>
+
+            <p>В сентябре GOODMi отмечает 10-летие! В честь праздника разыгрываем в нашей группе ВКонтакте два суперприза: вертикальный пылесос Xiaomi и умные весы Xiaomi. Подпишись, сделай репост, закрепи запись и лови шанс на подарок.</p>
+        </div>
+
+<div class="hyperos-prizes-section">
+            <div class="prizes-section-label">Призы розыгрыша</div>
+            <div class="prizes-section-sub">2 победителя &#8211; каждому свой приз</div>
+            <div class="prizes-grid">
+
+                <div class="prize-card">
+                    <div class="prize-card-winner-tag">1-й победитель</div>
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/104/1_ljnr-9k_jpg.webp" alt="Вертикальный пылесос Xiaomi G20 Lite" class="hyperos-prize-img">
+                    <div class="prize-card-name">Вертикальный пылесос Xiaomi G20 Lite</div>
+                </div>
+
+                <div class="prize-card">
+                    <div class="prize-card-winner-tag">2-й победитель</div>
+                    <img src="https://goodmi.ru/images/ab__webp/thumbnails/450/450/detailed/123/9_62xr-p1_jpg.webp" alt="Умные весы Xiaomi Smart Scale S200" class="hyperos-prize-img">
+                    <div class="prize-card-name">Умные весы Xiaomi Smart Scale S200</div>
+                </div>
+
+            </div>
+        </div>
+
+<div class="vk-steps-title">Как принять участие:</div>
+        <div class="vk-steps-list">
+
+            <div class="vk-step">
+                <div class="vk-step-num">1</div>
+                <div class="vk-step-text">Будьте подписаны на группу GOODMi <strong>ВКонтакте</strong> &#8211; <a href="https://vk.ru/goodmi_ru" target="_blank" style="color: var(--mi-vk); font-weight: 700;">vk.ru/goodmi_ru</a></div>
+            </div>
+
+            <div class="vk-step">
+                <div class="vk-step-num">2</div>
+                <div class="vk-step-text">Сделайте <strong>репост</strong> праздничного поста к себе на страницу
+                    <span class="vk-step-note">Ссылка на праздничный пост будет добавлена здесь дополнительно</span>
+                </div>
+            </div>
+
+            <div class="vk-step">
+                <div class="vk-step-num">3</div>
+                <div class="vk-step-text"><strong>Закрепите</strong> репост на первом месте у себя на стене</div>
+            </div>
+
+            <div class="vk-step">
+                <div class="vk-step-num">4</div>
+                <div class="vk-step-text">Поставьте <strong>лайк</strong> под публикацией</div>
+            </div>
+
+        </div>
+
+<div class="hyperos-vk-info">
+            <span>Все условия розыгрыша &#8211; в нашей группе ВКонтакте</span>
+            <a href="https://vk.ru/goodmi_ru" target="_blank" class="hyperos-vk-info-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.1 19.3c-6.3 0-9.8-4.2-9.9-11.2H8c.2 5.1 2.3 7.3 4.1 7.7V8.1h2.7v4.4c1.6-.2 3.3-2 3.9-4.4h2.7c-.5 2.7-2.3 4.7-4.5 5.3 2.2.2 3.9 1.3 4.8 3.8h-3c-.7-2.1-2.4-3.7-4.7-3.8v5.9h1.1z"></path></svg>
+                Перейти в группу ВКонтакте
+            </a>
+        </div>
+
+<div class="hyperos-cta-block">
+            <div class="hyperos-cta-text">Подпишись, сделай репост и участвуй в розыгрыше двух суперпризов!</div>
+            <div class="hyperos-cta-sub">В честь 10-летия GOODMi &#8211; итоги 5 октября в прямом эфире группы</div>
+        </div>
+
+<div class="promo-rules-block">
+            <div class="promo-rules-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg>
+                Условия розыгрыша
+            </div>
+            <p class="promo-rules-intro">Период проведения: с <strong>14 сентября 2026</strong> по <strong>30 сентября 2026</strong> включительно. Победители определяются с помощью сервиса <strong>KonkursVk</strong> среди подписчиков группы <a href="https://vk.ru/goodmi_ru" target="_blank">vk.ru/goodmi_ru</a>, выполнивших все условия участия (подписка, репост, закрепление записи, лайк).</p>
+
+            <div class="promo-rules-item">
+                <div class="promo-rules-item-title"><span class="promo-rules-badge">Кто не участвует</span></div>
+                <p>В розыгрыше не принимают участие коммерческие, конкурсные и закрытые страницы ВКонтакте.</p>
+            </div>
+
+            <div class="promo-rules-item">
+                <div class="promo-rules-item-title"><span class="promo-rules-badge">Проверка на честность</span></div>
+                <p>Приложение KonkursVk анализирует первые 50 постов на стене участника: если более 10% из них &#8211; записи других розыгрышей, участник исключается. Если постов на стене менее 10, среди них допускается не более одного розыгрыша.</p>
+            </div>
+
+            <div class="promo-rules-item">
+                <div class="promo-rules-item-title"><span class="promo-rules-badge">Закрепление записи</span></div>
+                <p>Репост праздничного поста должен быть закреплён на первом месте на стене участника &#8211; это автоматически проверяет приложение KonkursVk.</p>
+            </div>
+
+            <div class="promo-rules-item">
+                <div class="promo-rules-item-title"><span class="promo-rules-badge">Определение победителей</span></div>
+                <p>Двух победителей выберем <strong>5 октября 2026</strong> в прямом эфире группы ВКонтакте &#8211; по одному на каждый приз. Точное время эфира объявим <strong>1 октября 2026</strong> в группе <a href="https://vk.ru/goodmi_ru" target="_blank">vk.ru/goodmi_ru</a>.</p>
+            </div>
+
+            <div class="promo-rules-item">
+                <div class="promo-rules-item-title"><span class="promo-rules-badge">Получение приза</span></div>
+                <p>Приз можно забрать лично в течение двух недель после подведения итогов в любом магазине GOODMi в Севастополе, Симферополе или Ялте. Денежный эквивалент приза не выплачивается, доставка в другие города и регионы не осуществляется.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
