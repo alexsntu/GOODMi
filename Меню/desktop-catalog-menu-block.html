@@ -1,0 +1,87 @@
+<script>
+/* GOODMi – каталог-меню, версия ПК (блок 1242, меню №26).
+   Дополняет штатный шаблон UniTheme2, структуру не трогает:
+   1) задержка переключения разделов при движении курсора к панели;
+   2) заголовок раздела со ссылкой «Смотреть все» вверху панели;
+   3) при открытии каталога сразу показан первый раздел с подразделами.
+   Парные стили: CSS/goodmi-styles.css, секция 19 (классы gm-menu-*). */
+(function () {
+  var SWITCH_DELAY = 180;
+  var mq = window.matchMedia('(min-width: 1024px) and (hover: hover)');
+
+  function buildHead(li) {
+    var wrap = li.querySelector('.ut2-menu__submenu__wrapper');
+    var link = li.querySelector('a.ut2-menu__link');
+    var name = li.querySelector('.ut2-menu__link__name');
+    if (!wrap || !link || !name || wrap.querySelector('.gm-menu-head')) return;
+
+    var head = document.createElement('div');
+    head.className = 'gm-menu-head';
+
+    var title = document.createElement('span');
+    title.className = 'gm-menu-head__title';
+    title.textContent = name.textContent.replace(/\s+/g, ' ').trim();
+    head.appendChild(title);
+
+    var href = link.getAttribute('href');
+    if (href && href.indexOf('javascript') !== 0) {
+      var all = document.createElement('a');
+      all.className = 'gm-menu-head__all';
+      all.href = href;
+      all.textContent = 'Смотреть все';
+      head.appendChild(all);
+    }
+    wrap.insertBefore(head, wrap.firstChild);
+  }
+
+  function init(menu) {
+    if (menu.getAttribute('data-gm-menu')) return;
+    var list = menu.querySelector('.ut2-menu__list');
+    if (!list) return;
+    menu.setAttribute('data-gm-menu', '1');
+
+    var items = [];
+    for (var i = 0; i < list.children.length; i++) {
+      if (list.children[i].classList.contains('ut2-menu__item')) items.push(list.children[i]);
+    }
+    var withSub = items.filter(function (li) { return !!li.querySelector('.ut2-menu__submenu__carrier'); });
+    withSub.forEach(buildHead);
+
+    if (!mq.matches || !withSub.length) return;
+
+    var active = null;
+    var timer = null;
+    function activate(li) {
+      if (active === li) return;
+      if (active) active.classList.remove('gm-menu-active');
+      active = li;
+      li.classList.add('gm-menu-active');
+    }
+
+    menu.classList.add('gm-menu-hi');
+    activate(withSub[0]);
+
+    items.forEach(function (li) {
+      var hasSub = withSub.indexOf(li) !== -1;
+      li.addEventListener('mouseenter', function () {
+        clearTimeout(timer);
+        if (!hasSub || li === active) return;
+        timer = setTimeout(function () { activate(li); }, SWITCH_DELAY);
+      });
+      li.addEventListener('mouseleave', function () { clearTimeout(timer); });
+      li.addEventListener('click', function () { if (hasSub) { clearTimeout(timer); activate(li); } });
+    });
+  }
+
+  function run() {
+    var menus = document.querySelectorAll('.top-menu-grid-vertical .ut2-menu.ut2-v__menu');
+    for (var i = 0; i < menus.length; i++) init(menus[i]);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
