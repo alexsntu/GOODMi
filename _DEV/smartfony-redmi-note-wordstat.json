@@ -1,0 +1,96 @@
+{
+  "cluster": [
+    {
+      "phrase": "телефоны redmi note",
+      "total": 1413,
+      "by_region": {
+        "146": 187,
+        "959": 233,
+        "977": 993
+      },
+      "russia": 52846,
+      "score": 0.02576137990455879
+    },
+    {
+      "phrase": "смартфоны redmi note",
+      "total": 2012,
+      "by_region": {
+        "146": 284,
+        "959": 392,
+        "977": 1336
+      },
+      "russia": 82853,
+      "score": 0.04094567036154357
+    },
+    {
+      "phrase": "редми нот",
+      "total": 21276,
+      "by_region": {
+        "146": 3312,
+        "959": 3086,
+        "977": 14878
+      },
+      "russia": 583429,
+      "score": 0.3599742013807543
+    },
+    {
+      "phrase": "redmi note",
+      "total": 30338,
+      "by_region": {
+        "146": 5124,
+        "959": 5177,
+        "977": 20037
+      },
+      "russia": 961288,
+      "score": 0.5733187483531434
+    }
+  ],
+  "extra": {
+    "regions_checked": [
+      959,
+      146,
+      977
+    ],
+    "count": 6,
+    "results": [
+      {
+        "phrase": "\"redmi note доставка сдэк\"",
+        "total": 0,
+        "by_region": {}
+      },
+      {
+        "phrase": "\"redmi note самовывоз\"",
+        "total": 0,
+        "by_region": {}
+      },
+      {
+        "phrase": "\"redmi note трейд ин\"",
+        "total": 0,
+        "by_region": {}
+      },
+      {
+        "phrase": "\"redmi note кредит\"",
+        "total": 0,
+        "by_region": {}
+      },
+      {
+        "phrase": "redmi note 512",
+        "total": 913,
+        "by_region": {
+          "146": 109,
+          "959": 208,
+          "977": 596
+        }
+      },
+      {
+        "phrase": "redmi note 256",
+        "total": 1737,
+        "by_region": {
+          "146": 238,
+          "959": 418,
+          "977": 1081
+        }
+      }
+    ]
+  }
+}

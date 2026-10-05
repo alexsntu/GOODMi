@@ -1,0 +1,143 @@
+{
+  "date": "2026-09-25",
+  "rows": [
+    {
+      "phrase": "xiaomi 17",
+      "counts": [
+        2091,
+        2333,
+        8579,
+        439530
+      ],
+      "score": 0.6561828455194516
+    },
+    {
+      "phrase": "сяоми 17",
+      "counts": [
+        900,
+        1133,
+        4127,
+        160885
+      ],
+      "score": 0.2898932770715288
+    },
+    {
+      "phrase": "смартфон xiaomi 17",
+      "counts": [
+        119,
+        136,
+        528,
+        31070
+      ],
+      "score": 0.0389012402944115
+    },
+    {
+      "phrase": "телефон xiaomi 17",
+      "counts": [
+        36,
+        75,
+        229,
+        13533
+      ],
+      "score": 0.01502263711460819
+    }
+  ],
+  "raw": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "xiaomi 17",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"xiaomi 17\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"8579\",\n      \"share\": 0.005183767394042667,\n      \"affinityIndex\": 135.6971611246878\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"2333\",\n      \"share\": 0.006214540922965078,\n      \"affinityIndex\": 162.6800542610568\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"2091\",\n      \"share\": 0.005513796290937004,\n      \"affinityIndex\": 144.33643464786724\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"xiaomi 17\",\n      \"count\": \"439530\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra\",\n      \"count\": \"93115\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 max\",\n      \"count\": \"86416\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 pro max\",\n      \"count\": \"81149\"\n    },\n    {\n      \"phrase\": \"xiaomi redmi 17\",\n      \"count\": \"56689\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 t\",\n      \"count\": \"48034\"\n    },\n    {\n      \"phrase\": \"xiaomi note 17\",\n      \"count\": \"38873\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 купить\",\n      \"count\": \"38818\"\n    },\n    {\n      \"phrase\": \"xiaomi redmi note 17\",\n      \"count\": \"36662\"\n    },\n    {\n      \"phrase\": \"смартфоны xiaomi 17\",\n      \"count\": \"31070\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 t pro\",\n      \"count\": \"27131\"\n    },\n    {\n      \"phrase\": \"xiaomi redmi 17 pro\",\n      \"count\": \"25298\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"сяоми 17т\",\n      \"count\": \"52193\"\n    },\n    {\n      \"phrase\": \"ксяоми 17т\",\n      \"count\": \"14050\"\n    },\n    {\n      \"phrase\": \"сяоми 17т купить\",\n      \"count\": \"4729\"\n    },\n    {\n      \"phrase\": \"ксиаоми 17т\",\n      \"count\": \"7335\"\n    },\n    {\n      \"phrase\": \"сяоми 11т\",\n      \"count\": \"3344\"\n    },\n    {\n      \"phrase\": \"сяоми 17t\",\n      \"count\": \"1353\"\n    }\n  ],\n  \"totalCount\": \"439530\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "сяоми 17",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"сяоми 17\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"4127\",\n      \"share\": 0.002493694840332683,\n      \"affinityIndex\": 175.77882625527286\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"1133\",\n      \"share\": 0.00301803466168857,\n      \"affinityIndex\": 212.73917796556515\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"900\",\n      \"share\": 0.002373226524076185,\n      \"affinityIndex\": 167.28709788096577\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"сяоми 17\",\n      \"count\": \"160885\"\n    },\n    {\n      \"phrase\": \"сяоми 17 про\",\n      \"count\": \"81503\"\n    },\n    {\n      \"phrase\": \"сяоми 17 макс\",\n      \"count\": \"44129\"\n    },\n    {\n      \"phrase\": \"сяоми 17 про макс\",\n      \"count\": \"43393\"\n    },\n    {\n      \"phrase\": \"сяоми 17 т\",\n      \"count\": \"26860\"\n    },\n    {\n      \"phrase\": \"сяоми 17 ультра\",\n      \"count\": \"25357\"\n    },\n    {\n      \"phrase\": \"сяоми 17 купить\",\n      \"count\": \"15107\"\n    },\n    {\n      \"phrase\": \"сяоми 17 т про\",\n      \"count\": \"14242\"\n    },\n    {\n      \"phrase\": \"сяоми редми 17\",\n      \"count\": \"9930\"\n    },\n    {\n      \"phrase\": \"сяоми 17 цена\",\n      \"count\": \"8039\"\n    },\n    {\n      \"phrase\": \"сяоми 17 про купить\",\n      \"count\": \"7625\"\n    },\n    {\n      \"phrase\": \"сяоми 17 телефон\",\n      \"count\": \"5834\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"ксяоми 17т\",\n      \"count\": \"13151\"\n    },\n    {\n      \"phrase\": \"ксяоми 15т про\",\n      \"count\": \"1147\"\n    },\n    {\n      \"phrase\": \"хаоми 17т\",\n      \"count\": \"745\"\n    },\n    {\n      \"phrase\": \"хиаоми 17т\",\n      \"count\": \"1014\"\n    },\n    {\n      \"phrase\": \"сиоми 17т\",\n      \"count\": \"526\"\n    },\n    {\n      \"phrase\": \"xiaomi x7\",\n      \"count\": \"13500\"\n    }\n  ],\n  \"totalCount\": \"160885\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "смартфон xiaomi 17",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"смартфон xiaomi 17\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"528\",\n      \"share\": 0.00031903825434835396,\n      \"affinityIndex\": 118.5584422228443\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"136\",\n      \"share\": 0.0003622707096113376,\n      \"affinityIndex\": 134.62414117771507\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"119\",\n      \"share\": 0.0003137932848500734,\n      \"affinityIndex\": 116.60934864316496\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"смартфоны xiaomi 17\",\n      \"count\": \"31070\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi redmi 17\",\n      \"count\": \"14425\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 pro\",\n      \"count\": \"12151\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi redmi note 17\",\n      \"count\": \"8331\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 max\",\n      \"count\": \"6346\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 pro max\",\n      \"count\": \"6179\"\n    },\n    {\n      \"phrase\": \"redmi смартфон xiaomi 17 pro\",\n      \"count\": \"5398\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi note 17 pro\",\n      \"count\": \"5248\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi redmi note 17 pro\",\n      \"count\": \"5155\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 256\",\n      \"count\": \"4270\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra смартфон\",\n      \"count\": \"4147\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi redmi 17 256\",\n      \"count\": \"3851\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"телефон ксиоми 17т\",\n      \"count\": \"1216\"\n    },\n    {\n      \"phrase\": \"телефон хаоми\",\n      \"count\": \"4066\"\n    },\n    {\n      \"phrase\": \"телефон сяоми 17т\",\n      \"count\": \"1550\"\n    }\n  ],\n  \"totalCount\": \"31070\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "телефон xiaomi 17",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"телефон xiaomi 17\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"229\",\n      \"share\": 0.00013837075804123684,\n      \"affinityIndex\": 119.90857536197001\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"75\",\n      \"share\": 0.00019978164132978177,\n      \"affinityIndex\": 173.12568301599563\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"36\",\n      \"share\": 0.00009492906096304741,\n      \"affinityIndex\": 82.26310689962648\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"телефон xiaomi 17\",\n      \"count\": \"13533\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 pro телефон\",\n      \"count\": \"5916\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 t\",\n      \"count\": \"2833\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 max\",\n      \"count\": \"2518\"\n    },\n    {\n      \"phrase\": \"телефоны xiaomi 17 pro max\",\n      \"count\": \"2461\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi redmi 17\",\n      \"count\": \"2149\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 ultra\",\n      \"count\": \"1865\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 телефон купить\",\n      \"count\": \"1579\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi redmi note 17\",\n      \"count\": \"1395\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 t pro\",\n      \"count\": \"1382\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi redmi 17 pro\",\n      \"count\": \"928\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi redmi note 17 pro\",\n      \"count\": \"822\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"смартфон poco x7\",\n      \"count\": \"7896\"\n    },\n    {\n      \"phrase\": \"смартфон ксиаоми\",\n      \"count\": \"9151\"\n    },\n    {\n      \"phrase\": \"ксяоми раскладной смартфон\",\n      \"count\": \"275\"\n    },\n    {\n      \"phrase\": \"смартфоны сяоми 2026\",\n      \"count\": \"2252\"\n    },\n    {\n      \"phrase\": \"смартфон сяоми 17т\",\n      \"count\": \"1053\"\n    }\n  ],\n  \"totalCount\": \"13533\"\n}"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "extra": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"regions_checked\": [\n    959,\n    146,\n    977\n  ],\n  \"count\": 6,\n  \"results\": [\n    {\n      \"phrase\": \"\\\"xiaomi 17 доставка сдэк\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"xiaomi 17 самовывоз\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"xiaomi 17 трейд ин\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"xiaomi 17 кредит\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"xiaomi 17 leica\",\n      \"total\": 82,\n      \"by_region\": {\n        \"146\": 15,\n        \"959\": 10,\n        \"977\": 57\n      }\n    },\n    {\n      \"phrase\": \"xiaomi 17 512\",\n      \"total\": 297,\n      \"by_region\": {\n        \"146\": 43,\n        \"959\": 62,\n        \"977\": 192\n      }\n    }\n  ]\n}"
+      }
+    ]
+  }
+}

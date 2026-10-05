@@ -1,0 +1,146 @@
+{
+  "date": "2026-09-25",
+  "rows": [
+    {
+      "phrase": "xiaomi 17 ultra",
+      "counts": [
+        402,
+        428,
+        1645,
+        93115
+      ],
+      "score": 0.70780520618538
+    },
+    {
+      "phrase": "сяоми 17 ультра",
+      "counts": [
+        117,
+        147,
+        606,
+        25357
+      ],
+      "score": 0.21983581334028457
+    },
+    {
+      "phrase": "смартфон xiaomi 17 ultra",
+      "counts": [
+        42,
+        17,
+        102,
+        4147
+      ],
+      "score": 0.05610982114196008
+    },
+    {
+      "phrase": "телефон xiaomi 17 ultra",
+      "counts": [
+        4,
+        25,
+        44,
+        1865
+      ],
+      "score": 0.016249159332375394
+    }
+  ],
+  "raw": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "xiaomi 17 ultra",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"xiaomi 17 ultra\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"1645\",\n      \"share\": 0.0009939733492481861,\n      \"affinityIndex\": 123.37226657658003\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"428\",\n      \"share\": 0.0011400872331886213,\n      \"affinityIndex\": 141.50796513798866\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"402\",\n      \"share\": 0.0010600411807540294,\n      \"affinityIndex\": 131.5726253958991\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"xiaomi 17 ultra\",\n      \"count\": \"93115\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 pro ultra\",\n      \"count\": \"9953\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra vs xiaomi 17\",\n      \"count\": \"7459\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra купить\",\n      \"count\": \"6371\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra max\",\n      \"count\": \"4308\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra leica\",\n      \"count\": \"4189\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra pro max\",\n      \"count\": \"4182\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra смартфон\",\n      \"count\": \"4147\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra 16\",\n      \"count\": \"4079\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra vs 17 pro\",\n      \"count\": \"3334\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra обзор\",\n      \"count\": \"3289\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra edition\",\n      \"count\": \"2870\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra leica edition\",\n      \"count\": \"2744\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 и 17 ultra сравнение\",\n      \"count\": \"2689\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra камера\",\n      \"count\": \"2516\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"сяоми су7 ультра\",\n      \"count\": \"404\"\n    },\n    {\n      \"phrase\": \"ксяоми су7 ультра\",\n      \"count\": \"381\"\n    },\n    {\n      \"phrase\": \"сяоми 17т ультра\",\n      \"count\": \"1030\"\n    },\n    {\n      \"phrase\": \"ксиоми 17т ультра\",\n      \"count\": \"491\"\n    }\n  ],\n  \"totalCount\": \"93115\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "сяоми 17 ультра",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"сяоми 17 ультра\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"606\",\n      \"share\": 0.00036616890555890623,\n      \"affinityIndex\": 165.69293430170362\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"147\",\n      \"share\": 0.00039157201700637225,\n      \"affinityIndex\": 177.18794660947788\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"117\",\n      \"share\": 0.0003085194481299041,\n      \"affinityIndex\": 139.60631794160463\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"сяоми 17 ультра\",\n      \"count\": \"25357\"\n    },\n    {\n      \"phrase\": \"сяоми 17 про ультра\",\n      \"count\": \"2947\"\n    },\n    {\n      \"phrase\": \"купить сяоми 17 ультра\",\n      \"count\": \"1803\"\n    },\n    {\n      \"phrase\": \"сяоми 17 про макс ультра\",\n      \"count\": \"1352\"\n    },\n    {\n      \"phrase\": \"сяоми 17 ультра цена\",\n      \"count\": \"1294\"\n    },\n    {\n      \"phrase\": \"сравнение сяоми 17 ультра\",\n      \"count\": \"1081\"\n    },\n    {\n      \"phrase\": \"сяоми 17 т ультра\",\n      \"count\": \"885\"\n    },\n    {\n      \"phrase\": \"сяоми 17 ультра характеристики\",\n      \"count\": \"858\"\n    },\n    {\n      \"phrase\": \"сяоми 17 ультра камера\",\n      \"count\": \"752\"\n    },\n    {\n      \"phrase\": \"сяоми 15 ультра сяоми 17 ультра\",\n      \"count\": \"670\"\n    },\n    {\n      \"phrase\": \"сяоми 17 ультра обзор\",\n      \"count\": \"650\"\n    },\n    {\n      \"phrase\": \"сяоми 17 против сяоми 17 ультра\",\n      \"count\": \"605\"\n    },\n    {\n      \"phrase\": \"телефон сяоми 17 ультра\",\n      \"count\": \"599\"\n    },\n    {\n      \"phrase\": \"сяоми 17 т про ультра\",\n      \"count\": \"575\"\n    },\n    {\n      \"phrase\": \"что лучше сяоми 17 или 17 ультра\",\n      \"count\": \"481\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"xiaomi 11 ultra\",\n      \"count\": \"15851\"\n    },\n    {\n      \"phrase\": \"xiaomi poco f9 ultra\",\n      \"count\": \"6878\"\n    },\n    {\n      \"phrase\": \"xiaomi ultra машина\",\n      \"count\": \"880\"\n    },\n    {\n      \"phrase\": \"xiaomi ultrathin\",\n      \"count\": \"2648\"\n    },\n    {\n      \"phrase\": \"xiaomi yu7 ultra\",\n      \"count\": \"173\"\n    },\n    {\n      \"phrase\": \"xiaomi 4 ultra самокат\",\n      \"count\": \"186\"\n    },\n    {\n      \"phrase\": \"xiaomi u7 ultra\",\n      \"count\": \"100\"\n    }\n  ],\n  \"totalCount\": \"25357\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "смартфон xiaomi 17 ultra",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"смартфон xiaomi 17 ultra\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"102\",\n      \"share\": 0.00006163239004456838,\n      \"affinityIndex\": 176.5776878600831\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"42\",\n      \"share\": 0.00011075057112355532,\n      \"affinityIndex\": 317.3019862452105\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"17\",\n      \"share\": 0.0000452838387014172,\n      \"affinityIndex\": 129.73885207993635\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"xiaomi 17 ultra смартфон\",\n      \"count\": \"4147\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 16\",\n      \"count\": \"1449\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 512\",\n      \"count\": \"570\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 512 гб\",\n      \"count\": \"479\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra global\",\n      \"count\": \"472\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra черный\",\n      \"count\": \"468\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 16 512gb\",\n      \"count\": \"462\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra купить\",\n      \"count\": \"430\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 16 гб\",\n      \"count\": \"402\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 16 512\",\n      \"count\": \"400\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 pro ultra смартфон\",\n      \"count\": \"385\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 16 512 гб\",\n      \"count\": \"330\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra leica\",\n      \"count\": \"311\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra обзор\",\n      \"count\": \"292\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi 17 ultra 1024\",\n      \"count\": \"285\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"телефон сяоми 17т\",\n      \"count\": \"1550\"\n    }\n  ],\n  \"totalCount\": \"4147\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "телефон xiaomi 17 ultra",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"телефон xiaomi 17 ultra\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"44\",\n      \"share\": 0.000026586521195696162,\n      \"affinityIndex\": 175.50907440171898\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"25\",\n      \"share\": 0.00006659388044326059,\n      \"affinityIndex\": 439.61487971233464\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"4\",\n      \"share\": 0.0000105476734403386,\n      \"affinityIndex\": 69.62973414156562\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"телефон xiaomi 17 ultra\",\n      \"count\": \"1865\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 pro ultra\",\n      \"count\": \"482\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra хороший телефон\",\n      \"count\": \"314\"\n    },\n    {\n      \"phrase\": \"какой телефон лучше xiaomi 17 ultra\",\n      \"count\": \"292\"\n    },\n    {\n      \"phrase\": \"купить телефон xiaomi 17 ultra\",\n      \"count\": \"197\"\n    },\n    {\n      \"phrase\": \"сравнение телефонов xiaomi 17 ultra\",\n      \"count\": \"194\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 t pro ultra\",\n      \"count\": \"87\"\n    },\n    {\n      \"phrase\": \"обзор телефона xiaomi 17 ultra\",\n      \"count\": \"73\"\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra версии телефона\",\n      \"count\": \"43\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 ultra 16 512 гб\",\n      \"count\": \"38\"\n    },\n    {\n      \"phrase\": \"характеристика телефона xiaomi 17 ultra\",\n      \"count\": \"24\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 ultra цена\",\n      \"count\": \"21\"\n    },\n    {\n      \"phrase\": \"мобильные телефоны xiaomi 17 ultra\",\n      \"count\": \"16\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi 17 ultra 16gb 512gb\",\n      \"count\": \"14\"\n    },\n    {\n      \"phrase\": \"размеры телефона xiaomi 17 ultra\",\n      \"count\": \"13\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"хиоми 11 ультра\",\n      \"count\": \"229\"\n    },\n    {\n      \"phrase\": \"смартфоны сяоми 2026\",\n      \"count\": \"2252\"\n    },\n    {\n      \"phrase\": \"смартфон сяоми 17т\",\n      \"count\": \"1053\"\n    },\n    {\n      \"phrase\": \"ксиоми 17т ультра\",\n      \"count\": \"469\"\n    }\n  ],\n  \"totalCount\": \"1865\"\n}"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "extra": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"regions_checked\": [\n    959,\n    146,\n    977\n  ],\n  \"count\": 7,\n  \"results\": [\n    {\n      \"phrase\": \"\\\"xiaomi 17 ultra доставка сдэк\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"xiaomi 17 ultra самовывоз\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"xiaomi 17 ultra трейд ин\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"xiaomi 17 ultra кредит\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra 1 тб\",\n      \"total\": 2,\n      \"by_region\": {\n        \"977\": 2\n      }\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra leica\",\n      \"total\": 82,\n      \"by_region\": {\n        \"146\": 15,\n        \"959\": 10,\n        \"977\": 57\n      }\n    },\n    {\n      \"phrase\": \"xiaomi 17 ultra 512\",\n      \"total\": 126,\n      \"by_region\": {\n        \"146\": 12,\n        \"959\": 44,\n        \"977\": 70\n      }\n    }\n  ]\n}"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "date": "2026-09-25",
+  "rows": [
+    {
+      "phrase": "redmi note",
+      "counts": [
+        5177,
+        5124,
+        20037,
+        961288
+      ],
+      "score": 0.5733187483531434
+    },
+    {
+      "phrase": "редми нот",
+      "counts": [
+        3086,
+        3312,
+        14878,
+        583429
+      ],
+      "score": 0.3599742013807543
+    },
+    {
+      "phrase": "смартфоны redmi note",
+      "counts": [
+        392,
+        284,
+        1336,
+        82853
+      ],
+      "score": 0.04094567036154357
+    },
+    {
+      "phrase": "телефоны redmi note",
+      "counts": [
+        233,
+        187,
+        993,
+        52846
+      ],
+      "score": 0.02576137990455879
+    },
+    {
+      "phrase": "redmi note 17",
+      "counts": [
+        627,
+        940,
+        3010,
+        111465
+      ],
+      "score": 0.3064594316142142
+    },
+    {
+      "phrase": "redmi note 15",
+      "counts": [
+        1697,
+        1470,
+        5906,
+        267340
+      ],
+      "score": 0.6935405683857859
+    }
+  ],
+  "raw": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "redmi note",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"redmi note\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"20037\",\n      \"share\": 0.012107139209049182,\n      \"affinityIndex\": 144.40734137373792\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"5177\",\n      \"share\": 0.013651326350158234,\n      \"affinityIndex\": 162.8255618782483\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"5124\",\n      \"share\": 0.01364908173565069,\n      \"affinityIndex\": 162.79878934281723\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"redmi note\",\n      \"count\": \"961288\"\n    },\n    {\n      \"phrase\": \"redmi note pro\",\n      \"count\": \"502536\"\n    },\n    {\n      \"phrase\": \"xiaomi redmi note\",\n      \"count\": \"322876\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"редми нот 15 про\",\n      \"count\": \"99025\"\n    }\n  ],\n  \"totalCount\": \"961288\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "редми нот",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"редми нот\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"14878\",\n      \"share\": 0.008989869598853806,\n      \"affinityIndex\": 174.66756355052078\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"3312\",\n      \"share\": 0.008822357281123162,\n      \"affinityIndex\": 171.41290361569338\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"3086\",\n      \"share\": 0.00813753005922123,\n      \"affinityIndex\": 158.1071374989153\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"редми нот\",\n      \"count\": \"583429\"\n    },\n    {\n      \"phrase\": \"редми нот про\",\n      \"count\": \"263759\"\n    },\n    {\n      \"phrase\": \"редми нот 15\",\n      \"count\": \"164042\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"redmi\",\n      \"count\": \"2449534\"\n    }\n  ],\n  \"totalCount\": \"583429\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "смартфоны redmi note",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"смартфоны redmi note\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"1336\",\n      \"share\": 0.0008072634617602289,\n      \"affinityIndex\": 112.71878595269038\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"392\",\n      \"share\": 0.0010336719971531828,\n      \"affinityIndex\": 144.33237488333933\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"284\",\n      \"share\": 0.0007565064818354403,\n      \"affinityIndex\": 105.63155182559127\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"смартфон redmi note\",\n      \"count\": \"82853\"\n    },\n    {\n      \"phrase\": \"смартфон xiaomi redmi note\",\n      \"count\": \"60174\"\n    },\n    {\n      \"phrase\": \"смартфон redmi note pro\",\n      \"count\": \"50823\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"мобильные телефоны xiaomi\",\n      \"count\": \"9953\"\n    }\n  ],\n  \"totalCount\": \"82853\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "телефоны redmi note",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"телефоны redmi note\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"993\",\n      \"share\": 0.0006000094442574157,\n      \"affinityIndex\": 129.85669562462942\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"233\",\n      \"share\": 0.0006144019778997235,\n      \"affinityIndex\": 132.97159136226148\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"187\",\n      \"share\": 0.0004981222257155892,\n      \"affinityIndex\": 107.80581350459764\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"телефон redmi note\",\n      \"count\": \"52847\"\n    },\n    {\n      \"phrase\": \"телефона redmi note pro\",\n      \"count\": \"22094\"\n    },\n    {\n      \"phrase\": \"телефон xiaomi redmi note\",\n      \"count\": \"14648\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"редми ноут 10 про\",\n      \"count\": \"6717\"\n    }\n  ],\n  \"totalCount\": \"52846\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "redmi note 17",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"redmi note 17\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"3010\",\n      \"share\": 0.0018187597454328512,\n      \"affinityIndex\": 185.70007130097255\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"940\",\n      \"share\": 0.002503929904666598,\n      \"affinityIndex\": 255.65771564762832\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"627\",\n      \"share\": 0.0016533478117730757,\n      \"affinityIndex\": 168.8110853028018\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"redmi note 17\",\n      \"count\": \"111465\"\n    },\n    {\n      \"phrase\": \"redmi note 17 pro\",\n      \"count\": \"69530\"\n    },\n    {\n      \"phrase\": \"xiaomi redmi note 17\",\n      \"count\": \"36662\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"редми ноут 7\",\n      \"count\": \"3577\"\n    }\n  ],\n  \"totalCount\": \"111465\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "phrase": "redmi note 15",
+        "region": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"phrase\": \"redmi note 15\",\n  \"regions\": [\n    {\n      \"region\": \"977\",\n      \"count\": \"5906\",\n      \"share\": 0.003568636231404126,\n      \"affinityIndex\": 153.60214715821542\n    },\n    {\n      \"region\": \"959\",\n      \"count\": \"1697\",\n      \"share\": 0.0044748504570636515,\n      \"affinityIndex\": 192.60765005080194\n    },\n    {\n      \"region\": \"146\",\n      \"count\": \"1470\",\n      \"share\": 0.003915720170063723,\n      \"affinityIndex\": 168.5414222104299\n    }\n  ]\n}"
+            }
+          ]
+        },
+        "top": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"results\": [\n    {\n      \"phrase\": \"redmi note 15\",\n      \"count\": \"267340\"\n    },\n    {\n      \"phrase\": \"redmi note 15 pro\",\n      \"count\": \"178469\"\n    },\n    {\n      \"phrase\": \"xiaomi redmi note 15\",\n      \"count\": \"106266\"\n    }\n  ],\n  \"associations\": [\n    {\n      \"phrase\": \"редми ноут 12s\",\n      \"count\": \"827\"\n    }\n  ],\n  \"totalCount\": \"267340\"\n}"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "usp": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"regions_checked\": [\n    959,\n    146,\n    977\n  ],\n  \"count\": 4,\n  \"results\": [\n    {\n      \"phrase\": \"\\\"redmi note доставка сдэк\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"redmi note самовывоз\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"redmi note трейд ин\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    },\n    {\n      \"phrase\": \"\\\"redmi note кредит\\\"\",\n      \"total\": 0,\n      \"by_region\": {}\n    }\n  ]\n}"
+        }
+      ]
+    }
+  }
+}
