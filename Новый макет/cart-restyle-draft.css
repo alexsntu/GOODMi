@@ -1,0 +1,95 @@
+/* Черновик v2: оформление страницы корзины /cart/ (GOODMi). НЕ ВЫЛОЖЕНО.
+   Расположение по образцу Ozon: фото слева, название, под ним ряд кнопок
+   (избранное, сравнение, удалить), цена отдельной колонкой, количество справа;
+   на телефоне цена над названием, кнопки и количество одним рядом внизу.
+   Проверено только в браузере через временный <style> 2026-10-07 (ПК и узкий
+   вид 390px, гость, два товара); кнопки избранного/сравнения в превью были
+   подставлены макетом. Шаблон корзины не тронут: ячейка описания и её обёртка
+   раскрыты через display: contents, поэтому их содержимое раскладывается
+   сеткой строки. Без записей вида «1 / 3»: LESS считает их как деление. */
+
+/* Фон страницы */
+.tygh-content .content-grid:has(.ty-cart-content){background:#f4f4f6;padding-bottom:32px}
+
+/* Две колонки: товары слева, итог и кнопки справа */
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body{display:grid;grid-template-columns:minmax(0,1fr) 380px;column-gap:20px;row-gap:12px;align-items:start}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*{grid-column-start:2;min-width:0;margin:0}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*:has(.ty-cart-content){grid-column-start:1;grid-row-start:1;grid-row-end:span 4}
+.main-content-grid:has(.ty-cart-content) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Товар – белая карточка-сетка: фото | кнопки | название | цена | количество */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content,.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody{display:block;width:100%;border:0}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content thead{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody{display:flex;flex-direction:column;gap:10px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr{display:grid;grid-template-columns:96px auto minmax(0,1fr) 150px auto;column-gap:16px;row-gap:4px;align-items:start;padding:16px 20px;background:#fff;border:0;border-radius:16px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__product-elem{display:block;padding:0;border:0;width:auto;min-width:0;background:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__image-block{grid-column-start:1;grid-row-start:1;grid-row-end:span 4}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content__image{width:96px;height:96px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content__image img{width:96px;height:96px;object-fit:cover;border-radius:14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__description,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in{display:contents}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>*{grid-column-start:2;grid-column-end:4;min-width:0;order:3;margin:0}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-title{order:1;font-size:15px;font-weight:500;line-height:1.35;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__sku{order:2}
+
+/* Ряд кнопок под названием: избранное, сравнение, удалить */
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.gm-cart-actions{order:8;grid-column-end:3;display:flex;flex-wrap:nowrap;gap:6px;margin:6px 0 0}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:#f4f4f6;color:#1c1c1c;font-size:0;text-decoration:none;transition:background-color .15s}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action:hover,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete:hover{background:#e9e9ee}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action i{font-size:18px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{order:9;grid-column-start:3;grid-column-end:4;justify-self:start;margin:6px 0 0 -10px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete .ty-icon{font-size:16px;color:#1c1c1c;margin:0}
+
+/* Цена за единицу: текущая крупно, старая под ней; построчный итог скрыт */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong)){grid-column-start:4;grid-row-start:1;grid-row-end:span 3;display:flex;flex-direction:column-reverse;justify-content:flex-end;align-items:flex-start;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong))>.ut2-cost-base,.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong))>span{font-size:18px;font-weight:600;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price .ty-strike{font-size:13px;color:#8a8a93}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__qty{grid-column-start:5;grid-row-start:1;grid-row-end:span 3;order:10}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:has(strong){display:none}
+
+/* Итог: белая карточка, суммы сверху, промокод ниже */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total{margin-top:58px;padding:20px;background:#fff;border:0;border-radius:16px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__wrapper{border:0;padding:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__body{display:flex;flex-direction:column;gap:14px;padding:0;width:auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__body>*{width:100%;float:none;margin:0;padding:0;flex:0 0 auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic{order:-1}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__item,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__item{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__item{margin:0 0 8px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__title,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__title{text-align:left;width:auto;flex:1 1 auto;padding:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__value,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__value{width:auto;flex:0 0 auto;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-coupons__container{padding-top:14px;border-top:1px solid #e3e3e8}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__footer{width:auto;padding:14px 0 0;margin:14px 0 0;border-top:1px solid #e3e3e8}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic{margin:0;padding:0;border:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__title{font-size:15px;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__value{font-size:24px;font-weight:600}
+
+/* Кнопки: «Оформить заказ» на всю ширину, остальное – текстовые ссылки */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons{display:flex;flex-direction:column;gap:10px;padding:0;background:none;border:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons{order:-1;float:none;width:100%}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons .ty-btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;box-sizing:border-box;font-size:16px;font-weight:600;border-radius:12px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons{float:none;width:100%;display:flex;justify-content:space-between;gap:8px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn{background:none;border:0;box-shadow:none;color:#6b6b6b;padding:0 4px;font-weight:400}
+
+/* Планшет: одна колонка */
+@media (max-width:1023px){
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body{grid-template-columns:minmax(0,1fr)}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*{grid-column-start:1}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*:has(.ty-cart-content){grid-row-end:auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total{margin-top:0}
+}
+
+/* Телефон: цена над названием, кнопки и количество одним рядом, «Оформить заказ» закреплена внизу */
+@media (max-width:767px){
+.tygh-content .content-grid:has(.ty-cart-content){padding-bottom:16px}
+.main-content-grid:has(.ty-cart-content) h1.ty-mainbox-title{font-size:22px}
+.main-content-grid:has(.ty-cart-content) .ty-table__responsive-header{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-table__responsive-content{display:contents}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr{grid-template-columns:auto auto minmax(0,1fr) auto;column-gap:10px;padding:14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__image-block{grid-column-start:1;grid-column-end:3;grid-row-end:span 3}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong)){grid-column-start:3;grid-column-end:5;grid-row-end:auto;flex-direction:row-reverse;justify-content:flex-end;align-items:baseline;gap:8px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>*{grid-column-start:3;grid-column-end:5}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.gm-cart-actions{grid-column-start:1;grid-column-end:2;margin-top:10px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{grid-column-start:2;grid-column-end:3;margin:10px 0 0 -4px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__qty{grid-column-start:3;grid-column-end:5;grid-row-start:auto;grid-row-end:auto;margin-top:8px;justify-self:start}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__top-buttons{display:none}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons{position:fixed;left:0;right:0;bottom:0;z-index:50;width:auto;padding:10px 12px;background:#fff;box-shadow:0 -4px 16px rgba(0,0,0,.08);box-sizing:border-box}
+}

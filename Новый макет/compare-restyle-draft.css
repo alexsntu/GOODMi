@@ -1,0 +1,56 @@
+/* Черновик v1: оформление страницы сравнения /yith-compare/ (GOODMi,
+   модуль ab__extended_comparison). НЕ ВЫЛОЖЕНО.
+   По образцу сравнения DNS: серый фон, белые карточки; категории – серыми
+   плашками-вкладками; шапка с товарами закреплена при прокрутке; у
+   характеристик нет серых полос-заголовков и повторов названия товара –
+   мелкая серая подпись, под ней значения в колонках с пунктирными
+   разделителями, строки через одну с лёгким фоном.
+   Проверено только в браузере через временный <style> 2026-10-07 (ПК и узкий
+   вид 390px, гость, три товара). Шаблоны модуля не тронуты; ширины колонок и
+   прокрутку карусели, которыми управляет скрипт модуля, правила не меняют. */
+
+/* Фон страницы и заголовок */
+.tygh-content .content-grid:has(.ab-ec-comparison){background:#f4f4f6;padding-bottom:32px}
+.main-content-grid:has(.ab-ec-comparison) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Верх карточки: вкладки категорий и действия */
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list{align-items:center;gap:12px 16px;flex-wrap:wrap;margin:0;padding:14px 20px;border:0;border-radius:16px 16px 0 0;background:#fff}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul>li{margin:0;padding:0;border:0;height:auto}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:10px;background:#f1f1f4;color:#1c1c1c;font-size:14px;font-weight:500;line-height:1;transition:background-color .15s}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item:hover{background:#e6e6eb}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul>li.active .ab-ec-comparison-list__item,
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item.active{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__count{position:static;width:auto;height:auto;min-width:0;padding:0;background:none;color:#8a8a93;font-size:14px;font-weight:400}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons{gap:6px 18px;flex-wrap:wrap;margin-left:auto}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons a{color:#6b6b6b;font-size:14px}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons a:hover{color:#ff6900}
+
+/* Шапка с товарами (закреплена при прокрутке самим модулем) */
+.ab-ec-comparison__header{margin:0;padding:0 5px;border:0;border-top:1px solid #ececf0;border-radius:0 0 16px 16px;background:#fff;box-shadow:0 6px 14px -8px rgba(0,0,0,.18)}
+.ab-ec-comparison .ab-ec-product-item{border:0;border-left:1px dashed #d9d9de;padding:14px 15px}
+.ab-ec-comparison .owl-item:first-child .ab-ec-product-item{border-left-color:transparent}
+.ab-ec-comparison .ab-ec-product-item__img-block img{border-radius:12px}
+.ab-ec-comparison .ab-ec-product-item__name .product-title{font-size:14px;line-height:1.35;color:#1c1c1c}
+
+/* Характеристики: белая карточка, группы, строки через одну с фоном */
+.ab-ec-comparison .ab-ec-comparison-features__wrapper{margin:12px 0 0;border-radius:16px;background:#fff;overflow:hidden}
+.ab-ec-comparison .ab-ec-comparison-features__group{margin:0;border:0}
+.ab-ec-comparison .ab-ec-comparison-features__group-name{padding:18px 20px 10px;background:#fff;border:0;font-size:17px;font-weight:600}
+.ab-ec-comparison .ab-ec-comparison-features__group-name span{padding:0;font-size:17px;font-weight:600}
+.ab-ec-comparison .ab-ec-comparison-features__item{margin:0;border:0;background:#fff}
+.ab-ec-comparison .ab-ec-comparison-features__group-content>.ab-ec-comparison-features__item:nth-child(odd){background:#f7f7f9}
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name,
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name span{background:none;border:0}
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name span{padding:12px 20px 0;font-size:13px;line-height:1.3;color:#8a8a93}
+.ab-ec-comparison .ab-ec-comparison-features__item-content{padding:0 5px 12px}
+.ab-ec-comparison .ab-ec-comparison-features__variants{margin:0;padding:4px 0 0}
+.ab-ec-comparison .ab-ec-comparison-features__variant{margin:0;padding:2px 15px;border-left:1px dashed #d9d9de}
+.ab-ec-comparison .ab-ec-comparison-features__variant:first-child{border-left-color:transparent}
+.ab-ec-comparison .ab-ec-comparison-features__variant-product{display:none}
+.ab-ec-comparison .ab-ec-comparison-features__value{font-size:15px;line-height:1.35;color:#1c1c1c}
+
+/* Выбранная категория: модуль выводит её тегом span (без ссылки), остальные – ссылками a */
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14);font-weight:600;cursor:default}
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item:hover{background:#fff}
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item .ab-ec-comparison-list__count{color:#ff6900;font-weight:600}

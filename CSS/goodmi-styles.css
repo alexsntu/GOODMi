@@ -78,6 +78,12 @@
   20. Каталог-меню, мобильная версия (блок 1208, fly-меню, меню №26)
   21. Выбор города – диалог «Местоположение покупателя» (аддон geo_maps)
   22. Главная: товарные витрины и заголовки секций
+  23. Категории: хлебные крошки над заголовком
+  24. Оформление заказа (/checkout/)
+  25. Корзина (/cart/)
+  26. Избранное (/wishlist/)
+  27. Сравнение товаров (/yith-compare/)
+  28. Сроки получения товара (модуль gm_delivery_date)
 =======================================================================
 */
 
@@ -3344,4 +3350,465 @@ body .ut2-sw-w nav.ut2-fm .ut2-tlw a:not(.hidden):active {
     padding: 0 16px;
     font-size: 14px;
   }
+}
+
+/* ================================================================
+   23. Категории: хлебные крошки над заголовком
+   Блок темы abt__ut2__categories_title_block выводит сначала H1, потом
+   крошки, настройки порядка в UniTheme2 нет. Здесь меняется только
+   видимый порядок (order), разметка и шаблон темы не трогаются.
+   Действует на страницах категорий и брендов.
+================================================================ */
+
+.ut2-extra-block-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ut2-extra-block-title > [id^="breadcrumbs_"] {
+  order: -1;
+  width: 100%;
+}
+
+/* Отступы: во flex-колонке поля крошек и заголовка не схлопываются (было 20 + 20) */
+.ut2-extra-block-title > [id^="breadcrumbs_"] .ty-breadcrumbs {
+  margin-bottom: 14px;
+}
+
+.ut2-extra-block-title > .ty-mainbox-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* ================================================================
+   24. Оформление заказа (/checkout/)
+   Только оформление, шаблоны lite checkout не тронуты. Серый фон,
+   белые карточки шагов, компактные заголовки с оранжевыми номерами;
+   блок «Ваш заказ» и «Вы недавно просматривали» скрыты; согласие
+   стоит над кнопкой. Основной режим доставки и оплаты – выпадающий
+   список (*_mode_select); правила для плиток (*_mode_radio-list)
+   срабатывают, только если в макете выключить «списком выбора».
+   Всё ограничено #litecheckout_form, кроме фона и скрытия блока
+   просмотренных. Без записи «1 / -1»: LESS посчитал бы её как деление.
+================================================================ */
+
+/* Фон страницы и заголовок */
+.tygh-content .content-grid:has(#litecheckout_form) { background: #f4f4f6; padding-bottom: 32px; }
+#litecheckout_form .litecheckout__page-title { font-size: 26px; line-height: 1.2; margin: 20px 0 16px; }
+
+/* Левая колонка: белые карточки шагов; блок «Ваш заказ» скрыт */
+#litecheckout_form .litecheckout__ab_steps { display: flex; flex-direction: column; gap: 12px; }
+#litecheckout_form .litecheckout__ab_steps > div { margin: 0; width: 100%; }
+#litecheckout_form .litecheckout__ab_steps > div:has(> .litecheckout__step-order-products) { display: none; }
+#litecheckout_form .litecheckout__ab_steps > div > .span16 {
+  float: none; width: 100%; margin: 0; padding: 20px 24px;
+  border: 0; border-radius: 16px; background: #fff; box-sizing: border-box;
+}
+#litecheckout_form .ab_step-container,
+#litecheckout_form .litecheckout__ab_steps .ty-mainbox-container { padding-left: 0; margin-left: 0; }
+
+/* Заголовки шагов и номера */
+#litecheckout_form .litecheckout__ab_step-title { font-size: 18px; font-weight: 600; line-height: 1.3; margin: 0 0 14px; align-items: center; }
+#litecheckout_form .litecheckout__ab_step-title::before {
+  width: 30px; height: 30px; flex: 0 0 30px; margin: 0 12px 0 0;
+  font-size: 15px; font-weight: 600; background: #fff1e6; color: #ff6900;
+}
+#litecheckout_form .litecheckout__step-user .ty-btn__secondary { background: #fff; color: #1c1c1c; border: 1px solid #d9d9de; border-radius: 10px; box-shadow: none; }
+
+/* Подписи внутри карточек */
+#litecheckout_form .litecheckout__step-delivery .ty-mainbox-title { font-size: 13px; color: #6b6b6b; margin: 14px 0 8px; padding: 0 0 0 5px; }
+#litecheckout_form .litecheckout__ab_steps > div:last-child .ty-mainbox-title { font-size: 16px; font-weight: 600; margin: 0 0 10px; padding: 0 0 0 5px; }
+
+/* Поля и комментарий */
+#litecheckout_form .litecheckout__input,
+#litecheckout_form .litecheckout__ab_steps textarea { border-radius: 10px; }
+#litecheckout_form .litecheckout__ab_steps textarea { height: 76px; min-height: 76px; }
+
+/* Режим «выпадающий список» у доставки и оплаты (выбран пользователем 2026-10-06) */
+#litecheckout_form .b--pay-ship__opted { border-radius: 10px; }
+#litecheckout_form .b--ship-way_mode_select .b--ship-way__in { padding: 0 5px; box-sizing: border-box; }
+#litecheckout_form .b--pay-ship__select-details__description { margin: 8px 0 0; }
+#litecheckout_form .b--pay-ship__select-details__description p { margin: 0; }
+
+/* Режим «плитки» (если в макете выключить «списком выбора»): две колонки,
+   детали выбранного – на всю ширину. Сейчас не используется, оставлено про запас. */
+#litecheckout_form .b--ship-way__vendor { margin: 0; }
+#litecheckout_form .b--ship-way_mode_radio-list .b--ship-way__list { margin: 0 10px 0 5px; width: auto; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__list { display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: dense; gap: 10px; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit { display: contents; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__label {
+  margin: 0; padding: 14px 48px 14px 16px; min-height: 52px; box-sizing: border-box; align-items: center;
+  border: 1px solid #e3e3e8; border-radius: 12px; background: #fff; cursor: pointer;
+  transition: border-color .15s, background-color .15s;
+}
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__label:hover { border-color: #ffb37a; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit_active .b--pay-ship__unit__label { border-color: #ff6900; box-shadow: inset 0 0 0 1px #ff6900; background: #fff8f2; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__pseudo-radio { border-color: #c9c9d1; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__label:hover .b--pay-ship__unit__pseudo-radio,
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit_active .b--pay-ship__unit__pseudo-radio { border-color: #ff6900; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit_active .b--pay-ship__unit__pseudo-radio::after { background: #ff6900; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit:not(.b--pay-ship__unit_active) .b--pay-ship__unit__label:hover .b--pay-ship__unit__pseudo-radio::after { background: #ffb37a; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__details { grid-column-start: 1; grid-column-end: -1; padding: 0; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__details__in { margin: 0; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__details .ty-wysiwyg-content p { margin: 0; }
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit__details:has(> .b--pay-ship__unit__details__in:empty),
+#litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__unit:not(.b--pay-ship__unit_active) .b--pay-ship__unit__details { display: none; }
+
+/* Правая колонка: белые карточки, согласие над кнопкой, кнопка без капса */
+#litecheckout_form .litecheckout__ab_sticky-block { padding-top: 0; }
+#litecheckout_form .litecheckout__ab_sticky-block .litecheckout__pm_sf,
+#litecheckout_form .litecheckout__ab_sticky-block .litecheckout__ab_cart { border-radius: 16px; background: #fff; }
+#litecheckout_form .litecheckout__ab_sticky-block .litecheckout__ab_cart { display: flex; flex-direction: column; }
+#litecheckout_form .litecheckout__ab_cart > div:has(.litecheckout__terms) { order: 2; }
+#litecheckout_form .litecheckout__ab_cart > div:has(.litecheckout__submit-btn) { order: 3; }
+#litecheckout_form .litecheckout__submit-btn { text-transform: none; font-size: 16px; font-weight: 600; letter-spacing: 0; border-radius: 12px; }
+
+/* Убрать «Вы недавно просматривали» со страницы оформления */
+.tygh-content .container-fluid-row:has(#litecheckout_form) ~ .container-fluid-row { display: none; }
+
+@media (max-width: 767px) {
+  #litecheckout_form .litecheckout__page-title { font-size: 22px; margin: 12px 0; }
+  #litecheckout_form .litecheckout__ab_steps { gap: 10px; }
+  #litecheckout_form .litecheckout__ab_steps > div > .span16 { padding: 16px 14px; border-radius: 14px; }
+  #litecheckout_form .b--pay-ship_mode_radio-list .b--pay-ship__list { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ================================================================
+   25. Корзина (/cart/)
+   Только оформление, шаблон корзины не тронут. Расположение по образцу
+   Ozon: фото слева (квадрат со скруглением), название, под ним ряд
+   кнопок-значков (избранное, сравнение, удалить), цена отдельной
+   колонкой, количество справа; справа от списка – карточка итога и
+   кнопка «Оформить заказ». На телефоне цена над названием, кнопки и
+   количество одним рядом, «Оформить заказ» закреплена внизу экрана.
+   Ячейка описания и её обёртка раскрыты через display: contents, чтобы
+   их содержимое раскладывалось сеткой строки. Кнопки .gm-cart-action
+   выводит хук темы addons/abt__unitheme2/hooks/checkout/product_options.post.tpl.
+   Всё ограничено блоком с таблицей корзины, кроме фона страницы.
+   Без записей вида «1 / 3»: LESS считает их как деление.
+================================================================ */
+
+/* Фон страницы */
+.tygh-content .content-grid:has(.ty-cart-content){background:#f4f4f6;padding-bottom:32px}
+
+/* Две колонки: товары слева, итог и кнопки справа */
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body{display:grid;grid-template-columns:minmax(0,1fr) 380px;column-gap:20px;row-gap:12px;align-items:start}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*{grid-column-start:2;min-width:0;margin:0}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*:has(.ty-cart-content){grid-column-start:1;grid-row-start:1;grid-row-end:span 4}
+.main-content-grid:has(.ty-cart-content) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Товар – белая карточка-сетка: фото | кнопки | название | цена | количество */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content,.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody{display:block;width:100%;border:0}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content thead{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody{display:flex;flex-direction:column;gap:10px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr{display:grid;grid-template-columns:96px auto minmax(0,1fr) 150px auto;column-gap:16px;row-gap:4px;align-items:start;padding:16px 20px;background:#fff;border:0;border-radius:16px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__product-elem{display:block;padding:0;border:0;width:auto;min-width:0;background:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__image-block{grid-column-start:1;grid-row-start:1;grid-row-end:span 4}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content__image{width:96px;height:96px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content__image img{width:96px;height:96px;object-fit:cover;border-radius:14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__description,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in{display:contents}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>*{grid-column-start:2;grid-column-end:4;min-width:0;order:3;margin:0}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-title{order:1;font-size:15px;font-weight:500;line-height:1.35;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__sku{order:2}
+
+/* Ряд кнопок под названием: избранное, сравнение, удалить */
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.gm-cart-actions{order:8;grid-column-end:3;display:flex;flex-wrap:nowrap;gap:6px;margin:6px 0 0}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:#f4f4f6;color:#1c1c1c;font-size:0;text-decoration:none;transition:background-color .15s}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action:hover,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete:hover{background:#e9e9ee}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action i{font-size:18px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{order:9;grid-column-start:3;grid-column-end:4;justify-self:start;margin:6px 0 0 -10px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete .ty-icon{font-size:16px;color:#1c1c1c;margin:0}
+
+/* Цена за единицу: текущая крупно, старая под ней; построчный итог скрыт */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong)){grid-column-start:4;grid-row-start:1;grid-row-end:span 3;display:flex;flex-direction:column-reverse;justify-content:flex-end;align-items:flex-start;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong))>.ut2-cost-base,.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong))>span{font-size:18px;font-weight:600;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price .ty-strike{font-size:13px;color:#8a8a93}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__qty{grid-column-start:5;grid-row-start:1;grid-row-end:span 3;order:10}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:has(strong){display:none}
+
+/* Итог: белая карточка, суммы сверху, промокод ниже */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total{margin-top:58px;padding:20px;background:#fff;border:0;border-radius:16px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__wrapper{border:0;padding:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__body{display:flex;flex-direction:column;gap:14px;padding:0;width:auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__body>*{width:100%;float:none;margin:0;padding:0;flex:0 0 auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic{order:-1}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__item,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__item{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__item{margin:0 0 8px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__title,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__title{text-align:left;width:auto;flex:1 1 auto;padding:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__value,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__value{width:auto;flex:0 0 auto;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-coupons__container{padding-top:14px;border-top:1px solid #e3e3e8}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__footer{width:auto;padding:14px 0 0;margin:14px 0 0;border-top:1px solid #e3e3e8}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic{margin:0;padding:0;border:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__title{font-size:15px;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__value{font-size:24px;font-weight:600}
+
+/* Кнопки: «Оформить заказ» на всю ширину, остальное – текстовые ссылки */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons{display:flex;flex-direction:column;gap:10px;padding:0;background:none;border:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons{order:-1;float:none;width:100%}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons .ty-btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;box-sizing:border-box;font-size:16px;font-weight:600;border-radius:12px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons{float:none;width:100%;display:flex;justify-content:space-between;gap:8px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn{background:none;border:0;box-shadow:none;color:#6b6b6b;padding:0 4px;font-weight:400}
+
+/* Планшет: одна колонка */
+@media (max-width:1023px){
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body{grid-template-columns:minmax(0,1fr)}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*{grid-column-start:1}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*:has(.ty-cart-content){grid-row-end:auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total{margin-top:0}
+}
+
+/* Телефон: цена над названием, кнопки и количество одним рядом, «Оформить заказ» закреплена внизу */
+@media (max-width:767px){
+.tygh-content .content-grid:has(.ty-cart-content){padding-bottom:16px}
+.main-content-grid:has(.ty-cart-content) h1.ty-mainbox-title{font-size:22px}
+.main-content-grid:has(.ty-cart-content) .ty-table__responsive-header{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-table__responsive-content{display:contents}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr{grid-template-columns:auto auto minmax(0,1fr) auto;column-gap:10px;padding:14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__image-block{grid-column-start:1;grid-column-end:3;grid-row-end:span 3}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong)){grid-column-start:3;grid-column-end:5;grid-row-end:auto;flex-direction:row-reverse;justify-content:flex-end;align-items:baseline;gap:8px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>*{grid-column-start:3;grid-column-end:5}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.gm-cart-actions{grid-column-start:1;grid-column-end:2;margin-top:10px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{grid-column-start:2;grid-column-end:3;margin:10px 0 0 -4px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__qty{grid-column-start:3;grid-column-end:5;grid-row-start:auto;grid-row-end:auto;margin-top:8px;justify-self:start}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__top-buttons{display:none}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons{position:fixed;left:0;right:0;bottom:0;z-index:50;width:auto;padding:10px 12px;background:#fff;box-shadow:0 -4px 16px rgba(0,0,0,.08);box-sizing:border-box}
+}
+
+/* ================================================================
+   26. Избранное (/wishlist/)
+   Только оформление, шаблоны не тронуты. По образцу избранного Ozon:
+   серый фон, белые карточки без рамок, фото на всю ширину карточки,
+   красное сердце в углу (значок темы \e905 вместо крестика; нажатие
+   по-прежнему убирает товар), цена над названием, кнопка «В корзину»
+   на всю ширину внизу (подпись добавлена через ::after). Обёртки цены
+   и кнопки раскрыты через display: contents, порядок задан order.
+   Карточки от 210px: миниатюры товаров 200px, в более широких они бы
+   замылились. Всё ограничено сеткой .ut2-wl__grid, кроме фона страницы.
+================================================================ */
+
+/* Фон страницы и заголовок */
+.tygh-content .content-grid:has(.ut2-wl__grid){background:#f4f4f6;padding-bottom:32px}
+.main-content-grid:has(.ut2-wl__grid) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Сетка: карточки шириной от 210px, сколько поместится (6 в ряд на широком экране) */
+.ut2-wl__grid .ut2-gl__wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.ut2-wl__grid .ut2-gl__wrap>*{width:auto;min-width:0;margin:0;float:none}
+
+/* Карточка */
+.ut2-wl__grid .ut2-gl__item,.ut2-wl__grid .ut2-gl__item>form{height:100%;border:0;box-shadow:none;background:none}
+.ut2-wl__grid .ut2-gl__body{display:flex;flex-direction:column;height:100%;padding:0;border:0;border-radius:16px;background:#fff;box-shadow:none;overflow:hidden;box-sizing:border-box}
+
+/* Фото: квадрат на всю ширину карточки */
+.ut2-wl__grid .ut2-gl__image{position:relative;width:auto;height:auto;margin:8px 8px 0;padding:0;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#fff}
+.ut2-wl__grid .ut2-gl__image .product_icon_lnk{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.ut2-wl__grid .ut2-gl__image img{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain}
+
+/* Кнопки в углу фото: красное сердце (убрать из избранного) и сравнение */
+.ut2-wl__grid .ut2-w-c-q__buttons{top:6px;right:6px;display:flex;flex-direction:column;gap:6px}
+.ut2-wl__grid .ut2-w-c-q__buttons a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.9)}
+.ut2-wl__grid .ut2-add-to-wish.ty-remove .ty-icon::before{content:"\e905";color:#f5323c;font-size:22px}
+
+/* Содержимое: цена, название, рейтинг, наличие, кнопка внизу */
+.ut2-wl__grid .ut2-gl__content{display:flex;flex-direction:column;flex:1 1 auto;gap:4px;padding:10px 12px 12px}
+.ut2-wl__grid .ut2-gl__body .ut2-gl__content .ut2-gl__price-wrap,
+.ut2-wl__grid .ut2-gl__body .ut2-gl__content .ut2-gl__mix-price-and-button{display:contents}
+.ut2-wl__grid .ut2-gl__price{order:-2;margin:0;padding:0;width:auto}
+.ut2-wl__grid .ut2-gl__price .ty-price,.ut2-wl__grid .ut2-gl__price .ty-price .ut2-cost-base{font-size:18px;font-weight:700;line-height:1.2}
+.ut2-wl__grid .ut2-gl__name{order:1;height:auto;min-height:0;margin:0}
+.ut2-wl__grid .ut2-gl__name .product-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.35;color:#1c1c1c}
+.ut2-wl__grid .ut2-rating-stars{order:2;margin:0}
+.ut2-wl__grid .ut2-gl__amount{order:3;margin:0}
+.ut2-wl__grid .ut2-gl__bottom{display:none}
+.ut2-wl__grid .ut2-gl__control{order:10;width:100%;margin:auto 0 0;padding-top:8px}
+.ut2-wl__grid .ut2-gl__control>div{width:100%}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:44px;padding:0 12px;border-radius:12px;box-sizing:border-box}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart>span{display:inline-flex;align-items:center;gap:8px}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart>span::after{content:"В корзину";font-size:15px;font-weight:600}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart.ut2-added-to-cart>span::after{content:"В корзине"}
+
+/* Кнопки под списком – текстовые ссылки */
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons{display:flex;justify-content:space-between;margin:16px 0 0;padding:0;background:none;border:0}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn{background:none;border:0;box-shadow:none;color:#6b6b6b;font-weight:400;padding:0 4px}
+
+/* Телефон: две карточки в ряд */
+@media (max-width:767px){
+.main-content-grid:has(.ut2-wl__grid) h1.ty-mainbox-title{font-size:22px}
+.ut2-wl__grid .ut2-gl__wrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ut2-wl__grid .ut2-gl__content{padding:8px 10px 10px}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart{height:40px}
+}
+
+/* Правка 2026-10-07: у контейнера кнопки оставалась высота 36px из темы, кнопка 44px наезжала на «В наличии»;
+   кнопки под списком оформлены как кнопки (светлая и тёмная), а не текстовые ссылки. */
+.ut2-wl__grid .ut2-gl__control,.ut2-wl__grid .ut2-gl__control>div{height:auto;min-height:0}
+.ut2-wl__grid .ut2-gl__control{padding-top:12px}
+.ut2-wl__grid .ut2-gl__content>*{flex-shrink:0}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons{gap:12px;flex-wrap:wrap;margin:20px 0 0}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:1px solid #d9d9de;border-radius:12px;background:#fff;color:#1c1c1c;font-size:15px;font-weight:500;box-shadow:none;transition:border-color .15s,color .15s,background-color .15s}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn:hover{border-color:#ff6900;color:#ff6900}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn__secondary{border-color:#1c1c1c;background:#1c1c1c;color:#fff}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn__secondary:hover{border-color:#ff6900;background:#ff6900;color:#fff}
+@media (max-width:767px){
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn{flex:1 1 100%}
+}
+
+/* ================================================================
+   27. Сравнение товаров (/yith-compare/, модуль ab__extended_comparison)
+   Только оформление, шаблоны модуля не тронуты. По образцу сравнения DNS:
+   серый фон, белые карточки; категории – серыми плашками; у характеристик
+   нет серых полос и повторов названия товара – мелкая серая подпись, под
+   ней значения в колонках с пунктирными разделителями, строки через одну
+   с фоном. Шапка с товарами закреплена самим модулем (position: sticky),
+   поэтому карточка товара оставлена компактной. Ширины колонок и
+   прокрутку карусели, которыми управляет скрипт модуля, правила не меняют.
+================================================================ */
+
+/* Фон страницы и заголовок */
+.tygh-content .content-grid:has(.ab-ec-comparison){background:#f4f4f6;padding-bottom:32px}
+.main-content-grid:has(.ab-ec-comparison) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Верх карточки: вкладки категорий и действия */
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list{align-items:center;gap:12px 16px;flex-wrap:wrap;margin:0;padding:14px 20px;border:0;border-radius:16px 16px 0 0;background:#fff}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul>li{margin:0;padding:0;border:0;height:auto}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:10px;background:#f1f1f4;color:#1c1c1c;font-size:14px;font-weight:500;line-height:1;transition:background-color .15s}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item:hover{background:#e6e6eb}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul>li.active .ab-ec-comparison-list__item,
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item.active{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__count{position:static;width:auto;height:auto;min-width:0;padding:0;background:none;color:#8a8a93;font-size:14px;font-weight:400}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons{gap:6px 18px;flex-wrap:wrap;margin-left:auto}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons a{color:#6b6b6b;font-size:14px}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons a:hover{color:#ff6900}
+
+/* Шапка с товарами (закреплена при прокрутке самим модулем) */
+.ab-ec-comparison__header{margin:0;padding:0 5px;border:0;border-top:1px solid #ececf0;border-radius:0 0 16px 16px;background:#fff;box-shadow:0 6px 14px -8px rgba(0,0,0,.18)}
+.ab-ec-comparison .ab-ec-product-item{border:0;border-left:1px dashed #d9d9de;padding:14px 15px}
+.ab-ec-comparison .owl-item:first-child .ab-ec-product-item{border-left-color:transparent}
+.ab-ec-comparison .ab-ec-product-item__img-block img{border-radius:12px}
+.ab-ec-comparison .ab-ec-product-item__name .product-title{font-size:14px;line-height:1.35;color:#1c1c1c}
+
+/* Характеристики: белая карточка, группы, строки через одну с фоном */
+.ab-ec-comparison .ab-ec-comparison-features__wrapper{margin:12px 0 0;border-radius:16px;background:#fff;overflow:hidden}
+.ab-ec-comparison .ab-ec-comparison-features__group{margin:0;border:0}
+.ab-ec-comparison .ab-ec-comparison-features__group-name{padding:18px 20px 10px;background:#fff;border:0;font-size:17px;font-weight:600}
+.ab-ec-comparison .ab-ec-comparison-features__group-name span{padding:0;font-size:17px;font-weight:600}
+.ab-ec-comparison .ab-ec-comparison-features__item{margin:0;border:0;background:#fff}
+.ab-ec-comparison .ab-ec-comparison-features__group-content>.ab-ec-comparison-features__item:nth-child(odd){background:#f7f7f9}
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name,
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name span{background:none;border:0}
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name span{padding:12px 20px 0;font-size:13px;line-height:1.3;color:#8a8a93}
+.ab-ec-comparison .ab-ec-comparison-features__item-content{padding:0 5px 12px}
+.ab-ec-comparison .ab-ec-comparison-features__variants{margin:0;padding:4px 0 0}
+.ab-ec-comparison .ab-ec-comparison-features__variant{margin:0;padding:2px 15px;border-left:1px dashed #d9d9de}
+.ab-ec-comparison .ab-ec-comparison-features__variant:first-child{border-left-color:transparent}
+.ab-ec-comparison .ab-ec-comparison-features__variant-product{display:none}
+.ab-ec-comparison .ab-ec-comparison-features__value{font-size:15px;line-height:1.35;color:#1c1c1c}
+
+/* Выбранная категория: модуль выводит её тегом span (без ссылки), остальные – ссылками a */
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14);font-weight:600;cursor:default}
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item:hover{background:#fff}
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item .ab-ec-comparison-list__count{color:#ff6900;font-weight:600}
+
+/* ================================================================
+   28. Сроки получения товара (модуль gm_delivery_date)
+   Разметку выдаёт модуль GOODMi «Сроки получения товара»: скрипт находит
+   товары на странице и запрашивает у сервера готовые блоки.
+   .gm-dd--card – карточка товара (список «значок – способ – срок»),
+   .gm-dd--line – каталог (мелкие строки под «В наличии»),
+   .gm-dd--cart – корзина (одна строка под кодом товара),
+   .gm-dd--preorder – товара нет в наличии.
+   Правила расчёта – app/addons/gm_delivery_date/lib/engine.php.
+================================================================ */
+
+.gm-dd__icon{width:20px;height:20px;flex:0 0 20px;color:#ff6900}
+
+/* Карточка товара: список «значок – способ – срок» */
+.gm-dd--card{margin:14px 0 0;padding:4px 12px;border-radius:12px;background:#f4f4f6}
+.gm-dd--card .gm-dd__row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #e6e6eb;font-size:14px;line-height:1.3;color:#1c1c1c}
+.gm-dd--card .gm-dd__row:first-child{border-top:0}
+.gm-dd--card .gm-dd__date{margin-left:auto;font-weight:500;color:#ff6900;text-align:right}
+.gm-dd--card.gm-dd--preorder{padding:12px 14px;font-size:13px;line-height:1.45;color:#6b6b6b}
+
+/* Каталог: мелкие строки под «В наличии» */
+.gm-dd--line{display:flex;flex-direction:column;gap:2px;margin:6px 0 0;font-size:12px;line-height:1.35;color:#6b6b6b}
+.gm-dd--line>span,.gm-dd--cart>span{position:relative;display:block;padding-left:19px}
+.gm-dd--preorder>span{padding-left:0}
+.gm-dd__full,.gm-dd__short{font-style:normal}
+.gm-dd__short{display:none}
+@media (max-width:767px){
+.gm-dd--line .gm-dd__full{display:none}
+.gm-dd--line .gm-dd__short{display:inline}
+}
+.gm-dd--line b,.gm-dd--cart b{font-weight:500;color:#ff6900;white-space:nowrap}
+.gm-dd--line .gm-dd__icon{position:absolute;left:0;top:1px;width:14px;height:14px}
+
+/* Корзина: сроки одной строкой под кодом товара */
+.gm-dd--cart{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 0;font-size:13px;line-height:1.35;color:#6b6b6b}
+.gm-dd--cart .gm-dd__icon{position:absolute;left:0;top:1px;width:15px;height:15px}
+.abt__ut2--content__description__in>.gm-dd--cart{margin:6px 0 0}
+
+/* Оформление заказа: срок под названием товара в «Вашей корзине» и строка для всего заказа */
+.gm-dd-co{display:block;font-size:12px;line-height:1.3;color:#ff6900}
+.gm-dd-co-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:8px 0 2px;padding-top:8px;border-top:1px dashed #e3e3e8;font-size:13px;line-height:1.35;color:#1c1c1c}
+.gm-dd-co-total b{font-weight:600;color:#ff6900;text-align:right}
+
+/* ================================================================
+   29. Оформление заказа: компактный вид и карточки товаров
+   ================================================================
+   Дополняет секцию 24. Поля ниже (44px), меньше отступы, убраны пустые
+   полосы. Город, способ получения и способ оплаты показаны строкой
+   выбранного значения со словом «Изменить» (только когда способы выведены
+   выпадающим списком; сам список и поле города работают как раньше).
+   .gm-dd-order – карточки товаров в конце формы, по одной на срок
+   получения; их вставляет скрипт модуля gm_delivery_date.
+   Без дробей и calc() – «Свой CSS» проходит через LESS.
+   ================================================================ */
+#litecheckout_form .litecheckout__ab_steps{gap:10px}
+#litecheckout_form .litecheckout__ab_steps > div > [class*="litecheckout__step-"],#litecheckout_form .litecheckout__ab_steps > div:not(.gm-dd-order):has(textarea) > *{padding-top:14px !important;padding-bottom:14px !important}
+#litecheckout_form .litecheckout__ab_step-title{margin-bottom:8px}
+#litecheckout_form .litecheckout__field{margin-top:4px;margin-bottom:4px}
+#litecheckout_form .litecheckout__input{min-height:44px;height:44px}
+#litecheckout_form .litecheckout__input--selectable + div{display:none}
+#litecheckout_form .litecheckout__step-delivery .ty-mainbox-title{display:none}
+#litecheckout_form .litecheckout__shipping-method__description p:has(> br:only-child){display:none}
+#litecheckout_form .litecheckout__step-delivery [class*="b--pay-ship_mode_select"],#litecheckout_form .litecheckout__step-payments [class*="b--pay-ship_mode_select"]{margin-bottom:0}
+#litecheckout_form textarea{min-height:0;height:56px}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__opted{display:flex;align-items:center;gap:12px;height:auto;min-height:0;padding:4px 0;border:0 !important;background:none !important;box-shadow:none !important;cursor:pointer}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__opted__text{flex:1 1 auto;min-width:0}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__opted__text__title{font-size:15px;font-weight:600;color:#1c1c1c;white-space:normal}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__opted__icon{position:static !important;display:block;flex:0 0 auto;width:auto;height:auto !important;margin:0;padding:0;font-size:0;line-height:0;transform:none !important}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__opted__icon::before{display:none}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__opted__icon::after{content:"Изменить";font-family:Roboto,Arial,sans-serif;font-size:14px;font-weight:500;line-height:1.3;color:#ff6900}
+#litecheckout_form [class*="b--pay-ship_mode_select"] .b--pay-ship__select > input:checked ~ .b--pay-ship__list{margin-top:6px}
+#litecheckout_form .litecheckout__field--fill:has(> .litecheckout__input--selectable){position:relative;margin:0 5px 2px}
+#litecheckout_form .litecheckout__input--selectable:not(:placeholder-shown):not(:focus){height:30px;min-height:0;padding:0 90px 0 0 !important;border-color:transparent !important;background:transparent !important;box-shadow:none !important;font-size:15px;font-weight:600;color:#1c1c1c;cursor:pointer;text-overflow:ellipsis}
+#litecheckout_form .litecheckout__field--fill:has(> .litecheckout__input--selectable:not(:placeholder-shown):not(:focus))::after{content:"Изменить";position:absolute;right:0;top:6px;font-family:Roboto,Arial,sans-serif;font-size:14px;font-weight:500;line-height:1.3;color:#ff6900;pointer-events:none}
+.gm-dd-order{padding:14px 29px 16px;border-radius:16px;background:#fff;text-align:left}
+.gm-dd-order__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.gm-dd-order__title{font-size:18px;font-weight:600;line-height:1.3;color:#1c1c1c}
+.gm-dd-order__edit{font-size:13px;color:#ff6900;white-space:nowrap;text-decoration:none}
+.gm-dd-order__sub{margin:2px 0 10px;font-size:13px;line-height:1.35;color:#8a8a93}
+.gm-dd-order__items{display:flex;flex-wrap:wrap;gap:8px}
+.gm-dd-order__item{position:relative;display:block;width:72px;height:72px;border:1px solid #ececf0;border-radius:12px;background:#fff;overflow:hidden}
+.gm-dd-order__item img{display:block;width:100%;height:100%;object-fit:contain}
+.gm-dd-order__qty{position:absolute;right:3px;bottom:3px;padding:1px 6px;border-radius:8px;background:rgba(28,28,28,.78);color:#fff;font-size:11px;line-height:1.4}
+.gm-dd-order__foot{margin-top:10px;font-size:13px;line-height:1.35;color:#1c1c1c}
+@media (max-width:767px){
+.gm-dd-order{padding:14px 16px;border-radius:14px}
+.gm-dd-order__title{font-size:16px}
+.gm-dd-order__item{width:64px;height:64px}
+}
+/* Секция 29, телефон: подпись под «Ваши данные» ниже кнопки «Войти», строки города и способа получения по левому краю, без крестика в поле города */
+#litecheckout_form .litecheckout__input--selectable::-webkit-search-cancel-button{display:none;-webkit-appearance:none}
+@media (max-width:767px){
+#litecheckout_form .litecheckout__field--fill:has(> .litecheckout__input--selectable){margin-left:0;margin-right:0}
+#litecheckout_form .litecheckout__step-delivery .b--pay-ship__in{padding-left:0;padding-right:0}
+#litecheckout_form .litecheckout__step-user .litecheckout__ab_label-from-fields{margin-top:12px}
+}
+/* Секция 21, телефон: окно выбора города прижато к верху экрана (тема ставит окна внизу, и клавиатура закрывала поиск и найденные города); список найденного невысокий, чтобы помещался над клавиатурой */
+@media (max-width:767px){
+.ui-dialog.ui-widget.ui-front:has(.gm-geo-picker){top:0 !important;bottom:auto !important;inset-block-end:auto !important;left:0 !important;width:100% !important;margin:0 !important;border-radius:0 0 16px 16px}
+.ui-dialog.ui-widget.ui-front:has(.gm-geo-picker) .ui-dialog-content{max-height:70vh !important;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.gm-geo-picker .gm-geo-picker__results{max-height:36vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 }

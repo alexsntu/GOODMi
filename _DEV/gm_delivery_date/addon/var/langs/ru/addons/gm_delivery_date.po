@@ -1,0 +1,14 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gm_delivery_date\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+
+msgctxt "Addons::name::gm_delivery_date"
+msgid "GOODMi: delivery dates"
+msgstr "GOODMi: сроки получения товара"
+
+msgctxt "Addons::description::gm_delivery_date"
+msgid "Shows pickup, courier and CDEK dates based on warehouse stock and customer location"
+msgstr "Показывает покупателю даты самовывоза, курьера и СДЭК по остаткам на складах и выбранному городу. Только витрина GOODMi."
