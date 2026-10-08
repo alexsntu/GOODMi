@@ -3877,3 +3877,50 @@ html.gm-jivo-open .gm-jivo-btn{display:none}
 .gm-about__link:hover{background:#e6e8ec;color:#1c1c1c}
 #description{scroll-margin-top:130px}
 }
+
+/* ================================================================
+   33. Список товаров: ровные карточки
+   Строка со звёздами есть только у товаров с отзывами, из-за этого
+   «В наличии», срок получения и цена в соседних карточках стояли на
+   разной высоте. У карточек без отзывов под названием оставлено то же
+   место (20px строка рейтинга + штатный отступ названия 5px). Правило
+   действует только в списках, где есть хотя бы один товар с отзывами.
+================================================================ */
+.grid-list.ut2-gl:has(.ut2-rating-stars) .ut2-gl__content>.ut2-gl__name:not(:has(+ .ut2-rating-stars)){margin-bottom:25px}
+
+/* Правка 2026-10-08 (секция 26, избранное): порядок в карточке – цена, название, отзывы, наличие, сроки получения, кнопка
+   (блок сроков .gm-dd стоял сразу под ценой). Строки выровнены между карточками: название всегда в две строки,
+   у товара без отзывов оставлено место под звёзды (24px вместо 25px из секции 33 – здесь у названия нет нижнего отступа). */
+.ut2-wl__grid .gm-dd{order:4;margin-top:6px}
+.ut2-wl__grid .ut2-gl__name{min-height:42px}
+.ut2-wl__grid.grid-list.ut2-gl:has(.ut2-rating-stars) .ut2-gl__content>.ut2-gl__name:not(:has(+ .ut2-rating-stars)){margin-bottom:24px}
+
+/* ================================================================
+   34. Список товаров: цена и кнопка «В корзину»
+   ПК (от 768px): кнопка справа от цены в одной строке (старая цена
+   и процент скидки идут второй строкой под ценой, поэтому места
+   хватает). Телефон (до 767px): блок сроков получения в карточках
+   каталога скрыт (в избранном и в карточке товара остаётся), цена и
+   кнопка прижаты к низу карточки, под цену всегда оставлено место на
+   две строки, кнопка на всю ширину. Избранное не затрагивается.
+================================================================ */
+@media (min-width:768px){
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price-wrap{flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:8px}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price-wrap>.ut2-gl__price{flex:1 1 auto;width:auto;min-width:0}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price-wrap>.ut2-gl__control{flex:0 0 auto;width:auto;margin:0;padding:0}
+}
+@media (max-width:767px){
+.ut2-gl__item .gm-dd--line{display:none}
+.ut2-wl__grid .ut2-gl__item .gm-dd--line{display:flex}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price-wrap{margin-top:auto}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price-wrap>.ut2-gl__price{min-height:44px;justify-content:flex-start}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__control,.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__control>div{width:100%}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__control .ty-btn__add-to-cart{display:flex;align-items:center;justify-content:center;width:100%;height:40px;box-sizing:border-box}
+}
+
+/* Правка 2026-10-08 (секция 26, избранное): в теме включена кнопка с надписью «В КОРЗИНУ», поэтому наша подпись через ::after
+   задваивала текст – убрана. Под цену оставлено место на две строки (старая цена с процентом идёт второй строкой),
+   чтобы название и остальные строки стояли на одной высоте во всех карточках. */
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart>span::after,.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart.ut2-added-to-cart>span::after{content:none}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart{white-space:nowrap}
+.ut2-wl__grid .ut2-gl__price{min-height:44px;justify-content:flex-start;align-content:flex-start}
