@@ -66,22 +66,27 @@
     if (!ids.length) {
       return;
     }
+    // Для каких товаров нужны условия покупки (гарантия, возврат, оплата, доставка) – только карточка товара
+    var termIds = ids.filter(function (pid) {
+      return batch[pid].some(function (slot) {
+        return slot.view === 'card';
+      });
+    });
 
     $.ceAjax('request', fn_url('gm_delivery_date.estimate'), {
       method: 'get',
       hidden: true,
       caching: false,
       // _t – чтобы повторный запрос тех же товаров (после смены города) не брался из памяти страницы
-      data: {ids: ids.join(','), _t: Date.now()},
+      data: {ids: ids.join(','), terms: termIds.join(','), _t: Date.now()},
       callback: function (data) {
         var items = (data && data.gm_dd) || {};
+        var terms = (data && data.gm_dd_terms) || {};
         ids.forEach(function (pid) {
-          var html = items[pid];
-          if (!html) {
-            return;
-          }
+          var html = items[pid] || {};
           batch[pid].forEach(function (slot) {
-            var block = html[slot.view];
+            // Условия покупки – только в карточке товара, под блоком сроков (показываем и когда сроков нет)
+            var block = (html[slot.view] || '') + (slot.view === 'card' ? terms[pid] || '' : '');
             if (!block) {
               return;
             }
@@ -194,7 +199,7 @@
 
   // Покупатель сменил город в шапке – убрать старые сроки и посчитать заново
   $.ceEvent('on', 'ce:geomap:location_set_after', function () {
-    $('.gm-dd').remove();
+    $('.gm-dd, .gm-terms').remove();
     $('[' + MARK + ']').removeAttr(MARK);
     pending = {};
     run(document);

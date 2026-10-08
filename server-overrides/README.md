@@ -27,10 +27,12 @@
 | Файл (от корня магазина) | Что делает |
 |---|---|
 | `app/addons/gm_delivery_date/addon.xml` | описание модуля |
-| `app/addons/gm_delivery_date/func.php` | остатки по складам, локация покупателя, разметка блока |
+| `app/addons/gm_delivery_date/func.php` | остатки по складам, локация покупателя, разметка блока; с 2026-10-08 – условия покупки в карточке товара (`fn_gm_delivery_date_terms`) и сроки гарантии по категориям (`fn_gm_delivery_date_warranty_map`) |
 | `app/addons/gm_delivery_date/lib/engine.php` | правила расчёта дат (без CS-Cart, проверяются `_DEV/gm_delivery_date/tests.php`) |
 | `app/addons/gm_delivery_date/controllers/frontend/gm_delivery_date.php` | ответ на запрос страницы `gm_delivery_date.estimate` |
 | `js/addons/gm_delivery_date/func.js` | находит товары на странице и вставляет блоки |
+| `js/addons/gm_delivery_date/jivo.js` | компактная круглая кнопка чата Jivo на телефоне вместо вертикальной плашки (стили – секция 31); к срокам не относится, лежит здесь, чтобы подключаться тем же шаблоном |
+| `js/addons/gm_delivery_date/about.js` | строка «О товаре» с кнопкой «Перейти к описанию» над краткими характеристиками в карточке товара на ПК (стили и перестановка блока – секция 32) |
 | `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/index/scripts.post.tpl` | подключает скрипт (только GOODMi) |
 | `var/langs/ru/addons/gm_delivery_date.po` | название модуля в админке |
 

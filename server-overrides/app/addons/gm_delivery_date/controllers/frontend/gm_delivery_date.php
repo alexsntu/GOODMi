@@ -3,6 +3,7 @@
  * GOODMi: сроки получения товара – ответ на запрос страницы.
  * GET index.php?dispatch=gm_delivery_date.estimate&ids=1,2,3 (только AJAX).
  * Ответ: { gm_dd: { "<product_id>": { card: html, line: html, cart: html }, ... } }
+ * С параметром terms=1,2 (товары карточки) в ответе ещё gm_dd_terms: { "<product_id>": html списка условий покупки }.
  * GET index.php?dispatch=gm_delivery_date.checkout – сроки для корзины по выбранному способу получения.
  * Ответ: { gm_dd_cart: { label, items: { "<product_id>": текст }, total, same, edit_url, groups: [{ title, sub, items: [{ name, url, img, amount }] }] } }
  */
@@ -28,8 +29,23 @@ if ($mode === 'estimate') {
         }
     }
 
+    // Условия покупки (гарантия, возврат, оплата, доставка) – только для карточки товара, по запросу страницы
+    $terms = [];
+    if (defined('AJAX_REQUEST') && fn_gm_delivery_date_enabled() && !empty($_REQUEST['terms'])) {
+        $raw = (string) $_REQUEST['terms'];
+        $term_ids = array_slice(array_values(array_unique(array_filter(array_map('intval', explode(',', $raw))))), 0, 10);
+        if ($term_ids) {
+            try {
+                $terms = fn_gm_delivery_date_terms($term_ids);
+            } catch (\Throwable $e) {
+                $terms = [];
+            }
+        }
+    }
+
     if (defined('AJAX_REQUEST')) {
         Tygh::$app['ajax']->assign('gm_dd', $items ?: new \stdClass());
+        Tygh::$app['ajax']->assign('gm_dd_terms', $terms ?: new \stdClass());
         // Диагностика: какую зону покупателя определил модуль (видна в ответе запроса)
         if (fn_gm_delivery_date_enabled()) {
             Tygh::$app['ajax']->assign('gm_dd_zone', fn_gm_delivery_date_client_zone());
