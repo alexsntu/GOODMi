@@ -1,0 +1,15 @@
+.gm-card .ut2-pb__options .ty-product-options__item{margin:0 0 8px}
+.gm-card .ut2-pb__options .ty-product-options__item-label{font-size:13px;font-weight:400;color:#6b6b6b}
+.gm-card .ut2-pb__options .ty-product-option-child{font-size:13px;font-weight:600;color:#1c1c1c}
+.gm-card .ut2-pb__options .ty-product-options__image--wrapper{margin:2px 8px 0 0;padding:3px;border:1px solid #e3e3e8;border-radius:12px;background:#fff;transition:border-color .15s}
+.gm-card .ut2-pb__options .ty-product-options__image--wrapper img{border-radius:8px}
+.gm-card .ut2-pb__options .ty-product-options__image--wrapper:hover{border-color:#9aa0a9}
+.gm-card .ut2-pb__options .ty-product-options__image--wrapper--active,.gm-card .ut2-pb__options .ty-product-options__image--wrapper--active:hover{border-color:#ff6900;box-shadow:0 0 0 1px #ff6900}
+.gm-card .ut2-pb__options .ty-product-options__radio--label{display:inline-flex;align-items:center;justify-content:center;gap:0;box-sizing:border-box;height:36px;min-width:72px;margin:2px 8px 0 0;padding:0 14px;border:1px solid #dcdce2;border-radius:10px;background:#fff;font-size:14px;font-weight:500;line-height:1;text-align:center;vertical-align:top;transition:border-color .15s}
+.gm-card .ut2-pb__options .ty-product-options__radio--label bdi{display:block;line-height:1}
+.gm-card .ut2-pb__options .ty-product-options__radio--label .ty-product-option-checkbox{display:none}
+.gm-card .ut2-pb__options .ty-product-options__radio--label:hover{border-color:#9aa0a9}
+.gm-card .ut2-pb__options input:checked + .ty-product-options__radio--label{border-color:#ff6900;box-shadow:0 0 0 1px #ff6900;background:#fff6ef}
+.gm-card .ut2-pb__options .ty-product-options__radio--label--disabled,.gm-card .ut2-pb__options .ty-product-options__radio--label--disabled:hover{border:1px solid #ececf0;background:#f4f4f6;color:#a8a8b0}
+.gm-card .ut2-pb__short-features .ut2-features-list .ty-control-group{padding:4px 0}
+.gm-card .ut2-pb__short-features .ut2-features-list .ty-control-group > span:last-child{font-weight:500}

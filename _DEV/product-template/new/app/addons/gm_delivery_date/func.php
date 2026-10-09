@@ -227,15 +227,12 @@ function fn_gm_delivery_date_render(array $estimate, \DateTimeInterface $now)
         return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
     };
 
-    // Заголовок блока в карточке товара (оформление – секция 35 «Своего CSS»)
-    $title = '<div class="gm-dd__title">Доставка и возврат</div>';
-
     if (!empty($estimate['preorder'])) {
         $full = 'Сейчас данного товара нет в наличии, но мы можем его привезти под заказ.'
             . ' Уточнить сроки доставки и актуальную цену вы можете после оформления заказа.';
 
         return [
-            'card' => '<div class="gm-dd gm-dd--card gm-dd--preorder">' . $title . $e($full) . '</div>',
+            'card' => '<div class="gm-dd gm-dd--card gm-dd--preorder">' . $e($full) . '</div>',
             // В каталоге про «под заказ» не пишем: на карточке уже есть штатная метка «Предзаказ»
             'line' => '',
             'cart' => '<div class="gm-dd gm-dd--cart gm-dd--preorder"><span>Под заказ</span></div>',
@@ -261,7 +258,7 @@ function fn_gm_delivery_date_render(array $estimate, \DateTimeInterface $now)
     }
 
     return [
-        'card' => '<div class="gm-dd gm-dd--card">' . $title . $card . '</div>',
+        'card' => '<div class="gm-dd gm-dd--card">' . $card . '</div>',
         'line' => '<div class="gm-dd gm-dd--line">' . $line . '</div>',
         'cart' => '<div class="gm-dd gm-dd--cart">' . $cart . '</div>',
     ];

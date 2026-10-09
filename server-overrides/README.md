@@ -16,6 +16,7 @@
 | `styles/data/New Orange GOODMI - work.css` | «Свой CSS» GOODMi: все наши стили (меню, выбор города, главная, крошки, оформление заказа – секции 24 и 29, корзина, избранное, сравнение, сроки получения) | Дизайн → Темы → Свой CSS |
 | `templates/addons/geo_maps/views/geo_maps/customer_geolocation.tpl` | Выбор города списком вместо карты в диалоге «Местоположение» | Переопределяет шаблон модуля `geo_maps` |
 | `templates/addons/call_requests/views/call_requests/components/call_requests_content.tpl` | «Быстрый заказ» в карточке товара: без E-mail, имя и телефон в одну строку | Переопределяет шаблон модуля `call_requests` |
+| `templates/addons/reward_points/views/products/components/product_representation.tpl` | Строка «Бонусы за покупку»: «начислим N бонусов» – ссылка на бонусную программу (только GOODMi, остальным – штатная разметка) | Переопределяет шаблон модуля `reward_points` (исходник в теме `responsive`) |
 | `templates/addons/abt__unitheme2/hooks/checkout/product_options.post.tpl` | Кнопки «В избранное» и «Сравнить» у товара в корзине | Хук `checkout:product_options` |
 | `templates/addons/abt__unitheme2/hooks/ab__extended_comparison_wishlist/top_lists.pre.tpl` | Сравнение всегда открывается на одной категории | Хук `ab__extended_comparison_wishlist:top_lists` |
 
@@ -31,17 +32,33 @@
 | `app/addons/gm_delivery_date/lib/engine.php` | правила расчёта дат (без CS-Cart, проверяются `_DEV/gm_delivery_date/tests.php`) |
 | `app/addons/gm_delivery_date/controllers/frontend/gm_delivery_date.php` | ответ на запрос страницы `gm_delivery_date.estimate` |
 | `js/addons/gm_delivery_date/func.js` | находит товары на странице и вставляет блоки |
-| `js/addons/gm_delivery_date/jivo.js` | компактная круглая кнопка чата Jivo на телефоне вместо вертикальной плашки (стили – секция 31); к срокам не относится, лежит здесь, чтобы подключаться тем же шаблоном |
-| `js/addons/gm_delivery_date/about.js` | строка «О товаре» с кнопкой «Перейти к описанию» над краткими характеристиками в карточке товара на ПК (стили и перестановка блока – секция 32) |
+| `js/addons/gm_delivery_date/jivo.js` | чат Jivo на телефоне: пункт «Помощь» в нижнем закреплённом меню темы на месте «Главной» (с 2026-10-09; стили – секция 41), запасной вариант – прежняя круглая кнопка (секция 31); к срокам не относится, лежит здесь, чтобы подключаться тем же шаблоном. В настройках темы пункт «Главная» из нижнего меню убран пользователем |
+| `js/addons/gm_delivery_date/share.js` | открывает меню кнопки «Поделиться» в карточке на шаблоне `goodmi_card` и копирует ссылку; на телефоне – штатное окно «Поделиться» |
+| `js/addons/gm_delivery_date/about.js` | прокрутка по кнопке в заголовке «О товаре» (к описанию на ПК, к характеристикам на телефоне); сам заголовок выдаёт шаблон `goodmi_card`, стили – секции 32 и 41 |
 | `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/index/scripts.post.tpl` | подключает скрипт (только GOODMi) |
+| `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/products/gm_card_delivery.post.tpl` | выводит сроки и условия покупки сразу в странице карточки на шаблоне `goodmi_card` (функция `fn_gm_delivery_date_card_html` в `func.php`) |
 | `var/langs/ru/addons/gm_delivery_date.po` | название модуля в админке |
+
+### Свой шаблон карточки товара `goodmi_card` (с 2026-10-09 – шаблон по умолчанию всей витрины GOODMi)
+
+| Файл (от `design/themes/abt__unitheme2/templates/`) | Что делает |
+|---|---|
+| `blocks/product_templates/goodmi_card.tpl` | копия `abt__ut2_three_columns_template.tpl`: краткие характеристики последними в левой колонке, строка «О товаре» в разметке, сроки и условия покупки через хук `products:gm_card_delivery` |
+| `blocks/product_templates/components/goodmi_card_mobile.tpl` | копия `components/abt__ut2_mobile_template.tpl` с тем же хуком под кнопкой «В корзину» |
+| `blocks/product_templates/components/goodmi_credit.tpl` | плашка «от N ₽/мес. в кредит на 12 мес.» справа от цены; платёж считается в шаблоне (75% годовых, 12 мес.), стили – секция 37 |
+| `blocks/product_templates/components/goodmi_share.tpl` | кнопка «Поделиться» с меню (ссылка, ВКонтакте, Одноклассники, Telegram, WhatsApp) – подключается из обоих шаблонов в блоке кнопок; скрипт `js/addons/gm_delivery_date/share.js`, стили – секция 36 |
+
+Выбирается в админке как шаблон страницы товара `GOODMi_card` (у товара, категории или витрины). Откат – вернуть
+прежний шаблон в настройке; файлы можно не удалять. Правки в копиях помечены «GOODMi:»; после обновления UniTheme2
+сверить обе копии с исходными шаблонами темы. Блок с отметкой `data-gm-dd="1"` скрипт `func.js` не запрашивает повторно,
+а при смене города заменяет как обычно. Бэкап и выложенные версии – `/root/gm-backups/2026-10-09-card-template/`.
 
 Как модуль устроен, что где менять и как проверять – `_DEV/gm_delivery_date/README.md` (там же правила, проверки и исходники).
 
 Восстановление: вернуть файлы → Модули → установить «GOODMi: сроки получения товара» → очистить кэш. Стили блока –
 секция 28 «Своего CSS». Правила словами – `_DEV/gm_delivery_date/RULES.md`.
 
-Исходники стилей с комментариями – `CSS/goodmi-styles.css` (секции 19–28). Серверный файл стилей
+Исходники стилей с комментариями – `CSS/goodmi-styles.css` (секции 19–42; 35 – вид блока «Доставка и возврат», 36 – кнопка «Поделиться», 37 – плашка кредита, 38 – блок покупки, 39 – выбор вариантов и «О товаре», 40 – вкладки и разделы под карточкой, 41 – «Помощь» в нижнем меню и карточка на телефоне, 42 – блок «Этот товар хорошо дополняют»). Серверный файл стилей
 **не равен** `CSS/goodmi-styles.min.css` один в один (например, на сервере нет секции виджета
 бонусов), поэтому при восстановлении брать именно копию из этой папки.
 

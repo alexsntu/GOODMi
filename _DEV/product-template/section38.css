@@ -1,0 +1,24 @@
+.gm-card .ut2-pb__main-content-box{border-radius:16px}
+.gm-card .gm-credit-row .ty-price,.gm-card .gm-credit-row .ty-price .ty-price-num{font-size:28px;font-weight:700;line-height:1.2}
+.gm-card .gm-credit-row .stock-wrap{margin-top:8px}
+.gm-card .gm-credit-row .ty-qty-in-stock{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 8px;border-radius:999px;background:#e8f7ee;font-size:13px;font-weight:500;line-height:1.4;color:#00994a}
+.gm-card .gm-credit-row .ty-qty-in-stock::before{content:"";flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:#00aa52}
+.gm-card .gm-credit-row .ty-qty-in-stock:has(.on_backorder){background:#e9f1ff;color:#1f63c4}
+.gm-card .gm-credit-row .ty-qty-in-stock:has(.on_backorder)::before{background:#2f7bea}
+.gm-card .gm-credit-row .ty-qty-in-stock .on_backorder{font-size:inherit;font-weight:inherit;color:inherit}
+.gm-card .gm-credit-row .ty-qty-out-of-stock{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 8px;border-radius:999px;background:#f2f3f5;font-size:13px;font-weight:500;line-height:1.4;color:#6b6b6b}
+.gm-card .gm-credit-row .ty-qty-out-of-stock::before{content:"";flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:#9aa0a9}
+.gm-card .ut2-pb__advanced-options .ty-reward-group{position:relative;display:flex;align-items:center;gap:8px;margin:4px 0 2px;padding:9px 12px;border-radius:10px;background:#f2f3f5;font-size:13px;line-height:1.3;transition:background-color .15s}
+.gm-card .ut2-pb__advanced-options .ty-reward-group.hidden{display:none}
+.gm-card .ut2-pb__advanced-options .ty-reward-group:hover{background:#e9eaee}
+.gm-card .ut2-pb__advanced-options .ty-reward-group::before{content:"Б";flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:#ff6900;color:#fff;font-size:12px;font-weight:700;line-height:20px;text-align:center}
+.gm-card .ut2-pb__advanced-options .ty-reward-group .ty-control-group__label{width:auto;min-width:0;margin:0;padding:0;font-size:13px;font-weight:400;line-height:1.3;color:#6b6b6b}
+.gm-card .ut2-pb__advanced-options .ty-reward-group .ty-control-group__item{margin-left:auto;font-size:13px;font-weight:600;line-height:1.3;color:#1c1c1c;white-space:nowrap}
+.gm-card .ut2-pb__advanced-options .ty-reward-group bdi{font-size:inherit;font-weight:inherit;line-height:inherit}
+.gm-bonus-link,.gm-bonus-link:hover{color:inherit;font-size:inherit;font-weight:inherit;text-decoration:none}
+.gm-card .ut2-pb__advanced-options .gm-bonus-link{display:inline-flex;align-items:center;gap:6px}
+.gm-card .ut2-pb__advanced-options .gm-bonus-link::before{content:"";position:absolute;left:0;right:0;top:0;bottom:0}
+.gm-card .ut2-pb__advanced-options .gm-bonus-link::after{content:"";width:6px;height:6px;border-right:1.5px solid #8a8a93;border-top:1.5px solid #8a8a93;rotate:45deg}
+.gm-card .ut2-pb__button .ty-btn__add-to-cart{height:50px;border-radius:12px;font-size:16px;font-weight:600}
+.gm-card .ut2-pb__button a.ty-btn.ty-btn__outline{height:46px;border:0;border-radius:12px;box-shadow:none;background:#fff1e6 !important;color:#e55d00;font-weight:500}
+.gm-card .ut2-pb__button a.ty-btn.ty-btn__outline:hover{background:#ffe3cf !important}

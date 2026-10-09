@@ -1,0 +1,18 @@
+.gm-card .ut2-pb__button{position:relative}
+.gm-share{position:absolute;right:0;bottom:0;z-index:5}
+.gm-share__btn{display:flex;align-items:center;gap:4px;margin:0;padding:0;border:0;background:none;font-family:inherit;font-size:14px;font-weight:400;line-height:21px;color:#ff6900;cursor:pointer}
+.gm-share__btn svg{flex:0 0 20px;width:20px;height:20px}
+.gm-share__btn:hover{color:#e55d00}
+.gm-share__menu{display:none;position:absolute;right:0;top:100%;min-width:232px;margin-top:8px;padding:6px 0;border-radius:14px;background:#1c1c1c;box-shadow:0 8px 24px rgba(0,0,0,.25);overflow:hidden}
+.gm-share--open .gm-share__menu{display:block}
+.gm-share__item{position:relative;display:flex;align-items:center;gap:12px;padding:11px 16px;font-size:14px;font-weight:500;line-height:1.3;color:#fff;text-decoration:none;white-space:nowrap}
+.gm-share__item + .gm-share__item::before{content:"";position:absolute;left:48px;right:16px;top:0;border-top:1px solid #3a3a3d}
+.gm-share__item svg{flex:0 0 20px;width:20px;height:20px;color:#9aa0a9}
+.gm-share__item:hover,.gm-share__item:focus{background:#2c2c2e;color:#fff;text-decoration:none}
+@media (max-width:767px){
+.gm-card.ut2-pb-mobile .ut2-pb__button > [id^="add_to_cart_update"]{justify-content:flex-start}
+}
+@media (max-width:374px){
+.gm-share__btn{gap:0;font-size:0}
+.gm-share__btn svg{flex:0 0 22px;width:22px;height:22px}
+}
