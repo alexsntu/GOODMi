@@ -4270,3 +4270,12 @@ html.gm-jivo-open .gm-jivo-btn{display:none}
   .tygh-content .content-grid:has(#litecheckout_form){padding-bottom:140px}
   body:has(#litecheckout_form) .gm-jivo-btn{bottom:190px}
 }
+
+/* Секция 43, правка 2026-10-11: на телефоне строка согласия выше (48px вместо 22px) и галочка крупнее (26px) – по узкой строке было трудно попасть пальцем */
+@media (max-width:767px){
+  #litecheckout_form .litecheckout__ab_cart > div:has(.litecheckout__terms){padding:4px 12px 0}
+  #litecheckout_form .litecheckout__ab_cart > div:has(.litecheckout__terms) label{padding:12px 0 10px 36px;cursor:pointer}
+  #litecheckout_form .litecheckout__ab_cart > div:has(.litecheckout__terms) input.checkbox{width:26px !important;height:26px !important;margin-left:-36px;top:-3px}
+  .tygh-content .content-grid:has(#litecheckout_form){padding-bottom:150px}
+  body:has(#litecheckout_form) .gm-jivo-btn{bottom:200px}
+}
