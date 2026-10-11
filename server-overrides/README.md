@@ -13,7 +13,7 @@
 
 | Файл (от `design/themes/abt__unitheme2/`) | Что делает | Как подключается |
 |---|---|---|
-| `styles/data/New Orange GOODMI - work.css` | «Свой CSS» GOODMi: все наши стили (меню, выбор города, главная, крошки, оформление заказа – секции 24 и 29, корзина, избранное, сравнение, сроки получения) | Дизайн → Темы → Свой CSS |
+| `styles/data/New Orange GOODMI - work.css` | «Свой CSS» GOODMi: все наши стили (меню, выбор города, главная, крошки, оформление заказа – секции 24, 29 и 43, корзина, избранное, сравнение, сроки получения) | Дизайн → Темы → Свой CSS |
 | `templates/addons/geo_maps/views/geo_maps/customer_geolocation.tpl` | Выбор города списком вместо карты в диалоге «Местоположение» | Переопределяет шаблон модуля `geo_maps` |
 | `templates/addons/call_requests/views/call_requests/components/call_requests_content.tpl` | «Быстрый заказ» в карточке товара: без E-mail, имя и телефон в одну строку | Переопределяет шаблон модуля `call_requests` |
 | `templates/addons/reward_points/views/products/components/product_representation.tpl` | Строка «Бонусы за покупку»: «начислим N бонусов» – ссылка на бонусную программу (только GOODMi, остальным – штатная разметка) | Переопределяет шаблон модуля `reward_points` (исходник в теме `responsive`) |
