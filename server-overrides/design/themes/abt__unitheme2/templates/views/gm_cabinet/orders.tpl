@@ -7,6 +7,7 @@
     {include file="views/gm_cabinet/components/nav.tpl"}
 
     <div class="gm-lk__main">
+        {if $gm_cab.verify}{include file="views/gm_cabinet/components/verify.tpl"}{/if}
         <div class="gm-lk__card gm-ord-filters">
             <div class="gm-seg">
                 {foreach from=$gm_cab.tabs item="tab"}

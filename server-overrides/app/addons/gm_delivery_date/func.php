@@ -726,3 +726,66 @@ function fn_gm_delivery_date_card_html($product_id)
 
     return (isset($items[$pid]['card']) ? $items[$pid]['card'] : '') . (isset($terms[$pid]) ? $terms[$pid] : '');
 }
+
+/**
+ * Право оставить отзыв (модуль «Отзывы о товарах», настройка «только после покупки»): магазин штатно считает покупкой
+ * только заказ сайта. На витрине GOODMi покупкой считается и выданный заказ в магазине – по данным личного кабинета
+ * (app/gm_cabinet/store.php: подтверждённый номер, МойСклад). Для таких покупателей – один отзыв на товар.
+ * Обработчик живёт в этом модуле, потому что CS-Cart подключает обработчики только из модулей.
+ */
+function fn_gm_delivery_date_product_reviews_is_user_eligible_to_write_product_review($user_id, $product_id, $ip, $need_to_buy_first, $review_ip_check, &$result)
+{
+    $code = 'product_reviews.need_to_buy_first';
+    if (!$need_to_buy_first || !$user_id || !$product_id || (int) \Tygh\Registry::get('runtime.company_id') !== fn_gm_delivery_date_company_id() || !is_object($result)) {
+        return;
+    }
+    $errors = $result->getErrors();
+    if (!isset($errors[$code])) {
+        return;
+    }
+    try {
+        $store = \Tygh\Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+        if (!is_file($store)) {
+            return;
+        }
+        require_once $store;
+        if (!fn_gm_cab_bought_in_store((int) $user_id, (int) $product_id)) {
+            return;
+        }
+        $result->removeError($code);
+        if (db_get_field('SELECT 1 FROM ?:product_reviews WHERE user_id = ?i AND product_id = ?i LIMIT 1', $user_id, $product_id)) {
+            $result->addError('gm_cabinet.already_reviewed', 'Вы уже оставили отзыв на этот товар.');
+
+            return;
+        }
+        if (!$result->hasErrors()) {
+            $result->setSuccess(true);
+        }
+    } catch (\Throwable $e) {
+        // Проверка покупки в магазине необязательна: при сбое действует штатное правило
+    }
+}
+
+/**
+ * Доступ к заказу сайта: штатно покупатель видит только заказы своей учётной записи. На витрине GOODMi вошедший
+ * покупатель может открыть и заказ, оформленный без входа на его подтверждённый номер телефона (такие заказы
+ * показывает «Мои заказы» личного кабинета). Проверка – fn_gm_cab_order_by_phone в app/gm_cabinet/store.php.
+ */
+function fn_gm_delivery_date_is_order_allowed_post($order_id, $auth, &$allowed)
+{
+    if (!empty($allowed) || empty($auth['user_id']) || !$order_id || !defined('AREA') || AREA !== 'C'
+        || (int) \Tygh\Registry::get('runtime.company_id') !== fn_gm_delivery_date_company_id()) {
+        return;
+    }
+    try {
+        $store = \Tygh\Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+        if (is_file($store)) {
+            require_once $store;
+            if (fn_gm_cab_order_by_phone((int) $auth['user_id'], (int) $order_id)) {
+                $allowed = 1;
+            }
+        }
+    } catch (\Throwable $e) {
+        // При сбое действует штатное правило доступа
+    }
+}

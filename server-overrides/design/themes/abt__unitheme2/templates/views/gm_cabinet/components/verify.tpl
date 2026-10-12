@@ -1,0 +1,35 @@
+{* GOODMi: блок «Подтвердите номер телефона» в личном кабинете. Данные: $gm_cab.verify (fn_gm_cab_verify_state):
+   mask – номер со скрытыми цифрами, pending – код отправлен и ждёт ввода, wait – секунд до повторной отправки,
+   sms – можно ли подтвердить самому кодом (иначе только через сотрудника), url – адрес обработчика (gm_cabinet.verify), back – на какую страницу вернуться. Оформление – секция 56 (.gm-vf). *}
+{$v = $gm_cab.verify}
+<div class="gm-lk__card gm-vf">
+    <h2 class="gm-vf__h">Подтвердите номер телефона</h2>
+    {if !$v.sms}
+        <p class="gm-vf__t">Покупки в магазинах и бонусы привязаны к номеру <b>{$v.mask}</b>. Чтобы показать их только вам, номер нужно один раз подтвердить: назовите его сотруднику в любом магазине GOODMi или позвоните нам &#8211; подтвердим за минуту.</p>
+        <div class="gm-vf__form">
+            <a class="gm-vf__btn" href="tel:+78002501700">Позвонить 8 (800) 250-17-00</a>
+        </div>
+    {elseif $v.pending}
+        <p class="gm-vf__t">Мы отправили СМС с кодом на <b>{$v.mask}</b>. Введите 4 цифры из сообщения.</p>
+        <form class="gm-vf__form" action="{$v.url}" method="post" name="gm_vf_check">
+            <input type="hidden" name="action" value="check">
+            <input type="hidden" name="back" value="{$v.back}">
+            <input class="gm-vf__code" type="text" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="4" placeholder="0000" required>
+            <button class="gm-vf__btn" type="submit">Подтвердить</button>
+        </form>
+        <form class="gm-vf__again" action="{$v.url}" method="post" name="gm_vf_again">
+            <input type="hidden" name="action" value="send">
+            <input type="hidden" name="back" value="{$v.back}">
+            <button class="gm-vf__link" type="submit">Отправить код ещё раз</button>
+            <span class="gm-vf__hint">Повторная отправка возможна раз в минуту</span>
+        </form>
+    {else}
+        <p class="gm-vf__t">Покупки в магазинах и бонусы привязаны к номеру <b>{$v.mask}</b>. Чтобы показать их только вам, подтвердите номер кодом из СМС &#8211; это нужно сделать один раз.</p>
+        <form class="gm-vf__form" action="{$v.url}" method="post" name="gm_vf_send">
+            <input type="hidden" name="action" value="send">
+            <input type="hidden" name="back" value="{$v.back}">
+            <button class="gm-vf__btn" type="submit">Получить код</button>
+        </form>
+    {/if}
+    <p class="gm-vf__hint">Другой номер? <a href="{$gm_cab.profile_url}">Изменить в профиле</a></p>
+</div>

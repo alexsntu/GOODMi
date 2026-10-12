@@ -16,6 +16,8 @@
             <p>Бонусы привязаны к номеру телефона. Добавьте его в профиль, и здесь появятся баланс, уровень и история начислений.</p>
             <a class="gm-bp-btn" href="{$gm_cab.profile_url}">Перейти в профиль</a>
         </div>
+    {elseif $gm_cab.verify}
+        {include file="views/gm_cabinet/components/verify.tpl"}
     {elseif !$b}
         <div class="gm-bp__card gm-bp-empty">
             <h2 class="gm-bp__h">Не удалось получить данные о бонусах</h2>

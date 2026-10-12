@@ -7,6 +7,10 @@
  * одним списком, с составом и ссылками на товары. Только витрина GOODMi и только вошедший покупатель; номер телефона берётся
  * из его профиля в базе, из запроса не принимается. Логика – в app/gm_cabinet/lib.php и store.php,
  * шаблон – design/themes/abt__unitheme2/templates/views/gm_cabinet/bonuses.tpl.
+ * index.php?dispatch=gm_cabinet.products[&page=N] – «Купленные товары»: товары из выданных заказов сайта и магазинов.
+ * POST index.php?dispatch=gm_cabinet.verify (action=send|check, code, back) – подтверждение номера телефона кодом из СМС.
+ * Пока номер не подтверждён (и подтверждение включено ключом phone_verify в secrets.php), страницы не показывают данные,
+ * найденные по номеру: покупки в магазинах, заказы без входа и бонусы.
  *
  * php index.php --dispatch=gm_cabinet.sync_orders [--minutes=50] – загрузка заказов МойСклад в таблицу ?:gm_ms_orders
  * (только из командной строки; ночное задание в cron). Первый запуск проходит всю историю, дальше – изменённое.
@@ -18,7 +22,31 @@ if (!defined('BOOTSTRAP')) {
     die('Access denied');
 }
 
-if ($mode === 'bonuses' || $mode === 'orders') {
+if ($mode === 'phone') {
+    // Страница «Номер телефона»: состояние подтверждения и смена номера через код из СМС
+    if ((int) Registry::get('runtime.company_id') !== 2) {
+        return [CONTROLLER_STATUS_NO_PAGE];
+    }
+    if (empty($auth['user_id'])) {
+        return [CONTROLLER_STATUS_REDIRECT, 'auth.login_form?return_url=' . urlencode(Registry::get('config.current_url'))];
+    }
+    require_once Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+    $user_id = (int) $auth['user_id'];
+    if (!gm_cab_verify_enabled($user_id)) {
+        return [CONTROLLER_STATUS_REDIRECT, 'profiles.update'];
+    }
+    $phone = fn_gm_cab_user_phone($user_id);
+    Tygh::$app['view']->assign('gm_cab', [
+        'nav' => fn_gm_cab_nav($user_id, 'profile'),
+        'profile_url' => fn_url('profiles.update'),
+        'has_phone' => $phone !== '',
+        'state' => fn_gm_cab_verify_state($user_id, $phone),
+        'url' => fn_url('gm_cabinet.verify'),
+    ]);
+    fn_add_breadcrumb('Номер телефона');
+}
+
+if ($mode === 'bonuses' || $mode === 'orders' || $mode === 'products') {
     if ((int) Registry::get('runtime.company_id') !== 2) {
         return [CONTROLLER_STATUS_NO_PAGE];
     }
@@ -33,14 +61,28 @@ if ($mode === 'bonuses' || $mode === 'orders') {
 
     $user_id = (int) $auth['user_id'];
     $phone = fn_gm_cab_user_phone($user_id);
-    $store_orders = [];
-    if ($phone !== '') {
-        fn_gm_cab_refresh_cached($phone);
-        $store_orders = gm_cab_store_display(fn_gm_cab_store_get($phone));
+    // Данные по номеру показываем только после подтверждения номера кодом из СМС
+    $verify = null;
+    $trusted_phone = $phone;
+    if ($phone !== '' && gm_cab_verify_enabled($user_id)) {
+        $state = fn_gm_cab_verify_state($user_id, $phone);
+        if (!$state['verified']) {
+            $trusted_phone = '';
+            $verify = $state + ['url' => fn_url('gm_cabinet.verify'), 'back' => $mode];
+        }
     }
-    $site_orders = fn_gm_cab_site_orders($user_id, $phone);
+    $store_orders = [];
+    $site_orders = [];
+    if ($trusted_phone !== '') {
+        fn_gm_cab_refresh_cached($trusted_phone);
+    }
+    if ($mode !== 'products') {
+        $store_orders = $trusted_phone !== '' ? gm_cab_store_display(fn_gm_cab_store_get($trusted_phone)) : [];
+        $site_orders = fn_gm_cab_site_orders($user_id, $trusted_phone);
+    }
     $nav = [
-        'nav' => fn_gm_cab_nav($user_id, $mode),
+        'verify' => $verify,
+        'nav' => fn_gm_cab_nav($user_id, $mode === 'products' ? 'purchased' : $mode),
         'bonuses_url' => fn_url('gm_cabinet.bonuses'),
         'orders_url' => fn_url('gm_cabinet.orders'),
         'profile_url' => fn_url('profiles.update'),
@@ -48,9 +90,83 @@ if ($mode === 'bonuses' || $mode === 'orders') {
     ];
 }
 
+if ($mode === 'verify') {
+    if ((int) Registry::get('runtime.company_id') !== 2) {
+        return [CONTROLLER_STATUS_NO_PAGE];
+    }
+    $back = isset($_REQUEST['back']) && in_array($_REQUEST['back'], ['bonuses', 'phone'], true) ? $_REQUEST['back'] : 'orders';
+    if (empty($auth['user_id'])) {
+        return [CONTROLLER_STATUS_REDIRECT, 'auth.login_form?return_url=' . urlencode('gm_cabinet.' . $back)];
+    }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        require_once Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+        $user_id = (int) $auth['user_id'];
+        $phone = fn_gm_cab_user_phone($user_id);
+        if (gm_cab_verify_enabled($user_id)) {
+            $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
+            $state = fn_gm_cab_verify_state($user_id, $phone);
+            $result = null;
+            if ($action === 'change') {
+                // Смена номера: код уходит на новый номер, в профиль он попадёт только после ввода кода
+                $new_phone = gm_cab_phone(isset($_REQUEST['new_phone']) ? $_REQUEST['new_phone'] : '');
+                if ($new_phone === '') {
+                    $result = ['ok' => false, 'message' => 'Введите номер полностью, например +7 978 000-00-00.'];
+                } elseif ($new_phone === $phone) {
+                    $result = ['ok' => false, 'message' => 'Это ваш текущий номер.'];
+                } else {
+                    $result = fn_gm_cab_verify_send($user_id, $new_phone);
+                }
+            } elseif ($action === 'check') {
+                $target = $state['change_phone'] !== '' ? $state['change_phone'] : $phone;
+                $result = fn_gm_cab_verify_check($user_id, $target, isset($_REQUEST['code']) ? $_REQUEST['code'] : '');
+                if ($result['ok'] && $target !== $phone) {
+                    fn_gm_cab_set_user_phone($user_id, $target);
+                    $result['message'] = 'Номер изменён и подтверждён.';
+                }
+            } elseif (!$state['verified']) {
+                $result = fn_gm_cab_verify_send($user_id, $phone);
+            }
+            if ($result) {
+                fn_set_notification($result['ok'] ? 'N' : 'E', $result['ok'] ? 'Готово' : 'Ошибка', $result['message']);
+            }
+        }
+    }
+
+    return [CONTROLLER_STATUS_REDIRECT, 'gm_cabinet.' . $back];
+}
+
+if ($mode === 'products') {
+    // «Купленные товары»: при первом показе догружаем состав покупок в магазинах из МойСклад
+    $complete = true;
+    if ($trusted_phone !== '') {
+        try {
+            $complete = fn_gm_cab_store_load_items($trusted_phone);
+        } catch (\Throwable $e) {
+            $complete = false;
+        }
+    }
+    $list = fn_gm_cab_purchased($user_id, $trusted_phone);
+    $per_page = 24;
+    $pages = max(1, (int) ceil(count($list) / $per_page));
+    $page = isset($_REQUEST['page']) ? max(1, min($pages, (int) $_REQUEST['page'])) : 1;
+
+    Tygh::$app['view']->assign('gm_cab', $nav + [
+        'items' => array_slice($list, ($page - 1) * $per_page, $per_page),
+        'total' => count($list),
+        'complete' => $complete,
+        'page' => $page,
+        'pages' => $pages,
+        'prev_url' => $page > 1 ? fn_url('gm_cabinet.products' . ($page > 2 ? '?page=' . ($page - 1) : '')) : '',
+        'next_url' => $page < $pages ? fn_url('gm_cabinet.products?page=' . ($page + 1)) : '',
+        'catalog_url' => fn_url(''),
+    ]);
+
+    fn_add_breadcrumb('Купленные товары');
+}
+
 if ($mode === 'bonuses') {
     $bonus = null;
-    if ($phone !== '') {
+    if ($trusted_phone !== '') {
         $cache_dir = rtrim(Registry::get('config.dir.cache_misc'), '/') . '/gm_cabinet';
         try {
             $bonus = gm_cab_cached($cache_dir, 'bp_' . $phone, 300, function () use ($phone) {

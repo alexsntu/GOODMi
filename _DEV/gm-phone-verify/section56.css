@@ -1,0 +1,25 @@
+
+/* ================================================================
+   56. Личный кабинет: блок «Подтвердите номер телефона» (.gm-vf)
+   ================================================================
+   Шаблон views/gm_cabinet/components/verify.tpl – показывается в
+   «Моих заказах» и «Моих бонусах», пока номер из профиля не подтверждён
+   кодом из СМС: текст, кнопка «Получить код» либо поле для 4 цифр
+   и кнопка «Подтвердить», ссылка на повторную отправку.
+   ================================================================ */
+.gm-vf{margin:0 0 12px;font-family:Roboto,Arial,sans-serif;border:1px solid #ffd9bf}
+.gm-vf__h{margin:0 0 8px;padding:0;font-size:18px;font-weight:600;line-height:1.3;color:#1c1c1c}
+.gm-vf__t{margin:0 0 14px;font-size:15px;line-height:1.45;color:#3d3d3d}
+.gm-vf__form{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px}
+.gm-vf__code{width:140px;height:48px;padding:0 14px;border:1px solid #d9d9de;border-radius:12px;background:#fff;box-shadow:none;box-sizing:border-box;font-size:22px;font-weight:600;letter-spacing:6px;text-align:center;color:#1c1c1c}
+.gm-vf__code:focus{border-color:#ff6900;outline:0}
+.gm-vf__btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:0;border-radius:12px;background:#ff6900;font-size:15px;font-weight:600;color:#fff;cursor:pointer}
+.gm-vf__btn:hover{background:#e85f00}
+.gm-vf__again{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 10px}
+.gm-vf__link{padding:0;border:0;background:none;font-size:14px;font-weight:500;color:#ff6900;cursor:pointer}
+.gm-vf__hint{margin:0;font-size:13px;line-height:1.4;color:#8a8a93}
+.gm-vf__hint a{color:#ff6900}
+@media (max-width:767px){
+.gm-vf__code{flex:1 1 120px;width:auto}
+.gm-vf__btn{flex:1 1 140px}
+}

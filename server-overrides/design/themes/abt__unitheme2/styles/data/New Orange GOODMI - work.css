@@ -4245,3 +4245,246 @@ body:not(.user-is-guest) .ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info
 .ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__item.gm-acc-orders{order:2}
 .ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__a[href*="orders"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h16l-1.4 9a1.5 1.5 0 0 1-1.5 1.3H6.9a1.5 1.5 0 0 1-1.5-1.3z'/%3E%3Cpath d='M8.5 9.5L12 4l3.5 5.5'/%3E%3Cpath d='M10 13.5v3'/%3E%3Cpath d='M14 13.5v3'/%3E%3C/svg%3E")}
 .ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__a[href*="gm_cabinet.bonuses"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z'/%3E%3C/svg%3E")}
+
+/* ================================================================
+   53. Меню кабинета: значки и порядок без привязки к адресам страниц
+   ================================================================
+   Раньше значки и порядок пунктов выбирались по адресу ссылки. После
+   того как страницам кабинета задали красивые адреса (/cabinet/,
+   /my-bonus/, /my-profile/), эти правила перестали срабатывать. Теперь
+   пункты левого меню несут свои классы (.gm-lk-nav__a--orders и т. д.),
+   а в выпадающем меню и нижнем листе пункты хука находятся по классам
+   .gm-acc-orders и .gm-acc-bonus. Штатный пункт профиля класса не имеет –
+   для него оставлен отбор по адресу, прежнему и новому.
+   ================================================================ */
+.gm-lk-nav .gm-lk-nav__a--orders,.gm-lk-nav .gm-lk-nav__a--orders:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h16l-1.4 9a1.5 1.5 0 0 1-1.5 1.3H6.9a1.5 1.5 0 0 1-1.5-1.3z'/%3E%3Cpath d='M8.5 9.5L12 4l3.5 5.5'/%3E%3Cpath d='M10 13.5v3'/%3E%3Cpath d='M14 13.5v3'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--orders,.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--orders:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6900' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h16l-1.4 9a1.5 1.5 0 0 1-1.5 1.3H6.9a1.5 1.5 0 0 1-1.5-1.3z'/%3E%3Cpath d='M8.5 9.5L12 4l3.5 5.5'/%3E%3Cpath d='M10 13.5v3'/%3E%3Cpath d='M14 13.5v3'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--bonuses,.gm-lk-nav .gm-lk-nav__a--bonuses:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--bonuses,.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--bonuses:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6900' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--wishlist,.gm-lk-nav .gm-lk-nav__a--wishlist:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--wishlist,.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--wishlist:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6900' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--compare,.gm-lk-nav .gm-lk-nav__a--compare:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 20V10'/%3E%3Cpath d='M12 20V4'/%3E%3Cpath d='M18 20v-7'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--compare,.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--compare:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6900' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 20V10'/%3E%3Cpath d='M12 20V4'/%3E%3Cpath d='M18 20v-7'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--profile,.gm-lk-nav .gm-lk-nav__a--profile:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.5' r='3.5'/%3E%3Cpath d='M5 20c.8-3.5 3.5-5.5 7-5.5s6.2 2 7 5.5'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--profile,.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--profile:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6900' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.5' r='3.5'/%3E%3Cpath d='M5 20c.8-3.5 3.5-5.5 7-5.5s6.2 2 7 5.5'/%3E%3C/svg%3E")}
+.ut2-top-my-account .ty-dropdown-box__content .gm-acc-orders > .ty-account-info__a{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h16l-1.4 9a1.5 1.5 0 0 1-1.5 1.3H6.9a1.5 1.5 0 0 1-1.5-1.3z'/%3E%3Cpath d='M8.5 9.5L12 4l3.5 5.5'/%3E%3Cpath d='M10 13.5v3'/%3E%3Cpath d='M14 13.5v3'/%3E%3C/svg%3E")}
+.ut2-top-my-account .ty-dropdown-box__content .gm-acc-bonus > .ty-account-info__a{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z'/%3E%3C/svg%3E")}
+.ut2-top-my-account .ty-dropdown-box__content .ty-account-info__a[href*="my-profile"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.5' r='3.5'/%3E%3Cpath d='M5 20c.8-3.5 3.5-5.5 7-5.5s6.2 2 7 5.5'/%3E%3C/svg%3E")}
+.ut2-top-my-account .ty-dropdown-box__content .ty-account-info__item:has(> a[href*="my-profile"]){order:1}
+.ut2-top-my-account .ty-dropdown-box__content .ty-account-info__item.gm-acc-orders{order:2}
+.ut2-top-my-account .ty-dropdown-box__content .ty-account-info__item.gm-acc-bonus{order:3}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .gm-acc-orders > .ty-account-info__a{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h16l-1.4 9a1.5 1.5 0 0 1-1.5 1.3H6.9a1.5 1.5 0 0 1-1.5-1.3z'/%3E%3Cpath d='M8.5 9.5L12 4l3.5 5.5'/%3E%3Cpath d='M10 13.5v3'/%3E%3Cpath d='M14 13.5v3'/%3E%3C/svg%3E")}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .gm-acc-bonus > .ty-account-info__a{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z'/%3E%3C/svg%3E")}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__a[href*="my-profile"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.5' r='3.5'/%3E%3Cpath d='M5 20c.8-3.5 3.5-5.5 7-5.5s6.2 2 7 5.5'/%3E%3C/svg%3E")}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__item:has(> a[href*="my-profile"]){order:1}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__item.gm-acc-orders{order:2}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__item.gm-acc-bonus{order:3}
+
+/* ================================================================
+   54. Подробности заказа: гость, блок «Получение и получатель», телефон
+   ================================================================
+   Гостю (заказ без входа) хук wrapper/mainbox_general_title_wrapper.pre.tpl
+   выводит вместо левого меню карточку .gm-lk__side--guest – с ней страница
+   получает оформление секции 49. Блок сведений о покупателе заменён
+   шаблоном views/profiles/components/profiles_info.tpl (.gm-ord-info):
+   две плитки – как получить заказ и получатель, без адреса плательщика.
+   В заголовок добавлено слово «Заказ» (в языковой переменной темы его нет),
+   единственная вкладка «Общее» скрыта, на телефоне товары – строками
+   «цена × количество … сумма» вместо таблицы с рамкой.
+   ================================================================ */
+.gm-lk__side--guest{padding:20px}
+.gm-lk-guest__title{margin:0 0 8px;font-size:17px;font-weight:600;line-height:1.3;color:#1c1c1c}
+.gm-lk-guest__text{margin:0 0 16px;font-size:14px;line-height:1.45;color:#6b6b70}
+.gm-lk-guest__btn{display:flex;align-items:center;justify-content:center;height:46px;margin:0 0 10px;padding:0 16px;border-radius:12px;background:#ff6900;font-size:15px;font-weight:600;color:#fff;text-decoration:none}
+.gm-lk-guest__btn:hover{background:#e85f00;color:#fff}
+.gm-lk-guest__link{display:block;font-size:14px;font-weight:500;text-align:center;color:#ff6900;text-decoration:none}
+.gm-lk-guest__link:hover{color:#e85f00}
+.ty-mainbox-container:has(> .gm-lk__side--std):has(.ty-orders-detail) > .ty-mainbox-title > bdi::before{content:"Заказ\00a0"}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail > .ty-tabs:not(:has(.ty-tabs__item + .ty-tabs__item)){display:none !important}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-profiles-info.gm-ord-info{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 6px}
+.gm-ord-info__main{display:block;font-size:15px;font-weight:500;line-height:1.4;color:#1c1c1c}
+.gm-ord-info__note{display:block;margin-top:4px;font-size:13px;line-height:1.4;color:#6b6b70}
+@media (max-width:767px){
+.ty-mainbox-container > .gm-lk__side--guest{grid-row-start:auto;order:3;padding:16px 14px}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-profiles-info.gm-ord-info{grid-template-columns:minmax(0,1fr)}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail .ty-accordion:not(:has(.ui-accordion-header ~ .ui-accordion-header)) > .ui-accordion-header{display:none !important}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table{display:block;outline:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table thead{display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;padding:12px 0;border:0;border-bottom:1px solid #f0f0f3}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top:last-child{border-bottom:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td{display:block;width:auto;padding:0;border:0;font-size:14px;text-align:left}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td::before{display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:first-child{flex:0 0 100%;margin-bottom:8px}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table .ty-table__responsive-header{display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table .ty-table__responsive-content{display:inline;padding:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:nth-child(2){color:#6b6b70}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:nth-child(2)::after{content:" \00d7";display:inline}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:nth-child(3){color:#6b6b70}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:nth-child(3)::after{content:" шт.";display:inline}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:last-child{margin-left:auto;font-weight:600;color:#1c1c1c}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:last-child::after{display:none}
+}
+
+/* Секция 54, правка 2026-10-12 (по снимкам с телефона): кнопки действий – плитками в столбик, «Оформить заказ повторно»
+   не обрезается, печать счёта на телефоне скрыта; товар – фото слева, название справа; убраны пустые поля под товарами и итогом */
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail .ui-accordion-content{margin-bottom:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail .ty-orders-repay:not(:has(*)){display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__products{margin-top:8px}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-summary{margin-top:16px}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-summary > .ty-subheader{margin-top:0}
+@media (max-width:767px){
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders__actions > .ty-btn.cm-new-window{display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders__actions-right{flex-wrap:wrap;width:100%;min-width:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders__actions-right > a{flex:1 1 100%;justify-content:center;min-width:0;background:#f4f4f6 !important;color:#1c1c1c !important}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:first-child .clearfix{display:flex;align-items:flex-start;gap:12px}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:first-child .clearfix::before,.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table tr.ty-valign-top > td:first-child .clearfix::after{display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table-image{float:none;flex:0 0 56px;margin:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table-description-wrapper{flex:1 1 0;min-width:0}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-detail__table-description{margin:0}
+}
+
+/* Секция 54, правка 2026-10-12 (решение владельца): в итоге заказа скрыты штрихкод и строка «Способ доставки» –
+   способ получения показан плиткой вверху страницы */
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-summary__right:has(.ty-barcode){display:none}
+.ty-mainbox-container:has(> .gm-lk__side--std) .ty-orders-summary__row:has(> td[data-ct-orders-summary="summary-ship"]){display:none}
+
+/* ================================================================
+   55. Всплывающее окно входа и страница восстановления пароля
+   ================================================================
+   Только стили поверх штатных форм, в виде страницы входа (секция 47).
+   Окно входа (.ty-login-popup): поля 48px, вход через Яндекс и ВКонтакте,
+   ссылка на регистрацию; внизу закреплённая полоса темы
+   (.buttons-container-picker, её положение и высоту задаёт скрипт диалога –
+   не трогаем): «Запомнить» слева и оранжевая кнопка «Войти» на остальную ширину.
+   Восстановление пароля (/lost-password/, .ty-recover-password): серый фон,
+   по центру карточка с формой и карточка с пояснением.
+   ================================================================ */
+.ty-login-popup{font-family:Roboto,Arial,sans-serif}
+.ty-login-popup form{display:flex;flex-direction:column;font-size:14px;line-height:1.4;color:#6b6b70}
+.ty-login-popup .ty-control-group{margin:0 0 14px}
+.ty-login-popup .ty-login__filed-label{margin:0 0 6px;font-size:14px;font-weight:500;color:#1c1c1c}
+.ty-login-popup .ty-login__input{width:100%;height:48px;padding:0 14px;border:1px solid #d9d9de;border-radius:12px;background:#fff;box-shadow:none;box-sizing:border-box;font-size:16px;color:#1c1c1c}
+.ty-login-popup .ty-login__input:focus{border-color:#ff6900;outline:0}
+.ty-login-popup .ty-password-forgot__a{font-size:14px;color:#ff6900}
+.ty-login-popup .buttons-container{order:3;display:flex;flex-direction:row;align-items:center;gap:16px;border-top:1px solid #ececf0;background:#fff !important;box-shadow:none}
+.ty-login-popup .ty-btn__login{order:2;flex:1 1 auto;float:none;display:flex;align-items:center;justify-content:center;height:50px;margin:0;padding:0 20px;border:0;border-radius:12px;background:#ff6900;color:#fff;font-size:16px;font-weight:600;line-height:1.2;box-shadow:none}
+.ty-login-popup .ty-btn__login:hover{background:#e85f00;color:#fff}
+.ty-login-popup .ty-login__remember-me{order:1;flex:0 0 auto;float:none;margin:0;padding:0;text-align:left}
+.ty-login-popup .ty-login__remember-me-label{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;color:#1c1c1c;cursor:pointer}
+.ty-login-popup p.ty-text-center{order:1;display:flex;gap:10px;margin:8px 0 0;text-align:left}
+.ty-login-popup .ty-hybrid-auth__icon{display:block;width:48px;height:48px;margin:0;border-radius:12px;overflow:hidden}
+.ty-login-popup .ty-hybrid-auth__icon img{display:block;width:100%;height:100%;object-fit:cover}
+.ty-login-popup .ty-login-reglink{order:2;float:none;margin:18px 0 0;padding:14px 0 0;border-top:1px solid #ececf0;font-size:14px;text-align:center;color:#6b6b70}
+.ty-login-popup .ty-login-reglink::before{content:"Нет аккаунта? "}
+.ty-login-popup .ty-login-reglink__a{font-weight:500;color:#ff6900}
+.ui-dialog:has(.ty-login-popup) .ui-dialog-title{font-family:Roboto,Arial,sans-serif;font-size:22px;font-weight:700;color:#1c1c1c}
+.ui-dialog:has(.ty-login-popup) .ui-dialog-titlebar{border-bottom:0}
+
+.tygh-content .content-grid:has(.main-content-grid .ty-recover-password){background:#f4f4f6;padding-bottom:40px}
+.row-fluid:has(> .main-content-grid .ty-recover-password){display:flex;justify-content:center;align-items:flex-start;gap:12px;margin-top:8px}
+.row-fluid:has(> .main-content-grid .ty-recover-password)::before,.row-fluid:has(> .main-content-grid .ty-recover-password)::after{display:none}
+.row-fluid > .main-content-grid:has(.ty-recover-password){float:none;flex:0 1 460px;width:460px;min-width:0;margin:0}
+.row-fluid:has(> .main-content-grid .ty-recover-password) > .auth-information-grid{float:none;flex:0 1 360px;width:360px;min-width:0;margin:0 !important;padding:0}
+.row-fluid:has(> .main-content-grid .ty-recover-password) > .auth-information-grid > div{margin:0;padding:0}
+.main-content-grid:has(.ty-recover-password) .ty-mainbox-container{padding:28px 32px 32px;border-radius:20px;background:#fff}
+.main-content-grid:has(.ty-recover-password) h1.ty-mainbox-title{margin:0 0 20px;padding:0;border:0;font-size:26px;font-weight:700;line-height:1.2;color:#1c1c1c}
+.main-content-grid:has(.ty-recover-password) h1.ty-mainbox-title::after{content:"Пришлём на почту ссылку для смены пароля";display:block;margin-top:6px;font-size:14px;font-weight:400;line-height:1.4;color:#6b6b70}
+.main-content-grid .ty-recover-password{width:auto;max-width:none;margin:0;padding:0}
+.main-content-grid .ty-recover-password .ty-control-group{margin:0 0 16px}
+.main-content-grid .ty-recover-password .ty-login__filed-label{margin:0 0 6px;font-size:14px;font-weight:500;color:#1c1c1c}
+.main-content-grid .ty-recover-password .ty-login__input{width:100%;height:48px;padding:0 14px;border:1px solid #d9d9de;border-radius:12px;background:#fff;box-shadow:none;box-sizing:border-box;font-size:16px;color:#1c1c1c}
+.main-content-grid .ty-recover-password .ty-login__input:focus{border-color:#ff6900;outline:0}
+.main-content-grid .ty-recover-password .buttons-container{margin:0;padding:0;border:0;background:none}
+.main-content-grid .ty-recover-password .buttons-container .ty-btn{float:none;display:flex;align-items:center;justify-content:center;width:100%;height:50px;margin:0;padding:0 20px;border:0;border-radius:12px;background:#ff6900;color:#fff;font-size:16px;font-weight:600;box-shadow:none}
+.main-content-grid .ty-recover-password .buttons-container .ty-btn:hover{background:#e85f00;color:#fff}
+.row-fluid:has(> .main-content-grid .ty-recover-password) > .auth-information-grid .ty-login-info__txt{font-size:14px;line-height:1.45;color:#6b6b70}
+.row-fluid:has(> .main-content-grid .ty-recover-password) > .auth-information-grid .ty-login-info__txt i{font-style:normal;font-weight:500;color:#1c1c1c}
+@media (max-width:767px){
+.row-fluid:has(> .main-content-grid .ty-recover-password){flex-direction:column;align-items:stretch;gap:10px;margin-top:0}
+.row-fluid > .main-content-grid:has(.ty-recover-password),.row-fluid:has(> .main-content-grid .ty-recover-password) > .auth-information-grid{flex:0 0 auto;width:100%}
+.main-content-grid:has(.ty-recover-password) .ty-mainbox-container{padding:20px 16px 22px;border-radius:16px}
+.main-content-grid:has(.ty-recover-password) h1.ty-mainbox-title{font-size:22px}
+}
+
+/* ================================================================
+   56. Личный кабинет: блок «Подтвердите номер телефона» (.gm-vf)
+   ================================================================
+   Шаблон views/gm_cabinet/components/verify.tpl – показывается в
+   «Моих заказах» и «Моих бонусах», пока номер из профиля не подтверждён
+   кодом из СМС: текст, кнопка «Получить код» либо поле для 4 цифр
+   и кнопка «Подтвердить», ссылка на повторную отправку.
+   ================================================================ */
+.gm-vf{margin:0 0 12px;font-family:Roboto,Arial,sans-serif;border:1px solid #ffd9bf}
+.gm-vf__h{margin:0 0 8px;padding:0;font-size:18px;font-weight:600;line-height:1.3;color:#1c1c1c}
+.gm-vf__t{margin:0 0 14px;font-size:15px;line-height:1.45;color:#3d3d3d}
+.gm-vf__form{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px}
+.gm-vf__code{width:140px;height:48px;padding:0 14px;border:1px solid #d9d9de;border-radius:12px;background:#fff;box-shadow:none;box-sizing:border-box;font-size:22px;font-weight:600;letter-spacing:6px;text-align:center;color:#1c1c1c}
+.gm-vf__code:focus{border-color:#ff6900;outline:0}
+.gm-vf__btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:0;border-radius:12px;background:#ff6900;font-size:15px;font-weight:600;color:#fff;cursor:pointer}
+.gm-vf__btn:hover{background:#e85f00}
+.gm-vf__again{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 10px}
+.gm-vf__link{padding:0;border:0;background:none;font-size:14px;font-weight:500;color:#ff6900;cursor:pointer}
+.gm-vf__hint{margin:0;font-size:13px;line-height:1.4;color:#8a8a93}
+.gm-vf__hint a{color:#ff6900}
+@media (max-width:767px){
+.gm-vf__code{flex:1 1 120px;width:auto}
+.gm-vf__btn{flex:1 1 140px}
+}
+
+/* Секция 56, дополнение 2026-10-12: страница «Номер телефона» (gm_cabinet.phone) и защита подтверждённого номера в профиле –
+   поле телефона погашено, над формой плашка со ссылкой на смену номера (сохранение блокирует profiles.pre.php) */
+.gm-vf--plain{border:0}
+.gm-vf__phone{flex:1 1 200px;max-width:280px;height:48px;padding:0 14px;border:1px solid #d9d9de;border-radius:12px;background:#fff;box-shadow:none;box-sizing:border-box;font-size:16px;color:#1c1c1c}
+.gm-vf__phone:focus{border-color:#ff6900;outline:0}
+.gm-vf__btn--ghost{border:1px solid #d9d9de;background:#fff;color:#1c1c1c}
+.gm-vf__btn--ghost:hover{border-color:#ff6900;background:#fff;color:#ff6900}
+.gm-vf__t a{color:#ff6900}
+.ty-mainbox-container > .gm-phone-lock{grid-column-start:2;margin:0 0 12px;padding:12px 16px;border-radius:12px;background:#fff1e6;font-family:Roboto,Arial,sans-serif;font-size:14px;line-height:1.4;color:#1c1c1c;box-sizing:border-box}
+.ty-mainbox-container > .gm-phone-lock a{font-weight:500;color:#ff6900;white-space:nowrap}
+.ty-mainbox-container:has(> .gm-phone-lock) > .ty-mainbox-title{order:-1}
+.ty-mainbox-container:has(> .gm-phone-lock) input[name="user_data[phone]"]{pointer-events:none;border-color:#ececf0 !important;background-color:#f4f4f6 !important;color:#8a8a93 !important}
+@media (max-width:767px){
+.ty-mainbox-container > .gm-phone-lock{grid-column-start:1}
+.ty-mainbox-container:has(> .gm-phone-lock) > .gm-lk__side--std{order:-2}
+.gm-vf__phone{max-width:none}
+}
+
+/* ================================================================
+   57. Личный кабинет: «Купленные товары» (.gm-pp) и значок пункта меню
+   ================================================================
+   Шаблон views/gm_cabinet/products.tpl: сетка карточек (фото, название,
+   цена и дата последней покупки, «Купить снова» и «Оценить»).
+   Пункт левого меню .gm-lk-nav__a--purchased – значок коробки
+   (остальные значки – секция 53).
+   ================================================================ */
+.gm-lk-nav .gm-lk-nav__a--purchased,.gm-lk-nav .gm-lk-nav__a--purchased:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8l8-4 8 4v8l-8 4-8-4z'/%3E%3Cpath d='M4 8l8 4 8-4M12 12v8'/%3E%3C/svg%3E")}
+.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--purchased,.gm-lk-nav .gm-lk-nav__a--on.gm-lk-nav__a--purchased:hover{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6900' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8l8-4 8 4v8l-8 4-8-4z'/%3E%3Cpath d='M4 8l8 4 8-4M12 12v8'/%3E%3C/svg%3E")}
+.gm-pp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 16px}
+.gm-pp-item{display:flex;flex-direction:column;min-width:0}
+.gm-pp-item__pic{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:12px;background:#f4f4f6;overflow:hidden}
+.gm-pp-item__pic img{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
+.gm-pp-item__name{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:8px;font-size:14px;line-height:1.35;color:#1c1c1c;text-decoration:none}
+a.gm-pp-item__name:hover{color:#ff6900}
+.gm-pp-item__meta{margin-top:4px;font-size:12px;line-height:1.4;color:#8a8a93}
+.gm-pp-item__btns{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:auto;padding-top:10px}
+.gm-pp-item__btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:10px;background:#ff6900;font-size:13px;font-weight:600;color:#fff;text-decoration:none;white-space:nowrap}
+.gm-pp-item__btn:hover{background:#e85f00;color:#fff}
+.gm-pp-item__btn--light{background:#fff1e6;color:#ff6900}
+.gm-pp-item__btn--light:hover{background:#ffe3cf;color:#e85f00}
+.gm-pp-item__off{font-size:12px;color:#8a8a93}
+.gm-pp-note{margin:10px 4px 0;font-size:13px;color:#8a8a93}
+@media (max-width:1100px){
+.gm-pp{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:767px){
+.gm-pp{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 10px}
+.gm-pp-item__name{font-size:13px}
+.gm-pp-item__btn{flex:1 1 auto;padding:0 8px}
+}
+
+/* Секция 57, дополнение 2026-10-12: пункт «Купленные товары» в выпадающем меню шапки и в нижнем листе «Профиль» –
+   значок коробки, место сразу после «Моих заказов» (тот же order, порядок по разметке) */
+.ut2-top-my-account .ty-dropdown-box__content .gm-acc-purchased > .ty-account-info__a{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8l8-4 8 4v8l-8 4-8-4z'/%3E%3Cpath d='M4 8l8 4 8-4M12 12v8'/%3E%3C/svg%3E")}
+.ut2-top-my-account .ty-dropdown-box__content .ty-account-info__item.gm-acc-purchased{order:2}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .gm-acc-purchased > .ty-account-info__a{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231c1c1c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8l8-4 8 4v8l-8 4-8-4z'/%3E%3Cpath d='M4 8l8 4 8-4M12 12v8'/%3E%3C/svg%3E")}
+.ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info) > .ty-dropdown-box__content .ty-account-info__item.gm-acc-purchased{order:2}

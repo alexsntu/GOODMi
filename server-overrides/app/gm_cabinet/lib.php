@@ -503,6 +503,43 @@ function gm_cab_ms_customer_rows($phone, array $agent_ids = [], $since = '')
     return array_values($rows);
 }
 
+/**
+ * Статус заказа МойСклад в том виде, в каком его видит покупатель. Названия статусов в МойСклад сделаны для сотрудников
+ * («Отмена: клиент передумал», «КОНТРОЛЬ!!!!!», «Перемещение АО-> Б.Муссон», «БМ готов к выдаче») – покупателю показываем
+ * общий смысл. Таблица согласована с владельцем 2026-10-12; незнакомый статус показывается как есть.
+ */
+function gm_cab_status_public($status)
+{
+    $status = trim((string) $status);
+    $low = mb_strtolower($status);
+    if ($low === '') {
+        return $status;
+    }
+    if (gm_cab_status_kind($status) === 'cancelled') {
+        return 'Отменён';
+    }
+    if (mb_strpos($low, 'готов к выдаче') !== false || mb_strpos($low, 'прозвонили') === 0) {
+        return 'Готов к выдаче';
+    }
+    if (mb_strpos($low, 'перемещение') === 0) {
+        return 'Доставляется в магазин';
+    }
+    if (mb_strpos($low, 'контроль') !== false || mb_strpos($low, 'уточняем') === 0) {
+        return 'В обработке';
+    }
+    if (mb_strpos($low, 'нет связи') === 0) {
+        return 'Не смогли связаться';
+    }
+    if (mb_strpos($low, 'авито') === 0) {
+        return 'Доставляется';
+    }
+    if (mb_strpos($low, 'заказан') === 0) {
+        return 'Ожидает поступления';
+    }
+
+    return $status;
+}
+
 /** Строки таблицы → вид для страницы (покупки в магазинах). */
 function gm_cab_store_display(array $db_rows)
 {
@@ -518,7 +555,7 @@ function gm_cab_store_display(array $db_rows)
             'ts' => gm_cab_ts($row['moment'], 'Europe/Moscow'),
             'date' => gm_cab_date($row['moment'], 'Europe/Moscow'),
             'sum' => gm_cab_money($row['total']),
-            'status' => (string) $row['state'],
+            'status' => gm_cab_status_public($row['state']),
             'url' => '',
         ];
     }
@@ -614,4 +651,195 @@ function gm_cab_decorate_orders(array $orders)
     }
 
     return $orders;
+}
+
+/**
+ * Отправка одного СМС через Таргет СМС (JSON API, вход по логину и паролю кабинета sms.targetsms.ru).
+ * Ключи: targetsms_login, targetsms_password, targetsms_sender в secrets.php.
+ * Возвращает ['ok' => bool, 'error' => текст для журнала (покупателю не показывается)].
+ */
+function gm_cab_sms_send($phone, $text)
+{
+    $secrets = gm_cab_secrets();
+    foreach (['targetsms_login', 'targetsms_password', 'targetsms_sender'] as $key) {
+        if (empty($secrets[$key])) {
+            return ['ok' => false, 'error' => 'не задан ключ ' . $key];
+        }
+    }
+    $data = gm_cab_http('https://sms.targetsms.ru/sendsmsjson.php', ['Content-Type: application/json; charset=utf-8'], [
+        'security' => ['login' => $secrets['targetsms_login'], 'password' => $secrets['targetsms_password']],
+        'type' => 'sms',
+        'message' => [[
+            'type' => 'sms',
+            'sender' => $secrets['targetsms_sender'],
+            'text' => (string) $text,
+            'name_delivery' => 'Код подтверждения GOODMi',
+            'abonent' => [['phone' => (string) $phone, 'number_sms' => '1']],
+        ]],
+    ], 10);
+    if ($data === null) {
+        return ['ok' => false, 'error' => 'сервис не ответил'];
+    }
+    if (!empty($data['error'])) {
+        return ['ok' => false, 'error' => (string) $data['error']];
+    }
+    $sms = isset($data['sms'][0]) && is_array($data['sms'][0]) ? $data['sms'][0] : [];
+    if (!empty($sms['id_sms']) && isset($sms['action']) && $sms['action'] === 'send') {
+        return ['ok' => true, 'error' => ''];
+    }
+
+    return ['ok' => false, 'error' => isset($sms['action']) ? (string) $sms['action'] : 'неизвестный ответ'];
+}
+
+/** Номер для показа покупателю: +7 978 ***-**-85. */
+function gm_cab_phone_mask($phone)
+{
+    $phone = (string) $phone;
+    if (strlen($phone) !== 11) {
+        return '';
+    }
+
+    return '+' . $phone[0] . ' ' . substr($phone, 1, 3) . ' ***-**-' . substr($phone, 9, 2);
+}
+
+/** Отпечаток кода подтверждения: сам код в базе не хранится. */
+function gm_cab_code_hash($code, $user_id, $phone)
+{
+    $secrets = gm_cab_secrets();
+    $salt = !empty($secrets['verify_salt']) ? (string) $secrets['verify_salt'] : 'gm-cab';
+
+    return hash('sha256', $salt . '|' . (int) $user_id . '|' . $phone . '|' . $code);
+}
+
+/**
+ * Включено ли подтверждение номера для покупателя. Ключи secrets.php:
+ * phone_verify – true (для всех) или список user_id (проверка на тестовых записях); без ключа – выключено.
+ */
+function gm_cab_verify_enabled($user_id)
+{
+    $secrets = gm_cab_secrets();
+    if (empty($secrets['phone_verify'])) {
+        return false;
+    }
+
+    return $secrets['phone_verify'] === true || (is_array($secrets['phone_verify']) && in_array((int) $user_id, array_map('intval', $secrets['phone_verify']), true));
+}
+
+/**
+ * Можно ли покупателю подтверждать номер самому, кодом из СМС (ключ phone_verify_sms в secrets.php).
+ * Пока выключено, подтверждает только сотрудник в админке (gm_cabinet.phones), а покупателю показывается, куда обратиться.
+ */
+function gm_cab_verify_sms_enabled()
+{
+    $secrets = gm_cab_secrets();
+
+    return !empty($secrets['phone_verify_sms']);
+}
+
+/**
+ * Покупал ли покупатель товар в магазинах: есть ли у его контрагентов МойСклад выданный заказ с этим товаром.
+ * Товар ищется по внешним кодам (обмен с сайтом) и по артикулу, заказы – отбором «контрагент + товар».
+ * Возвращает true/false, либо null, если МойСклад не ответил (такой ответ не кэшируется).
+ */
+function gm_cab_ms_bought(array $agent_ids, array $ext_codes, $code)
+{
+    $headers = gm_cab_ms_headers();
+    $agent_ids = array_values(array_filter($agent_ids, function ($id) {
+        return (bool) preg_match('/^[0-9a-f-]{36}$/', (string) $id);
+    }));
+    if ($headers === null || !$agent_ids) {
+        return null;
+    }
+    $base = 'https://api.moysklad.ru/api/remap/1.2/entity/';
+    $filters = [];
+    foreach (array_slice(array_values(array_unique(array_filter($ext_codes, 'strlen'))), 0, 4) as $ext) {
+        $filters[] = 'externalCode=' . $ext;
+    }
+    if ((string) $code !== '') {
+        $filters[] = 'code=' . $code;
+    }
+    $hrefs = [];
+    foreach ($filters as $filter) {
+        $data = gm_cab_http($base . 'assortment?limit=5&filter=' . rawurlencode($filter), $headers, null, 10);
+        if ($data === null || !isset($data['rows'])) {
+            return null;
+        }
+        foreach ($data['rows'] as $row) {
+            if (!empty($row['meta']['href'])) {
+                $hrefs[$row['meta']['href']] = true;
+            }
+        }
+    }
+    if (!$hrefs) {
+        return false;
+    }
+    $parts = [];
+    foreach (array_slice($agent_ids, 0, 10) as $id) {
+        $parts[] = 'agent=' . $base . 'counterparty/' . $id;
+    }
+    foreach (array_slice(array_keys($hrefs), 0, 6) as $href) {
+        $parts[] = 'assortment=' . $href;
+    }
+    $data = gm_cab_http($base . 'customerorder?limit=50&expand=state&filter=' . rawurlencode(implode(';', $parts)), $headers, null, 12);
+    if ($data === null || !isset($data['rows'])) {
+        return null;
+    }
+    foreach ($data['rows'] as $row) {
+        if (gm_cab_status_kind(isset($row['state']['name']) ? $row['state']['name'] : '') === 'received') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Состав сразу многих заказов покупателя из МойСклад одним запросом (до 100 заказов на страницу) –
+ * для раздела «Купленные товары». Возвращает ['size' => всего заказов, 'orders' => [id заказа => строки состава
+ * в том же виде, что gm_cab_ms_positions]] либо null, если МойСклад не ответил.
+ */
+function gm_cab_ms_customer_items(array $agent_ids, $offset = 0)
+{
+    $headers = gm_cab_ms_headers();
+    $agent_ids = array_values(array_filter($agent_ids, function ($id) {
+        return (bool) preg_match('/^[0-9a-f-]{36}$/', (string) $id);
+    }));
+    if ($headers === null || !$agent_ids) {
+        return null;
+    }
+    $base = 'https://api.moysklad.ru/api/remap/1.2/entity/';
+    $parts = [];
+    foreach (array_slice($agent_ids, 0, 10) as $id) {
+        $parts[] = 'agent=' . $base . 'counterparty/' . $id;
+    }
+    $url = $base . 'customerorder?limit=100&offset=' . (int) $offset . '&order=moment,desc&expand=positions.assortment&filter='
+        . rawurlencode(implode(';', $parts));
+    $data = gm_cab_http($url, $headers, null, 25);
+    if ($data === null || !isset($data['rows'])) {
+        return null;
+    }
+    $orders = [];
+    foreach ($data['rows'] as $order) {
+        if (empty($order['id'])) {
+            continue;
+        }
+        $rows = [];
+        $positions = isset($order['positions']['rows']) && is_array($order['positions']['rows']) ? $order['positions']['rows'] : [];
+        foreach ($positions as $i => $position) {
+            $item = isset($position['assortment']) && is_array($position['assortment']) ? $position['assortment'] : [];
+            $rows[] = [
+                'order_id' => (string) $order['id'],
+                'pos' => (int) $i,
+                'ms_product_id' => gm_cab_cut(isset($item['id']) ? $item['id'] : '', 36),
+                'ext_code' => gm_cab_cut(isset($item['externalCode']) ? $item['externalCode'] : '', 64),
+                'code' => gm_cab_cut(isset($item['code']) ? $item['code'] : '', 64),
+                'name' => gm_cab_cut(isset($item['name']) ? $item['name'] : '', 255),
+                'qty' => round(isset($position['quantity']) ? (float) $position['quantity'] : 0, 3),
+                'price' => round((isset($position['price']) ? (float) $position['price'] : 0) / 100, 2),
+            ];
+        }
+        $orders[(string) $order['id']] = $rows;
+    }
+
+    return ['size' => isset($data['meta']['size']) ? (int) $data['meta']['size'] : count($orders), 'orders' => $orders];
 }

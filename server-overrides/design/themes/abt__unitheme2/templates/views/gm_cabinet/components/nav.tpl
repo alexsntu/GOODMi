@@ -9,7 +9,7 @@
     </div>
     <nav class="gm-lk-nav">
         {foreach from=$gm_cab.nav.items item="item"}
-            <a class="gm-lk-nav__a{if $item.active} gm-lk-nav__a--on{/if}" href="{$item.url}">{$item.title}</a>
+            <a class="gm-lk-nav__a gm-lk-nav__a--{$item.key}{if $item.active} gm-lk-nav__a--on{/if}" href="{$item.url}">{$item.title}</a>
         {/foreach}
         <a class="gm-lk-nav__a gm-lk-nav__a--out" href="{$gm_cab.nav.logout_url}" rel="nofollow">Выйти</a>
     </nav>

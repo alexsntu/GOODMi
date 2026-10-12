@@ -1,0 +1,37 @@
+<?php
+/**
+ * GOODMi: личный кабинет – страница админки «Подтверждение телефона покупателей».
+ * heaven.php?dispatch=gm_cabinet.phones[&q=номер или e-mail] – поиск покупателя GOODMi, подтверждение номера без СМС
+ * (продавец или администратор проверил покупателя лично) и снятие подтверждения. Логика – в app/gm_cabinet/store.php,
+ * шаблон – design/backend/templates/views/gm_cabinet/phones.tpl.
+ */
+
+use Tygh\Registry;
+
+if (!defined('BOOTSTRAP')) {
+    die('Access denied');
+}
+
+require_once Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $query = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
+    if ($mode === 'phones' && !empty($_REQUEST['user_id'])) {
+        $user_id = (int) $_REQUEST['user_id'];
+        $is_customer = (bool) db_get_field("SELECT 1 FROM ?:users WHERE user_id = ?i AND company_id = 2 AND user_type = 'C'", $user_id);
+        if ($is_customer) {
+            $result = isset($_REQUEST['action']) && $_REQUEST['action'] === 'reset'
+                ? fn_gm_cab_verify_reset($user_id)
+                : fn_gm_cab_verify_manual($user_id, (int) $auth['user_id']);
+            fn_set_notification($result['ok'] ? 'N' : 'E', $result['ok'] ? 'Готово' : 'Ошибка', $result['message']);
+        }
+    }
+
+    return [CONTROLLER_STATUS_OK, 'gm_cabinet.phones?q=' . urlencode($query)];
+}
+
+if ($mode === 'phones') {
+    $query = isset($_REQUEST['q']) ? trim((string) $_REQUEST['q']) : '';
+    Tygh::$app['view']->assign('gm_q', $query);
+    Tygh::$app['view']->assign('gm_users', $query !== '' ? fn_gm_cab_verify_search($query) : []);
+}
