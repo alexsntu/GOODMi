@@ -53,6 +53,21 @@
             </div>
         </div>
 
+        {if $gm_cab.card_number}
+        {* Карта лояльности: штрих-код (Code 128, SVG из fn_gm_cab_barcode_svg) и номер – показать или назвать на кассе.
+           Оформление – секция 64 (.gm-bp-code). *}
+        <div class="gm-bp__card gm-bp-code">
+            <div class="gm-bp-code__text">
+                <h2 class="gm-bp__h">Карта лояльности</h2>
+                <p class="gm-bp-note">Покажите штрих-код на кассе или назовите номер карты &#8211; так продавец начислит или спишет бонусы.</p>
+            </div>
+            <div class="gm-bp-code__box">
+                {if $gm_cab.card_barcode}<div class="gm-bp-code__bars">{$gm_cab.card_barcode nofilter}</div>{/if}
+                <div class="gm-bp-code__num">{$gm_cab.card_number}</div>
+            </div>
+        </div>
+        {/if}
+
         <div class="gm-bp__card">
             <div class="gm-bp-stats">
                 <div class="gm-bp-stat">

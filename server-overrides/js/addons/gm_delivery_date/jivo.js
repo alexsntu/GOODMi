@@ -11,8 +11,14 @@
  * Если нижнего меню на странице нет, остаётся прежняя круглая кнопка .gm-jivo-btn; пока чат открыт,
  * у <html> стоит класс gm-jivo-open – стили её прячут.
  * На ПК скрипт ничего не показывает: и пункт, и кнопка видны только до 767px.
+ * Сам виджет Jivo на телефоне сайт подключает не везде (в макете – только на главной и в карточке товара; блок
+ * «Живочат» на странице категорий стоит в сетке hidden-phone). Поэтому, если по нажатию «Помощь» виджета на странице
+ * нет, скрипт подключает его сам (WIDGET – код виджета GOODMi) и открывает чат, как только тот загрузится; на
+ * время загрузки подпись пункта меняется на «Открываем…».
  */
 (function (window, document) {
+  var WIDGET = 'KAsYFxIsnB'; // код виджета Jivo витрины GOODMi (тот же, что в блоке «Живочат» и в «Своём HTML» макета)
+  var loading = false;
   var OPEN = 'gm-jivo-open';
   var NEW_BTN = 'gm-jivo-btn--new';
   var NEW_NAV = 'gm-jivo-nav--new';
@@ -71,12 +77,39 @@
     });
   }
 
+  function label(text) {
+    var span = nav && nav.querySelector('span');
+    if (span) {
+      span.textContent = text;
+    }
+  }
+
+  // Виджета на странице нет – подключаем его по первому нажатию
+  function load() {
+    if (loading || window.jivo_api || document.querySelector('script[src*="code.jivo.ru/widget"]')) {
+      return;
+    }
+    loading = true;
+    label('Открываем…');
+    var script = document.createElement('script');
+    script.src = 'https://code.jivo.ru/widget/' + WIDGET;
+    script.async = true;
+    script.onerror = function () {
+      loading = false;
+      pending = false;
+      label('Помощь');
+    };
+    document.head.appendChild(script);
+  }
+
   function open() {
     if (!ready()) {
       pending = true;
+      load();
       return;
     }
     pending = false;
+    label('Помощь');
     mark(false);
     var wrap = document.querySelector('body > jdiv .__jivoMobileButton');
     var native = wrap && (wrap.querySelector('jdiv[class*="button__"]') || wrap);

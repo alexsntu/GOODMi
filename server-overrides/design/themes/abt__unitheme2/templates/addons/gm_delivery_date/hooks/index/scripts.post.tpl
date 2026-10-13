@@ -1,8 +1,9 @@
-{* GOODMi: сроки получения товара, компактная кнопка чата Jivo на телефоне, заголовок «О товаре» кнопка «Поделиться» в карточке, вход по номеру телефона (auth.js) – скрипты подключаются только на витрине GOODMi (company_id = 2) *}
+{* GOODMi: сроки получения товара, компактная кнопка чата Jivo на телефоне, заголовок «О товаре» кнопка «Поделиться» в карточке, вход по номеру телефона (auth.js), кнопка «Ещё» в строке быстрых ссылок категории (seomenu.js) – скрипты подключаются только на витрине GOODMi (company_id = 2) *}
 {if $runtime.company_id == 2}
     {script src="js/addons/gm_delivery_date/func.js"}
     {script src="js/addons/gm_delivery_date/jivo.js"}
     {script src="js/addons/gm_delivery_date/about.js"}
     {script src="js/addons/gm_delivery_date/share.js"}
     {script src="js/addons/gm_delivery_date/auth.js"}
+    {script src="js/addons/gm_delivery_date/seomenu.js"}
 {/if}

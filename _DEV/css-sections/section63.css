@@ -11,7 +11,9 @@
 .seomenu{margin:0 0 14px;font-family:Roboto,Arial,sans-serif}
 .seomenu .ty-text-links-wrapper{margin:0;padding:0}
 .seomenu .ty-text-links-btn{display:none !important}
-.seomenu .ty-text-links{display:flex !important;flex-wrap:wrap;gap:8px;position:static;width:auto;margin:0;padding:0 !important;border:0;background:none;box-shadow:none;list-style:none}
+.seomenu .ty-text-links{display:flex !important;flex-wrap:wrap;gap:8px;position:static;z-index:auto !important;width:auto;margin:0;padding:0 !important;border:0;background:none;box-shadow:none;list-style:none}
+/* z-index:auto обязателен: список – .cm-popup-box с парой sw_text_links_…; пока у видимого списка числовой z-index,
+   движок при любом нажатии вне его закрывает все открытые панели (.cm-combination.open) – так закрывалось меню на телефоне */
 /* !important: старые правила для этого блока заданы по id (#text_links_4917 …) во встроенных стилях сайта */
 .seomenu .ty-text-links__item,.seomenu .ty-text-links__item:hover{display:block !important;float:none;height:auto !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:0 !important;background:none !important}
 /* display:block и высота строкой: на телефоне тема принудительно делает ссылки блочными */
@@ -20,7 +22,7 @@
 .seomenu .ty-text-links__active .ty-text-links__a,.seomenu .ty-text-links__a.active{background:#ff6900;color:#fff}
 @media (max-width:767px){
 .seomenu{margin:0 -15px 12px}
-.seomenu .ty-text-links{flex-wrap:nowrap;overflow-x:auto;padding:0 15px 2px !important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.seomenu .ty-text-links{flex-wrap:nowrap;overflow-x:auto;padding:0 15px 14px !important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .seomenu .ty-text-links::-webkit-scrollbar{display:none}
 .seomenu .ty-text-links__item{flex:0 0 auto}
 .seomenu .ty-text-links__a{height:34px;padding:0 12px;font-size:13px;line-height:34px}

@@ -1,0 +1,423 @@
+{
+ "links": {
+  "self": "https://api.ngenix.net/api/v3/ruleset/6177742"
+ },
+ "id": 6177742,
+ "name": "Нежелательные страны + Meta-бот",
+ "enabled": true,
+ "category": "extended",
+ "hints": {
+  "stubPageAvailable": true
+ },
+ "customerRef": {
+  "id": 55141,
+  "link": "https://api.ngenix.net/api/v3/customer/55141"
+ },
+ "modifiedAt": "2026-10-13T13:41:26.509672Z",
+ "createdAt": "2026-06-02T06:30:05.368330Z",
+ "rules": [
+  {
+   "id": 8203787,
+   "name": "Страны",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "in",
+     "negation": false,
+     "params": [
+      {
+       "variable": "ip.geoip.country"
+      },
+      {
+       "trafficPatternRef": {
+        "id": 1018888,
+        "link": "https://api.ngenix.net/api/v3/traffic-pattern/1018888"
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "502",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4307396,
+   "name": "Боты от Meta",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "contains",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "meta-externalagent",
+        "facebookexternalhit",
+        "facebookcatalog"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4832750,
+   "name": "Паразитные боты DotBot",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "contains",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "t2i-data-curation",
+        "keys-so-bot"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 5613364,
+   "name": "KeySO-bot",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "contains",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "Mozilla/5.0 (keys-so-bot)",
+        "Python/3.13 aiohttp",
+        "Go-http-client"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 1755333,
+   "name": "SEO-боты",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "contains",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "SERankingBacklinksBot",
+        "AhrefsBot",
+        "SemrushBot",
+        "MJ12bot"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 3402995,
+   "name": "Скрапер",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "contains",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "GeedoShopProductFinder",
+        "Scrapy",
+        "DotBot"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8168497,
+   "name": "Поиск уязвимостей (.env, .git, wp-login)",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "contains",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.rawuri"
+      },
+      {
+       "value": [
+        ".env",
+        "/.git",
+        "wp-login.php"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4670557,
+   "name": "поддельные боты",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "equals",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6078900,
+   "name": "поддельные боты 2",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "equals",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.6893.1675 Mobile Safari/537.36"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 2710066,
+   "name": "Бот корзин: Chrome 154 на Linux не из своих стран",
+   "label": "",
+   "enabled": true,
+   "conditions": [
+    {
+     "function": "equals",
+     "negation": false,
+     "params": [
+      {
+       "variable": "http.request.headers.user-agent"
+      },
+      {
+       "value": [
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36"
+       ]
+      },
+      {
+       "option": {
+        "name": "ignore_case",
+        "value": false
+       }
+      }
+     ]
+    },
+    {
+     "function": "in",
+     "negation": true,
+     "params": [
+      {
+       "variable": "ip.geoip.country"
+      },
+      {
+       "trafficPatternRef": {
+        "id": 1022646,
+        "link": "https://api.ngenix.net/api/v3/traffic-pattern/1022646"
+       }
+      }
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "action": "deny",
+     "params": [
+      "403",
+      "",
+      "{\"stubPageRef\":{\"id\":6047619}}"
+     ]
+    }
+   ]
+  }
+ ],
+ "modelName": "Ruleset"
+}

@@ -3,8 +3,12 @@
  * GOODMi: личный кабинет – своя таблица заказов МойСклад (?:gm_ms_orders): запись, чтение, загрузка.
  * Работает внутри CS-Cart (функции db_*, fn_*_storage_data). Обращение к МойСклад – в lib.php.
  *
- * Таблица: по строке на заказ покупателя из МойСклад, ключ – идентификатор заказа, поиск – по номеру телефона.
- * Хранятся заказы всех каналов продаж; что показывать покупателю, решается при чтении (gm_cab_hidden_channels).
+ * Таблица: по строке на документ МойСклад, ключ – идентификатор документа, поиск – по номеру телефона. Вид документа –
+ * поле doc (см. gm_cab_ms_docs в lib.php): O – заказ покупателя, D – отгрузка, R – розничная продажа, X и Y – возвраты.
+ * Покупкой считаются отгрузка и розничная продажа (решение 2026-10-13): заказ покупателя нужен только пока он не
+ * завершён или отменён, выданный заказ сам по себе покупкой не считается – иначе покупка задваивалась бы с продажей.
+ * Продажи на обезличенного «Розничного покупателя» (без телефона) в таблицу не попадают.
+ * Хранятся документы всех каналов продаж; что показывать покупателю, решается при чтении (gm_cab_hidden_channels).
  */
 
 if (!defined('BOOTSTRAP')) {
@@ -13,8 +17,10 @@ if (!defined('BOOTSTRAP')) {
 
 require_once __DIR__ . '/lib.php';
 
-/** Имя записи в хранилище CS-Cart: с какой даты изменения заказов продолжать загрузку. */
+/** Имя записи в хранилище CS-Cart: с какой даты изменения заказов продолжать загрузку (для остальных документов – с хвостом _D, _R, _X, _Y). */
 const GM_CAB_CURSOR = 'gm_ms_orders_cursor';
+/** С какой даты начинать первую загрузку отгрузок, продаж и возвратов (более раннюю историю догружаем позже). */
+const GM_CAB_SALES_FROM = '2024-01-01 00:00:00';
 
 /** Запись заказов. Если заказ в МойСклад изменился, отметка о загруженном составе сбрасывается – состав перечитается. */
 function fn_gm_cab_store_upsert(array $rows)
@@ -23,6 +29,7 @@ function fn_gm_cab_store_upsert(array $rows)
         db_query(
             'INSERT INTO ?:gm_ms_orders ?m ON DUPLICATE KEY UPDATE'
             . ' items_at = IF(updated <> VALUES(updated), NULL, items_at),'
+            . ' doc = VALUES(doc), ref_id = VALUES(ref_id), store = VALUES(store),'
             . ' agent_id = VALUES(agent_id), phone = VALUES(phone), number = VALUES(number), moment = VALUES(moment),'
             . ' total = VALUES(total), state = VALUES(state), channel = VALUES(channel),'
             . ' external_code = VALUES(external_code), updated = VALUES(updated)',
@@ -34,21 +41,89 @@ function fn_gm_cab_store_upsert(array $rows)
 }
 
 /**
- * Покупки покупателя в магазинах: всё, кроме заказов сайта и чужих площадок, новые сверху.
- * Старые заказы сайта заведены в МойСклад без канала продаж – их выдаёт числовой внешний код (номер заказа сайта).
+ * Состоявшиеся покупки покупателя в магазинах: отгрузки и розничные продажи по его номеру, новые сверху.
+ * Не входят: продажи чужих площадок и заказов сайта (они показаны как заказы сайта), а также полностью
+ * возвращённые. returned – сумма возвратов по продаже (частичный возврат покупку не отменяет).
+ * Заказ сайта, выданный в магазине, часто пробивают розничной продажей без привязки к заказу. Такую продажу
+ * узнаём по совпадению: тот же номер, та же сумма и не больше трёх дней от выданного заказа сайта – и не показываем,
+ * иначе покупка была бы видна дважды (заказ сайта и покупка в магазине).
+ */
+function fn_gm_cab_store_sales($phone, $limit = 300)
+{
+    if ($phone === '') {
+        return [];
+    }
+    $hidden = gm_cab_hidden_channels();
+    $rows = db_get_array(
+        'SELECT s.id, s.doc, s.number, s.moment, s.total, s.state, s.channel, s.store, s.items_at,'
+        . ' o.channel AS order_channel, o.external_code AS order_code, o.id AS order_id,'
+        . " (SELECT IFNULL(SUM(x.total), 0) FROM ?:gm_ms_orders x WHERE x.ref_id = s.id AND x.doc IN ('X', 'Y')) AS returned"
+        . " FROM ?:gm_ms_orders s LEFT JOIN ?:gm_ms_orders o ON s.ref_id != '' AND o.id = s.ref_id AND o.doc = 'O'"
+        . " WHERE s.phone = ?s AND s.doc IN ('D', 'R') AND s.channel NOT IN (?a)"
+        . ' ORDER BY s.moment DESC LIMIT ?i',
+        $phone, $hidden, (int) $limit
+    );
+    // Выданные заказы сайта и чужих площадок этого номера – для сверки с непривязанными продажами
+    $site = db_get_array(
+        "SELECT moment, total, state FROM ?:gm_ms_orders WHERE phone = ?s AND doc = 'O'"
+        . " AND (channel IN (?a) OR (channel = '' AND external_code REGEXP '^[0-9]{3,9}$'))",
+        $phone, $hidden
+    );
+    $site = array_values(array_filter($site, function ($order) {
+        return gm_cab_status_kind($order['state']) === 'received' && (float) $order['total'] > 0;
+    }));
+    $sales = [];
+    foreach ($rows as $row) {
+        // Продажа по заказу сайта или чужой площадки: покупатель видит её как заказ сайта
+        if ($row['order_id'] !== null && (in_array(mb_strtolower((string) $row['order_channel']), $hidden, true)
+            || ((string) $row['order_channel'] === '' && preg_match('/^[0-9]{3,9}$/', (string) $row['order_code'])))) {
+            continue;
+        }
+        if ((float) $row['total'] > 0 && (float) $row['returned'] >= (float) $row['total']) {
+            continue;
+        }
+        // Непривязанная продажа, совпавшая с выданным заказом сайта (каждый заказ «гасит» одну продажу)
+        if ($row['order_id'] === null) {
+            foreach ($site as $k => $order) {
+                if (abs((float) $order['total'] - (float) $row['total']) < 0.01
+                    && abs(strtotime((string) $order['moment']) - strtotime((string) $row['moment'])) <= 3 * 86400) {
+                    unset($site[$k]);
+                    continue 2;
+                }
+            }
+        }
+        $sales[] = $row;
+    }
+
+    return $sales;
+}
+
+/**
+ * Покупки и заказы покупателя в магазинах для страницы: состоявшиеся покупки (fn_gm_cab_store_sales) и заказы
+ * покупателя, которые ещё в работе или отменены. Выданный заказ не показывается: его место занимает продажа.
+ * Заказы сайта и чужих площадок не показываются; старые заказы сайта заведены в МойСклад без канала продаж –
+ * их выдаёт числовой внешний код (номер заказа сайта).
  */
 function fn_gm_cab_store_get($phone, $limit = 300)
 {
     if ($phone === '') {
         return [];
     }
-
-    return db_get_array(
-        'SELECT id, number, moment, total, state, channel, items_at FROM ?:gm_ms_orders'
-        . " WHERE phone = ?s AND channel NOT IN (?a) AND NOT (channel = '' AND external_code REGEXP '^[0-9]{3,9}$')"
+    $orders = db_get_array(
+        "SELECT id, doc, number, moment, total, state, channel, items_at FROM ?:gm_ms_orders"
+        . " WHERE phone = ?s AND doc = 'O' AND channel NOT IN (?a) AND NOT (channel = '' AND external_code REGEXP '^[0-9]{3,9}$')"
         . ' ORDER BY moment DESC LIMIT ?i',
         $phone, gm_cab_hidden_channels(), (int) $limit
     );
+    $orders = array_values(array_filter($orders, function ($row) {
+        return gm_cab_status_kind($row['state']) !== 'received';
+    }));
+    $rows = array_merge(fn_gm_cab_store_sales($phone, $limit), $orders);
+    usort($rows, function ($a, $b) {
+        return strcmp((string) $b['moment'], (string) $a['moment']);
+    });
+
+    return array_slice($rows, 0, (int) $limit);
 }
 
 /** Карточки покупателя в МойСклад, уже встречавшиеся в таблице. */
@@ -58,8 +133,10 @@ function fn_gm_cab_store_agents($phone)
 }
 
 /**
- * Дозагрузка свежих заказов одного покупателя при открытии страницы.
- * Возвращает число обновлённых строк или null, если МойСклад недоступен.
+ * Дозагрузка свежих документов одного покупателя при открытии страницы: заказы, отгрузки и розничные продажи.
+ * Продажи покупателя, у которого до этого в таблице были только заказы, один раз берутся целиком – иначе после
+ * перехода на учёт по продажам его выданные заказы исчезли бы, а продажи ещё не появились. Отметка о такой
+ * загрузке – файл в кэше кабинета. Возвращает число обновлённых строк или null, если МойСклад недоступен.
  */
 function fn_gm_cab_store_refresh_customer($phone)
 {
@@ -67,30 +144,50 @@ function fn_gm_cab_store_refresh_customer($phone)
     $cursor = (string) fn_get_storage_data(GM_CAB_CURSOR);
     // Берём с запасом в сутки от места, до которого дошла общая загрузка
     $since = $cursor !== '' ? date('Y-m-d H:i:s', strtotime($cursor) - 86400) : '';
-    $rows = gm_cab_ms_customer_rows($phone, $agents, $since);
+    $dir = rtrim(\Tygh\Registry::get('config.dir.cache_misc'), '/') . '/gm_cabinet';
+    $mark = $dir . '/' . md5('sales_full_' . $phone) . '.json';
+    $full = is_file($mark) ? [] : ['D', 'R'];
+    $rows = gm_cab_ms_customer_rows($phone, $agents, $since, ['O', 'D', 'R'], $full);
     if ($rows === null) {
         return null;
     }
     fn_gm_cab_store_upsert($rows);
+    if ($full) {
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+        @file_put_contents($mark, json_encode(['t' => time()]), LOCK_EX);
+    }
 
     return count($rows);
 }
 
 /**
- * Общая загрузка: заказы, изменённые после сохранённой отметки, страницами по 100 по возрастанию даты изменения.
- * Отметка сохраняется после каждой страницы, поэтому прерванная загрузка продолжается с того же места.
- * Первый запуск (отметки нет) проходит всю историю.
+ * Общая загрузка документов вида $doc, изменённых после сохранённой отметки, страницами по 100 по возрастанию даты
+ * изменения. Отметка у каждого вида своя и сохраняется после каждой страницы, поэтому прерванная загрузка
+ * продолжается с того же места. Первый запуск по заказам проходит всю историю, по продажам и возвратам – начиная
+ * с GM_CAB_SALES_FROM.
+ * $history = true – догрузка старой истории продаж и возвратов (изменённых до GM_CAB_SALES_FROM): идёт с начала
+ * времён по своей отдельной отметке (…_H) и заканчивается, дойдя до GM_CAB_SALES_FROM; основную отметку не трогает.
  *
  * @return array ['pages', 'orders', 'stored', 'cursor', 'done', 'error']
  */
-function fn_gm_cab_store_sync($max_seconds, $log = null)
+function fn_gm_cab_store_sync($max_seconds, $log = null, $doc = 'O', $history = false)
 {
     $started = time();
-    $cursor = (string) fn_get_storage_data(GM_CAB_CURSOR);
-    // Небольшой возврат назад, чтобы не потерять заказы, изменённые в ту же секунду, на которой остановились
-    $from = $cursor !== '' ? date('Y-m-d H:i:s', strtotime($cursor) - 300) : '2000-01-01 00:00:00';
+    $key = GM_CAB_CURSOR . ($doc === 'O' ? '' : '_' . $doc) . ($history ? '_H' : '');
+    $cursor = (string) fn_get_storage_data($key);
+    // Небольшой возврат назад, чтобы не потерять документы, изменённые в ту же секунду, на которой остановились
+    $from = $cursor !== '' ? date('Y-m-d H:i:s', strtotime($cursor) - 300)
+        : ($doc === 'O' || $history ? '2000-01-01 00:00:00' : GM_CAB_SALES_FROM);
     $offset = 0;
     $stat = ['pages' => 0, 'orders' => 0, 'stored' => 0, 'cursor' => $cursor, 'done' => false, 'error' => ''];
+    if ($history && ($doc === 'O' || $from >= GM_CAB_SALES_FROM)) {
+        // У заказов старой истории нет (они загружены целиком); у остальных – уже дошли до общей загрузки
+        $stat['done'] = true;
+
+        return $stat;
+    }
 
     while (time() - $started < $max_seconds) {
         // МойСклад делит ограничение частоты запросов со штатным обменом сайта (остатки, цены), поэтому отказ –
@@ -100,7 +197,7 @@ function fn_gm_cab_store_sync($max_seconds, $log = null)
             if ($attempt > 0) {
                 sleep(20);
             }
-            $page = gm_cab_ms_page($from, $offset);
+            $page = gm_cab_ms_page($from, $offset, 100, $doc);
         }
         if ($page === null) {
             $stat['error'] = 'МойСклад не ответил (отметка ' . $from . ', смещение ' . $offset . ')';
@@ -113,7 +210,7 @@ function fn_gm_cab_store_sync($max_seconds, $log = null)
         if ($page['last'] !== '' && $page['last'] > $from) {
             $from = $page['last'];
             $offset = 0;
-            fn_set_storage_data(GM_CAB_CURSOR, $from);
+            fn_set_storage_data($key, $from);
             $stat['cursor'] = $from;
         } else {
             // Вся страница изменена в одну секунду – идём дальше смещением
@@ -122,7 +219,7 @@ function fn_gm_cab_store_sync($max_seconds, $log = null)
         if ($log && $stat['pages'] % 25 === 0) {
             call_user_func($log, $stat);
         }
-        if ($page['count'] < 100) {
+        if ($page['count'] < 100 || ($history && $from >= GM_CAB_SALES_FROM)) {
             $stat['done'] = true;
             break;
         }
@@ -185,7 +282,7 @@ function fn_gm_cab_refresh_cached($phone)
 {
     $cache_dir = rtrim(\Tygh\Registry::get('config.dir.cache_misc'), '/') . '/gm_cabinet';
     try {
-        gm_cab_cached($cache_dir, 'msr_' . $phone, 600, function () use ($phone) {
+        gm_cab_cached($cache_dir, 'msr2_' . $phone, 600, function () use ($phone) {
             $count = fn_gm_cab_store_refresh_customer($phone);
 
             return $count === null ? null : ['n' => $count];
@@ -279,12 +376,13 @@ function fn_gm_cab_store_items(array $orders, $max_fetch = 12)
         return [];
     }
     $fetched = 0;
+    $doc_of = db_get_hash_single_array('SELECT id, doc FROM ?:gm_ms_orders WHERE id IN (?a)', ['id', 'doc'], array_keys($orders));
     foreach ($orders as $order_id => $items_at) {
         if ($items_at !== '' || $fetched >= $max_fetch) {
             continue;
         }
         $fetched++;
-        $rows = gm_cab_ms_positions($order_id);
+        $rows = gm_cab_ms_positions($order_id, isset($doc_of[$order_id]) ? $doc_of[$order_id] : 'O');
         if ($rows === null) {
             continue;
         }
@@ -632,8 +730,8 @@ function fn_gm_cab_set_user_phone($user_id, $phone)
 
 /**
  * Покупал ли покупатель этот товар в магазинах GOODMi (для права оставить отзыв, см. хук в модуле gm_delivery_date).
- * Считаются только выданные заказы по подтверждённому номеру из профиля. Сначала смотрим уже загруженный состав
- * заказов, затем спрашиваем МойСклад (ответ запоминается: «покупал» – на 30 дней, «не покупал» – на 10 минут).
+ * Считаются только отгрузки и розничные продажи по подтверждённому номеру из профиля. Сначала смотрим уже
+ * загруженный состав продаж, затем спрашиваем МойСклад (ответ запоминается: «покупал» – на 30 дней, «не покупал» – на 10 минут).
  */
 function fn_gm_cab_bought_in_store($user_id, $product_id)
 {
@@ -654,15 +752,14 @@ function fn_gm_cab_bought_in_store($user_id, $product_id)
         return false;
     }
 
-    $states = db_get_fields(
-        'SELECT o.state FROM ?:gm_ms_order_items i JOIN ?:gm_ms_orders o ON o.id = i.order_id'
-        . " WHERE o.phone = ?s AND ((i.ext_code != '' AND i.ext_code IN (?a)) OR (?s != '' AND i.code = ?s))",
-        $phone, $ext ?: [''], $code, $code
-    );
-    foreach ($states as $state) {
-        if (gm_cab_status_kind($state) === 'received') {
-            return true;
-        }
+    // Покупка – товар в составе отгрузки или розничной продажи (не полностью возвращённой)
+    $sale_ids = array_column(fn_gm_cab_store_sales($phone, 2000), 'id');
+    if ($sale_ids && db_get_field(
+        'SELECT 1 FROM ?:gm_ms_order_items i WHERE i.order_id IN (?a)'
+        . " AND ((i.ext_code != '' AND i.ext_code IN (?a)) OR (?s != '' AND i.code = ?s)) LIMIT 1",
+        $sale_ids, $ext ?: [''], $code, $code
+    )) {
+        return true;
     }
 
     $dir = rtrim(\Tygh\Registry::get('config.dir.cache_misc'), '/') . '/gm_cabinet';
@@ -706,61 +803,71 @@ function fn_gm_cab_order_by_phone($user_id, $order_id)
  * ------------------------------------------------------------------------------------------------------------- */
 
 /**
- * Догрузить состав покупок в магазинах, у которых он ещё не загружен (состав хранится по первому показу заказа,
- * а для этого раздела нужен весь). МойСклад отдаёт до 100 заказов с составом за запрос; за один показ страницы –
- * не больше $max_pages запросов, продолжение – при следующем показе. Возвращает true, если загружено всё.
+ * Догрузить состав покупок в магазинах (отгрузок и розничных продаж), у которых он ещё не загружен: состав хранится
+ * по первому показу документа, а для этого раздела нужен весь. МойСклад отдаёт до 100 документов с составом за
+ * запрос; за один показ страницы – не больше $max_pages запросов, продолжение – при следующем показе.
+ * Возвращает true, если загружено всё.
  */
 function fn_gm_cab_store_load_items($phone, $max_pages = 3)
 {
-    $missing = db_get_fields('SELECT id FROM ?:gm_ms_orders WHERE phone = ?s AND items_at IS NULL', $phone);
-    if (!$missing) {
-        return true;
-    }
-    $dir = rtrim(\Tygh\Registry::get('config.dir.cache_misc'), '/') . '/gm_cabinet';
-    $file = $dir . '/' . md5('items_load_' . $phone) . '.json';
-    $mark = is_file($file) ? json_decode((string) @file_get_contents($file), true) : null;
-    // Всё, что МойСклад отдал по контрагентам номера, уже записано; оставшиеся заказы не перепроверяем чаще раза в 6 часов
-    if (is_array($mark) && !empty($mark['done']) && time() - (int) $mark['t'] < 6 * 3600) {
-        return true;
-    }
     $agents = fn_gm_cab_store_agents($phone);
     if (!$agents) {
         return true;
     }
-    $missing = array_flip($missing);
-    $offset = is_array($mark) && empty($mark['done']) && isset($mark['offset']) ? (int) $mark['offset'] : 0;
-    $done = false;
-    for ($page = 0; $page < $max_pages; $page++) {
-        $data = gm_cab_ms_customer_items($agents, $offset);
-        if ($data === null) {
-            break;
+    $dir = rtrim(\Tygh\Registry::get('config.dir.cache_misc'), '/') . '/gm_cabinet';
+    $all_done = true;
+    foreach (['R', 'D'] as $doc) {
+        $missing = db_get_fields('SELECT id FROM ?:gm_ms_orders WHERE phone = ?s AND doc = ?s AND items_at IS NULL', $phone, $doc);
+        if (!$missing) {
+            continue;
         }
-        foreach ($data['orders'] as $order_id => $rows) {
-            if (!isset($missing[$order_id])) {
-                continue;
+        $file = $dir . '/' . md5('items_load_' . $doc . '_' . $phone) . '.json';
+        $mark = is_file($file) ? json_decode((string) @file_get_contents($file), true) : null;
+        // Всё, что МойСклад отдал по контрагентам номера, уже записано; оставшиеся документы не перепроверяем чаще раза в 6 часов
+        if (is_array($mark) && !empty($mark['done']) && time() - (int) $mark['t'] < 6 * 3600) {
+            continue;
+        }
+        if ($max_pages <= 0) {
+            $all_done = false;
+            continue;
+        }
+        $missing = array_flip($missing);
+        $offset = is_array($mark) && empty($mark['done']) && isset($mark['offset']) ? (int) $mark['offset'] : 0;
+        $done = false;
+        for (; $max_pages > 0; $max_pages--) {
+            $data = gm_cab_ms_customer_items($agents, $offset, $doc);
+            if ($data === null) {
+                break;
             }
-            db_query('DELETE FROM ?:gm_ms_order_items WHERE order_id = ?s', $order_id);
-            if ($rows) {
-                db_query('INSERT INTO ?:gm_ms_order_items ?m', $rows);
+            foreach ($data['orders'] as $order_id => $rows) {
+                if (!isset($missing[$order_id])) {
+                    continue;
+                }
+                db_query('DELETE FROM ?:gm_ms_order_items WHERE order_id = ?s', $order_id);
+                if ($rows) {
+                    db_query('INSERT INTO ?:gm_ms_order_items ?m', $rows);
+                }
+                db_query('UPDATE ?:gm_ms_orders SET items_at = NOW() WHERE id = ?s', $order_id);
             }
-            db_query('UPDATE ?:gm_ms_orders SET items_at = NOW() WHERE id = ?s', $order_id);
+            $offset += 100;
+            if ($offset >= $data['size'] || !$data['orders']) {
+                $done = true;
+                break;
+            }
         }
-        $offset += 100;
-        if ($offset >= $data['size'] || !$data['orders']) {
-            $done = true;
-            break;
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
         }
+        @file_put_contents($file, json_encode(['t' => time(), 'done' => $done, 'offset' => $done ? 0 : $offset]), LOCK_EX);
+        $all_done = $all_done && $done;
     }
-    if (!is_dir($dir)) {
-        @mkdir($dir, 0775, true);
-    }
-    @file_put_contents($file, json_encode(['t' => time(), 'done' => $done, 'offset' => $done ? 0 : $offset]), LOCK_EX);
 
-    return $done;
+    return $all_done;
 }
 
 /**
- * Купленные товары покупателя: выданные заказы сайта (свои и по подтверждённому номеру) и выданные покупки в магазинах.
+ * Купленные товары покупателя: выданные заказы сайта (свои и по подтверждённому номеру) и покупки в магазинах –
+ * отгрузки и розничные продажи.
  * $phone – номер, которому можно доверять (пустой – только заказы своей учётной записи).
  */
 function fn_gm_cab_purchased($user_id, $phone)
@@ -793,14 +900,13 @@ function fn_gm_cab_purchased($user_id, $phone)
     }
 
     if ($phone !== '') {
-        $rows = db_get_array(
-            'SELECT i.ext_code, i.code, i.name, i.price, o.moment, o.state FROM ?:gm_ms_order_items i'
-            . ' JOIN ?:gm_ms_orders o ON o.id = i.order_id WHERE o.phone = ?s ORDER BY o.moment DESC LIMIT 5000',
-            $phone
-        );
-        $rows = array_values(array_filter($rows, function ($row) {
-            return gm_cab_status_kind($row['state']) === 'received';
-        }));
+        // Товары из отгрузок и розничных продаж (заказ покупателя сам по себе покупкой не считается)
+        $sale_ids = array_column(fn_gm_cab_store_sales($phone, 2000), 'id');
+        $rows = $sale_ids ? db_get_array(
+            'SELECT i.ext_code, i.code, i.name, i.price, o.moment FROM ?:gm_ms_order_items i'
+            . ' JOIN ?:gm_ms_orders o ON o.id = i.order_id WHERE i.order_id IN (?a) ORDER BY o.moment DESC LIMIT 5000',
+            $sale_ids
+        ) : [];
         $ext = array_values(array_unique(array_filter(array_column($rows, 'ext_code'), 'strlen')));
         $codes = array_values(array_unique(array_filter(array_column($rows, 'code'), 'strlen')));
         $by_ext = $ext ? db_get_hash_single_array(
@@ -1314,3 +1420,45 @@ function fn_gm_cab_auth_status($hours = 1)
 
     return $status;
 }
+
+/**
+ * Штрих-код номера карты лояльности (Code 128) в виде SVG – покупатель показывает его на кассе с экрана телефона.
+ * Ширины полос считает генератор штатного модуля CS-Cart «Штрих-код» (barcode): чётное число цифр кодируется
+ * плотным набором C, нечётное – набором B. Картинку рисуем сами векторно: она остаётся чёткой при любом размере.
+ * Пустая строка – модуль выключен, номер не из цифр или генератор вернул не то: тогда показывается только номер.
+ */
+function fn_gm_cab_barcode_svg($digits)
+{
+    $digits = (string) $digits;
+    $class = '\\Tygh\\Tools\\Barcode\\Generator';
+    if (!ctype_digit($digits) || strlen($digits) < 6 || strlen($digits) > 24 || !class_exists($class)) {
+        return '';
+    }
+    try {
+        $ref = new \ReflectionClass($class);
+        $method = $ref->getMethod('generateCodeString');
+        $method->setAccessible(true);
+        $coded = $method->invoke($ref->newInstanceWithoutConstructor(), $digits, strlen($digits) % 2 === 0 ? 'C128C' : 'C128');
+        $widths = is_array($coded) ? (string) reset($coded) : '';
+        // Начало (набор C – 211232, набор B – 211214) и стоп-знак 2331112: проверяем, что это действительно Code 128
+        if (!preg_match('/^(211232|211214)[1-4]+2331112$/', $widths)) {
+            return '';
+        }
+        $quiet = 10;
+        $x = $quiet;
+        $bars = '';
+        foreach (str_split($widths) as $i => $w) {
+            if ($i % 2 === 0) {
+                $bars .= '<rect x="' . $x . '" y="0" width="' . (int) $w . '" height="60"/>';
+            }
+            $x += (int) $w;
+        }
+        $total = $x + $quiet;
+
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' . $total . ' 60" preserveAspectRatio="none" shape-rendering="crispEdges"'
+            . ' role="img" aria-label="Штрих-код карты лояльности"><rect width="' . $total . '" height="60" fill="#fff"/><g fill="#000">' . $bars . '</g></svg>';
+    } catch (\Throwable $e) {
+        return '';
+    }
+}
+

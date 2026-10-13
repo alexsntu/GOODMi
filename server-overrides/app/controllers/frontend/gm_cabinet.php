@@ -16,7 +16,8 @@
  * index.php?dispatch=gm_cabinet.recover – восстановление пароля кодом из СМС (для невошедшего покупателя): номер,
  * затем код и новый пароль. Работает только для подтверждённого номера; номер между шагами хранится в сессии.
  *
- * php index.php --dispatch=gm_cabinet.sync_orders [--minutes=50] – загрузка заказов МойСклад в таблицу ?:gm_ms_orders
+ * php index.php --dispatch=gm_cabinet.sync_orders [--minutes=50] [--docs=O,X,Y,D,R] [--history=1] – загрузка заказов, отгрузок,
+ * розничных продаж и возвратов МойСклад в таблицу ?:gm_ms_orders
  * (только из командной строки; ночное задание в cron). Первый запуск проходит всю историю, дальше – изменённое.
  */
 
@@ -261,8 +262,13 @@ if ($mode === 'bonuses') {
         }
     }
 
+    // Карта лояльности: номер группами по четыре цифры и штрих-код для показа на кассе
+    $card = is_array($bonus) && !empty($bonus['found']) && !empty($bonus['card']) ? (string) $bonus['card'] : '';
+
     Tygh::$app['view']->assign('gm_cab', $nav + [
         'has_phone' => $phone !== '',
+        'card_number' => $card !== '' ? trim(chunk_split($card, 4, ' ')) : '',
+        'card_barcode' => $card !== '' ? fn_gm_cab_barcode_svg($card) : '',
         'bonus' => $bonus,
         'orders' => gm_cab_merge_orders($site_orders, $store_orders, 8),
         'orders_total' => count($site_orders) + count($store_orders),
@@ -410,13 +416,31 @@ if ($mode === 'sync_orders') {
     }
 
     $minutes = isset($_REQUEST['minutes']) ? max(1, min(600, (int) $_REQUEST['minutes'])) : 50;
-    $stat = fn_gm_cab_store_sync($minutes * 60, function ($s) {
-        echo date('H:i:s'), ' страниц ', $s['pages'], ', заказов ', $s['orders'], ', записано ', $s['stored'], ', отметка ', $s['cursor'], "\n";
-    });
-    echo date('Y-m-d H:i:s'), ' итог: страниц ', $stat['pages'], ', заказов ', $stat['orders'], ', записано ', $stat['stored'],
-        ', отметка ', $stat['cursor'], $stat['done'] ? ', дошли до конца' : ', не закончено', $stat['error'] !== '' ? ', ошибка: ' . $stat['error'] : '', "\n";
+    // Виды документов: заказы, возвраты (их мало), отгрузки, розничные продажи. --docs=R,D – только указанные
+    $titles = ['O' => 'заказы', 'X' => 'возвраты покупателей', 'Y' => 'розничные возвраты', 'D' => 'отгрузки', 'R' => 'розничные продажи'];
+    $docs = array_keys($titles);
+    if (!empty($_REQUEST['docs'])) {
+        $docs = array_values(array_intersect(explode(',', strtoupper((string) $_REQUEST['docs'])), $docs));
+    }
+    // --history=1 – догрузка старой истории продаж и возвратов (до GM_CAB_SALES_FROM), основные отметки не трогает
+    $history = !empty($_REQUEST['history']);
+    $deadline = time() + $minutes * 60;
+    $failed = false;
+    foreach ($docs as $doc) {
+        $left = $deadline - time();
+        if ($left < 20) {
+            echo date('H:i:s'), ' ', $titles[$doc], ': время вышло, продолжим в следующий запуск', "\n";
+            continue;
+        }
+        $stat = fn_gm_cab_store_sync($left, function ($s) use ($titles, $doc) {
+            echo date('H:i:s'), ' ', $titles[$doc], ': страниц ', $s['pages'], ', документов ', $s['orders'], ', записано ', $s['stored'], ', отметка ', $s['cursor'], "\n";
+        }, $doc, $history);
+        echo date('Y-m-d H:i:s'), ' ', $titles[$doc], $history ? ' (старая история)' : '', ' – итог: страниц ', $stat['pages'], ', документов ', $stat['orders'], ', записано ', $stat['stored'],
+            ', отметка ', $stat['cursor'], $stat['done'] ? ', дошли до конца' : ', не закончено', $stat['error'] !== '' ? ', ошибка: ' . $stat['error'] : '', "\n";
+        $failed = $failed || $stat['error'] !== '';
+    }
 
     flock($lock, LOCK_UN);
     fclose($lock);
-    exit($stat['error'] !== '' ? 1 : 0);
+    exit($failed ? 1 : 0);
 }

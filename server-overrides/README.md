@@ -39,6 +39,7 @@
 | `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/products/gm_card_delivery.post.tpl` | выводит сроки и условия покупки сразу в странице карточки на шаблоне `goodmi_card` (функция `fn_gm_delivery_date_card_html` в `func.php`) |
 | `var/langs/ru/addons/gm_delivery_date.po` | название модуля в админке |
 | `js/addons/gm_delivery_date/auth.js` | вход по номеру телефона: подпись поля входа, необязательный e-mail в регистрации и профиле, ссылка «Забыли пароль?» на восстановление по СМС (с 2026-10-13) |
+| `js/addons/gm_delivery_date/seomenu.js` | кнопка «Ещё» в строке быстрых ссылок категории (блок 1284, класс `.seomenu`): на ПК видны две строки, остальное раскрывается; на телефоне не работает (там прокрутка). Стили – секция 65 (с 2026-10-13) |
 | `app/addons/gm_delivery_date/init.php`, `controllers/frontend/profiles.pre.php` | обработчики входа по номеру и регистрации (`auth_routines`, `update_user_pre`, `update_profile`), проверка формы регистрации, защита подтверждённого номера в профиле |
 
 ### Свой шаблон карточки товара `goodmi_card` (с 2026-10-09 – шаблон по умолчанию всей витрины GOODMi)
@@ -139,3 +140,17 @@
 восстановление пароля по СМС (`gm_cabinet.recover`, шаблон `templates/views/gm_cabinet/recover.tpl`). Логика – в
 `app/gm_cabinet/store.php`, таблицы `cscart_gm_phone_verify` и `cscart_gm_phone_auth`. Описание, SQL и откат –
 `_DEV/gm-phone-verify/README.md`.
+
+## Настройки nginx (не файлы CS-Cart)
+
+Лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в `server-overrides/etc/nginx/`.
+
+| Файл на сервере | Что делает |
+|---|---|
+| `/etc/nginx/conf.d/gm-bot-filter.conf` | условия отсева ботов-обходчиков, три правила (описаны в начале файла): бот «Chrome 142 на Mac»; служебные действия без Referer для любого браузера; настольный Chrome старше 140-й версии без Referer на адресах с фильтрами; с 2026-10-13 |
+| `/etc/nginx/vhosts-resources/goodmi.ru/gm-bot-filter.conf` | включает отказ 403 по этим условиям для goodmi.ru |
+| `/etc/nginx/vhosts-resources/maxmobiles.ru/gm-bot-filter.conf` | то же для maxmobiles.ru (с 2026-10-13) |
+| `/etc/nginx/conf.d/gm-bot-names.conf` | условия отсева ботов по названию (Meta, Ahrefs, Semrush, MJ12bot и др.) и поиска уязвимостей (`.env`, `/.git`, `wp-login.php`) – для сайтов не за NGENIX |
+| `/etc/nginx/vhosts-resources/xione.ru/gm-bot-filter.conf` | xione.ru: три правила против обходчиков + боты по названию + поиск уязвимостей (с 2026-10-13) |
+
+После правки: `nginx -t && systemctl reload nginx`. Бэкап прежних настроек – `/root/gm-backups/2026-10-13-bot-filter/`.

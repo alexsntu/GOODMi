@@ -1,0 +1,23 @@
+/* ================================================================
+   65. Категории: кнопка «Ещё» в строке быстрых ссылок (.seomenu)
+   ================================================================
+   Дополнение к секции 63. На ПК длинный список ссылок показывается
+   двумя строками, остальное раскрывает кнопка «Ещё N» (её ставит
+   скрипт js/addons/gm_delivery_date/seomenu.js). До запуска скрипта
+   список обрезан стилями до двух строк (2 × 36px + отступ 8px), чтобы
+   страница не прыгала; класс gm-seomenu--ready снимает обрезку.
+   На телефоне кнопки нет: там одна строка с прокруткой пальцем.
+   ================================================================ */
+@media (min-width:768px){
+.seomenu .ty-text-links{max-height:80px;overflow:hidden}
+.seomenu .ty-text-links.gm-seomenu--ready{max-height:none;overflow:visible}
+}
+.seomenu .ty-text-links .ty-text-links__item.gm-seomenu-hidden{display:none !important}
+.seomenu .gm-seomenu-more{display:block;margin:0;padding:0;list-style:none}
+.seomenu .gm-seomenu-more__btn{display:flex;align-items:center;gap:4px;height:36px;margin:0;padding:0 10px 0 14px;border:1px solid #e3e3e8;border-radius:10px;background:#fff;font-family:inherit;font-size:14px;font-weight:500;line-height:1;color:#1c1c1c;white-space:nowrap;cursor:pointer;transition:border-color .2s ease,color .2s ease}
+.seomenu .gm-seomenu-more__btn:hover,.seomenu .gm-seomenu-more__btn:focus-visible{border-color:#ff6900;color:#ff6900;outline:0}
+.seomenu .gm-seomenu-more__btn svg{width:16px;height:16px;transition:rotate .2s ease}
+.seomenu .gm-seomenu-more--open .gm-seomenu-more__btn svg{rotate:180deg}
+@media (max-width:767px){
+.seomenu .gm-seomenu-more{display:none !important}
+}

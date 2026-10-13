@@ -1,0 +1,20 @@
+/* ================================================================
+   64. Личный кабинет: карта лояльности со штрих-кодом (.gm-bp-code)
+   ================================================================
+   Блок на странице «Мои бонусы» (views/gm_cabinet/bonuses.tpl) под
+   балансом: штрих-код номера карты БонусПлюс (Code 128, SVG) и сам
+   номер. Покупатель показывает его на кассе с телефона, поэтому фон
+   под кодом всегда белый, с полями, а код растянут на всю ширину.
+   ================================================================ */
+.gm-bp-code{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px}
+.gm-bp-code__text{flex:1 1 260px;min-width:0}
+.gm-bp-code__text .gm-bp-note{margin:0}
+.gm-bp-code__box{flex:0 1 360px;width:100%;padding:16px 18px 12px;border:1px solid #e4e4e8;border-radius:14px;background:#fff;box-sizing:border-box;text-align:center}
+.gm-bp-code__bars{line-height:0}
+.gm-bp-code__bars svg{display:block;width:100%;height:84px}
+.gm-bp-code__num{margin-top:10px;font-family:Roboto,Arial,sans-serif;font-size:20px;font-weight:600;line-height:1.2;letter-spacing:1.5px;color:#1c1c1c;white-space:nowrap}
+@media (max-width:767px){
+.gm-bp-code__box{flex:1 1 100%;padding:14px 12px 10px}
+.gm-bp-code__bars svg{height:96px}
+.gm-bp-code__num{font-size:19px}
+}

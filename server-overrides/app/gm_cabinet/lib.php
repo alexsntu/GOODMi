@@ -271,6 +271,8 @@ function gm_cab_bonusplus($phone, $history_limit = 60)
 
     return [
         'found' => true,
+        // Номер карты лояльности – его называют или показывают штрих-кодом на кассе
+        'card' => preg_replace('/\D+/', '', (string) (isset($c['discountCardNumber']) ? $c['discountCardNumber'] : '')),
         'balance' => gm_cab_money($balance),
         'balance_word' => gm_cab_plural($balance, 'бонус', 'бонуса', 'бонусов'),
         'pending' => gm_cab_money(isset($c['notActiveBonuses']) ? $c['notActiveBonuses'] : 0),
@@ -399,7 +401,7 @@ function gm_cab_cut($value, $length)
 }
 
 /** Заказ МойСклад → строка таблицы. null, если у заказа нет покупателя с пригодным номером телефона. */
-function gm_cab_ms_row(array $order, $known_phone = '')
+function gm_cab_ms_row(array $order, $known_phone = '', $doc = 'O')
 {
     $phone = $known_phone !== '' ? $known_phone : gm_cab_phone(isset($order['agent']['phone']) ? $order['agent']['phone'] : '');
     if ($phone === '' || empty($order['id'])) {
@@ -412,8 +414,20 @@ function gm_cab_ms_row(array $order, $known_phone = '')
         $agent_id = basename((string) $order['agent']['meta']['href']);
     }
 
+    // Связанный документ: у продажи – заказ покупателя, у возврата – продажа (берём идентификатор из ссылки)
+    $docs = gm_cab_ms_docs();
+    $ref = isset($docs[$doc]) ? $docs[$doc]['ref'] : '';
+    $ref_id = '';
+    if ($ref !== '' && !empty($order[$ref])) {
+        $ref_id = !empty($order[$ref]['id']) ? (string) $order[$ref]['id']
+            : (!empty($order[$ref]['meta']['href']) ? basename((string) $order[$ref]['meta']['href']) : '');
+    }
+
     return [
         'id' => (string) $order['id'],
+        'doc' => isset($docs[$doc]) ? $doc : 'O',
+        'ref_id' => preg_match('/^[0-9a-f-]{36}$/', $ref_id) ? $ref_id : '',
+        'store' => gm_cab_cut(isset($order['retailStore']['name']) ? $order['retailStore']['name'] : '', 64),
         'agent_id' => gm_cab_cut($agent_id, 36),
         'phone' => $phone,
         'number' => gm_cab_cut(isset($order['name']) ? $order['name'] : '', 32),
@@ -434,18 +448,39 @@ function gm_cab_ms_headers()
 }
 
 /**
- * Страница общего списка заказов, изменённых начиная с $from (московское время), по возрастанию даты изменения.
- * Возвращает ['rows' => строки таблицы, 'count' => сколько заказов пришло, 'last' => дата изменения последнего] или null.
+ * Документы МойСклад, которые загружаются в таблицу ?:gm_ms_orders (поле doc):
+ * O – заказ покупателя (нужен для незавершённых и отменённых заказов);
+ * D – отгрузка, R – розничная продажа: именно они считаются покупкой (решение 2026-10-13), могут быть привязаны
+ *     к заказу (ref – ссылка на него) или быть самостоятельными;
+ * X – возврат покупателя, Y – розничный возврат: ссылаются на продажу (ref), по ним покупка считается возвращённой.
+ * expand – что МойСклад должен развернуть в ответе; контрагент (agent) добавляется отдельно, когда он неизвестен.
  */
-function gm_cab_ms_page($from, $offset, $limit = 100)
+function gm_cab_ms_docs()
+{
+    return [
+        'O' => ['entity' => 'customerorder', 'expand' => 'salesChannel,state', 'ref' => ''],
+        'D' => ['entity' => 'demand', 'expand' => 'salesChannel,state', 'ref' => 'customerOrder'],
+        'R' => ['entity' => 'retaildemand', 'expand' => 'retailStore', 'ref' => 'customerOrder'],
+        'X' => ['entity' => 'salesreturn', 'expand' => '', 'ref' => 'demand'],
+        'Y' => ['entity' => 'retailsalesreturn', 'expand' => '', 'ref' => 'demand'],
+    ];
+}
+
+/**
+ * Страница общего списка документов вида $doc, изменённых начиная с $from (московское время), по возрастанию даты
+ * изменения. Возвращает ['rows' => строки таблицы, 'count' => сколько документов пришло, 'last' => дата изменения
+ * последнего] или null.
+ */
+function gm_cab_ms_page($from, $offset, $limit = 100, $doc = 'O')
 {
     $headers = gm_cab_ms_headers();
-    if ($headers === null) {
+    $docs = gm_cab_ms_docs();
+    if ($headers === null || !isset($docs[$doc])) {
         return null;
     }
-    $url = 'https://api.moysklad.ru/api/remap/1.2/entity/customerorder?filter=' . rawurlencode('updated>=' . $from)
+    $url = 'https://api.moysklad.ru/api/remap/1.2/entity/' . $docs[$doc]['entity'] . '?filter=' . rawurlencode('updated>=' . $from)
         . '&order=' . rawurlencode('updated,asc') . '&limit=' . (int) $limit . '&offset=' . (int) $offset
-        . '&expand=agent,salesChannel,state';
+        . '&expand=' . trim('agent,' . $docs[$doc]['expand'], ',');
     $data = gm_cab_http($url, $headers, null, 40);
     if ($data === null || !isset($data['rows'])) {
         return null;
@@ -453,7 +488,7 @@ function gm_cab_ms_page($from, $offset, $limit = 100)
     $rows = [];
     $last = '';
     foreach ($data['rows'] as $order) {
-        $row = gm_cab_ms_row($order);
+        $row = gm_cab_ms_row($order, '', $doc);
         if ($row !== null) {
             $rows[] = $row;
         }
@@ -466,17 +501,20 @@ function gm_cab_ms_page($from, $offset, $limit = 100)
 }
 
 /**
- * Свежие заказы одного покупателя. Если его карточки в МойСклад уже известны ($agent_ids), берутся только заказы,
- * изменённые с $since; иначе карточки ищутся по номеру телефона и заказы берутся целиком (до 500 на карточку).
+ * Документы одного покупателя. Если его карточки в МойСклад уже известны ($agent_ids), берутся только документы,
+ * изменённые с $since; иначе карточки ищутся по номеру телефона и документы берутся целиком (до 500 каждого вида
+ * на карточку). $docs – какие виды брать; $full_docs – какие из них взять целиком, даже когда карточки известны
+ * (первая загрузка продаж для покупателя, у которого раньше были только заказы).
  * Возвращает строки таблицы или null, если МойСклад недоступен.
  */
-function gm_cab_ms_customer_rows($phone, array $agent_ids = [], $since = '')
+function gm_cab_ms_customer_rows($phone, array $agent_ids = [], $since = '', array $docs = ['O', 'D', 'R'], array $full_docs = [])
 {
     $headers = gm_cab_ms_headers();
     if ($headers === null || strlen($phone) !== 11) {
         return null;
     }
     $base = 'https://api.moysklad.ru/api/remap/1.2';
+    $known = gm_cab_ms_docs();
 
     if (!$agent_ids) {
         $since = '';
@@ -493,24 +531,30 @@ function gm_cab_ms_customer_rows($phone, array $agent_ids = [], $since = '')
 
     $rows = [];
     foreach (array_slice(array_values(array_unique($agent_ids)), 0, 6) as $agent_id) {
-        $filter = 'agent=' . $base . '/entity/counterparty/' . $agent_id . ($since !== '' ? ';updated>=' . $since : '');
-        for ($offset = 0; $offset < 500; $offset += 100) {
-            $url = $base . '/entity/customerorder?filter=' . rawurlencode($filter) . '&order=' . rawurlencode('moment,desc')
-                . '&limit=100&offset=' . $offset . '&expand=salesChannel,state';
-            $list = gm_cab_http($url, $headers, null, 12);
-            if ($list === null) {
-                return $rows ? $rows : null;
+        foreach ($docs as $doc) {
+            if (!isset($known[$doc])) {
+                continue;
             }
-            $page = (array) (isset($list['rows']) ? $list['rows'] : []);
-            foreach ($page as $order) {
-                $order['agent'] = ['id' => $agent_id];
-                $row = gm_cab_ms_row($order, $phone);
-                if ($row !== null) {
-                    $rows[$row['id']] = $row;
+            $doc_since = in_array($doc, $full_docs, true) ? '' : $since;
+            $filter = 'agent=' . $base . '/entity/counterparty/' . $agent_id . ($doc_since !== '' ? ';updated>=' . $doc_since : '');
+            for ($offset = 0; $offset < 500; $offset += 100) {
+                $url = $base . '/entity/' . $known[$doc]['entity'] . '?filter=' . rawurlencode($filter) . '&order=' . rawurlencode('moment,desc')
+                    . '&limit=100&offset=' . $offset . ($known[$doc]['expand'] !== '' ? '&expand=' . $known[$doc]['expand'] : '');
+                $list = gm_cab_http($url, $headers, null, 12);
+                if ($list === null) {
+                    return $rows ? array_values($rows) : null;
                 }
-            }
-            if (count($page) < 100) {
-                break;
+                $page = (array) (isset($list['rows']) ? $list['rows'] : []);
+                foreach ($page as $order) {
+                    $order['agent'] = ['id' => $agent_id];
+                    $row = gm_cab_ms_row($order, $phone, $doc);
+                    if ($row !== null) {
+                        $rows[$row['id']] = $row;
+                    }
+                }
+                if (count($page) < 100) {
+                    break;
+                }
             }
         }
     }
@@ -570,7 +614,10 @@ function gm_cab_store_display(array $db_rows)
             'ts' => gm_cab_ts($row['moment'], 'Europe/Moscow'),
             'date' => gm_cab_date($row['moment'], 'Europe/Moscow'),
             'sum' => gm_cab_money($row['total']),
-            'status' => gm_cab_status_public($row['state']),
+            // Отгрузка и розничная продажа – уже состоявшаяся покупка, своего статуса у них для покупателя нет
+            'status' => isset($row['doc']) && $row['doc'] !== 'O'
+                ? (!empty($row['returned']) && (float) $row['returned'] > 0 ? 'Получен, часть товаров возвращена' : 'Получен')
+                : gm_cab_status_public($row['state']),
             'url' => '',
         ];
     }
@@ -579,16 +626,18 @@ function gm_cab_store_display(array $db_rows)
 }
 
 /**
- * Состав заказа МойСклад: строки для таблицы ?:gm_ms_order_items. null, если МойСклад недоступен.
+ * Состав документа МойСклад (заказ, отгрузка, розничная продажа – по $doc): строки для таблицы ?:gm_ms_order_items.
+ * null, если МойСклад недоступен.
  * Товар сайта потом находится по внешнему коду (карта обмена commerceml) или по коду товара.
  */
-function gm_cab_ms_positions($order_id)
+function gm_cab_ms_positions($order_id, $doc = 'O')
 {
     $headers = gm_cab_ms_headers();
-    if ($headers === null || !preg_match('/^[0-9a-f-]{36}$/', (string) $order_id)) {
+    $docs = gm_cab_ms_docs();
+    if ($headers === null || !isset($docs[$doc]) || !preg_match('/^[0-9a-f-]{36}$/', (string) $order_id)) {
         return null;
     }
-    $url = 'https://api.moysklad.ru/api/remap/1.2/entity/customerorder/' . $order_id . '/positions?limit=100&expand=assortment';
+    $url = 'https://api.moysklad.ru/api/remap/1.2/entity/' . $docs[$doc]['entity'] . '/' . $order_id . '/positions?limit=100&expand=assortment';
     $data = gm_cab_http($url, $headers, null, 10);
     if ($data === null || !isset($data['rows'])) {
         return null;
@@ -795,12 +844,13 @@ function gm_cab_ms_bought(array $agent_ids, array $ext_codes, $code)
     foreach (array_slice(array_keys($hrefs), 0, 6) as $href) {
         $parts[] = 'assortment=' . $href;
     }
-    $data = gm_cab_http($base . 'customerorder?limit=50&expand=state&filter=' . rawurlencode(implode(';', $parts)), $headers, null, 12);
-    if ($data === null || !isset($data['rows'])) {
-        return null;
-    }
-    foreach ($data['rows'] as $row) {
-        if (gm_cab_status_kind(isset($row['state']['name']) ? $row['state']['name'] : '') === 'received') {
+    // Покупка – это отгрузка или розничная продажа с этим товаром (заказ покупателя сам по себе покупкой не считается)
+    foreach (['demand', 'retaildemand'] as $entity) {
+        $data = gm_cab_http($base . $entity . '?limit=1&filter=' . rawurlencode(implode(';', $parts)), $headers, null, 12);
+        if ($data === null || !isset($data['rows'])) {
+            return null;
+        }
+        if ($data['rows']) {
             return true;
         }
     }
@@ -813,8 +863,12 @@ function gm_cab_ms_bought(array $agent_ids, array $ext_codes, $code)
  * для раздела «Купленные товары». Возвращает ['size' => всего заказов, 'orders' => [id заказа => строки состава
  * в том же виде, что gm_cab_ms_positions]] либо null, если МойСклад не ответил.
  */
-function gm_cab_ms_customer_items(array $agent_ids, $offset = 0)
+function gm_cab_ms_customer_items(array $agent_ids, $offset = 0, $doc = 'D')
 {
+    $docs = gm_cab_ms_docs();
+    if (!isset($docs[$doc])) {
+        return null;
+    }
     $headers = gm_cab_ms_headers();
     $agent_ids = array_values(array_filter($agent_ids, function ($id) {
         return (bool) preg_match('/^[0-9a-f-]{36}$/', (string) $id);
@@ -827,7 +881,7 @@ function gm_cab_ms_customer_items(array $agent_ids, $offset = 0)
     foreach (array_slice($agent_ids, 0, 10) as $id) {
         $parts[] = 'agent=' . $base . 'counterparty/' . $id;
     }
-    $url = $base . 'customerorder?limit=100&offset=' . (int) $offset . '&order=moment,desc&expand=positions.assortment&filter='
+    $url = $base . $docs[$doc]['entity'] . '?limit=100&offset=' . (int) $offset . '&order=moment,desc&expand=positions.assortment&filter='
         . rawurlencode(implode(';', $parts));
     $data = gm_cab_http($url, $headers, null, 25);
     if ($data === null || !isset($data['rows'])) {
