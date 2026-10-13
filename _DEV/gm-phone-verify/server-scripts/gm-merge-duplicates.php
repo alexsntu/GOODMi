@@ -17,7 +17,10 @@ chdir("/var/www/maxmobiles/data/www/maxmobiles.ru");
 define("BOOTSTRAP", 1); define("DIR_ROOT", getcwd()); define("PRODUCT_STATUS", "");
 $config = []; @include "config.local.php";
 $m = new mysqli($config["db_host"], $config["db_user"], $config["db_password"], $config["db_name"]); $m->set_charset("utf8"); $p = $config["table_prefix"];
-$opt = getopt("", ["phones::", "apply", "all", "quiet"]);
+$opt = getopt("", ["phones::", "apply", "all", "quiet", "main::", "any-names", "no-ms"]);
+// --main=registered – основной считать последнюю зарегистрированную запись (по умолчанию – с последним входом);
+// --no-ms – не требовать номера в заказах МойСклад; --any-names – объединять и при разных именах
+$by_reg = isset($opt["main"]) && $opt["main"] === "registered";
 $apply = isset($opt["apply"]); $only = !empty($opt["phones"]) ? array_filter(explode(",", $opt["phones"])) : [];
 if ($apply && !$only && !isset($opt["all"])) { echo "Для --apply укажите --phones=... или --all\n"; exit(1); }
 $dir = "/root/gm-backups/2026-10-13-merge";
@@ -38,12 +41,14 @@ foreach ($by as $ph => $list) {
     $ph = (string) $ph; // ключи-номера PHP хранит числами
     if (count($list) < 2 || ($only && !in_array($ph, $only, true))) continue;
     $stat["номеров"]++;
-    usort($list, function ($a, $b) { return [$b["last_login"], $b["orders"], $b["timestamp"]] <=> [$a["last_login"], $a["orders"], $a["timestamp"]]; });
+    usort($list, function ($a, $b) use ($by_reg) { return $by_reg ? [$b["timestamp"], $b["user_id"]] <=> [$a["timestamp"], $a["user_id"]] : [$b["last_login"], $b["orders"], $b["timestamp"]] <=> [$a["last_login"], $a["orders"], $a["timestamp"]]; });
     $main = $list[0]; $second = array_slice($list, 1); $M = (int) $main["user_id"];
-    if (!isset($ms[$ph])) { $stat["пропущено: нет в МойСклад"]++; continue; }
+    if (!isset($ms[$ph]) && !isset($opt["no-ms"])) { $stat["пропущено: нет в МойСклад"]++; continue; }
     $mw = words($main["firstname"] . " " . $main["lastname"]); $same = (bool) $mw;
     foreach ($second as $s) { if (!array_intersect($mw, words($s["firstname"] . " " . $s["lastname"]))) $same = false; }
-    if (!$same) { $stat["пропущено: имена разные"]++; continue; }
+    $names = "#" . $main["user_id"] . " " . trim($main["firstname"] . " " . $main["lastname"]) . " (создана " . date("d.m.Y", $main["timestamp"]) . ", заказов " . $main["orders"] . ")"; foreach ($second as $s) $names .= "  <-  #" . $s["user_id"] . " " . trim($s["firstname"] . " " . $s["lastname"]) . " (создана " . date("d.m.Y", $s["timestamp"]) . ", заказов " . $s["orders"] . ")";
+    if (!$same && !isset($opt["quiet"])) echo "…", substr($ph, -4), ": ИМЕНА РАЗНЫЕ – ", $names, "\n";
+    if (!$same && !isset($opt["any-names"])) { $stat["пропущено: имена разные"]++; continue; }
     $ids = implode(",", array_map(function ($s) { return (int) $s["user_id"]; }, $second));
     $before = [
         "phone" => $ph, "main" => $M, "second" => array_map("intval", explode(",", $ids)), "time" => date("c"),
