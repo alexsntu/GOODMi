@@ -257,6 +257,8 @@ if ($mode === 'bonuses') {
         'bonus' => $bonus,
         'orders' => gm_cab_merge_orders($site_orders, $store_orders, 8),
         'orders_total' => count($site_orders) + count($store_orders),
+        // Покупки в магазинах (МойСклад): без них и без карты БонусПлюс покупатель считается новым
+        'store_total' => count($store_orders),
     ]);
 
     fn_add_breadcrumb('Мои бонусы');

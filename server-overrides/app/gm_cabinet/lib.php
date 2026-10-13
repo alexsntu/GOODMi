@@ -78,9 +78,14 @@ function gm_cab_phone($raw)
     return '';
 }
 
-/** Запрос к внешнему сервису. Возвращает разобранный JSON или null при любой ошибке. */
-function gm_cab_http($url, array $headers, $post = null, $timeout = 8)
+/**
+ * Запрос к внешнему сервису. Возвращает разобранный JSON или null при любой ошибке.
+ * В $error кладётся разобранный ответ сервиса с кодом не 2xx (если это JSON) – чтобы отличить «сервис отказал
+ * по делу» (например, клиент не найден) от сбоя.
+ */
+function gm_cab_http($url, array $headers, $post = null, $timeout = 8, &$error = null)
 {
+    $error = null;
     $curl = curl_init($url);
     curl_setopt_array($curl, [
         CURLOPT_RETURNTRANSFER => true,
@@ -97,10 +102,15 @@ function gm_cab_http($url, array $headers, $post = null, $timeout = 8)
     $code = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
     curl_close($curl);
 
-    if ($body === false || $code < 200 || $code >= 300) {
+    if ($body === false) {
         return null;
     }
     $data = json_decode($body, true);
+    if ($code < 200 || $code >= 300) {
+        $error = is_array($data) ? $data : null;
+
+        return null;
+    }
 
     return is_array($data) ? $data : null;
 }
@@ -197,8 +207,13 @@ function gm_cab_bonusplus($phone, $history_limit = 60)
     $headers = ['Authorization: ' . $secrets['bonusplus_auth'], 'Content-Type: application/json', 'Accept: application/json'];
     $base = 'https://bonusplus.pro/api';
 
-    $c = gm_cab_http($base . '/customer?phone=' . rawurlencode($phone), $headers);
+    $c = gm_cab_http($base . '/customer?phone=' . rawurlencode($phone), $headers, null, 8, $refusal);
     if ($c === null) {
+        // Неизвестный номер БонусПлюс отдаёт не пустым ответом, а ошибкой 412 с кодом CUSTOMER_NOT_FOUND
+        if (is_array($refusal) && isset($refusal['code']) && $refusal['code'] === 'CUSTOMER_NOT_FOUND') {
+            return ['found' => false];
+        }
+
         return null;
     }
     if (!isset($c['availableBonuses'])) {
