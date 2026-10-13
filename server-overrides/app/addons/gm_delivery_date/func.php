@@ -789,3 +789,176 @@ function fn_gm_delivery_date_is_order_allowed_post($order_id, $auth, &$allowed)
         // При сбое действует штатное правило доступа
     }
 }
+
+/** Витрина GOODMi на стороне покупателя – условие всех обработчиков входа и регистрации. */
+function fn_gm_delivery_date_is_goodmi_front()
+{
+    return defined('AREA') && AREA === 'C' && (int) \Tygh\Registry::get('runtime.company_id') === fn_gm_delivery_date_company_id();
+}
+
+/** Подключить логику личного кабинета (app/gm_cabinet/store.php). false – файла нет, обработчик должен отступить. */
+function fn_gm_delivery_date_cabinet()
+{
+    $store = \Tygh\Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+    if (!is_file($store)) {
+        return false;
+    }
+    require_once $store;
+
+    return true;
+}
+
+/**
+ * Вход по номеру телефона (витрина GOODMi). Если в поле входа введён не e-mail, а номер, штатная проверка ищет
+ * покупателя, у которого этот номер подтверждён и стоит в профиле; пароль проверяет сам CS-Cart. Введённое
+ * покупателем значение не меняем (оно возвращается в форму при ошибке), поэтому подменяем только условие поиска:
+ * «user_id = N OR NULL = 'введённое'» находит ровно этого покупателя, «NULL = 'введённое'» – никого.
+ * Кого пускать и счётчик неверных паролей – fn_gm_cab_login_by_phone в app/gm_cabinet/store.php.
+ * По e-mail-заглушке (gm_cab_is_stub_email) войти нельзя: настоящего адреса за ней нет.
+ */
+function fn_gm_delivery_date_auth_routines($request, $auth, &$field, &$condition, &$user_login)
+{
+    if (!fn_gm_delivery_date_is_goodmi_front()) {
+        return;
+    }
+    $login = trim((string) $user_login);
+    if ($login === '') {
+        return;
+    }
+    try {
+        if (!fn_gm_delivery_date_cabinet()) {
+            return;
+        }
+        if (strpos($login, '@') !== false) {
+            if (gm_cab_is_stub_email($login)) {
+                $field = 'NULL';
+            }
+
+            return;
+        }
+        $found = fn_gm_cab_login_by_phone($login, isset($request['password']) ? (string) $request['password'] : '');
+        if ($found === null) {
+            return;
+        }
+        if ($found['locked']) {
+            fn_set_notification('E', __('error'), 'Слишком много неудачных попыток входа по этому номеру. Попробуйте через 15 минут или восстановите пароль.');
+        }
+        $field = $found['user_id'] > 0 ? 'user_id = ' . (int) $found['user_id'] . ' OR NULL' : 'NULL';
+    } catch (\Throwable $e) {
+        // При сбое вход работает штатно, по e-mail
+    }
+}
+
+/**
+ * Запись без своей почты (витрина GOODMi) хранится с e-mail-заглушкой из номера телефона (fn_gm_cab_stub_email) –
+ * её подставляет profiles.pre.php. Письмо о регистрации на заглушку не отправляем.
+ */
+function fn_gm_delivery_date_update_user_pre($user_id, $user_data, $auth, $ship_to_another, &$notify_user, &$can_update)
+{
+    if (!empty($user_id) || !isset($user_data['email']) || !fn_gm_delivery_date_is_goodmi_front()) {
+        return;
+    }
+    try {
+        if (fn_gm_delivery_date_cabinet() && gm_cab_is_stub_email($user_data['email'])) {
+            $notify_user = false;
+        }
+    } catch (\Throwable $e) {
+    }
+}
+
+/**
+ * После регистрации через форму сайта (витрина GOODMi): сразу отправляем на номер код подтверждения; покупатель
+ * попадает в «Мои заказы», где ждёт поле для кода и подсказка про оператора. Работает только для регистрации,
+ * которую пометил profiles.pre.php (runtime.gm_reg_phone), – не для записей, создаваемых при оформлении заказа.
+ */
+function fn_gm_delivery_date_update_profile($action, &$user_data, $current_user_data)
+{
+    if ($action !== 'add' || empty($user_data['user_id']) || !fn_gm_delivery_date_is_goodmi_front()
+        || (string) \Tygh\Registry::get('runtime.gm_reg_phone') === '') {
+        return;
+    }
+    try {
+        if (!fn_gm_delivery_date_cabinet()) {
+            return;
+        }
+        $user_id = (int) $user_data['user_id'];
+        $phone = fn_gm_cab_user_phone($user_id);
+        if ($phone === '' || !gm_cab_verify_enabled($user_id)) {
+            return;
+        }
+        $sent = fn_gm_cab_verify_send($user_id, $phone);
+        // До подтверждения номера оформить заказ нельзя (checkout.pre.php)
+        fn_gm_cab_must_verify_set($user_id);
+        if ($sent['ok']) {
+            fn_set_notification('N', 'Подтвердите номер', 'Мы отправили СМС с кодом на ' . gm_cab_phone_mask($phone) . '. Введите код, чтобы подтвердить номер: после этого можно оформлять заказы и входить по номеру.');
+        } else {
+            fn_set_notification('W', 'Номер пока не подтверждён', 'Отправить СМС с кодом не получилось. ' . GM_CAB_OPERATOR_TEXT);
+        }
+        $_REQUEST['redirect_url'] = 'gm_cabinet.orders';
+    } catch (\Throwable $e) {
+        // Подтверждение номера необязательно для самой регистрации: при сбое она завершается штатно
+    }
+}
+
+/**
+ * Регистрация по номеру телефона не считается завершённой, пока номер не подтверждён (решение 2026-10-13): такой
+ * покупатель с любой страницы сайта попадает в «Мои заказы», где его ждёт блок подтверждения (код из СМС или звонок
+ * оператору). Открыты только сама эта страница, отправка кода, профиль (исправить номер) и выход. Действует на записи,
+ * отмеченные при регистрации (must_verify, см. fn_gm_cab_verify_required в app/gm_cabinet/store.php), – не на
+ * покупателей, зарегистрированных раньше. Фоновые запросы страниц не трогаем, кроме корзины и оформления заказа.
+ */
+function fn_gm_delivery_date_before_dispatch($controller, $mode, $action, $dispatch_extra, $area)
+{
+    if ($area !== 'C' || defined('CONSOLE') || (int) \Tygh\Registry::get('runtime.company_id') !== fn_gm_delivery_date_company_id()) {
+        return;
+    }
+    $user_id = isset(\Tygh::$app['session']['auth']['user_id']) ? (int) \Tygh::$app['session']['auth']['user_id'] : 0;
+    if ($user_id <= 0) {
+        return;
+    }
+    $open = ['gm_cabinet.orders', 'gm_cabinet.verify', 'auth.logout', 'profiles.update'];
+    if (in_array($controller . '.' . $mode, $open, true) || (defined('AJAX_REQUEST') && $controller !== 'checkout')) {
+        return;
+    }
+    try {
+        if (!fn_gm_delivery_date_cabinet() || !fn_gm_cab_verify_required($user_id)) {
+            return;
+        }
+    } catch (\Throwable $e) {
+        return;
+    }
+    fn_set_notification('W', 'Завершите регистрацию', 'Подтвердите номер телефона: введите код из СМС или позвоните оператору интернет-магазина по номеру 8 (800) 250-17-00 с этого телефона. До подтверждения остальные разделы сайта недоступны.', '', 'gm_verify_required');
+    fn_redirect('gm_cabinet.orders');
+}
+
+/**
+ * Админка: отметка «номер подтверждён» возле телефона покупателя GOODMi (списки заказов и покупателей, заказ, профиль –
+ * шаблоны design/backend/templates/addons/gm_delivery_date/hooks/). Возвращает 'Y' – номер подтверждён, 'N' – нет,
+ * '' – номера нет или он непригоден. С $user_id проверяется подтверждение именно этого покупателя, без него
+ * (заказ) – подтверждён ли номер хоть в одной учётной записи. Таблица ?:gm_phone_verify, см. app/gm_cabinet/store.php.
+ */
+function fn_gm_delivery_date_phone_mark($phone, $user_id = 0)
+{
+    static $cache = [];
+    $digits = preg_replace('/\D+/', '', (string) $phone);
+    if (strlen($digits) === 11 && ($digits[0] === '7' || $digits[0] === '8')) {
+        $digits = '7' . substr($digits, 1);
+    } elseif (strlen($digits) === 10) {
+        $digits = '7' . $digits;
+    } else {
+        return '';
+    }
+    $key = $digits . '|' . (int) $user_id;
+    if (!isset($cache[$key])) {
+        try {
+            $found = (int) $user_id > 0
+                ? db_get_field('SELECT 1 FROM ?:gm_phone_verify WHERE user_id = ?i AND phone = ?s AND verified_at > 0', (int) $user_id, $digits)
+                : db_get_field('SELECT 1 FROM ?:gm_phone_verify WHERE phone = ?s AND verified_at > 0 LIMIT 1', $digits);
+            $cache[$key] = $found ? 'Y' : 'N';
+        } catch (\Throwable $e) {
+            $cache[$key] = '';
+        }
+    }
+
+    return $cache[$key];
+}

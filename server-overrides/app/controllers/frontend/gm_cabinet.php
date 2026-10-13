@@ -11,6 +11,10 @@
  * POST index.php?dispatch=gm_cabinet.verify (action=send|check, code, back) – подтверждение номера телефона кодом из СМС.
  * Пока номер не подтверждён (и подтверждение включено ключом phone_verify в secrets.php), страницы не показывают данные,
  * найденные по номеру: покупки в магазинах, заказы без входа и бонусы.
+ * index.php?dispatch=gm_cabinet.auth_status&key=...[&hours=1..24] – сводка по СМС и попыткам входа в JSON для оповещений (ключ
+ * status_key в secrets.php; без верного ключа – «страница не найдена»).
+ * index.php?dispatch=gm_cabinet.recover – восстановление пароля кодом из СМС (для невошедшего покупателя): номер,
+ * затем код и новый пароль. Работает только для подтверждённого номера; номер между шагами хранится в сессии.
  *
  * php index.php --dispatch=gm_cabinet.sync_orders [--minutes=50] – загрузка заказов МойСклад в таблицу ?:gm_ms_orders
  * (только из командной строки; ночное задание в cron). Первый запуск проходит всю историю, дальше – изменённое.
@@ -20,6 +24,76 @@ use Tygh\Registry;
 
 if (!defined('BOOTSTRAP')) {
     die('Access denied');
+}
+
+if ($mode === 'auth_status') {
+    require_once Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+    $gm_secrets = gm_cab_secrets();
+    $gm_key = isset($_REQUEST['key']) ? (string) $_REQUEST['key'] : '';
+    if (empty($gm_secrets['status_key']) || $gm_key === '' || !hash_equals((string) $gm_secrets['status_key'], $gm_key)) {
+        return [CONTROLLER_STATUS_NO_PAGE];
+    }
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-store');
+    echo json_encode(fn_gm_cab_auth_status(isset($_REQUEST['hours']) ? (int) $_REQUEST['hours'] : 1), JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+if ($mode === 'recover') {
+    // Восстановление пароля по СМС: шаг 1 – номер, шаг 2 – код из СМС и новый пароль
+    if ((int) Registry::get('runtime.company_id') !== 2) {
+        return [CONTROLLER_STATUS_NO_PAGE];
+    }
+    if (!empty($auth['user_id'])) {
+        return [CONTROLLER_STATUS_REDIRECT, 'profiles.update'];
+    }
+    require_once Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+    $rc_phone = isset(Tygh::$app['session']['gm_recover_phone']) ? (string) Tygh::$app['session']['gm_recover_phone'] : '';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
+        $result = null;
+        if ($action === 'send') {
+            $new_phone = gm_cab_phone(isset($_REQUEST['phone']) ? $_REQUEST['phone'] : '');
+            $result = fn_gm_cab_recover_send($new_phone);
+            if ($result['ok']) {
+                Tygh::$app['session']['gm_recover_phone'] = $new_phone;
+            }
+        } elseif ($action === 'again' && $rc_phone !== '') {
+            $result = fn_gm_cab_recover_send($rc_phone);
+        } elseif ($action === 'check' && $rc_phone !== '') {
+            // Пароли берём из $_POST: в $_REQUEST CS-Cart хранит их уже обработанными
+            $result = fn_gm_cab_recover_check(
+                $rc_phone,
+                isset($_REQUEST['code']) ? $_REQUEST['code'] : '',
+                isset($_POST['password1']) ? (string) $_POST['password1'] : '',
+                isset($_POST['password2']) ? (string) $_POST['password2'] : ''
+            );
+            if ($result['ok']) {
+                unset(Tygh::$app['session']['gm_recover_phone']);
+                Tygh::$app['session']->regenerateID();
+                fn_login_user($result['user_id'], true);
+                fn_set_notification('N', 'Готово', $result['message']);
+
+                return [CONTROLLER_STATUS_REDIRECT, 'gm_cabinet.orders'];
+            }
+        } elseif ($action === 'reset') {
+            unset(Tygh::$app['session']['gm_recover_phone']);
+        }
+        if ($result) {
+            fn_set_notification($result['ok'] ? 'N' : 'E', $result['ok'] ? 'Готово' : 'Ошибка', $result['message']);
+        }
+
+        return [CONTROLLER_STATUS_REDIRECT, 'gm_cabinet.recover'];
+    }
+
+    $rc_state = fn_gm_cab_recover_state($rc_phone);
+    Tygh::$app['view']->assign('gm_rc', $rc_state + [
+        'url' => fn_url('gm_cabinet.recover'),
+        'email_url' => fn_url('auth.recover_password'),
+        'login_url' => fn_url('auth.login_form'),
+    ]);
+    fn_add_breadcrumb('Восстановление пароля');
 }
 
 if ($mode === 'phone') {
@@ -68,7 +142,8 @@ if ($mode === 'bonuses' || $mode === 'orders' || $mode === 'products') {
         $state = fn_gm_cab_verify_state($user_id, $phone);
         if (!$state['verified']) {
             $trusted_phone = '';
-            $verify = $state + ['url' => fn_url('gm_cabinet.verify'), 'back' => $mode];
+            // required – регистрация по номеру не завершена: до подтверждения открыта только эта страница
+            $verify = $state + ['url' => fn_url('gm_cabinet.verify'), 'back' => $mode, 'required' => fn_gm_cab_verify_required($user_id)];
         }
     }
     $store_orders = [];

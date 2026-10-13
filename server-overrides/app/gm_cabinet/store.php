@@ -415,7 +415,10 @@ function fn_gm_cab_verify_send($user_id, $phone)
         return ['ok' => false, 'message' => 'Сначала укажите номер телефона в профиле.'];
     }
     if (!gm_cab_verify_sms_enabled()) {
-        return ['ok' => false, 'message' => 'Подтвердить номер сейчас можно у сотрудника магазина GOODMi или по телефону 8 (800) 250-17-00.'];
+        return ['ok' => false, 'message' => 'Подтвердить номер сейчас может оператор интернет-магазина: позвоните по номеру 8 (800) 250-17-00 с того телефона, который нужно подтвердить.'];
+    }
+    if (fn_gm_cab_phone_blocked($phone)) {
+        return ['ok' => false, 'message' => GM_CAB_BLOCKED_TEXT];
     }
     $now = TIME;
     $row = db_get_row('SELECT * FROM ?:gm_phone_verify WHERE user_id = ?i', $user_id);
@@ -429,7 +432,7 @@ function fn_gm_cab_verify_send($user_id, $phone)
         $phone, $now - 3600, $user_id
     );
     if ($count >= GM_CAB_SMS_PER_HOUR || $count + $by_phone >= GM_CAB_SMS_PER_HOUR) {
-        return ['ok' => false, 'message' => 'Слишком много запросов кода. Попробуйте через час.'];
+        return fn_gm_cab_limit_refused($phone, $user_id);
     }
     $day_key = 'gm_sms_day_' . date('Ymd', $now);
     $day = (int) fn_get_storage_data($day_key);
@@ -441,14 +444,19 @@ function fn_gm_cab_verify_send($user_id, $phone)
     $sent = gm_cab_sms_send($phone, 'Код подтверждения GOODMi: ' . $code);
     if (!$sent['ok']) {
         fn_log_event('general', 'runtime', ['message' => 'GOODMi кабинет: СМС не отправлено – ' . $sent['error']]);
+        fn_gm_cab_log('sms_error', $phone, $user_id, $sent['error']);
 
         return ['ok' => false, 'message' => 'Не удалось отправить код. Попробуйте позже или позвоните нам: 8 (800) 250-17-00.'];
     }
     fn_set_storage_data($day_key, $day + 1);
+    fn_gm_cab_log('sms_verify', $phone, $user_id);
     db_replace_into('gm_phone_verify', [
         'user_id' => (int) $user_id,
         'phone' => $row ? $row['phone'] : '',
         'verified_at' => $row ? (int) $row['verified_at'] : 0,
+        'verified_by' => $row ? (int) $row['verified_by'] : 0,
+        'note' => $row ? (string) $row['note'] : '',
+        'must_verify' => $row ? (int) $row['must_verify'] : 0,
         'code_phone' => $phone,
         'code_hash' => gm_cab_code_hash($code, $user_id, $phone),
         'code_expires' => $now + GM_CAB_CODE_TTL,
@@ -474,6 +482,10 @@ function fn_gm_cab_verify_check($user_id, $phone, $code)
     }
     if (strlen($code) !== 4 || !hash_equals($row['code_hash'], gm_cab_code_hash($code, $user_id, $phone))) {
         db_query('UPDATE ?:gm_phone_verify SET attempts = attempts + 1 WHERE user_id = ?i', $user_id);
+        fn_gm_cab_log('code_bad', $phone, $user_id);
+        if (fn_gm_cab_strike($phone, 'неверные коды', $user_id)) {
+            return ['ok' => false, 'message' => GM_CAB_BLOCKED_TEXT];
+        }
 
         return ['ok' => false, 'message' => 'Неверный код. Проверьте СМС и попробуйте ещё раз.'];
     }
@@ -481,6 +493,9 @@ function fn_gm_cab_verify_check($user_id, $phone, $code)
         "UPDATE ?:gm_phone_verify SET phone = ?s, verified_at = ?i, code_hash = '', code_expires = 0, attempts = 0 WHERE user_id = ?i",
         $phone, TIME, $user_id
     );
+
+    fn_gm_cab_strike_reset($phone);
+    fn_gm_cab_log('code_ok', $phone, $user_id);
 
     return ['ok' => true, 'message' => 'Номер подтверждён.'];
 }
@@ -554,6 +569,31 @@ function fn_gm_cab_verify_search($query, $limit = 30)
     }
 
     return $rows;
+}
+
+/**
+ * Отметить, что покупатель зарегистрировался по номеру телефона (форма регистрации сайта, с 2026-10-13): пока он не
+ * подтвердит номер, оформить заказ нельзя (fn_gm_cab_verify_required, controllers/frontend/checkout.pre.php модуля
+ * gm_delivery_date). На покупателей, зарегистрированных раньше, это не распространяется.
+ */
+function fn_gm_cab_must_verify_set($user_id)
+{
+    db_query('INSERT INTO ?:gm_phone_verify (user_id, must_verify) VALUES (?i, 1) ON DUPLICATE KEY UPDATE must_verify = 1', $user_id);
+}
+
+/** Должен ли покупатель подтвердить номер, прежде чем оформлять заказ: отмечен при регистрации и номер ещё не подтверждён. */
+function fn_gm_cab_verify_required($user_id)
+{
+    if (!gm_cab_verify_enabled($user_id)) {
+        return false;
+    }
+    $row = db_get_row('SELECT phone, verified_at, must_verify FROM ?:gm_phone_verify WHERE user_id = ?i', $user_id);
+    if (!$row || !(int) $row['must_verify']) {
+        return false;
+    }
+    $phone = fn_gm_cab_user_phone($user_id);
+
+    return !($phone !== '' && $row['phone'] === $phone && (int) $row['verified_at'] > 0);
 }
 
 /** Запрещено ли покупателю править номер в профиле напрямую: подтверждение включено и текущий номер подтверждён. */
@@ -790,4 +830,461 @@ function fn_gm_cab_purchased($user_id, $phone)
     }
 
     return $list;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Вход по номеру телефона и восстановление пароля кодом из СМС (таблица ?:gm_phone_auth, по строке на номер).
+ * По номеру пускаем только того покупателя, у которого этот номер подтверждён и стоит в профиле: иначе номер мог бы
+ * занять любой, кто вписал его в профиль. Пароль – тот же, что и для входа по e-mail. Восстановление по СМС работает
+ * только для подтверждённого номера. Ограничения: GM_CAB_LOGIN_FAILS неверных паролей подряд закрывают вход по номеру
+ * на GM_CAB_LOGIN_LOCK секунд; коды восстановления – те же правила, что у подтверждения (5 минут, 5 попыток,
+ * пауза минута, 3 СМС в час на номер, общий дневной потолок).
+ * Подключение: обработчики auth_routines, update_user_pre, update_profile, before_dispatch в модуле gm_delivery_date (func.php),
+ * проверка формы регистрации – controllers/frontend/profiles.pre.php, страница gm_cabinet.recover.
+ * ------------------------------------------------------------------------------------------------------------- */
+
+const GM_CAB_LOGIN_FAILS = 8;
+const GM_CAB_LOGIN_LOCK = 900;
+const GM_CAB_PASSWORD_MIN = 6;
+// Домен e-mail-заглушки для записей без почты, см. fn_gm_cab_stub_email (решение 2026-10-13)
+const GM_CAB_STUB_DOMAIN = '@goodmi.ru';
+const GM_CAB_OPERATOR_TEXT = 'Позвоните оператору интернет-магазина по номеру 8 (800) 250-17-00 с того телефона, который нужно подтвердить.';
+
+/**
+ * E-mail-заглушка: покупателю, который не указал почту, записывается адрес из его номера – 79780000000@goodmi.ru
+ * (CS-Cart без e-mail не создаёт ни запись, ни заказ, а одинаковый адрес у двух покупателей не допускает).
+ * Настоящего ящика за ней нет, поэтому по заглушке нельзя войти и восстановить пароль, письма на неё не шлём,
+ * в форме профиля она не показывается (js/addons/gm_delivery_date/auth.js – то же правило разбора).
+ */
+function gm_cab_is_stub_email($email)
+{
+    $email = mb_strtolower(trim((string) $email));
+
+    // mail@goodmi.ru – первая версия заглушки (несколько часов 2026-10-13)
+    return $email === 'mail@goodmi.ru' || (bool) preg_match('/^7\d{10}(-\d+)?' . preg_quote(GM_CAB_STUB_DOMAIN, '/') . '$/', $email);
+}
+
+/**
+ * Свободная заглушка для номера. Обычно это сам номер; если адрес занят незавершённой регистрацией на тот же номер
+ * (её владелец номер так и не подтвердил), добавляется порядковый хвост: 79780000000-2@goodmi.ru.
+ */
+function fn_gm_cab_stub_email($phone, $user_id = 0)
+{
+    $phone = (string) $phone;
+    if ($phone === '') {
+        return '';
+    }
+    for ($n = 1; $n <= 50; $n++) {
+        $email = $phone . ($n > 1 ? '-' . $n : '') . GM_CAB_STUB_DOMAIN;
+        if (!db_get_field('SELECT user_id FROM ?:users WHERE email = ?s AND user_id != ?i', $email, (int) $user_id)) {
+            return $email;
+        }
+    }
+
+    return $phone . '-' . substr(md5(uniqid('', true)), 0, 8) . GM_CAB_STUB_DOMAIN;
+}
+
+/** Покупатели GOODMi, у которых этот номер подтверждён и сейчас стоит в профиле (обычно один; первым – подтвердивший позже). */
+function fn_gm_cab_phone_owners($phone)
+{
+    if ((string) $phone === '') {
+        return [];
+    }
+    $ids = db_get_fields(
+        'SELECT v.user_id FROM ?:gm_phone_verify v JOIN ?:users u ON u.user_id = v.user_id'
+        . " WHERE v.phone = ?s AND v.verified_at > 0 AND u.company_id = 2 AND u.user_type = 'C'"
+        . ' ORDER BY v.verified_at DESC, v.user_id DESC',
+        $phone
+    );
+    $owners = [];
+    foreach ($ids as $id) {
+        if (fn_gm_cab_user_phone((int) $id) === $phone) {
+            $owners[] = (int) $id;
+        }
+    }
+
+    return $owners;
+}
+
+/**
+ * Вход по номеру: кого искать штатной проверке входа. null – введён не номер (пусть ищет по e-mail как обычно);
+ * иначе ['user_id' => покупатель или 0, 'locked' => вход по номеру временно закрыт из-за неверных паролей].
+ * Пароль сверяется здесь же только ради счётчика неудачных попыток: сам вход выполняет CS-Cart.
+ */
+function fn_gm_cab_login_by_phone($login, $password)
+{
+    $phone = gm_cab_phone($login);
+    if ($phone === '') {
+        return null;
+    }
+    $owners = fn_gm_cab_phone_owners($phone);
+    if (!$owners) {
+        return ['user_id' => 0, 'locked' => false];
+    }
+    $now = TIME;
+    $row = db_get_row('SELECT login_fails, login_window FROM ?:gm_phone_auth WHERE phone = ?s', $phone);
+    $fails = $row && (int) $row['login_window'] > $now - GM_CAB_LOGIN_LOCK ? (int) $row['login_fails'] : 0;
+    if ($fails >= GM_CAB_LOGIN_FAILS) {
+        return ['user_id' => 0, 'locked' => true];
+    }
+    $users = db_get_hash_array('SELECT user_id, password, salt FROM ?:users WHERE user_id IN (?n)', 'user_id', $owners);
+    foreach ($owners as $id) {
+        if ((string) $password !== '' && isset($users[$id])
+            && fn_password_verify((string) $password, (string) $users[$id]['password'], (string) $users[$id]['salt'])) {
+            if ($fails > 0) {
+                db_query('UPDATE ?:gm_phone_auth SET login_fails = 0 WHERE phone = ?s', $phone);
+            }
+
+            return ['user_id' => $id, 'locked' => false];
+        }
+    }
+    db_query(
+        'INSERT INTO ?:gm_phone_auth (phone, login_fails, login_window) VALUES (?s, 1, ?i)'
+        . ' ON DUPLICATE KEY UPDATE login_fails = IF(login_window > ?i, login_fails + 1, 1), login_window = IF(login_window > ?i, login_window, ?i)',
+        $phone, $now, $now - GM_CAB_LOGIN_LOCK, $now - GM_CAB_LOGIN_LOCK, $now
+    );
+    fn_gm_cab_log('login_bad', $phone, $owners[0]);
+    if ($fails + 1 === GM_CAB_LOGIN_FAILS) {
+        fn_gm_cab_log('login_lock', $phone, $owners[0]);
+    }
+
+    return ['user_id' => $owners[0], 'locked' => false];
+}
+
+/** Состояние восстановления пароля для страницы: ждём ли ввода кода, отправленного на этот номер. */
+function fn_gm_cab_recover_state($phone)
+{
+    $row = (string) $phone !== '' ? db_get_row('SELECT * FROM ?:gm_phone_auth WHERE phone = ?s', $phone) : [];
+    $pending = $row && $row['code_hash'] !== '' && (int) $row['code_expires'] > TIME && (int) $row['attempts'] < GM_CAB_CODE_ATTEMPTS;
+
+    return [
+        'pending' => (bool) $pending,
+        'mask' => gm_cab_phone_mask($phone),
+        'sms' => gm_cab_verify_sms_enabled(),
+    ];
+}
+
+/** Отправить код восстановления пароля на подтверждённый номер. Возвращает ['ok' => bool, 'message' => текст покупателю]. */
+function fn_gm_cab_recover_send($phone)
+{
+    if ((string) $phone === '') {
+        return ['ok' => false, 'message' => 'Введите номер полностью, например +7 978 000-00-00.'];
+    }
+    if (!gm_cab_verify_sms_enabled()) {
+        return ['ok' => false, 'message' => 'Восстановление по СМС сейчас недоступно. ' . GM_CAB_OPERATOR_TEXT];
+    }
+    if (fn_gm_cab_phone_blocked($phone)) {
+        return ['ok' => false, 'message' => GM_CAB_BLOCKED_TEXT];
+    }
+    $owners = fn_gm_cab_phone_owners($phone);
+    if (!$owners) {
+        return ['ok' => false, 'message' => 'Этот номер не подтверждён ни в одной учётной записи, поэтому восстановить пароль по СМС нельзя.'
+            . ' Восстановите пароль по e-mail или позвоните оператору интернет-магазина по номеру 8 (800) 250-17-00 с этого телефона.'];
+    }
+    $now = TIME;
+    $row = db_get_row('SELECT * FROM ?:gm_phone_auth WHERE phone = ?s', $phone);
+    if ($row && (int) $row['last_sent'] + GM_CAB_SMS_PAUSE > $now) {
+        return ['ok' => false, 'message' => 'Код уже отправлен. Повторно можно запросить через минуту.'];
+    }
+    $window = $row && (int) $row['sent_window'] > $now - 3600 ? (int) $row['sent_window'] : $now;
+    $count = $row && $window === (int) $row['sent_window'] ? (int) $row['sent_count'] : 0;
+    // В часовой потолок номера входят и коды подтверждения, отправленные на него из кабинета
+    $by_verify = (int) db_get_field('SELECT SUM(sent_count) FROM ?:gm_phone_verify WHERE code_phone = ?s AND sent_window > ?i', $phone, $now - 3600);
+    if ($count + $by_verify >= GM_CAB_SMS_PER_HOUR) {
+        return fn_gm_cab_limit_refused($phone, $owners[0]);
+    }
+    $fail = ['ok' => false, 'message' => 'Не удалось отправить код. Попробуйте позже или позвоните оператору интернет-магазина: 8 (800) 250-17-00.'];
+    $day_key = 'gm_sms_day_' . date('Ymd', $now);
+    $day = (int) fn_get_storage_data($day_key);
+    if ($day >= GM_CAB_SMS_DAY_LIMIT) {
+        return $fail;
+    }
+
+    $user_id = $owners[0];
+    $code = (string) random_int(1000, 9999);
+    $sent = gm_cab_sms_send($phone, 'Код для восстановления пароля GOODMi: ' . $code);
+    if (!$sent['ok']) {
+        fn_log_event('general', 'runtime', ['message' => 'GOODMi кабинет: СМС восстановления не отправлено – ' . $sent['error']]);
+        fn_gm_cab_log('sms_error', $phone, $user_id, $sent['error']);
+
+        return $fail;
+    }
+    fn_set_storage_data($day_key, $day + 1);
+    fn_gm_cab_log('sms_recover', $phone, $user_id);
+    // Не REPLACE: в строке номера живут ещё счётчики входа и блокировка
+    db_query(
+        'INSERT INTO ?:gm_phone_auth (phone, user_id, code_hash, code_expires, attempts, sent_count, sent_window, last_sent)'
+        . ' VALUES (?s, ?i, ?s, ?i, 0, ?i, ?i, ?i) ON DUPLICATE KEY UPDATE user_id = VALUES(user_id), code_hash = VALUES(code_hash),'
+        . ' code_expires = VALUES(code_expires), attempts = 0, sent_count = VALUES(sent_count), sent_window = VALUES(sent_window), last_sent = VALUES(last_sent)',
+        $phone, $user_id, gm_cab_code_hash($code, $user_id, 'recover:' . $phone), $now + GM_CAB_CODE_TTL, $count + 1, $window, $now
+    );
+
+    return ['ok' => true, 'message' => 'Код отправлен на ' . gm_cab_phone_mask($phone) . '.'];
+}
+
+/**
+ * Проверить код восстановления и записать новый пароль. Пароли – в исходном виде, как их ввёл покупатель.
+ * Возвращает ['ok' => bool, 'message' => текст покупателю, 'user_id' => чей пароль изменён].
+ */
+function fn_gm_cab_recover_check($phone, $code, $password1, $password2)
+{
+    $code = preg_replace('/\D+/', '', (string) $code);
+    $password1 = (string) $password1;
+    $row = (string) $phone !== '' ? db_get_row('SELECT * FROM ?:gm_phone_auth WHERE phone = ?s', $phone) : [];
+    if (!$row || $row['code_hash'] === '' || (int) $row['code_expires'] <= TIME) {
+        return ['ok' => false, 'message' => 'Срок действия кода истёк. Запросите новый.', 'user_id' => 0];
+    }
+    if ((int) $row['attempts'] >= GM_CAB_CODE_ATTEMPTS) {
+        return ['ok' => false, 'message' => 'Слишком много попыток. Запросите новый код.', 'user_id' => 0];
+    }
+    if (mb_strlen($password1) < GM_CAB_PASSWORD_MIN) {
+        return ['ok' => false, 'message' => 'Пароль должен быть не короче ' . GM_CAB_PASSWORD_MIN . ' символов.', 'user_id' => 0];
+    }
+    if ($password1 !== (string) $password2) {
+        return ['ok' => false, 'message' => 'Пароли не совпадают. Введите новый пароль дважды одинаково.', 'user_id' => 0];
+    }
+    $user_id = (int) $row['user_id'];
+    if (strlen($code) !== 4 || !hash_equals($row['code_hash'], gm_cab_code_hash($code, $user_id, 'recover:' . $phone))) {
+        db_query('UPDATE ?:gm_phone_auth SET attempts = attempts + 1 WHERE phone = ?s', $phone);
+        fn_gm_cab_log('code_bad', $phone, $user_id);
+        if (fn_gm_cab_strike($phone, 'неверные коды', $user_id)) {
+            return ['ok' => false, 'message' => GM_CAB_BLOCKED_TEXT, 'user_id' => 0];
+        }
+
+        return ['ok' => false, 'message' => 'Неверный код. Проверьте СМС и попробуйте ещё раз.', 'user_id' => 0];
+    }
+    // Номер за время ожидания кода могли сменить или снять с него подтверждение
+    if (!in_array($user_id, fn_gm_cab_phone_owners($phone), true)) {
+        db_query("UPDATE ?:gm_phone_auth SET code_hash = '', code_expires = 0 WHERE phone = ?s", $phone);
+
+        return ['ok' => false, 'message' => 'Этот номер больше не подтверждён. ' . GM_CAB_OPERATOR_TEXT, 'user_id' => 0];
+    }
+    db_query(
+        "UPDATE ?:users SET password = ?s, salt = '', password_change_timestamp = ?i WHERE user_id = ?i",
+        fn_password_hash($password1), TIME, $user_id
+    );
+    db_query("UPDATE ?:gm_phone_auth SET code_hash = '', code_expires = 0, attempts = 0, login_fails = 0 WHERE phone = ?s", $phone);
+    fn_gm_cab_strike_reset($phone);
+    fn_gm_cab_log('recover_ok', $phone, $user_id);
+    fn_log_event('users', 'update', ['user_id' => $user_id]);
+
+    return ['ok' => true, 'message' => 'Пароль изменён. Теперь вы можете входить по номеру телефона и новому паролю.', 'user_id' => $user_id];
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Блокировка номера и журнал (решение 2026-10-13). GM_CAB_STRIKES неудач подряд по номеру – неверные коды и запросы
+ * кода сверх часового потолка – блокируют отправку СМС на него: и подтверждение, и восстановление пароля. Покупатель
+ * видит просьбу позвонить оператору; снять блокировку можно только в админке («Покупатели → Заблокированные номера»,
+ * gm_cabinet.blocked). Удачный ввод кода счётчик обнуляет. Неверные пароли в счёт не идут (у входа своя временная
+ * пауза), иначе чужой номер можно было бы заблокировать, не имея к нему доступа.
+ * Журнал ?:gm_auth_log – события для страницы админки и сводки gm_cabinet.auth_status (оповещения):
+ * sms_verify, sms_recover – СМС принято сервисом; sms_error – сервис отказал; code_ok, recover_ok – код введён верно;
+ * code_bad – неверный код; limit – запрос сверх потолка; login_bad, login_lock – неверный пароль и пауза входа;
+ * block, unblock – блокировка номера и её снятие.
+ * ------------------------------------------------------------------------------------------------------------- */
+
+const GM_CAB_STRIKES = 6;
+const GM_CAB_BLOCKED_TEXT = 'Отправка СМС на этот номер заблокирована: слишком много неудачных попыток. Позвоните оператору интернет-магазина по номеру 8 (800) 250-17-00 с этого телефона.';
+
+/** Записать событие в журнал. Сбой журнала не должен мешать работе кабинета. */
+function fn_gm_cab_log($event, $phone, $user_id = 0, $info = '')
+{
+    try {
+        // В тексте ошибки сервиса СМС могут оказаться логин и пароль – вырезаем
+        $info = (string) $info;
+        foreach (gm_cab_secrets() as $secret) {
+            if (is_string($secret) && strlen($secret) >= 4) {
+                $info = str_replace($secret, '***', $info);
+            }
+        }
+        db_query('INSERT INTO ?:gm_auth_log ?e', [
+            'ts' => TIME,
+            'phone' => (string) $phone,
+            'user_id' => (int) $user_id,
+            'event' => (string) $event,
+            'info' => mb_substr($info, 0, 120),
+        ]);
+    } catch (\Throwable $e) {
+    }
+}
+
+/** Заблокирована ли отправка СМС на номер. */
+function fn_gm_cab_phone_blocked($phone)
+{
+    return (string) $phone !== '' && (int) db_get_field('SELECT blocked_at FROM ?:gm_phone_auth WHERE phone = ?s', $phone) > 0;
+}
+
+/** Засчитать неудачу по номеру. true – после неё номер заблокирован. */
+function fn_gm_cab_strike($phone, $reason, $user_id = 0)
+{
+    if ((string) $phone === '') {
+        return false;
+    }
+    db_query('INSERT INTO ?:gm_phone_auth (phone, strikes) VALUES (?s, 1) ON DUPLICATE KEY UPDATE strikes = strikes + 1', $phone);
+    $row = db_get_row('SELECT strikes, blocked_at FROM ?:gm_phone_auth WHERE phone = ?s', $phone);
+    if ((int) $row['blocked_at'] > 0) {
+        return true;
+    }
+    if ((int) $row['strikes'] < GM_CAB_STRIKES) {
+        return false;
+    }
+    db_query('UPDATE ?:gm_phone_auth SET blocked_at = ?i, blocked_reason = ?s WHERE phone = ?s', TIME, (string) $reason, $phone);
+    fn_gm_cab_log('block', $phone, $user_id, $reason);
+
+    return true;
+}
+
+/** Обнулить счётчик неудач после удачного ввода кода (блокировку не снимает). */
+function fn_gm_cab_strike_reset($phone)
+{
+    db_query('UPDATE ?:gm_phone_auth SET strikes = 0 WHERE phone = ?s AND blocked_at = 0', $phone);
+}
+
+/** Отказ в отправке кода из-за часового потолка: это тоже неудача по номеру. */
+function fn_gm_cab_limit_refused($phone, $user_id = 0)
+{
+    fn_gm_cab_log('limit', $phone, $user_id);
+    if (fn_gm_cab_strike($phone, 'запросы кода сверх лимита', $user_id)) {
+        return ['ok' => false, 'message' => GM_CAB_BLOCKED_TEXT];
+    }
+
+    return ['ok' => false, 'message' => 'Слишком много запросов кода. Попробуйте через час.'];
+}
+
+/** Покупатели GOODMi с этим номером в профиле – для страниц админки. */
+function fn_gm_cab_users_by_phone($phone)
+{
+    $rows = db_get_array(
+        "SELECT user_id, firstname, lastname, email, phone FROM ?:users WHERE company_id = 2 AND user_type = 'C'"
+        . " AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(phone, '+', ''), '(', ''), ')', ''), '-', ''), ' ', '') LIKE ?l ORDER BY user_id DESC LIMIT 5",
+        '%' . substr((string) $phone, -10)
+    );
+    foreach ($rows as $k => $row) {
+        $rows[$k]['name'] = trim($row['firstname'] . ' ' . $row['lastname']);
+        $rows[$k]['email'] = gm_cab_is_stub_email($row['email']) ? '' : $row['email'];
+    }
+
+    return $rows;
+}
+
+/** Заблокированные номера для страницы админки: когда, за что, чьи, последние события. */
+function fn_gm_cab_blocked_list()
+{
+    $rows = db_get_array('SELECT phone, blocked_at, blocked_reason, strikes FROM ?:gm_phone_auth WHERE blocked_at > 0 ORDER BY blocked_at DESC LIMIT 300');
+    $titles = gm_cab_log_titles();
+    foreach ($rows as $k => $row) {
+        $rows[$k]['pretty'] = '+7 ' . substr($row['phone'], 1, 3) . ' ' . substr($row['phone'], 4, 3) . '-' . substr($row['phone'], 7, 2) . '-' . substr($row['phone'], 9, 2);
+        $rows[$k]['when'] = date('d.m.Y H:i', (int) $row['blocked_at']);
+        $rows[$k]['users'] = fn_gm_cab_users_by_phone($row['phone']);
+        $events = db_get_array('SELECT ts, event FROM ?:gm_auth_log WHERE phone = ?s ORDER BY id DESC LIMIT 8', $row['phone']);
+        foreach ($events as $i => $event) {
+            $events[$i] = date('d.m H:i', (int) $event['ts']) . ' – ' . (isset($titles[$event['event']]) ? $titles[$event['event']] : $event['event']);
+        }
+        $rows[$k]['events'] = $events;
+    }
+
+    return $rows;
+}
+
+/** Названия событий журнала для админки. */
+function gm_cab_log_titles()
+{
+    return [
+        'sms_verify' => 'СМС с кодом подтверждения',
+        'sms_recover' => 'СМС с кодом восстановления',
+        'sms_error' => 'сервис СМС отказал',
+        'code_ok' => 'код введён верно',
+        'recover_ok' => 'пароль восстановлен',
+        'code_bad' => 'неверный код',
+        'limit' => 'запрос кода сверх лимита',
+        'login_bad' => 'неверный пароль',
+        'login_lock' => 'пауза входа по номеру',
+        'block' => 'номер заблокирован',
+        'unblock' => 'блокировка снята',
+    ];
+}
+
+/** Снять блокировку с номера (админка): обнуляются и счётчики, чтобы покупатель мог сразу запросить код. */
+function fn_gm_cab_unblock($phone, $admin_id)
+{
+    $phone = gm_cab_phone($phone);
+    if ($phone === '' || !fn_gm_cab_phone_blocked($phone)) {
+        return ['ok' => false, 'message' => 'Этот номер не заблокирован.'];
+    }
+    db_query(
+        "UPDATE ?:gm_phone_auth SET blocked_at = 0, blocked_reason = '', strikes = 0, login_fails = 0, attempts = 0, sent_count = 0 WHERE phone = ?s",
+        $phone
+    );
+    db_query('UPDATE ?:gm_phone_verify SET sent_count = 0, attempts = 0 WHERE code_phone = ?s', $phone);
+    fn_gm_cab_log('unblock', $phone, (int) $admin_id);
+
+    return ['ok' => true, 'message' => 'Блокировка с номера ' . gm_cab_phone_mask($phone) . ' снята.'];
+}
+
+/**
+ * Сводка для оповещений (страница gm_cabinet.auth_status, читает облачная задача и пишет в Telegram): счётчики за час
+ * и за сегодня и список тревог. Номера – только со скрытыми цифрами.
+ */
+function fn_gm_cab_auth_status($hours = 1)
+{
+    // $hours – за сколько последних часов считать окно «hour» и тревоги (утренний запуск смотрит всю ночь)
+    $hours = max(1, min(24, (int) $hours));
+    $now = TIME;
+    $hour = $now - 3600 * $hours;
+    $day = strtotime('today', $now);
+    $count = function (array $events, $since) {
+        return (int) db_get_field('SELECT COUNT(*) FROM ?:gm_auth_log WHERE event IN (?a) AND ts > ?i', $events, $since);
+    };
+    $sms = ['sms_verify', 'sms_recover'];
+    $ok = ['code_ok', 'recover_ok'];
+    // Сколько СМС подряд осталось без введённого кода (не считая отправленных за последние 10 минут)
+    $last_ok = (int) db_get_field('SELECT MAX(ts) FROM ?:gm_auth_log WHERE event IN (?a)', $ok);
+    $streak = (int) db_get_field('SELECT COUNT(*) FROM ?:gm_auth_log WHERE event IN (?a) AND ts > ?i AND ts < ?i', $sms, $last_ok, $now - 600);
+    $blocked_new = db_get_array('SELECT phone, blocked_at, blocked_reason FROM ?:gm_phone_auth WHERE blocked_at > ?i ORDER BY blocked_at', $hour);
+    foreach ($blocked_new as $k => $row) {
+        $blocked_new[$k] = ['phone' => gm_cab_phone_mask($row['phone']), 'at' => date('H:i', (int) $row['blocked_at']), 'reason' => $row['blocked_reason']];
+    }
+    $pressure = db_get_array(
+        "SELECT phone, COUNT(*) AS n FROM ?:gm_auth_log WHERE event IN ('login_bad', 'code_bad', 'limit') AND ts > ?i GROUP BY phone HAVING n >= 5 ORDER BY n DESC LIMIT 10",
+        $hour
+    );
+    foreach ($pressure as $k => $row) {
+        $pressure[$k] = ['phone' => gm_cab_phone_mask($row['phone']), 'fails' => (int) $row['n']];
+    }
+    $status = [
+        'time' => date('Y-m-d H:i', $now),
+        'window_hours' => $hours,
+        'hour' => [
+            'sms_sent' => $count($sms, $hour), 'sms_errors' => $count(['sms_error'], $hour), 'codes_ok' => $count($ok, $hour),
+            'codes_bad' => $count(['code_bad'], $hour), 'limit_refusals' => $count(['limit'], $hour),
+            'login_bad' => $count(['login_bad'], $hour), 'login_locks' => $count(['login_lock'], $hour),
+        ],
+        'today' => [
+            'sms_sent' => $count($sms, $day), 'sms_errors' => $count(['sms_error'], $day), 'codes_ok' => $count($ok, $day),
+            'login_bad' => $count(['login_bad'], $day), 'blocks' => $count(['block'], $day),
+        ],
+        'sms_without_code_in_row' => $streak,
+        'blocked_total' => (int) db_get_field('SELECT COUNT(*) FROM ?:gm_phone_auth WHERE blocked_at > 0'),
+        'blocked_last_hour' => $blocked_new,
+        'numbers_under_pressure' => $pressure,
+        'alerts' => [],
+    ];
+    if ($status['hour']['sms_errors'] > 0) {
+        $error = (string) db_get_field("SELECT info FROM ?:gm_auth_log WHERE event = 'sms_error' ORDER BY id DESC LIMIT 1");
+        $status['alerts'][] = 'Сервис СМС отказал в отправке: ' . $status['hour']['sms_errors'] . ' раз' . ($error !== '' ? ' (' . $error . ')' : '');
+    }
+    if ($streak >= 5) {
+        $status['alerts'][] = 'СМС, похоже, не доходят: ' . $streak . ' подряд отправлено, ни один код не введён';
+    }
+    foreach ($blocked_new as $row) {
+        $status['alerts'][] = 'Заблокирован номер ' . $row['phone'] . ' в ' . $row['at'] . ' (' . $row['reason'] . ')';
+    }
+    foreach ($pressure as $row) {
+        $status['alerts'][] = 'Много неудачных попыток по номеру ' . $row['phone'] . ': ' . $row['fails'];
+    }
+    if ($status['hour']['login_locks'] > 0) {
+        $status['alerts'][] = 'Пауза входа по номеру сработала ' . $status['hour']['login_locks'] . ' раз';
+    }
+
+    return $status;
 }

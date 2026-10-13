@@ -4,6 +4,8 @@
  * heaven.php?dispatch=gm_cabinet.phones[&q=номер или e-mail] – поиск покупателя GOODMi, подтверждение номера без СМС
  * (продавец или администратор проверил покупателя лично) и снятие подтверждения. Логика – в app/gm_cabinet/store.php,
  * шаблон – design/backend/templates/views/gm_cabinet/phones.tpl.
+ * heaven.php?dispatch=gm_cabinet.blocked – «Заблокированные номера»: номера, на которые сайт перестал слать СМС после
+ * неудачных попыток (fn_gm_cab_strike), с кнопкой снятия блокировки. Шаблон – views/gm_cabinet/blocked.tpl.
  */
 
 use Tygh\Registry;
@@ -13,6 +15,15 @@ if (!defined('BOOTSTRAP')) {
 }
 
 require_once Registry::get('config.dir.root') . '/app/gm_cabinet/store.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $mode === 'blocked') {
+    if (!empty($_REQUEST['phone'])) {
+        $result = fn_gm_cab_unblock($_REQUEST['phone'], (int) $auth['user_id']);
+        fn_set_notification($result['ok'] ? 'N' : 'E', $result['ok'] ? 'Готово' : 'Ошибка', $result['message']);
+    }
+
+    return [CONTROLLER_STATUS_OK, 'gm_cabinet.blocked'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
@@ -34,4 +45,9 @@ if ($mode === 'phones') {
     $query = isset($_REQUEST['q']) ? trim((string) $_REQUEST['q']) : '';
     Tygh::$app['view']->assign('gm_q', $query);
     Tygh::$app['view']->assign('gm_users', $query !== '' ? fn_gm_cab_verify_search($query) : []);
+}
+
+if ($mode === 'blocked') {
+    Tygh::$app['view']->assign('gm_blocked', fn_gm_cab_blocked_list());
+    Tygh::$app['view']->assign('gm_strikes', GM_CAB_STRIKES);
 }

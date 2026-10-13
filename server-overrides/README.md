@@ -38,6 +38,8 @@
 | `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/index/scripts.post.tpl` | подключает скрипт (только GOODMi) |
 | `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/products/gm_card_delivery.post.tpl` | выводит сроки и условия покупки сразу в странице карточки на шаблоне `goodmi_card` (функция `fn_gm_delivery_date_card_html` в `func.php`) |
 | `var/langs/ru/addons/gm_delivery_date.po` | название модуля в админке |
+| `js/addons/gm_delivery_date/auth.js` | вход по номеру телефона: подпись поля входа, необязательный e-mail в регистрации и профиле, ссылка «Забыли пароль?» на восстановление по СМС (с 2026-10-13) |
+| `app/addons/gm_delivery_date/init.php`, `controllers/frontend/profiles.pre.php` | обработчики входа по номеру и регистрации (`auth_routines`, `update_user_pre`, `update_profile`), проверка формы регистрации, защита подтверждённого номера в профиле |
 
 ### Свой шаблон карточки товара `goodmi_card` (с 2026-10-09 – шаблон по умолчанию всей витрины GOODMi)
 
@@ -130,3 +132,10 @@
 - `design/themes/abt__unitheme2/templates/views/profiles/components/profiles_info.tpl` – новый файл, перекрывает штатный из темы responsive: на GOODMi в подробностях заказа две плитки «как получить» и «получатель»; в остальных случаях – штатное содержимое (ветка else, сверять с оригиналом после обновления CS-Cart).
 - `hooks/wrapper/mainbox_general_title_wrapper.pre.tpl` – гостю на странице заказа карточка «Заказ оформлен без входа».
 - «Свой CSS» – секция 54. Бэкап и откат: `/root/gm-backups/2026-10-12-order-details/`.
+
+### Личный кабинет: вход по номеру телефона (с 2026-10-13)
+
+Вход по подтверждённому номеру или e-mail, регистрация с подтверждением номера кодом из СМС и необязательным e-mail,
+восстановление пароля по СМС (`gm_cabinet.recover`, шаблон `templates/views/gm_cabinet/recover.tpl`). Логика – в
+`app/gm_cabinet/store.php`, таблицы `cscart_gm_phone_verify` и `cscart_gm_phone_auth`. Описание, SQL и откат –
+`_DEV/gm-phone-verify/README.md`.
