@@ -36,6 +36,8 @@
             <input type="hidden" name="action" value="send">
             <input class="gm-vf__phone" type="tel" name="phone" inputmode="tel" autocomplete="tel" placeholder="+7 978 000-00-00" maxlength="20" required>
             <button class="gm-vf__btn" type="submit">Получить код</button>
+            {* Проверка «я не робот»: показывается, если в настройках капчи включён сценарий «восстановление пароля» *}
+            <div class="gm-vf__captcha" style="flex:1 1 100%">{include file="common/image_verification.tpl" option="recover" align="left"}</div>
         </form>
     {/if}
     <p class="gm-vf__hint">Не приходит СМС или номер не подтверждён? Позвоните оператору интернет-магазина по номеру <a href="tel:+78002501700">8 (800) 250-17-00</a> с телефона, который указан в вашей учётной записи. Ещё можно <a href="{$rc.email_url}">восстановить пароль по e-mail</a> или <a href="{$rc.login_url}">вернуться ко входу</a>.</p>

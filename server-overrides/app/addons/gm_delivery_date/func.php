@@ -877,26 +877,36 @@ function fn_gm_delivery_date_update_profile($action, &$user_data, $current_user_
         || (string) \Tygh\Registry::get('runtime.gm_reg_phone') === '') {
         return;
     }
+    $user_id = (int) $user_data['user_id'];
     try {
         if (!fn_gm_delivery_date_cabinet()) {
             return;
         }
-        $user_id = (int) $user_data['user_id'];
         $phone = fn_gm_cab_user_phone($user_id);
         if ($phone === '' || !gm_cab_verify_enabled($user_id)) {
             return;
         }
-        $sent = fn_gm_cab_verify_send($user_id, $phone);
-        // До подтверждения номера оформить заказ нельзя (checkout.pre.php)
+        // Сначала отметка «обязан подтвердить номер» (до подтверждения сайт закрыт), потом отправка кода:
+        // сбой отправки не должен оставить запись с полным доступом
         fn_gm_cab_must_verify_set($user_id);
+        $_REQUEST['redirect_url'] = 'gm_cabinet.orders';
+        try {
+            $sent = fn_gm_cab_verify_send($user_id, $phone);
+        } catch (\Throwable $e) {
+            $sent = ['ok' => false];
+        }
         if ($sent['ok']) {
             fn_set_notification('N', 'Подтвердите номер', 'Мы отправили СМС с кодом на ' . gm_cab_phone_mask($phone) . '. Введите код, чтобы подтвердить номер: после этого можно оформлять заказы и входить по номеру.');
         } else {
             fn_set_notification('W', 'Номер пока не подтверждён', 'Отправить СМС с кодом не получилось. ' . GM_CAB_OPERATOR_TEXT);
         }
-        $_REQUEST['redirect_url'] = 'gm_cabinet.orders';
     } catch (\Throwable $e) {
-        // Подтверждение номера необязательно для самой регистрации: при сбое она завершается штатно
+        // При сбое регистрация завершается, но запись остаётся закрытой до подтверждения номера
+        try {
+            db_query('INSERT INTO ?:gm_phone_verify (user_id, must_verify) VALUES (?i, 1) ON DUPLICATE KEY UPDATE must_verify = 1', $user_id);
+            $_REQUEST['redirect_url'] = 'gm_cabinet.orders';
+        } catch (\Throwable $e2) {
+        }
     }
 }
 

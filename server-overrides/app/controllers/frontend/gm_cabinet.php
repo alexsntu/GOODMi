@@ -54,6 +54,10 @@ if ($mode === 'recover') {
         $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
         $result = null;
         if ($action === 'send') {
+            // Проверка «я не робот» (сценарий recover в настройках капчи); при отказе она сама показывает сообщение
+            if (fn_image_verification('recover', $_REQUEST) === false) {
+                return [CONTROLLER_STATUS_REDIRECT, 'gm_cabinet.recover'];
+            }
             $new_phone = gm_cab_phone(isset($_REQUEST['phone']) ? $_REQUEST['phone'] : '');
             $result = fn_gm_cab_recover_send($new_phone);
             if ($result['ok']) {
@@ -72,7 +76,12 @@ if ($mode === 'recover') {
             if ($result['ok']) {
                 unset(Tygh::$app['session']['gm_recover_phone']);
                 Tygh::$app['session']->regenerateID();
-                fn_login_user($result['user_id'], true);
+                // Остальные сессии покупателя CS-Cart завершит сам: у них устарела отметка смены пароля
+                if (fn_login_user($result['user_id'], true) !== LOGIN_STATUS_OK) {
+                    fn_set_notification('W', 'Пароль изменён', 'Войти автоматически не получилось. Войдите по номеру телефона и новому паролю.');
+
+                    return [CONTROLLER_STATUS_REDIRECT, 'auth.login_form'];
+                }
                 fn_set_notification('N', 'Готово', $result['message']);
 
                 return [CONTROLLER_STATUS_REDIRECT, 'gm_cabinet.orders'];

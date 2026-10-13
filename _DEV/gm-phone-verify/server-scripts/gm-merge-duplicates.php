@@ -24,6 +24,8 @@ $by_reg = isset($opt["main"]) && $opt["main"] === "registered";
 $apply = isset($opt["apply"]); $only = !empty($opt["phones"]) ? array_filter(explode(",", $opt["phones"])) : [];
 if ($apply && !$only && !isset($opt["all"])) { echo "Для --apply укажите --phones=... или --all\n"; exit(1); }
 $dir = "/root/gm-backups/2026-10-13-merge";
+if ($apply && !is_dir($dir) && !mkdir($dir, 0700, true)) { echo "Не удалось создать папку для файлов отката: $dir\n"; exit(1); }
+if ($apply && !is_writable($dir)) { echo "Папка для файлов отката недоступна для записи: $dir\n"; exit(1); }
 
 function norm($s) { $d = preg_replace("/\D+/", "", (string) $s); if (strlen($d) == 11 && ($d[0] == "7" || $d[0] == "8")) return "7" . substr($d, 1); if (strlen($d) == 10) return "7" . $d; return ""; }
 function words($s) { preg_match_all("/[\p{L}\p{N}]+/u", str_replace("ё", "е", mb_strtolower((string) $s)), $w); return array_unique($w[0]); }
@@ -36,7 +38,7 @@ foreach (rows($m, "SELECT u.user_id,u.firstname,u.lastname,u.email,u.phone,u.sta
 }
 $ms = []; foreach (rows($m, "SELECT DISTINCT phone FROM {$p}gm_ms_orders WHERE phone<>\"\"") as $x) $ms[$x["phone"]] = 1;
 ksort($by);
-$stat = ["номеров" => 0, "объединено" => 0, "пропущено: нет в МойСклад" => 0, "пропущено: имена разные" => 0, "вторых записей" => 0, "заказов" => 0, "отзывов" => 0, "переписок" => 0, "соцсетей" => 0, "избранное/корзина" => 0];
+$stat = ["номеров" => 0, "объединено" => 0, "пропущено: нет в МойСклад" => 0, "пропущено: имена разные" => 0, "вторых записей" => 0, "заказов" => 0, "отзывов" => 0, "переписок" => 0, "соцсетей" => 0, "избранное/корзина" => 0, "не перенесено: соцсети" => 0, "не перенесено: избранное/корзина" => 0, "не перенесено: заказы" => 0];
 foreach ($by as $ph => $list) {
     $ph = (string) $ph; // ключи-номера PHP хранит числами
     if (count($list) < 2 || ($only && !in_array($ph, $only, true))) continue;
@@ -69,7 +71,9 @@ foreach ($by as $ph => $list) {
         echo "| заказов ", count($before["orders"]), ", отзывов ", count($before["product_reviews"]), ", соцсетей ", count($before["hybrid_auth_users"]), ", избр./корз. ", count($before["user_session_products"]), "\n";
     }
     if (!$apply) continue;
-    file_put_contents("$dir/$ph.json", json_encode($before, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    // Без сохранённого прежнего состояния ничего не меняем (таблицы заказов на MyISAM – транзакцией не откатить)
+    $json = json_encode($before, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    if ($json === false || file_put_contents("$dir/$ph.json", $json) !== strlen($json)) { echo "   ОШИБКА: не записан файл отката $dir/$ph.json, номер пропущен\n"; exit(1); }
     try {
         // updated_at не трогаем, чтобы обмен с МойСклад не счёл старые заказы изменёнными
         run($m, "UPDATE {$p}orders SET user_id=$M, updated_at=updated_at WHERE user_id IN ($ids) AND company_id=2");
@@ -82,7 +86,12 @@ foreach ($by as $ph => $list) {
         run($m, "UPDATE {$p}gm_phone_verify SET phone=\"\", verified_at=0, verified_by=0 WHERE user_id IN ($ids)");
         run($m, "INSERT INTO {$p}gm_phone_verify (user_id,phone,verified_at,note) VALUES ($M,\"$ph\"," . time() . ",\"объединение дублей\") ON DUPLICATE KEY UPDATE note=IF(verified_at>0 AND phone=\"$ph\",note,\"объединение дублей\"), verified_at=IF(verified_at>0 AND phone=\"$ph\",verified_at," . time() . "), phone=\"$ph\"");
         run($m, "UPDATE {$p}users SET status=\"D\" WHERE user_id IN ($ids)");
-        echo "   выполнено, копия: $dir/$ph.json\n";
+        // Что не перенеслось из-за совпадений (у основной записи уже есть такая соцсеть или такой товар): остаётся у отключённой записи
+        $left_h = (int) rows($m, "SELECT COUNT(*) c FROM {$p}hybrid_auth_users WHERE user_id IN ($ids)")[0]["c"];
+        $left_w = (int) rows($m, "SELECT COUNT(*) c FROM {$p}user_session_products WHERE user_type=\"R\" AND user_id IN ($ids)")[0]["c"];
+        $left_o = (int) rows($m, "SELECT COUNT(*) c FROM {$p}orders WHERE user_id IN ($ids)")[0]["c"];
+        $stat["не перенесено: соцсети"] += $left_h; $stat["не перенесено: избранное/корзина"] += $left_w; $stat["не перенесено: заказы"] += $left_o;
+        echo "   выполнено, копия: $dir/$ph.json", ($left_h || $left_w || $left_o) ? " | не перенесено: соцсетей $left_h, избр./корз. $left_w, заказов $left_o" : "", "\n";
     } catch (Exception $e) { echo "   ОШИБКА: ", $e->getMessage(), "\n"; exit(1); }
 }
 echo $apply ? "ВЫПОЛНЕНО\n" : "ПРОБНЫЙ ПРОГОН, изменений нет\n";
