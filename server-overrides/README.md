@@ -162,6 +162,16 @@
 `app/gm_cabinet/store.php`, таблицы `cscart_gm_phone_verify` и `cscart_gm_phone_auth`. Описание, SQL и откат –
 `_DEV/gm-phone-verify/README.md`.
 
+### Оповещения антивируса maldet в Telegram (с 2026-10-14)
+
+Сервер не достаёт до Telegram, поэтому итог проверки идёт через ту же сводку, что и оповещения о СМС:
+`/usr/local/sbin/gm-maldet-status` (root, раз в час по `/etc/cron.d/gm-maldet-status`) кладёт выжимку последней
+проверки в `/var/lib/gm-status/maldet.json`; `fn_gm_cab_auth_status()` в `app/gm_cabinet/store.php` добавляет блок
+`malware` и тревоги (находки – один раз после проверки, «проверка не шла 30 часов», «нет свежих данных»), облачная
+задача пересылает их в Telegram. Оба файла лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в
+`server-overrides/usr/local/sbin/` и `server-overrides/etc/cron.d/`. Бэкап и проверка на подставных данных –
+`/root/gm-backups/2026-10-14-maldet-alerts/` (`store.php.orig`, `test/run.php`).
+
 ## Настройки nginx (не файлы CS-Cart)
 
 Лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в `server-overrides/etc/nginx/`.

@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Итог последней проверки антивируса maldet для сводки оповещений GOODMi
+ * (gm_cabinet.auth_status → облачная задача → Telegram).
+ * Каталог сессий maldet закрыт для пользователя сайта, поэтому root раз в час (/etc/cron.d/gm-maldet-status)
+ * кладёт короткую выжимку в /var/lib/gm-status/maldet.json, доступную сайту только на чтение.
+ */
+$sess = '/usr/local/maldetect/sess';
+$dir = '/var/lib/gm-status';
+
+$id = trim((string) @file_get_contents($sess . '/session.last'));
+$status = ['written_at' => time(), 'scan_id' => $id, 'completed_at' => 0, 'files' => 0, 'hits' => 0, 'cleaned' => 0, 'hit_files' => []];
+
+if ($id !== '' && preg_match('/^[\d.-]+$/', $id) && is_readable($sess . '/session.' . $id)) {
+    $report = (string) file_get_contents($sess . '/session.' . $id);
+    if (preg_match('/^COMPLETED:\s+(.+)$/m', $report, $m)) {
+        $status['completed_at'] = (int) strtotime(trim($m[1]));
+    }
+    foreach (['files' => 'TOTAL FILES', 'hits' => 'TOTAL HITS', 'cleaned' => 'TOTAL CLEANED'] as $key => $label) {
+        if (preg_match('/^' . $label . ':\s+(\d+)/m', $report, $m)) {
+            $status[$key] = (int) $m[1];
+        }
+    }
+    // Строки вида «{HEX}php.cmdshell.xxx : /путь/к/файлу»; в оповещение идут первые несколько
+    $hits = $sess . '/session.hits.' . $id;
+    if (is_readable($hits)) {
+        $status['hit_files'] = array_slice(file($hits, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES), 0, 20);
+    }
+}
+
+if (!is_dir($dir)) {
+    mkdir($dir, 0755, true);
+}
+$tmp = $dir . '/maldet.json.tmp';
+file_put_contents($tmp, json_encode($status, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+chmod($tmp, 0644);
+rename($tmp, $dir . '/maldet.json');

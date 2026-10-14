@@ -1418,6 +1418,29 @@ function fn_gm_cab_auth_status($hours = 1)
         $status['alerts'][] = 'Пауза входа по номеру сработала ' . $status['hour']['login_locks'] . ' раз';
     }
 
+    // Антивирус maldet: выжимку последней ежедневной проверки раз в час кладёт root (/usr/local/sbin/gm-maldet-status).
+    // Находки сообщаем один раз – в окне, куда попало окончание проверки; «проверка не шла 30 часов» – тоже один раз.
+    $scan = json_decode((string) @file_get_contents('/var/lib/gm-status/maldet.json'), true);
+    if (!is_array($scan) || empty($scan['written_at']) || (int) $scan['written_at'] < $now - 3 * 3600) {
+        $status['malware'] = null;
+        $status['alerts'][] = 'Нет свежих данных о проверке сайтов на вирусы – не работает выжимка /usr/local/sbin/gm-maldet-status';
+    } else {
+        $done = (int) $scan['completed_at'];
+        $status['malware'] = [
+            'last_scan' => $done ? date('Y-m-d H:i', $done) : '', 'files' => (int) $scan['files'],
+            'hits' => (int) $scan['hits'], 'cleaned' => (int) $scan['cleaned'],
+        ];
+        if ($scan['hits'] > 0 && $done > $hour) {
+            $files = array_slice((array) $scan['hit_files'], 0, 5);
+            $status['alerts'][] = 'Антивирус нашёл подозрительные файлы на сервере: ' . (int) $scan['hits'] . ' (проверка ' . date('d.m H:i', $done) . ')'
+                . ($files ? ': ' . implode('; ', $files) : '') . '. Отчёт: maldet --report ' . $scan['scan_id'];
+        }
+        $stale = $now - 30 * 3600;
+        if ($done < $stale && $done >= $stale - 3600 * $hours) {
+            $status['alerts'][] = 'Проверка сайтов на вирусы не запускалась больше 30 часов (последняя – ' . ($done ? date('d.m H:i', $done) : 'неизвестно') . ')';
+        }
+    }
+
     return $status;
 }
 

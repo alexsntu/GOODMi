@@ -1,0 +1,2 @@
+# Выжимка последней проверки maldet для оповещений GOODMi в Telegram (см. /usr/local/sbin/gm-maldet-status)
+50 * * * * root /usr/local/sbin/gm-maldet-status >/dev/null 2>&1
