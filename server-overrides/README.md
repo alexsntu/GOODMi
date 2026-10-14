@@ -7,7 +7,25 @@
 
 Файлы ядра CS-Cart, модулей и темы мы **не меняли** – только добавляли свои файлы в папку
 темы `abt__unitheme2` и дописывали «Свой CSS» витрины GOODMi. Все шаблоны ограничены условием
-`$runtime.company_id == 2`, поэтому на Maxmobiles и Xione не действуют.
+`$runtime.company_id == 2`, поэтому на Maxmobiles и Xione не действуют. Исключения (2026-10-14): штатный
+`common/scripts.tpl` темы правлен (пиксель Diginetica, GOODMi и Maxmobiles), а капча по требованию и `ia_defer.js`
+действуют на GOODMi и Maxmobiles – см. ниже.
+
+### Временно: пиксель статистики Diginetica отключён (2026-10-14)
+
+`design/themes/abt__unitheme2/templates/common/scripts.tpl` – **штатный файл темы**, уже ранее правленный вручную
+(там подключение Diginetica и прочие вставки по `$config.current_host`). Мы добавили в блок
+`{if $config.current_host =='goodmi.ru'}` перед подключением `cdn.diginetica.net/10125/client.js` один `<script>`
+с комментарием «GOODMi 2026-10-14»: он не даёт скрипту Diginetica отправить пиксель `tracking.diginetica.net/csc-event`
+(сервер статистики не отвечает из России, карточка товара «крутилась» до тайм-аута). Поиск Diginetica работает.
+
+То же добавлено и для Maxmobiles – в блок `{if $config.current_host =='maxmobiles.ru'}` перед `cdn.diginetica.net/10127/client.js`
+(бэкап перед этим шагом – `scripts.tpl.before-maxmobiles`).
+
+**Вернуть как было:** удалить оба комментария с `<script>` (по 4 строки в каждом блоке) или положить бэкап
+`/root/gm-backups/2026-10-14-diginetica-pixel/scripts.tpl.orig` на место, затем очистить кэш CS-Cart и CDN.
+Копия текущей версии – `server-overrides/design/themes/abt__unitheme2/templates/common/scripts.tpl`.
+После обновления темы файл перезапишется – вставку повторять только если tracking.diginetica.net всё ещё недоступен.
 
 ## Файлы
 
@@ -19,6 +37,7 @@
 | `templates/addons/reward_points/views/products/components/product_representation.tpl` | Строка «Бонусы за покупку»: «начислим N бонусов» – ссылка на бонусную программу (только GOODMi, остальным – штатная разметка) | Переопределяет шаблон модуля `reward_points` (исходник в теме `responsive`) |
 | `templates/addons/abt__unitheme2/hooks/checkout/product_options.post.tpl` | Кнопки «В избранное» и «Сравнить» у товара в корзине | Хук `checkout:product_options` |
 | `templates/addons/abt__unitheme2/hooks/ab__extended_comparison_wishlist/top_lists.pre.tpl` | Сравнение всегда открывается на одной категории | Хук `ab__extended_comparison_wishlist:top_lists` |
+| `templates/addons/rf_yandex_smartcaptcha/hooks/index/scripts.post.tpl` | Капча Яндекса на GOODMi и Maxmobiles грузится только когда на странице появляется поле капчи (регистрация, восстановление пароля), а не синхронно на каждой странице (2026-10-14); на Xione – как было. **Действует и на Maxmobiles** | Копия шаблона модуля из темы `responsive`; откат – удалить файл |
 
 ### Модуль «GOODMi: сроки получения товара» (`gm_delivery_date`)
 
@@ -32,10 +51,11 @@
 | `app/addons/gm_delivery_date/lib/engine.php` | правила расчёта дат (без CS-Cart, проверяются `_DEV/gm_delivery_date/tests.php`) |
 | `app/addons/gm_delivery_date/controllers/frontend/gm_delivery_date.php` | ответ на запрос страницы `gm_delivery_date.estimate` |
 | `js/addons/gm_delivery_date/func.js` | находит товары на странице и вставляет блоки |
+| `js/addons/gm_delivery_date/ia_defer.js` | с 2026-10-14: отложенный запрос сопутствующих товаров модуля `ab__intelligent_accessories` в карточке (когда блок подходит к экрану или через 4 с после загрузки). Единственный наш скрипт, который подключается и на Maxmobiles (витрины 1 и 2); откат – убрать его подключение из `scripts.post.tpl` |
 | `js/addons/gm_delivery_date/jivo.js` | чат Jivo на телефоне: пункт «Помощь» в нижнем закреплённом меню темы на месте «Главной» (с 2026-10-09; стили – секция 41), запасной вариант – прежняя круглая кнопка (секция 31); к срокам не относится, лежит здесь, чтобы подключаться тем же шаблоном. В настройках темы пункт «Главная» из нижнего меню убран пользователем |
 | `js/addons/gm_delivery_date/share.js` | открывает меню кнопки «Поделиться» в карточке на шаблоне `goodmi_card` и копирует ссылку; на телефоне – штатное окно «Поделиться» |
 | `js/addons/gm_delivery_date/about.js` | прокрутка по кнопке в заголовке «О товаре» (к описанию на ПК, к характеристикам на телефоне); сам заголовок выдаёт шаблон `goodmi_card`, стили – секции 32 и 41 |
-| `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/index/scripts.post.tpl` | подключает скрипт (только GOODMi) |
+| `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/index/scripts.post.tpl` | подключает скрипты: все – только GOODMi, `ia_defer.js` – GOODMi и Maxmobiles |
 | `design/themes/abt__unitheme2/templates/addons/gm_delivery_date/hooks/products/gm_card_delivery.post.tpl` | выводит сроки и условия покупки сразу в странице карточки на шаблоне `goodmi_card` (функция `fn_gm_delivery_date_card_html` в `func.php`) |
 | `var/langs/ru/addons/gm_delivery_date.po` | название модуля в админке |
 | `js/addons/gm_delivery_date/auth.js` | вход по номеру телефона: подпись поля входа, необязательный e-mail в регистрации и профиле, ссылка «Забыли пароль?» на восстановление по СМС (с 2026-10-13) |

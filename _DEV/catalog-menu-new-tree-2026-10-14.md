@@ -1,0 +1,227 @@
+# Новое каталог-меню GOODMi – дерево категорий (2026-10-14)
+
+Источник – активные категории GOODMi (status A). В скобках – число активных товаров в разделе вместе с подразделами. ⚠ – 1–2 товара.
+Пункт меню первого уровня = категория с автоподменю (`C:<id>:Y`): все подуровни берутся из дерева сами, скрытые категории в меню не попадают.
+
+Итого: 1-й уровень 17, 2-й 90, 3-й 113 (в меню №26 сейчас 20 / 135 / 264).
+
+- Смартфоны (221) – id 412, /smartfonyi/
+  - Смартфоны Xiaomi (23) – id 1411, /smartfony-xiaomi-ru/
+    - Xiaomi 17 Ultra (6) – id 2528, /xiaomi-17-ultra/
+    - Xiaomi 17T Pro (6) – id 2537, /xiaomi-17t-pro/
+    - Xiaomi 17T (7) – id 2536, /xiaomi-17t/
+    - Xiaomi 17 (4) – id 2529, /xiaomi-17/
+  - Смартфоны POCO (58) – id 1410, /smartfony-poco/
+    - Poco F9 Ultra (4) – id 2563, /poco-f9-ultra/
+    - Poco F9 Pro (3) – id 2562, /poco-f9-pro/
+    - Poco F8 Ultra (4) – id 2525, /poco-f8-ultra/
+    - Poco F8 Pro (3) – id 2519, /poco-f8-pro/
+    - Poco F7 Pro (1) ⚠ – id 2475, /poco-f7-pro-5g/
+    - Poco X8 Pro Max 5G (8) – id 2534, /poco-x8-pro-max-5g/
+    - Poco X8 Pro 5G (12) – id 2533, /poco-x8-pro-5g/
+    - Poco M8 Pro 5G (6) – id 2526, /poco-m8-pro-5g/
+    - Poco M8 5G (9) – id 2527, /poco-m8-5g/
+    - Poco M7 (1) ⚠ – id 2494, /poco-m7/
+    - Poco C81 Pro (7) – id 2546, /poco-c81-pro/
+  - Смартфоны Redmi Note (53) – id 1409, /smartfony-redmi-note/
+    - Redmi Note 17 Pro Max (8) – id 2550, /redmi-note-17-pro-max/
+    - Redmi Note 17 Pro 5G (8) – id 2553, /redmi-note-17-pro-5g/
+    - Redmi Note 17 4G (5) – id 2551, /redmi-note-17/
+    - Redmi Note 15 Pro Plus 5G (6) – id 2520, /redmi-note-15-pro-plus-5g/
+    - Redmi Note 15 Pro 5G (8) – id 2521, /redmi-note-15-pro-5g/
+    - Redmi Note 15 Pro 4G (8) – id 2522, /redmi-note-15-pro-4g/
+    - Redmi Note 15 4G (10) – id 2524, /redmi-note-15-4g/
+  - Смартфоны Redmi (23) – id 1408, /smartfony-redmi/
+    - Redmi 17 4G (11) – id 2547, /redmi-17-4g/
+    - Redmi A7 Pro (4) – id 2540, /redmi-a7-pro/
+    - Redmi A5 (8) – id 2477, /redmi-a5/
+  - Смартфоны Samsung (57) – id 2554, /smartfony-samsung-ru/
+- Планшеты (40) – id 448, /planshetyi/
+- Ноутбуки и компьютерная техника (186) – id 449, /ultrabuki/
+  - Ноутбуки (40) – id 2172, /noutbuki/
+  - Мониторы (29) – id 457, /monitory-xiaomi/
+  - Роутеры (21) – id 587, /wi-fi-routeryi/
+  - Периферия и аксессуары (86) – id 498, /kompyuternaya-periferiya/
+    - Клавиатуры (10) – id 499, /klaviatury-xiaomi/
+    - Клавиатура + мышь (7) – id 720, /komplekty-klaviatura-i-mysh/
+    - Мыши (25) – id 502, /kompyuternye-myshi-xiaomi/
+    - Коврики для мыши (17) – id 501, /kovriki-dlya-myshi-xiaomi/
+    - Адаптеры (16) – id 500, /usb-huby-i-dok-stancii/
+    - Чехлы для ноутбуков (11) – id 676, /chehly-dlya-noutbukov/
+  - Графические планшеты (10) – id 665, /planshety-dlya-risovaniya/
+- Телевизоры и видеотехника (140) – id 454, /tv-i-igryi/
+  - Телевизоры (21) – id 455, /televizory-xiaomi/
+  - Проекторы (13) – id 459, /proektoryi/
+  - ТВ-приставки (2) ⚠ – id 456, /tv-pristavki-xiaomi/
+  - Саундбары (8) – id 543, /soundbary-xiaomi/
+  - Кабели и аксессуары для ТВ (45) – id 538, /aksessuaryi-foto-i-video/
+  - Кронштейны (21) – id 458, /krepleniya-dlya-televizorov/
+  - Пульты (1) ⚠ – id 721, /pulty-dlya-tv-xiaomi/
+- Смарт-часы и браслеты (74) – id 480, /gadjety/
+  - Смарт-часы (63) – id 530, /smart-chasy/
+  - Фитнес-браслеты (11) – id 531, /fitnes-braslety-xiaomi/
+- Наушники и колонки (241) – id 482, /audio/
+  - Беспроводные наушники (99) – id 539, /besprovodnye-naushniki/
+  - Колонки и умные колонки (65) – id 542, /akustika-i-kolonki/
+  - Проводные наушники (16) – id 541, /provodnye-naushniki/
+  - Аксессуары для наушников (54) – id 545, /aksessuary-dlya-naushnikov/
+- Зарядки и электропитание (305) – id 483, /zaryadnyie-ustroystva/
+  - Портативные электростанции (18) – id 2548, /portativnye-elektrostancii-ru/
+  - Повербанки (93) – id 548, /power-banks/
+  - Сетевые зарядки (52) – id 546, /adaptery-pitaniya-zaryadnyie-ustroystva/
+  - Кабели (76) – id 550, /kabelya/
+  - Удлинители (16) – id 586, /udliniteli/
+  - Батарейки (15) – id 547, /batareyki/
+  - Беспроводные зарядки (31) – id 549, /besprovodnye-zaryadki/
+  - Солнечные панели (5) – id 2549, /solnechnye-paneli/
+- Пылесосы (313) – id 553, /pylesosy-i-uborka/
+  - Роботы-пылесосы (39) – id 554, /roboty-pylesosy/
+  - Вертикальные пылесосы (37) – id 555, /vertikalnye-pylesosy/
+  - Комплектующие для пылесосов (228) – id 557, /komplektuyushhie-dlya-pylesosov/
+    - Щетки и насадки (108) – id 563, /shhyotki/
+    - Тряпки-фибры (75) – id 561, /smennye-fibry/
+    - Фильтры для пылесосов (65) – id 562, /filtry/
+    - Мешки для пылесосов  (36) – id 559, /meshki/
+    - Станции самоочистки (2) ⚠ – id 558, /stanczii-samoochistki/
+  - Ручные и автомобильные пылесосы (4) – id 556, /avtomobilnye-pylesosy/
+  - Роботы-мойщики окон (5) – id 564, /roboty-mojshhiki-okon/
+- Техника для дома (692) – id 484, /tovary-dlya-doma-ru/
+  - Климатическая техника (99) – id 2161, /klimaticheskoe-oborudovanie/
+    - Очистители воздуха (10) – id 573, /ochistitel-vozduha/
+    - Увлажнители воздуха (19) – id 583, /uvlazhniteli-vozduha/
+    - Вентиляторы (29) – id 585, /ventilyatoryi/
+    - Обогреватели (21) – id 572, /obogrevateli/
+    - Ароматизаторы воздуха (9) – id 565, /aromatizator-vozduha/
+    - Осушители (2) ⚠ – id 568, /osushiteli/
+    - Кондиционеры (1) ⚠ – id 2269, /kondicionery/
+    - Аксессуары для очистителей воздуха (8) – id 716, /aksessuary-dlya-ochistiteley-vozduha/
+  - Роботизированные газонокосилки (1) ⚠ – id 2480, /robotizirovannye-gazonokosilki/
+  - Освещение (88) – id 615, /osweshenie/
+    - Настольные лампы (15) – id 618, /nastolnie-lampi/
+    - Ночники и светильники (31) – id 619, /svetilniki-i-nochniki/
+    - Фонарики (33) – id 621, /fonari/
+    - Умные лампочки (9) – id 617, /smart-lampi/
+    - Светодиодные ленты (2) ⚠ – id 616, /svetodiodnye-lenty/
+    - Потолочные лампы (1) ⚠ – id 620, /potolochnie-lampi/
+  - Инструменты (82) – id 576, /instrumenty/
+    - Измерительные приборы (13) – id 578, /izmeritelnye-pribory/
+    - Мультитулы (28) – id 579, /multituly/
+    - Наборы инструментов (8) – id 580, /nabory-instrumentov/
+    - Отвертки (20) – id 581, /otvertki/
+    - Электроинструмент (13) – id 2208, /elektroinstrumenty/
+  - Уход за одеждой и глажка (13) – id 2162, /uhod-za-odezhdoy-i-glazhka/
+    - Отпариватели (9) – id 569, /otparivateli/
+    - Машинки для удаления катышков (3) – id 567, /mashinka-dlya-udaleniya-katyshkov/
+    - Утюги (1) ⚠ – id 575, /utyugi/
+  - Для дома и быта (64) – id 552, /byitovyie-priboryi/
+    - Швабры (3) – id 584, /shvabryi/
+    - Защита от насекомых (13) – id 566, /zashhita-ot-nasekomyh/
+    - Сушилки для обуви (7) – id 571, /sushilki-dlya-obuvi/
+  - Аквариумы (20) – id 628, /akvariumy/
+  - Кресла и стулья (7) – id 551, /kreslo/
+  - Ванные принадлежности (22) – id 610, /vannue-prinadlejnosti/
+    - Дозаторы для мыла (7) – id 611, /dozatory-dlya-zhidkogo-myla/
+    - Аксессуары для ванной комнаты (15) – id 613, /aksessuary-dlya-vannoy-komnaty/
+  - Товары для животных (38) – id 629, /dlya-pitomczev/
+  - Канцелярия (16) – id 630, /kancztovary/
+- Техника для кухни (254) – id 588, /kyhonue-prinadlejnosti/
+  - Приготовление блюд (53) – id 2164, /prigotovlenie-blyud/
+    - Грили (12) – id 594, /gril/
+    - Блендеры, миксеры, комбайны (17) – id 592, /blenderi/
+    - Тостеры, сэндвичницы (3) – id 607, /tostery/
+    - Кастрюли, плиты и духовки (16) – id 605, /pliti-i-duhovki/
+    - Мясорубки (5) – id 598, /myasorubki/
+  - Приготовление напитков (126) – id 2163, /tehnika-dlya-prigotovleniya-napitkov/
+    - Электрические чайники (28) – id 589, /chajniki/
+    - Термосы и термокружки (57) – id 590, /termosy/
+    - Бутылки для воды (19) – id 591, /butylki/
+    - Все для кофе (20) – id 604, /kofemashini/
+  - Кухонные принадлежности (52) – id 2165, /narezka-smeshivanie-upakovka/
+    - Ножи и аксессуары (19) – id 593, /noji/
+    - Кухонные весы (3) – id 596, /kuhonnye-vesy/
+    - Мусорные корзины (2) ⚠ – id 597, /musornye-korziny/
+    - Мельницы для специй (15) – id 603, /elektricheskie-melniczy/
+    - Посуда (5) – id 606, /posuda/
+    - Столовые приборы (4) – id 601, /stolovye-pribory/
+    - Хранение продуктов (4) – id 609, /hranenie-produktov/
+  - Винные аксессуары и помпы для воды (30) – id 2166, /aksessuary-dlya-napitkov/
+    - Наборы для вина (18) – id 599, /nabor-aksessuarov-dlya-vina/
+    - Штопоры (19) – id 602, /shtopory/
+    - Помпы для воды (3) – id 600, /pompy-dlya-vody/
+- Красота и здоровье (296) – id 485, /zdorove/
+  - Зубные щетки и ирригаторы (105) – id 636, /uhod-za-polostyu-rta/
+    - Зубные щётки (43) – id 640, /zubnie-shetki/
+    - Зубные пасты (10) – id 639, /zubnye-pasty/
+    - Ирригаторы для полости рта (8) – id 637, /irrigatory/
+    - Насадки для щеток (44) – id 638, /smennye-nasadki/
+  - Массажёры (45) – id 644, /massajeri/
+  - Бритвы и эпиляторы (29) – id 643, /britvi/
+  - Стайлеры и выпрямители (23) – id 633, /vypryamiteli/
+  - Фены (35) – id 641, /feny/
+  - Зеркала (11) – id 642, /zerkala/
+  - Напольные весы (5) – id 577, /napolnye-vesy/
+  - Машинки для стрижки (8) – id 635, /mashinka-dlya-strizhki/
+  - Маникюрные принадлежности (15) – id 634, /manikyurnye-prinadlezhnosti/
+  - Триммеры (10) – id 713, /trimmery/
+  - Термометры (4) – id 645, /termometry/
+  - Ушные палочки (6) – id 717, /ushnye-palochki/
+- Умный дом (96) – id 622, /smart-ustroystva-i-umnyiy-dom/
+  - Камеры видеонаблюдения (35) – id 532, /ip-kamery/
+  - Умные замки (5) – id 626, /umnye-zamki/
+  - Сейфы (1) ⚠ – id 624, /sejfy/
+  - Датчики и метеостанции (38) – id 623, /datchiki/
+  - Умные розетки (8) – id 627, /umnye-rozetki/
+  - Дверные звонки (3) – id 719, /dvernye-zvonki/
+  - Умные выключатели (5) – id 625, /umnye-vyklyuchateli/
+- Авто и электротранспорт (149) – id 469, /dlya-avtomobilya-aksessuaryi/
+  - Электротранспорт (21) – id 479, /elektrotransport/
+    - Электросамокаты (14) – id 526, /elektrosamokaty/
+    - Гироскутеры и моноколёса (2) ⚠ – id 527, /giroskutery/
+    - Набор для картинга (2) ⚠ – id 528, /nabor-dlya-kartinga/
+    - Электроскутеры и электровелосипеды (1) ⚠ – id 529, /elektroskutery-i-elektrovelosipedy/
+    - Автомобили (2) ⚠ – id 2272, /avtomobili-xiaomi/
+  - Пуско-зарядные устройства (3) – id 473, /pusko-zaryadnye-ustrojstva/
+  - Видеорегистраторы (21) – id 533, /videoregistratoryi-foto-i-video/
+  - Компрессоры и насосы (7) – id 472, /kompressory/
+  - Держатели для телефона (61) – id 475, /derzhateli-dlya-smartfonov/
+  - Мойки высокого давления (1) ⚠ – id 2189, /moyki-vysokogo-davleniya/
+  - Зарядки в авто (13) – id 476, /zaryadnyie-ustroystva-i-fm-transmitteryi/
+  - Ароматизаторы и автопарфюм (18) – id 474, /avtomobilnyiy-ochistitel-vozduha/
+  - Парковочные карты и автовизитки (4) – id 470, /vremennye-karty-parkovki/
+- Отдых и хобби (411) – id 2567, /otdyh-i-hobbi/
+  - Фото и экшн-камеры (4) – id 2568, /foto-i-ekshn-kamery/
+    - Фотопринтеры (2) ⚠ – id 728, /fotoprintery/
+    - Экшн-камеры (1) ⚠ – id 534, /kameryi/
+    - Фотоаппараты (1) ⚠ – id 1921, /fotoapparaty/
+  - Рюкзаки, сумки и аксессуары (165) – id 488, /odezhda-i-aksessuaryi/
+    - Рюкзаки (58) – id 662, /ryukzaki/
+    - Зонты (17) – id 661, /zonty/
+    - Очки (66) – id 656, /ochki/
+    - Сумки через плечо и поясные (11) – id 654, /sumki/
+    - Чемоданы (8) – id 659, /chemodanu/
+    - Аксессуары для одежды (2) ⚠ – id 660, /aksessuaryi-odezhda-i-aksessuaryi/
+    - Перчатки (3) – id 653, /perchatki/
+  - Игры и игрушки (175) – id 489, /detskie-tovaryi/
+    - Игровые консоли (12) – id 2556, /igrovye-pristavki/
+    - Джойстики и геймпады (13) – id 506, /igrovye-dzhojstiki/
+    - Конструкторы и Робототехника (95) – id 668, /konstruktory/
+    - Умные игрушки и радиоуправляемые модели (34) – id 664, /detskiye-igrushki/
+    - Беговелы и детский транспорт (15) – id 663, /velosipedy/
+    - Роликовые коньки (1) ⚠ – id 2259, /rolikovye-konki/
+  - Туризм и отдых (56) – id 486, /turizm-i-otdyh/
+  - Спорт (12) – id 487, /sportivnye-tovary/
+- Аксессуары (803) – id 460, /aksessuaryi/
+  - Для смартфонов (440) – id 503, /dlya-smartfonov/
+    - Чехлы для смартфонов (330) – id 675, /chehlyi/
+    - Защитные стёкла (67) – id 516, /stekla/
+    - Моноподы и штативы (29) – id 509, /monopodyi/
+  - Для планшетов (58) – id 461, /dlya-planshetov/
+    - Стекла (13) – id 462, /stekla-dlya-planshetov/
+    - Чехлы и клавиатуры (40) – id 463, /chehlyi-dlya-planshetov/
+    - Стилусы (5) – id 1406, /stilusy/
+  - Флешки и карты памяти (71) – id 525, /kartyi-pamyati/
+  - Для смарт-часов и браслетов (191) – id 477, /dlya-gadzhetov/
+  - Для транспорта (24) – id 524, /dlya-elektrotransporta/
+  - Для Экшн-камер (3) – id 517, /dlya-ekshn-kamer/
+- Уценка (19) – id 701, /ucenka/
+- Подарочные сертификаты (6) – id 490, /podarochnye-sertifikaty-ru/

@@ -972,3 +972,20 @@ function fn_gm_delivery_date_phone_mark($phone, $user_id = 0)
 
     return $cache[$key];
 }
+
+/**
+ * Хук top_menu_form_post: признак «открывать в новом окне» у пунктов меню – всегда true/false.
+ * Пункты подменю, которые CS-Cart строит из дерева категорий (пункт с «C:<id>:Y»), получают new_window = 0 (число),
+ * а шаблоны меню темы сравнивают его со строкой "Y"; на PHP 7.4, на котором работает сайт, 0 == "Y" истинно, и все
+ * ссылки 2-го и 3-го уровня открывались в новом окне. Значение по смыслу не меняется: 0 → false, 1/"Y" → true.
+ * Действует на меню всех витрин (2026-10-14).
+ */
+function fn_gm_delivery_date_top_menu_form_post(&$top_menu, $level, $active)
+{
+    foreach ($top_menu as &$item) {
+        if (isset($item['new_window']) && !is_bool($item['new_window'])) {
+            $item['new_window'] = in_array($item['new_window'], [1, '1', 'Y'], true);
+        }
+    }
+    unset($item);
+}

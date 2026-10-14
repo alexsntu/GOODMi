@@ -8,6 +8,7 @@
  * update_user_pre – на e-mail-заглушку (запись без своей почты) письмо о регистрации не шлём.
  * update_profile – отправка кода подтверждения номера сразу после регистрации.
  * before_dispatch – пока зарегистрировавшийся по номеру не подтвердил номер, ему открыта только страница подтверждения.
+ * top_menu_form_post – подменю, построенное из категорий, не открывается в новом окне (ошибка темы на PHP 7.4).
  * Сами функции – в func.php.
  */
 
@@ -21,5 +22,6 @@ fn_register_hooks(
     'auth_routines',
     'update_user_pre',
     'update_profile',
-    'before_dispatch'
+    'before_dispatch',
+    'top_menu_form_post'
 );

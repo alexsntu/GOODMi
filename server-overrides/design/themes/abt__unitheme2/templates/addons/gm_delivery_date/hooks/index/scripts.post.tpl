@@ -7,3 +7,7 @@
     {script src="js/addons/gm_delivery_date/auth.js"}
     {script src="js/addons/gm_delivery_date/seomenu.js"}
 {/if}
+{* Отложенный запрос сопутствующих товаров в карточке (ia_defer.js) – на витринах Maxmobiles (1) и GOODMi (2), 2026-10-14 *}
+{if $runtime.company_id == 1 || $runtime.company_id == 2}
+    {script src="js/addons/gm_delivery_date/ia_defer.js"}
+{/if}
