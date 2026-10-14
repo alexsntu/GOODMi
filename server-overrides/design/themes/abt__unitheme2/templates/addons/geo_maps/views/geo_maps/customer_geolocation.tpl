@@ -4,8 +4,9 @@
   Куда кладётся на сервере:
     design/themes/abt__unitheme2/templates/addons/geo_maps/views/geo_maps/customer_geolocation.tpl
   Тема abt__unitheme2 общая для трёх витрин (maxmobiles.ru, goodmi.ru, xione.ru), поэтому
-  новый вид включён только для GOODMi (company_id = 2). Для остальных витрин ниже, в ветке
-  else, дословно повторён штатный шаблон с картой из темы responsive.
+  новый вид включён только для GOODMi (company_id = 2). Maxmobiles (company_id = 1) получает свой
+  выбор города из addons/my_changes/views/geo_maps/customer_geolocation.tpl (с 2026-10-14). Для
+  остальных витрин ниже, в ветке else, дословно повторён штатный шаблон с картой из темы responsive.
 
   Стили: CSS/goodmi-styles.css, секция 21 (классы gm-geo-picker*). Они попадают только
   в «Свой CSS» GOODMi.
@@ -193,6 +194,9 @@
 })(Tygh, Tygh.$);
 </script>
 {/literal}
+{elseif $runtime.company_id == 1}
+{* Maxmobiles: свой выбор города – отдельный файл в модуле «Мои изменения» (2026-10-14) *}
+{include file="addons/my_changes/views/geo_maps/customer_geolocation.tpl"}
 {else}
 <div class="ty-geo-maps__geolocation__location-selector" data-ca-geo-map-location-element="location_selector">
     {hook name="geo_maps:customer_location_selector"}

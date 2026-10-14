@@ -187,6 +187,14 @@
 - `addons/my_changes/hooks/ab__extended_comparison_wishlist/top_lists.pre.tpl` – сравнение сразу открывается на первой вкладке.
 - Бэкап, проверки и откат – `/root/gm-backups/2026-10-14-mm-stage1/` (`ROLLBACK.txt`).
 
+### Выбор города в окне геолокации (2026-10-14)
+
+- `addons/my_changes/views/geo_maps/customer_geolocation.tpl` – выбор города Maxmobiles (поиск + популярные города, тот же
+  список, что у GOODMi). Окно выводится одним файлом темы на все витрины, поэтому в файле GOODMi
+  `addons/geo_maps/views/geo_maps/customer_geolocation.tpl` добавлена развилка `elseif company_id == 1` с подключением этого файла.
+- Стили – секция MM-4 в конце «Своего CSS» Maxmobiles (акцент `#0071e3`).
+- Бэкап, проверки и откат – `/root/gm-backups/2026-10-14-mm-geo/` (`ROLLBACK.txt`).
+
 ### Сравнение: группировка «По разделам» (2026-10-14, обе витрины)
 
 - `app/addons/my_changes/func.php`, `init.php`, `GmSectionComparisonGrouper.php` – свой вариант настройки «Группировать по» модуля
