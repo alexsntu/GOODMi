@@ -13,7 +13,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a multibrand
 - Hours: daily 10:00–21:00
 - Main address: `г. Севастополь, ул. Вакуленчука, 29 — ТЦ «Муссон»`
 - Pickup points (6 total): Sevastopol ТЦ Муссон · Остров · ТЦ Мандарин · Адм. Октябрьского; Simferopol ТЦ Меганом; Yalta ТЦ Дом Торговли
-- Since: copywriting uses `«с 2015 года»` / `«более 10 лет на рынке»`; JSON-LD `LocalBusiness.description` uses `«с 2016 года»` — do not change either without user confirmation
+- Since: `«с 2016 года»` / `«более 10 лет на рынке»` everywhere – copywriting, meta tags and JSON-LD (user confirmed 2026-06-16). Never use `«с 2015 года»`; older published pages may still carry it
 - `sameAs` (full set, 9 sources — Yandex Maps has 6 separate branch profiles, GOODMi runs two stores at the flagship ТЦ Муссон address): `https://yandex.ru/maps/org/goodmi/81345582117/`, `https://yandex.ru/maps/org/goodmi/219323553091/`, `https://yandex.ru/maps/org/goodmi/41033084263/`, `https://yandex.ru/maps/org/goodmi/95861137013/`, `https://yandex.ru/maps/org/goodmi/183196216973/`, `https://yandex.ru/maps/org/goodmi/63307304488/`, `https://vk.ru/reviews-126411469`, `https://www.avito.ru/brands/i155162702/all?sellerId=557ad28f61641d9114ad5ca6531fa735`, `https://otzovik.com/reviews/mi92_ru-internet-magazin_tehniki_xiaomi`
 - Yandex rating widget iframe ID (flagship store, largest of the two Муссон profiles — also the one JSON-LD `aggregateRating` must match, not the summed total below): `81345582117`
 - Reviews: **7500+ оценок и отзывов** across all sources above (Yandex Maps 6 profiles ≈7598 + VK + Avito + Otzovik) — use this summed figure only in free-text copy (description, USPs), never in structured `aggregateRating.reviewCount`, which must reflect only the flagship Yandex Maps profile (`81345582117`)
@@ -28,6 +28,7 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a multibrand
 ```
 Категории/Новые/       # In-progress / skill-generated HTML (skills always save here)
 Категории/Готовые/     # Ready-to-deploy category SEO HTML blocks
+Категории/Перезалитые/ # Categories the user has already republished after the multibrand rework (user moves files here, not Claude)
 Акции/                 # Promotion page HTML
 Блог/                  # Blog article SEO blocks
 Страницы/              # Standalone page HTML (trade-in, VPN, reviews, etc.)
@@ -38,7 +39,8 @@ This is the SEO content repository for **GOODMi** (`goodmi.ru`) — a multibrand
 CSS/                   # goodmi-styles.css (shared, documented — edit this one), goodmi-styles.min.css (generated, no comments — upload this one), maxmobiles-styles.css
 Мета-теги/             # Meta tag drafts
 Расширение семантики/  # seo-core-expansion skill output — one-off working files, user deletes after reviewing
-_DEV/                  # Development artifacts and task trackers (untracked)
+_DEV/                  # Development artifacts, task trackers and handoff files (e.g. category-rework-handoff.md)
+server-overrides/      # Exact copies of every file we added/changed on the shop server (theme templates, gm_delivery_date addon, custom CSS); README lists what to restore after a CS-Cart / UniTheme2 update and how to roll back
 tools/                 # Utility scripts (see below)
 cscart-mcp-server/     # MCP server for CS-Cart API (Node.js/Jest)
 marketing-portal/      # Node/Express + SQLite internal marketing dashboard (drafts, topics, plan, promo ideas, tasks) — deployed via Docker to the VPS; see MARKETING.md §4
@@ -192,7 +194,17 @@ A bare one-word message (with or without trailing `.`) launches the correspondin
 | `Отзывы` | `reviews-shortcut-trigger.mdc` | `seo-homepage-reviews-block-builder` | `Страницы/HOMEPAGE-REVIEWS-SHORT-BLOCK-2026-03-24.html` |
 | `блог` | `blog-shortcut-trigger.mdc` | blog article workflow | `Блог/` |
 
+Note: `category-shortcut-trigger.mdc` still points to the legacy `seo-shop-page-builder` skill, not `-multibrand`. Do not switch it silently; ask the user which skill to use.
+
 If the triggering message already includes the needed data (category/model, competitor links, warranty terms, image URLs, etc.), skip straight to generation and only ask for genuinely missing required fields — but the blocking steps above (warranty, card images) still apply for `Категория`.
+
+### Category & meta rework (continuation protocol, from `AGENTS.md`)
+
+When the user says «продолжаем мету», «перезаливка категорий», «как вчера» or «далее» in this context:
+1. Read `_DEV/category-rework-handoff.md`, then `_DEV/positioning-rebrand-task.md`, and check the actual category folders.
+2. For meta tags, use exactly `.cursor/skills/seo-meta-builder-multibrand/SKILL.md` (the user's explicit choice). Do not fall back to legacy v1/v2 or ad-hoc tags. If Wordstat is unavailable, use only the skill's own fallback and say so.
+3. Process one category at a time. Take the existing HTML + JSON-LD from `Категории/Готовые/` and write the result to `Категории/Новые измененные/` (create the folder if missing). The user publishes and moves files to `Категории/Перезалитые/`.
+4. After each category, update the handoff file and output links to both files plus H1, Title, Description and WebPage.description as separate copyable blocks.
 
 ## Git Commit Messages
 
@@ -209,3 +221,13 @@ Node.js MCP server exposing CS-Cart API as MCP tools. See `cscart-mcp-server/CLA
 Requires `.env` with `CSCART_API_URL`, `CSCART_API_EMAIL`, `CSCART_API_KEY`. PixelPlus SEO tools also require `PIXELPLUS_API_TOKEN`.
 
 **PixelPlus project for goodmi.ru:** `project_id = 63589`. Used in `seo-meta-builder-v2` Step 6a to submit the semantic core after user confirmation. Tier 0 (informational/neural queries) are NOT submitted to PixelPlus — tracked separately via the Step 6b monitoring checklist.
+
+## Node services: commands
+
+All three are plain ESM Node ≥18 apps with a Dockerfile + docker-compose; none has a build or lint step.
+
+| Folder | Run | Dev (auto-reload) | Other |
+|---|---|---|---|
+| `cscart-mcp-server/` | `npm start` | `npm run dev` (nodemon) | `npm run setup` – interactive `.env` setup; `npm test` runs Jest, but there are no test files yet |
+| `marketing-portal/` | `npm start` | `npm run dev` (`node --watch`) | SQLite data in `data/`; deploy per `MARKETING.md` §4 |
+| `bonusplus-integration/` | `npm start` | `npm run dev` (`node --watch`) | see its `README.md` |
