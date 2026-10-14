@@ -1,0 +1,2649 @@
+#sw_dropdown_6078{
+    background-color: #292424 !important;
+}
+
+#sw_dropdown_6078:hover{
+    background-color: #3A332E !important;
+}
+
+.table {
+	width: 100%;
+	border: none;
+	margin-bottom: 20px;
+	border-collapse: separate;
+}
+.table thead th {
+	font-weight: bold;
+	text-align: left;
+	border: none;
+	padding: 10px 15px;
+	background: #F5F5F0;
+	font-size: 14px;
+	border-top: 1px solid #ddd;
+}
+.table tr th:first-child, .table tr td:first-child {
+	border-left: 1px solid #ddd;
+}
+.table tr th:last-child, .table tr td:last-child {
+	border-right: 1px solid #ddd;
+}
+.table thead tr th:first-child {
+	border-radius: 20px 0 0 0;
+}
+.table thead tr th:last-child {
+	border-radius: 0 20px 0 0;
+}
+.table tbody td {
+	text-align: left;
+	border: none;
+	padding: 10px 15px;
+	font-size: 14px;
+	vertical-align: top;
+}
+.table tbody tr:nth-child(even) {
+	background: #F8F8F8;
+}
+.table tbody tr:last-child td{
+	border-bottom: 1px solid #ddd;
+}
+.table tbody tr:last-child td:first-child {
+	border-radius: 0 0 0 20px;
+}
+.table tbody tr:last-child td:last-child {
+	border-radius: 0 0 20px 0;
+}
+/* Контейнер блока контактов */
+.mm-contacts-block {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #111111;
+}
+
+/* Шапка */
+
+.mm-contacts-block__hero {
+    background: radial-gradient(circle at top left, #f5f5f7 0%, #e8ecff 35%, #f5f5f7 70%, #ffffff 100%);
+    padding: 32px 0 28px;
+    margin-bottom: 24px;
+}
+
+.mm-contacts-block__hero-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 8px;
+}
+
+.mm-contacts-block__intro {
+    margin-bottom: 18px;
+}
+
+.mm-contacts-block__title {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.mm-contacts-block__subtitle {
+    margin: 0;
+    max-width: 640px;
+    color: #4a4a4a;
+}
+
+/* Общая карточка */
+
+.mm-contacts-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px 20px 18px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    margin-bottom: 16px;
+}
+
+.mm-contacts-card--primary {
+    background: linear-gradient(135deg, #f5f5f7, #ffffff);
+}
+
+.mm-contacts-card--map {
+    padding: 18px;
+}
+
+.mm-contacts-card__title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mm-contacts-card__text {
+    margin: 4px 0;
+}
+
+.mm-contacts-card__link a {
+    color: #0071e3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.mm-contacts-card__link a:hover {
+    text-decoration: underline;
+}
+
+.mm-contacts-card__map iframe {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Двухколоночный блок: контакты + карта */
+
+.mm-contacts-block__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.mm-contacts-block__col {
+    min-width: 0;
+}
+
+/* Список контактов */
+
+.mm-contacts-list {
+    margin-top: 4px;
+}
+
+.mm-contacts-list__item {
+    padding: 10px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.mm-contacts-list__item:first-child {
+    border-top: none;
+}
+
+.mm-contacts-list__label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #888888;
+    margin-bottom: 2px;
+}
+
+.mm-contacts-list__value {
+    display: inline-block;
+    color: #111111;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.mm-contacts-list__value:hover {
+    color: #0071e3;
+}
+
+/* Блок точек выдачи */
+
+.mm-contacts-block__pickup {
+    margin-top: 8px;
+}
+
+.mm-contacts-block__pickup-title {
+    margin: 0 0 16px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.mm-pickup-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.mm-contacts-card--pickup {
+    min-height: 100%;
+}
+
+.mm-contacts-card__header {
+    margin-bottom: 6px;
+}
+
+.mm-contacts-card--pickup .mm-contacts-card__title {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+/* Метаданные точки выдачи: Телефон / Карта / График */
+
+.mm-pickup-meta {
+    margin-top: 6px;
+}
+
+.mm-pickup-meta__row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.mm-pickup-meta__label {
+    min-width: 64px;
+    font-size: 13px;
+    color: #888888;
+}
+
+.mm-pickup-meta__value {
+    color: #111111;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.mm-pickup-meta__value:hover {
+    color: #0071e3;
+}
+
+/* Адаптив */
+
+@media (max-width: 1024px) {
+    .mm-contacts-block__layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .mm-pickup-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .mm-contacts-block {
+        padding: 24px 12px 32px;
+    }
+    .mm-contacts-block__hero {
+        padding: 24px 0 20px;
+    }
+    .mm-contacts-block__title {
+        font-size: 24px;
+    }
+    .mm-pickup-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/*
+=======================================================================
+  Maxmobiles — Стили SEO HTML-блоков
+  Подключение: Дизайн → Темы → Редактировать → Свой CSS
+  Все стили изолированы в .mm-block и не влияют на тему CS-Cart
+  Версия: актуальная
+=======================================================================
+
+  Содержание:
+  1. Основа
+  2. Intro (H2, лид, бейдж)
+  3. Trust strip
+  4. Section
+  5. Service cards
+  6. Advantages
+  7. Highlight box
+  8. FAQ
+  9. CTA + кнопки
+  10. Responsive (≤640px)
+  11. Collapse / Expand механизм
+=======================================================================
+*/
+
+
+/* ================================================================
+   1. Основа
+================================================================ */
+.mm-block {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+               "Helvetica Neue", Arial, sans-serif;
+  color: #1d1d1f;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mm-block * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ================================================================
+   2. Intro
+================================================================ */
+.mm-intro {
+  margin-bottom: 48px;
+}
+
+.mm-intro h2 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #1d1d1f;
+  margin-bottom: 18px;
+  line-height: 1.15;
+}
+
+.mm-intro-text {
+  font-size: 17px;
+  color: #3d3d3f;
+  line-height: 1.75;
+  max-width: 740px;
+}
+
+/* Бейдж-таблетка под лид-абзацем */
+.mm-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(135deg, #0071e3 0%, #0077ed 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 100px;
+  margin-top: 20px;
+  letter-spacing: -0.1px;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+.mm-badge-item {
+  color: #ffffff;
+}
+
+.mm-badge-sep {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+
+/* ================================================================
+   3. Trust strip
+================================================================ */
+.mm-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  row-gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid #e8e8ed;
+  border-bottom: 1px solid #e8e8ed;
+  margin-bottom: 48px;
+}
+
+.mm-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 180px;
+  padding: 0 20px 0 0;
+}
+
+.mm-trust-item:not(:last-child) {
+  border-right: 1px solid #e8e8ed;
+  margin-right: 20px;
+}
+
+.mm-trust-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.mm-trust-label {
+  font-size: 13px;
+  color: #6e6e73;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.mm-trust-label strong {
+  display: block;
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+
+/* ================================================================
+   4. Section
+================================================================ */
+.mm-section {
+  margin-bottom: 48px;
+}
+
+.mm-section-title {
+  font-size: clamp(19px, 2.8vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #1d1d1f;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8e8ed;
+  line-height: 1.25;
+}
+
+.mm-section-lead {
+  font-size: 16px;
+  color: #3d3d3f;
+  margin-bottom: 24px;
+  line-height: 1.65;
+}
+
+
+/* ================================================================
+   5. Service cards
+================================================================ */
+.mm-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Одиночная карточка в последней строке (например, 4 карточки → 3+1):
+   центрируем её во второй колонке, чтобы не болталась у края */
+.mm-services-grid > article:last-child:nth-child(3n + 1) {
+  grid-column: 2;
+}
+
+.mm-service-card {
+  background: #f5f5f7;
+  border-radius: 18px;
+  padding: 22px 24px;
+  transition: box-shadow 0.22s ease, background-color 0.22s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.mm-service-card:hover {
+  background: #ebebed;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+}
+
+.mm-service-card-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.mm-service-card h3,
+.mm-service-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 10px;
+  letter-spacing: -0.1px;
+  line-height: 1.3;
+}
+
+.mm-service-card p {
+  font-size: 14px;
+  color: #6e6e73;
+  line-height: 1.6;
+  flex: 1;
+}
+
+
+/* ================================================================
+   6. Advantages
+================================================================ */
+.mm-advantages-list {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+}
+
+.mm-advantage-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e8e8ed;
+  border-radius: 16px;
+  padding: 20px 24px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mm-advantage-item:hover {
+  border-color: #0071e3;
+  box-shadow: 0 4px 20px rgba(0, 113, 227, 0.08);
+}
+
+.mm-advantage-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: #0071e3;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.mm-advantage-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #f5f5f7;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-top: 1px;
+}
+
+.mm-advantage-body strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 5px;
+  letter-spacing: -0.1px;
+}
+
+.mm-advantage-body p {
+  font-size: 14px;
+  color: #6e6e73;
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   7. Highlight box
+================================================================ */
+.mm-highlight {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f3ff 100%);
+  border: 1px solid #c6dcf7;
+  border-radius: 18px;
+  padding: 28px 32px;
+  margin-bottom: 48px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.mm-highlight-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mm-highlight-body p {
+  font-size: 15px;
+  color: #1d1d1f;
+  line-height: 1.7;
+}
+
+.mm-highlight-body p + p {
+  margin-top: 10px;
+}
+
+
+/* ================================================================
+   8. FAQ
+================================================================ */
+.mm-faq {
+  margin-bottom: 48px;
+}
+
+.mm-faq-item {
+  border-bottom: 1px solid #e8e8ed;
+  padding: 18px 0;
+}
+
+.mm-faq-item:first-of-type {
+  border-top: 1px solid #e8e8ed;
+}
+
+.mm-faq-question {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 8px;
+  letter-spacing: -0.1px;
+  line-height: 1.4;
+}
+
+.mm-faq-answer {
+  font-size: 14px;
+  color: #6e6e73;
+  line-height: 1.65;
+}
+
+
+/* ================================================================
+   9. CTA + кнопки
+================================================================ */
+.mm-cta {
+  background: linear-gradient(145deg, #1d1d1f 0%, #2c2c2e 100%);
+  border-radius: 22px;
+  padding: 44px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.mm-cta-text h3 {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.mm-cta-text p {
+  font-size: 15px;
+  color: #98989d;
+  line-height: 1.6;
+  max-width: 460px;
+}
+
+.mm-cta-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mm-btn {
+  display: inline-block;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  /* transform на hover ЗАПРЕЩЁН — вызывает баг Chrome с overflow:hidden */
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.mm-btn-primary {
+  background: #0071e3;
+  color: #ffffff;
+}
+
+.mm-btn-primary:hover {
+  background: #0077ed;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.35);
+}
+
+.mm-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.mm-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+}
+
+
+/* ================================================================
+   10. Responsive
+================================================================ */
+
+/* Планшет: 641px–900px → 2 колонки карточек */
+@media (max-width: 900px) and (min-width: 641px) {
+  .mm-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Сброс центрирования-сиротки — при 2 колонках не нужно */
+  .mm-services-grid > article:last-child:nth-child(3n + 1) {
+    grid-column: auto;
+  }
+}
+
+/* Мобильный: ≤640px → 1 колонка */
+@media (max-width: 640px) {
+  .mm-intro h2 { font-size: 24px; }
+
+  .mm-cta { padding: 28px 22px; }
+
+  .mm-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Сброс центрирования-сиротки на мобильном */
+  .mm-services-grid > article:last-child:nth-child(3n + 1) {
+    grid-column: auto;
+  }
+
+  .mm-trust-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .mm-trust-item { padding: 0; }
+  .mm-trust-item:not(:last-child) { border-right: none; margin-right: 0; }
+
+  .mm-highlight { flex-direction: column; gap: 12px; padding: 22px 20px; }
+
+  /* Бейдж: компактнее на мобильном */
+  .mm-stat-badge {
+    font-size: 13px;
+    padding: 8px 15px;
+    gap: 6px;
+  }
+
+  /* Многострочный бейдж (с .mm-badge-sep): вертикальная укладка */
+  .mm-stat-badge:has(.mm-badge-sep) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    border-radius: 14px;
+  }
+
+  .mm-badge-sep { display: none; }
+
+  /* Фото в ремонтных страницах — на мобильном вдвое шире и выше */
+  .mm-repair-photo img {
+    max-width: 100% !important;
+    max-height: 800px !important;
+  }
+}
+
+
+/* ================================================================
+   10b. Ссылка внутри карточки услуги
+================================================================ */
+.mm-service-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: #0071e3;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: -0.1px;
+  transition: color 0.18s ease;
+}
+
+.mm-service-link:hover {
+  color: #0077ed;
+  text-decoration: underline;
+}
+
+
+/* ================================================================
+   10c. HowTo-шаги (нумерованный список процесса)
+================================================================ */
+.mm-howto-steps {
+  list-style: none;
+  counter-reset: mm-step;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mm-howto-step {
+  counter-increment: mm-step;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e8e8ed;
+  border-radius: 16px;
+  padding: 18px 22px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mm-howto-step:hover {
+  border-color: #0071e3;
+  box-shadow: 0 4px 20px rgba(0, 113, 227, 0.08);
+}
+
+.mm-howto-step::before {
+  content: counter(mm-step);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: #0071e3;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 50%;
+  margin-top: 1px;
+}
+
+.mm-howto-step-body strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 4px;
+  letter-spacing: -0.1px;
+}
+
+.mm-howto-step-body p {
+  font-size: 14px;
+  color: #6e6e73;
+  line-height: 1.6;
+}
+
+
+/* ================================================================
+   10d. Scroll wrap + кнопки прокрутки (горизонтальный скролл)
+================================================================ */
+.mm-services-scroll-wrap {
+  position: relative;
+}
+
+.mm-scroll-btn {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mm-services-scroll-wrap {
+    padding: 0 40px;
+  }
+
+  .mm-services-scroll-wrap .mm-services-grid {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+  }
+
+  .mm-services-scroll-wrap .mm-services-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mm-services-scroll-wrap .mm-services-grid .mm-service-card {
+    flex: 0 0 calc(100% - 8px);
+    scroll-snap-align: start;
+  }
+
+  .mm-scroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: calc(50% - 16px);
+    width: 32px;
+    height: 32px;
+    background: #ffffff;
+    border: 1.5px solid #d2d2d7;
+    border-radius: 50%;
+    color: #0071e3;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.18s ease, border-color 0.18s ease;
+  }
+
+  .mm-scroll-btn:hover {
+    background: #f0f7ff;
+    border-color: #0071e3;
+  }
+
+  .mm-scroll-btn--prev { left: 0; }
+  .mm-scroll-btn--next { right: 0; }
+}
+
+
+/* ================================================================
+   10e. Ссылка внутри преимущества
+================================================================ */
+.mm-advantage-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #0071e3;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: -0.1px;
+  transition: color 0.18s ease;
+}
+
+.mm-advantage-link:hover {
+  color: #0077ed;
+  text-decoration: underline;
+}
+
+
+/* ================================================================
+   12. Quick Links — быстрые ссылки / фасетная навигация
+================================================================ */
+.mm-quick-links {
+  margin-bottom: 48px;
+}
+
+.mm-quick-links-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mm-quick-link {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.mm-quick-link:hover {
+  background: #e8f3ff;
+  border-color: #0071e3;
+  color: #0071e3;
+}
+
+
+/* ================================================================
+   11. Collapse / Expand — собственный механизм (взамен CS-Cart toggle)
+================================================================ */
+.mm-collapse-wrapper {
+  position: relative;
+}
+
+/* overflow:hidden + position:relative нужны для fade-шторки */
+.mm-collapse-content {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Градиент-шторка — абсолютно позиционирована внутри .mm-collapse-content */
+.mm-collapse-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Кнопка «Показать больше / Скрыть» */
+.mm-collapse-trigger {
+  text-align: center;
+  padding: 20px 0 8px;
+}
+
+.mm-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid #d2d2d7;
+  color: #0071e3;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 11px 24px;
+  border-radius: 100px;
+  cursor: pointer;
+  letter-spacing: -0.1px;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.mm-collapse-btn:hover {
+  background: #f0f7ff;
+  border-color: #0071e3;
+}
+
+/* Шеврон: вращается на 180° при раскрытии */
+.mm-collapse-chevron {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mm-collapse-btn.mm-is-expanded .mm-collapse-chevron {
+  transform: rotate(180deg);
+}
+
+/* ================================================================
+   13. Blog article blocks (mm-article-*)
+================================================================ */
+.mm-article {
+  max-width: 1000px;
+}
+
+.mm-article-header {
+  margin-bottom: 24px;
+}
+
+.mm-article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mm-article-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  letter-spacing: -0.1px;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.mm-article-tag:hover {
+  background: #e8f3ff;
+  border-color: #0071e3;
+  color: #0071e3;
+}
+
+.mm-article-key-facts {
+  background: #f5f5f7;
+  border: 1px solid #e8e8ed;
+  border-radius: 18px;
+  padding: 20px 24px;
+  margin: 0 0 32px 0;
+}
+
+.mm-article-key-facts-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 12px;
+}
+
+.mm-article-key-facts-list {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.mm-article-key-facts-list li {
+  font-size: 15px;
+  color: #3d3d3f;
+  line-height: 1.6;
+  padding-left: 16px;
+  position: relative;
+  list-style: none !important;
+}
+
+.mm-article-key-facts-list li::marker {
+  content: "" !important;
+}
+
+.mm-article-key-facts-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #0071e3;
+}
+
+.mm-article-toc {
+  margin: 0 0 32px 0;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid #e8e8ed;
+  border-radius: 14px;
+}
+
+.mm-article-toc-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 10px;
+}
+
+.mm-article-toc-list {
+  margin-left: 20px;
+  color: #3d3d3f;
+}
+
+.mm-article-toc-link {
+  color: #0071e3;
+  text-decoration: none;
+}
+
+.mm-article-toc-link:hover {
+  text-decoration: underline;
+}
+
+.mm-article-body {
+  margin-bottom: 40px;
+}
+
+.mm-article-body figure {
+  margin: 0 0 32px 0;
+}
+
+.mm-article-body h2 {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #1d1d1f;
+  line-height: 1.2;
+  margin: 0 0 14px 0;
+}
+
+.mm-article-body p {
+  font-size: 16px;
+  color: #3d3d3f;
+  line-height: 1.75;
+}
+
+.mm-article-body section {
+  margin-bottom: 34px;
+}
+
+.mm-article-pullquote {
+  margin: 24px 0 28px 0;
+  padding: 18px 22px;
+  border-left: 3px solid #0071e3;
+  background: #f5f5f7;
+  border-radius: 0 12px 12px 0;
+}
+
+.mm-article-author {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.mm-article-author-icon {
+  font-size: 18px;
+  color: #6e6e73;
+  line-height: 1.2;
+}
+
+.mm-article-author-body strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.mm-article-author-body p {
+  font-size: 16px;
+  color: #3d3d3f;
+  line-height: 1.7;
+}
+
+/* Required visual separation between CTA and author */
+.mm-article .mm-cta {
+  margin-bottom: 48px;
+  opacity: 1;
+}
+
+/* Harden CTA contrast inside article context */
+.mm-article .mm-cta,
+.mm-article .mm-cta * {
+  opacity: 1;
+  filter: none;
+}
+
+.mm-article .mm-cta-text h3 {
+  color: #ffffff !important;
+}
+
+.mm-article .mm-cta-text p {
+  color: #c7c7cc !important;
+}
+
+.mm-article .mm-btn-primary {
+  background: #0071e3 !important;
+  color: #ffffff !important;
+}
+
+.mm-article .mm-btn-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Better space usage for blog article CTA */
+.mm-article .mm-cta {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) auto;
+  align-items: center;
+  column-gap: 28px;
+}
+
+.mm-article .mm-cta-text p {
+  max-width: 620px;
+}
+
+.mm-article .mm-cta-actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+  .mm-article .mm-cta {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+
+  .mm-article .mm-cta-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* Styled catalog links block inside blog article */
+.mm-catalog-links {
+  background: #f5f5f7;
+  border: 1px solid #e8e8ed;
+  border-radius: 18px;
+  padding: 22px 24px;
+}
+
+.mm-catalog-links h3 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #1d1d1f;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.mm-catalog-links ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.mm-catalog-links li {
+  margin: 0;
+  padding: 0;
+}
+
+.mm-catalog-links a {
+  display: inline-block;
+  padding: 7px 14px;
+  background: #ffffff;
+  border: 1px solid #dfe3ea;
+  border-radius: 999px;
+  color: #0071e3;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.mm-catalog-links a:hover {
+  background: #e8f3ff;
+  border-color: #0071e3;
+  color: #0071e3;
+}
+
+/* ================================================================
+   Mobile nav menu (menu-mobile-no-comments-no-css.html)
+   ================================================================ */
+.mm-nav-content,
+.mm-nav-content *,
+.mm-nav-sub,
+.mm-nav-sub * {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+               "Helvetica Neue", Arial, sans-serif !important;
+}
+.mm-nav-content *,
+.mm-nav-content *::before,
+.mm-nav-content *::after,
+.mm-nav-sub *,
+.mm-nav-sub *::before,
+.mm-nav-sub *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.mm-nav-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  background: #ffffff;
+  border: 1px solid #e5e5ea;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.mm-nav-search__placeholder {
+  flex: 1;
+  font-size: 15px;
+  color: #8e8e93;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  pointer-events: none;
+}
+.mm-nav-divider {
+  height: 1px;
+  background: #e5e5ea;
+  margin: 4px 0;
+}
+.mm-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mm-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 4px;
+  text-decoration: none !important;
+  color: #1d1d1f !important;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.12s;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.mm-nav-item:active { opacity: 0.6; }
+.mm-nav-item--main {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.mm-nav-item--main .mm-nav-item__icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mm-nav-item--secondary {
+  font-size: 15px;
+  font-weight: 400;
+}
+.mm-nav-item--secondary .mm-nav-item__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mm-nav-item__label { flex: 1; }
+.mm-nav-item__arrow {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.mm-nav-account-wrap { padding: 8px 0 0; }
+.mm-nav-item--account {
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ddf0ff 0%, #e8f5ff 100%);
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+.mm-nav-item--account:active {
+  opacity: 0.8;
+}
+.mm-nav-item--account .mm-nav-item__icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.mm-nav-sub {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  background: #ffffff;
+  z-index: 99999;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.mm-nav-sub.is-open { transform: translateX(0); }
+.mm-nav-sub__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #e5e5ea;
+  flex-shrink: 0;
+}
+.mm-nav-sub__title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
+}
+.mm-nav-level3 .mm-nav-sub__header,
+.mm-nav-level4 .mm-nav-sub__header {
+  padding: 18px 16px;
+}
+.mm-nav-level3 .mm-nav-sub__title,
+.mm-nav-level4 .mm-nav-sub__title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.mm-nav-sub-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 16px 28px;
+}
+.mm-nav-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.mm-nav-back:hover { background: rgba(0,0,0,0.06); }
+.mm-nav-sub__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.mm-nav-sub__close:hover { background: rgba(0,0,0,0.06); }
+.mm-nav-sub__header { justify-content: space-between; }
+.mm-nav-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 0 14px;
+  border-bottom: 1px solid #e5e5ea;
+  margin-bottom: 8px;
+}
+.mm-nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none !important;
+  color: #1d1d1f !important;
+  background: #f2f2f7;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.mm-nav-pill:active { opacity: 0.7; }
+.mm-nav-pill--hot {
+  background: #FFE8D6;
+  color: #B84B00 !important;
+}
+.mm-nav-pill-sep {
+  width: 1px;
+  height: 18px;
+  background: #e5e5ea;
+  flex-shrink: 0;
+  align-self: center;
+}
+.mm-nav-item--cat {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 0;
+  border-bottom: 1px solid #f2f2f7;
+}
+.mm-nav-item--cat:last-child { border-bottom: none; }
+.mm-nav-cat-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.mm-nav-level3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  background: #f2f2f7;
+  z-index: 100000;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.mm-nav-level3.is-open { transform: translateX(0); }
+.mm-nav-level3 *,
+.mm-nav-level3 *::before,
+.mm-nav-level3 *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.mm-nav-l3-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 16px 28px;
+}
+.mm-nav-l3-list {
+  list-style: none;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.mm-nav-l3-item {
+  display: block;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1d1d1f !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid #f2f2f7;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s;
+}
+.mm-nav-l3-item:last-child { border-bottom: none; }
+.mm-nav-l3-item:active { opacity: 0.6; }
+.mm-nav-l3-item--all {
+  color: #8e8e93 !important;
+  font-weight: 400;
+}
+.mm-nav-l3-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1d1d1f;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f2f2f7;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+.mm-nav-l3-btn:last-child { border-bottom: none; }
+.mm-nav-l3-btn:active { opacity: 0.6; }
+.mm-nav-l3-btn__label { flex: 1; }
+.mm-nav-l3-btn--hl,
+.mm-nav-l3-item--hl {
+  border: none !important;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background: #f2f8ff;
+  color: #0071e3 !important;
+  font-weight: 600;
+}
+.mm-nav-level4 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  height: 100dvh;
+  background: #f2f2f7;
+  z-index: 100001;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.mm-nav-level4.is-open { transform: translateX(0); }
+.mm-nav-level4 *,
+.mm-nav-level4 *::before,
+.mm-nav-level4 *::after { box-sizing: border-box; }
+.mm-nav-level4 a.mm-nav-l3-item {
+  display: block;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1d1d1f !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid #f2f2f7;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s;
+}
+.mm-nav-level4 a.mm-nav-l3-item:last-child { border-bottom: none; }
+.mm-nav-level4 a.mm-nav-l3-item:active { opacity: 0.6; }
+.mm-nav-level4 a.mm-nav-l3-item--all { color: #8e8e93 !important; font-weight: 400; }
+
+/* ==========================================
+   Desktop catalog menu — Maxmobiles (iPort-style)
+   Файл: Меню/Используемое/menu-desktop.html
+   и Меню/Используемое/menu-desktop-no-css.html (разметка без <style>)
+   Шаг 1: корневые пункты верхней строки +
+   адаптивное скрытие лишних пунктов за кнопкой
+   "ещё" (три точки) при сужении окна.
+   Шаг 2: первая мега-панель (выпадающий список)
+   для пункта "iPhone" — открывается по hover/focus,
+   позиционируется от .mm-desktop-nav__inner (левый
+   край панели = левый край строки меню, как на
+   референсе), НЕ привязана к позиции самого пункта.
+   JS обобщён через [data-mega-trigger]/[data-mega-panel] —
+   следующие пункты (iPad, Mac...) добавляются тем же
+   способом без переписывания скрипта.
+
+   Список ссылок и кнопка "ещё" — flex-соседи
+   внутри .mm-desktop-nav__inner (а не кнопка
+   внутри списка): так список может свободно
+   сжиматься (flex:1 1 auto; min-width:0),
+   а переполнение проверяется через
+   scrollWidth > clientWidth на самом списке —
+   это не зависит от паддингов и особенностей
+   родительской сетки CS-Cart.
+   ========================================== */
+
+/* .r-h-menu — обёртка CS-Cart для этой секции меню, сама
+   является flex-контейнером (изначально под нативное меню).
+   Её дочерние элементы по умолчанию получают min-width:auto
+   и отказываются сжиматься меньше "естественной" ширины
+   нашего контента — из-за этого блок не сужался вместе с
+   окном. Разрешаем сжатие по всей цепочке внутри обёртки. */
+.r-h-menu > div,
+.r-h-menu > div > .ty-wysiwyg-content {
+  min-width: 0 !important;
+  flex-shrink: 1 !important;
+}
+
+.mm-desktop-nav {
+  background: #1d1d1f;
+  width: 100%;
+}
+
+.mm-desktop-nav,
+.mm-desktop-nav * {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+               "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.mm-desktop-nav__inner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1500px;
+  min-width: 0;
+  height: 46px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0;
+  gap: 16px;
+}
+
+.mm-desktop-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin: 0;
+  padding: 8px 6px 8px 30px;
+  list-style: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.mm-desktop-nav__item {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.mm-desktop-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: -0.12px;
+  line-height: 22px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mm-desktop-nav__link:hover {
+  color: #568DFE;
+}
+
+/* Подчёркивание "выезжает" слева направо при наведении */
+.mm-desktop-nav__link:not(.mm-desktop-nav__link--highlight)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #568DFE;
+  transition: width 0.25s ease;
+}
+
+.mm-desktop-nav__link:not(.mm-desktop-nav__link--highlight):hover::before {
+  width: 100%;
+}
+
+/* ── Выделенный пункт (пилюля-градиент, как первая вкладка на iPort) ── */
+.mm-desktop-nav__link--highlight {
+  position: relative;
+  background: linear-gradient(90deg, #b17e62 0%, #f0b680 100%);
+  border-radius: 38px;
+  padding: 4px 14px;
+  box-shadow: 0 0 0 rgba(240, 182, 128, 0);
+  transition: box-shadow 0.3s ease, opacity 0.2s ease;
+}
+
+.mm-desktop-nav__link--highlight:hover {
+  color: #ffffff;
+  opacity: 0.95;
+  box-shadow: 0 0 10px 2px rgba(240, 182, 128, 0.55), 0 0 22px 6px rgba(177, 126, 98, 0.4);
+}
+
+/* Искры — две мерцающие точки рядом с пилюлей, только opacity (без transform) */
+.mm-desktop-nav__link--highlight::before,
+.mm-desktop-nav__link--highlight::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #f0b680 55%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mm-desktop-nav__link--highlight::before {
+  width: 6px;
+  height: 6px;
+  top: -5px;
+  left: 22%;
+}
+
+.mm-desktop-nav__link--highlight::after {
+  width: 4px;
+  height: 4px;
+  bottom: -4px;
+  right: 18%;
+}
+
+.mm-desktop-nav__link--highlight:hover::before {
+  animation: mm-sparkle 0.9s ease-in-out infinite;
+}
+
+.mm-desktop-nav__link--highlight:hover::after {
+  animation: mm-sparkle 0.9s ease-in-out infinite 0.35s;
+}
+
+@keyframes mm-sparkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* ── Вариант «в стиле Apple» — сплошной синий CTA, как кнопки на apple.com ── */
+.mm-desktop-nav__link--highlight-apple {
+  background: #0071e3;
+  color: #ffffff;
+}
+
+.mm-desktop-nav__link--highlight-apple:hover {
+  color: #ffffff;
+  background: #0077ed;
+  box-shadow: 0 0 10px 2px rgba(0, 113, 227, 0.55), 0 0 22px 6px rgba(0, 113, 227, 0.35);
+}
+
+.mm-desktop-nav__link--highlight-apple::before,
+.mm-desktop-nav__link--highlight-apple::after {
+  background: radial-gradient(circle, #ffffff 0%, #6cb2ff 55%, transparent 100%);
+}
+
+.mm-desktop-nav__divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(159, 160, 176, 0.4);
+  flex-shrink: 0;
+}
+
+/* ── Кнопка "ещё" (три точки) ── */
+.mm-desktop-nav__more {
+  position: relative;
+  display: none;
+  flex-shrink: 0;
+}
+
+.mm-desktop-nav__more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mm-desktop-nav__more-btn:hover,
+.mm-desktop-nav__more-btn[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.16);
+  color: #568DFE;
+}
+
+/* ── Дроп-даун с оставшимися пунктами ── */
+.mm-desktop-nav__dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 220px;
+  background: #1d1d1f;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  padding: 16px 20px;
+  z-index: 50;
+}
+
+.mm-desktop-nav__dropdown--open {
+  display: block;
+}
+
+.mm-desktop-nav__dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mm-desktop-nav__dropdown-link {
+  display: block;
+  padding: 8px 4px;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.mm-desktop-nav__dropdown-link:hover {
+  color: #568DFE;
+}
+
+/* ── Мега-панель (выпадающий список для пунктов с подкатегориями) ── */
+.mm-desktop-nav__inner {
+  position: relative;
+}
+
+/* Внешний слой — зона наведения, включает "пустой" зазор до панели
+   (padding-top), чтобы курсор не терял hover при переходе от пункта
+   меню к выпадающей панели. Видимую карточку рисует вложенный
+   .mm-desktop-mega__panel — так отступ остаётся наводимым, а не
+   мёртвой зоной. */
+.mm-desktop-mega {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding-top: 12px;
+  z-index: 60;
+}
+
+.mm-desktop-mega--open {
+  display: block;
+}
+
+.mm-desktop-mega__panel {
+  display: flex;
+  gap: 56px;
+  align-items: flex-start;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px 48px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.mm-desktop-mega__col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+  min-width: 190px;
+}
+
+.mm-desktop-mega__group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mm-desktop-mega__heading {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.12px;
+  color: #1d1d1f;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Заголовок-ссылка (например «Аксессуары для iPhone») получает тот же
+   hover-эффект слайд-подчёркивания, что и обычные пункты ── */
+a.mm-desktop-mega__heading {
+  position: relative;
+}
+
+a.mm-desktop-mega__heading::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #568DFE;
+  transition: width 0.25s ease;
+}
+
+a.mm-desktop-mega__heading:hover {
+  color: #568DFE;
+}
+
+a.mm-desktop-mega__heading:hover::before {
+  width: 100%;
+}
+
+/* ── Пункт подменю: во всём выпадающем списке iPhone используется
+   тот же hover-эффект, что и у корневых пунктов верхней строки —
+   цветная полоска, выезжающая слева направо ── */
+.mm-desktop-mega__link {
+  position: relative;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: -0.08px;
+  color: #48484f;
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mm-desktop-mega__link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #568DFE;
+  transition: width 0.25s ease;
+}
+
+.mm-desktop-mega__link:hover {
+  color: #568DFE;
+}
+
+.mm-desktop-mega__link:hover::before {
+  width: 100%;
+}
+
+/* Пункты без подменю (iPhone Air, iPhone 15, iPhone 13) — тот же
+   размер и жирность, что у заголовков групп («Объём памяти» и т.п.) */
+.mm-desktop-mega__link--root {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.12px;
+  color: #1d1d1f;
+}
+
+.mm-desktop-mega__promo {
+  display: flex;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.mm-desktop-mega__promo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mm-promo-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 220px;
+  height: 156px;
+  padding: 20px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.mm-promo-card--warranty {
+  background: #edf4ff;
+}
+
+.mm-promo-card--delivery {
+  background: #fbfbfb;
+}
+
+.mm-promo-card__text {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.12px;
+  line-height: 1.35;
+  color: #1d1d1f;
+  max-width: 150px;
+}
+
+.mm-promo-card__icon {
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   Наведение на нативном каталог-меню CS-Cart:
+   триггер "Каталог" (.ty-dropdown-box__title)
+   и все 3 уровня выпадающего списка (.ut2-menu__link,
+   __2nd-link, __3rd-link) — тот же приём, что и в
+   menu-desktop-no-css.html: подсветка синим +
+   появление синей полоски под текстом при hover.
+   ========================================== */
+
+.ty-dropdown-box__title {
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.ty-dropdown-box__title > span > span {
+  position: relative;
+}
+
+.ty-dropdown-box__title > span > span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #568DFE;
+  transition: width 0.25s ease;
+}
+
+.ty-dropdown-box__title:hover {
+  color: #568DFE !important;
+}
+
+.ty-dropdown-box__title:hover > span > span::after {
+  width: 100%;
+}
+
+.ut2-menu__link,
+.ut2-menu__2nd-link,
+.ut2-menu__3rd-link {
+  transition: color 0.2s ease;
+}
+
+.ut2-menu__link__name,
+.ut2-menu__2nd-link__name,
+.ut2-menu__3rd-link__name {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.ut2-menu__link__name::after,
+.ut2-menu__2nd-link__name::after,
+.ut2-menu__3rd-link__name::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background: #568DFE;
+  transition: width 0.25s ease;
+}
+
+.ut2-menu__link:hover .ut2-menu__link__name,
+.ut2-menu__2nd-link:hover .ut2-menu__2nd-link__name,
+.ut2-menu__3rd-link:hover .ut2-menu__3rd-link__name {
+  color: #568DFE !important;
+}
+
+.ut2-menu__link:hover .ut2-menu__link__name::after,
+.ut2-menu__2nd-link:hover .ut2-menu__2nd-link__name::after,
+.ut2-menu__3rd-link:hover .ut2-menu__3rd-link__name::after {
+  width: 100%;
+}
+
+/* Убираем нативное подчёркивание темы (text-decoration:underline,
+   светло-серое) на hover 2/3 уровня — у нас своя полоска через ::after */
+.ut2-menu .ut2-menu__2nd-link:hover .ut2-menu__2nd-link__name,
+.ut2-menu .ut2-menu__2nd-link:hover .ut2-menu__3rd-link__name,
+.ut2-menu .ut2-menu__3rd-link:hover .ut2-menu__2nd-link__name,
+.ut2-menu .ut2-menu__3rd-link:hover .ut2-menu__3rd-link__name {
+  text-decoration: none !important;
+}
+
+/* ==========================================
+   Меню быстрых ссылок в самом верху хедера
+   (menu-quicklinks.html). Фон наследуется от
+   родителя, поэтому текст светлый (как на тёмной
+   плашке каталог-меню). Тот же приём hover, что
+   и в .mm-desktop-nav__link — синяя полоска
+   0% → 100% под текстом.
+   ========================================== */
+.mm-quicklinks-nav {
+  width: 100%;
+  min-width: 0;
+}
+
+.mm-quicklinks-nav,
+.mm-quicklinks-nav * {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+               "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.mm-quicklinks-nav__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+
+.mm-quicklinks-nav__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 32px;
+  list-style: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.mm-quicklinks-nav__item {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.mm-quicklinks-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.12px;
+  line-height: 22px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mm-quicklinks-nav__link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #568DFE;
+  transition: width 0.25s ease;
+}
+
+.mm-quicklinks-nav__link:hover {
+  color: #568DFE;
+}
+
+.mm-quicklinks-nav__link:hover::before {
+  width: 100%;
+}
+
+/* ── Кнопка "ещё" (три точки) ── */
+.mm-quicklinks-nav__more {
+  position: relative;
+  display: none;
+  flex-shrink: 0;
+}
+
+.mm-quicklinks-nav__more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mm-quicklinks-nav__more-btn:hover,
+.mm-quicklinks-nav__more-btn[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.16);
+  color: #568DFE;
+}
+
+/* ── Дроп-даун с оставшимися пунктами ── */
+.mm-quicklinks-nav__dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 220px;
+  background: #1d1d1f;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  padding: 16px 20px;
+  z-index: 50;
+}
+
+.mm-quicklinks-nav__dropdown--open {
+  display: block;
+}
+
+.mm-quicklinks-nav__dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mm-quicklinks-nav__dropdown-link {
+  display: block;
+  padding: 8px 4px;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.mm-quicklinks-nav__dropdown-link:hover {
+  color: #568DFE;
+}
+
+
+/* ================================================================
+   Maxmobiles: оформление корзины, избранного и сравнения (этап 1 переноса с GOODMi, выложено 2026-10-14)
+   Секции MM-1…MM-3 – перенос секций 25–27 «Своего CSS» GOODMi (goodmi-styles.css) с правками того же времени:
+   оранжевый GOODMi #ff6900 заменён синим Maxmobiles #0071e3, правила блока сроков получения (.gm-dd) не перенесены –
+   сроков доставки на Maxmobiles нет. Кнопки «В избранное» / «Сравнить» в корзине и автопереход на первую вкладку
+   сравнения – шаблоны модуля «Мои изменения» (my_changes, только company_id = 1).
+   ================================================================ */
+/* ================================================================
+   MM-1. Корзина (/cart/)
+   Только оформление, шаблон корзины не тронут. Расположение по образцу
+   Ozon: фото слева (квадрат со скруглением), название, под ним ряд
+   кнопок-значков (избранное, сравнение, удалить), цена отдельной
+   колонкой, количество справа; справа от списка – карточка итога и
+   кнопка «Оформить заказ». На телефоне цена над названием, кнопки и
+   количество одним рядом, «Оформить заказ» закреплена внизу экрана.
+   Ячейка описания и её обёртка раскрыты через display: contents, чтобы
+   их содержимое раскладывалось сеткой строки. Кнопки .gm-cart-action
+   выводит хук темы addons/abt__unitheme2/hooks/checkout/product_options.post.tpl.
+   Всё ограничено блоком с таблицей корзины, кроме фона страницы.
+   Без записей вида «1 / 3»: LESS считает их как деление.
+================================================================ */
+
+/* Фон страницы */
+.tygh-content .content-grid:has(.ty-cart-content){background:#f4f4f6;padding-bottom:32px}
+
+/* Две колонки: товары слева, итог и кнопки справа */
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body{display:grid;grid-template-columns:minmax(0,1fr) 380px;column-gap:20px;row-gap:12px;align-items:start}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*{grid-column-start:2;min-width:0;margin:0}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*:has(.ty-cart-content){grid-column-start:1;grid-row-start:1;grid-row-end:span 4}
+.main-content-grid:has(.ty-cart-content) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Товар – белая карточка-сетка: фото | кнопки | название | цена | количество */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content,.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody{display:block;width:100%;border:0}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content thead{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody{display:flex;flex-direction:column;gap:10px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr{display:grid;grid-template-columns:96px auto minmax(0,1fr) 150px auto;column-gap:16px;row-gap:4px;align-items:start;padding:16px 20px;background:#fff;border:0;border-radius:16px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__product-elem{display:block;padding:0;border:0;width:auto;min-width:0;background:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__image-block{grid-column-start:1;grid-row-start:1;grid-row-end:span 4}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content__image{width:96px;height:96px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content__image img{width:96px;height:96px;object-fit:cover;border-radius:14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__description,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in{display:contents}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>*{grid-column-start:2;grid-column-end:4;min-width:0;order:3;margin:0}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-title{order:1;font-size:15px;font-weight:500;line-height:1.35;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__sku{order:2}
+
+/* Ряд кнопок под названием: избранное, сравнение, удалить */
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.gm-cart-actions{order:8;grid-column-end:3;display:flex;flex-wrap:nowrap;gap:6px;margin:6px 0 0}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:#f4f4f6;color:#1c1c1c;font-size:0;text-decoration:none;transition:background-color .15s}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action:hover,.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete:hover{background:#e9e9ee}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in .gm-cart-action i{font-size:18px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{order:9;grid-column-start:3;grid-column-end:4;justify-self:start;margin:6px 0 0 -10px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete .ty-icon{font-size:16px;color:#1c1c1c;margin:0}
+
+/* Цена за единицу: текущая крупно, старая под ней; построчный итог скрыт */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong)){grid-column-start:4;grid-row-start:1;grid-row-end:span 3;display:flex;flex-direction:column-reverse;justify-content:flex-end;align-items:flex-start;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong))>.ut2-cost-base,.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong))>span{font-size:18px;font-weight:600;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price .ty-strike{font-size:13px;color:#8a8a93}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__qty{grid-column-start:5;grid-row-start:1;grid-row-end:span 3;order:10}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:has(strong){display:none}
+
+/* Итог: белая карточка, суммы сверху, промокод ниже */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total{margin-top:58px;padding:20px;background:#fff;border:0;border-radius:16px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__wrapper{border:0;padding:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__body{display:flex;flex-direction:column;gap:14px;padding:0;width:auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__body>*{width:100%;float:none;margin:0;padding:0;flex:0 0 auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic{order:-1}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__item,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__item{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__item{margin:0 0 8px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__title,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__title{text-align:left;width:auto;flex:1 1 auto;padding:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-statistic__value,.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__value{width:auto;flex:0 0 auto;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-coupons__container{padding-top:14px;border-top:1px solid #e3e3e8}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__footer{width:auto;padding:14px 0 0;margin:14px 0 0;border-top:1px solid #e3e3e8}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic{margin:0;padding:0;border:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__title{font-size:15px;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total__statistic__value{font-size:24px;font-weight:600}
+
+/* Кнопки: «Оформить заказ» на всю ширину, остальное – текстовые ссылки */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons{display:flex;flex-direction:column;gap:10px;padding:0;background:none;border:0}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons{order:-1;float:none;width:100%}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons .ty-btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;box-sizing:border-box;font-size:16px;font-weight:600;border-radius:12px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons{float:none;width:100%;display:flex;justify-content:space-between;gap:8px}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn{background:none;border:0;box-shadow:none;color:#6b6b6b;padding:0 4px;font-weight:400}
+
+/* Планшет: одна колонка */
+@media (max-width:1023px){
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body{grid-template-columns:minmax(0,1fr)}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*{grid-column-start:1}
+.main-content-grid:has(.ty-cart-content) .ty-mainbox-body>*:has(.ty-cart-content){grid-row-end:auto}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-total{margin-top:0}
+}
+
+/* Телефон: цена над названием, кнопки и количество одним рядом, «Оформить заказ» закреплена внизу */
+@media (max-width:767px){
+.tygh-content .content-grid:has(.ty-cart-content){padding-bottom:16px}
+.main-content-grid:has(.ty-cart-content) h1.ty-mainbox-title{font-size:22px}
+.main-content-grid:has(.ty-cart-content) .ty-table__responsive-header{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-table__responsive-content{display:contents}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr{grid-template-columns:auto auto minmax(0,1fr) auto;column-gap:10px;padding:14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__image-block{grid-column-start:1;grid-column-end:3;grid-row-end:span 3}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__price:not(:has(strong)){grid-column-start:3;grid-column-end:5;grid-row-end:auto;flex-direction:row-reverse;justify-content:flex-end;align-items:baseline;gap:8px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>*{grid-column-start:3;grid-column-end:5}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.gm-cart-actions{grid-column-start:1;grid-column-end:2;margin-top:10px}
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.ty-cart-content__product-delete{grid-column-start:2;grid-column-end:3;margin:10px 0 0 -4px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content td.ty-cart-content__qty{grid-column-start:3;grid-column-end:5;grid-row-start:auto;grid-row-end:auto;margin-top:8px;justify-self:start}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__top-buttons{display:none}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__right-buttons{position:fixed;left:0;right:0;bottom:0;z-index:50;width:auto;padding:10px 12px;background:#fff;box-shadow:0 -4px 16px rgba(0,0,0,.08);box-sizing:border-box}
+}
+
+/* Правка 2026-10-08: «Продолжить покупки» и «Очистить корзину» под «Оформить заказ» – кнопки, а не текстовые ссылки
+   (светлая с рамкой и тёмная, как под списком избранного). Фон тёмной – с !important: у .ty-btn__outline в теме background: transparent !important. */
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons{flex-wrap:wrap;justify-content:flex-start}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn{display:inline-flex;align-items:center;justify-content:center;flex:1 1 0;height:44px;margin:0;padding:0 14px;box-sizing:border-box;border:1px solid #d9d9de;border-radius:12px;background:#fff;color:#1c1c1c;font-size:14px;font-weight:500;line-height:1;white-space:nowrap;text-decoration:none;box-shadow:none;transition:border-color .15s,color .15s}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn:hover{border-color:#0071e3;background:#fff;color:#0071e3}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn.text-button{border-color:#1c1c1c;background:#1c1c1c!important;color:#fff}
+.main-content-grid:has(.ty-cart-content) .ut2-cart-content__bottom-buttons .ut2-cart-content__left-buttons .ty-btn.text-button:hover{border-color:#0071e3;background:#0071e3!important;color:#fff}
+
+/* Правка 2026-10-08 (секция 25, корзина): выбор цвета и памяти у товара скрыт – вариант виден в названии, сменить его можно в карточке товара. */
+.main-content-grid:has(.ty-cart-content) .abt__ut2--content__description__in>.cm-picker-cart-product-variation-features{display:none}
+
+/* ================================================================
+   MM-2. Избранное (/wishlist/)
+   Только оформление, шаблоны не тронуты. По образцу избранного Ozon:
+   серый фон, белые карточки без рамок, фото на всю ширину карточки,
+   красное сердце в углу (значок темы \e905 вместо крестика; нажатие
+   по-прежнему убирает товар), цена над названием, кнопка «В корзину»
+   на всю ширину внизу (подпись добавлена через ::after). Обёртки цены
+   и кнопки раскрыты через display: contents, порядок задан order.
+   Карточки от 210px: миниатюры товаров 200px, в более широких они бы
+   замылились. Всё ограничено сеткой .ut2-wl__grid, кроме фона страницы.
+================================================================ */
+
+/* Фон страницы и заголовок */
+.tygh-content .content-grid:has(.ut2-wl__grid){background:#f4f4f6;padding-bottom:32px}
+.main-content-grid:has(.ut2-wl__grid) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Сетка: карточки шириной от 210px, сколько поместится (6 в ряд на широком экране) */
+.ut2-wl__grid .ut2-gl__wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.ut2-wl__grid .ut2-gl__wrap>*{width:auto;min-width:0;margin:0;float:none}
+
+/* Карточка */
+.ut2-wl__grid .ut2-gl__item,.ut2-wl__grid .ut2-gl__item>form{height:100%;border:0;box-shadow:none;background:none}
+.ut2-wl__grid .ut2-gl__body{display:flex;flex-direction:column;height:100%;padding:0;border:0;border-radius:16px;background:#fff;box-shadow:none;overflow:hidden;box-sizing:border-box}
+
+/* Фото: квадрат на всю ширину карточки */
+.ut2-wl__grid .ut2-gl__image{position:relative;width:auto;height:auto;margin:8px 8px 0;padding:0;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#fff}
+.ut2-wl__grid .ut2-gl__image .product_icon_lnk{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.ut2-wl__grid .ut2-gl__image img{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain}
+
+/* Кнопки в углу фото: красное сердце (убрать из избранного) и сравнение */
+.ut2-wl__grid .ut2-w-c-q__buttons{top:6px;right:6px;display:flex;flex-direction:column;gap:6px}
+.ut2-wl__grid .ut2-w-c-q__buttons a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.9)}
+.ut2-wl__grid .ut2-add-to-wish.ty-remove .ty-icon::before{content:"\e905";color:#f5323c;font-size:22px}
+
+/* Содержимое: цена, название, рейтинг, наличие, кнопка внизу */
+.ut2-wl__grid .ut2-gl__content{display:flex;flex-direction:column;flex:1 1 auto;gap:4px;padding:10px 12px 12px}
+.ut2-wl__grid .ut2-gl__body .ut2-gl__content .ut2-gl__price-wrap,
+.ut2-wl__grid .ut2-gl__body .ut2-gl__content .ut2-gl__mix-price-and-button{display:contents}
+.ut2-wl__grid .ut2-gl__price{order:-2;margin:0;padding:0;width:auto}
+.ut2-wl__grid .ut2-gl__price .ty-price,.ut2-wl__grid .ut2-gl__price .ty-price .ut2-cost-base{font-size:18px;font-weight:700;line-height:1.2}
+.ut2-wl__grid .ut2-gl__name{order:1;height:auto;min-height:0;margin:0}
+.ut2-wl__grid .ut2-gl__name .product-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.35;color:#1c1c1c}
+.ut2-wl__grid .ut2-rating-stars{order:2;margin:0}
+.ut2-wl__grid .ut2-gl__amount{order:3;margin:0}
+.ut2-wl__grid .ut2-gl__bottom{display:none}
+.ut2-wl__grid .ut2-gl__control{order:10;width:100%;margin:auto 0 0;padding-top:8px}
+.ut2-wl__grid .ut2-gl__control>div{width:100%}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:44px;padding:0 12px;border-radius:12px;box-sizing:border-box}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart>span{display:inline-flex;align-items:center;gap:8px}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart>span::after{content:"В корзину";font-size:15px;font-weight:600}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart.ut2-added-to-cart>span::after{content:"В корзине"}
+
+/* Кнопки под списком – текстовые ссылки */
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons{display:flex;justify-content:space-between;margin:16px 0 0;padding:0;background:none;border:0}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn{background:none;border:0;box-shadow:none;color:#6b6b6b;font-weight:400;padding:0 4px}
+
+/* Телефон: две карточки в ряд */
+@media (max-width:767px){
+.main-content-grid:has(.ut2-wl__grid) h1.ty-mainbox-title{font-size:22px}
+.ut2-wl__grid .ut2-gl__wrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ut2-wl__grid .ut2-gl__content{padding:8px 10px 10px}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart{height:40px}
+}
+
+/* Правка 2026-10-07: у контейнера кнопки оставалась высота 36px из темы, кнопка 44px наезжала на «В наличии»;
+   кнопки под списком оформлены как кнопки (светлая и тёмная), а не текстовые ссылки. */
+.ut2-wl__grid .ut2-gl__control,.ut2-wl__grid .ut2-gl__control>div{height:auto;min-height:0}
+.ut2-wl__grid .ut2-gl__control{padding-top:12px}
+.ut2-wl__grid .ut2-gl__content>*{flex-shrink:0}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons{gap:12px;flex-wrap:wrap;margin:20px 0 0}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:1px solid #d9d9de;border-radius:12px;background:#fff;color:#1c1c1c;font-size:15px;font-weight:500;box-shadow:none;transition:border-color .15s,color .15s,background-color .15s}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn:hover{border-color:#0071e3;color:#0071e3}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn__secondary{border-color:#1c1c1c;background:#1c1c1c;color:#fff}
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn__secondary:hover{border-color:#0071e3;background:#0071e3;color:#fff}
+@media (max-width:767px){
+.main-content-grid:has(.ut2-wl__grid) .ut2-wish-list__buttons .ty-btn{flex:1 1 100%}
+}
+
+/* ================================================================
+   MM-3. Сравнение товаров (/compare/, модуль ab__extended_comparison)
+   Только оформление, шаблоны модуля не тронуты. По образцу сравнения DNS:
+   серый фон, белые карточки; категории – серыми плашками; у характеристик
+   нет серых полос и повторов названия товара – мелкая серая подпись, под
+   ней значения в колонках с пунктирными разделителями, строки через одну
+   с фоном. Шапка с товарами закреплена самим модулем (position: sticky),
+   поэтому карточка товара оставлена компактной. Ширины колонок и
+   прокрутку карусели, которыми управляет скрипт модуля, правила не меняют.
+================================================================ */
+
+/* Фон страницы и заголовок */
+.tygh-content .content-grid:has(.ab-ec-comparison){background:#f4f4f6;padding-bottom:32px}
+.main-content-grid:has(.ab-ec-comparison) h1.ty-mainbox-title{font-size:26px;line-height:1.2;margin:8px 0 16px}
+
+/* Верх карточки: вкладки категорий и действия */
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list{align-items:center;gap:12px 16px;flex-wrap:wrap;margin:0;padding:14px 20px;border:0;border-radius:16px 16px 0 0;background:#fff}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul>li{margin:0;padding:0;border:0;height:auto}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:10px;background:#f1f1f4;color:#1c1c1c;font-size:14px;font-weight:500;line-height:1;transition:background-color .15s}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item:hover{background:#e6e6eb}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list>ul>li.active .ab-ec-comparison-list__item,
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__item.active{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison-list__count{position:static;width:auto;height:auto;min-width:0;padding:0;background:none;color:#8a8a93;font-size:14px;font-weight:400}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons{gap:6px 18px;flex-wrap:wrap;margin-left:auto}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons a{color:#6b6b6b;font-size:14px}
+.main-content-grid:has(.ab-ec-comparison) .ab-ec-comparison__buttons a:hover{color:#0071e3}
+
+/* Шапка с товарами (закреплена при прокрутке самим модулем) */
+.ab-ec-comparison__header{margin:0;padding:0 5px;border:0;border-top:1px solid #ececf0;border-radius:0 0 16px 16px;background:#fff;box-shadow:0 6px 14px -8px rgba(0,0,0,.18)}
+.ab-ec-comparison .ab-ec-product-item{border:0;border-left:1px dashed #d9d9de;padding:14px 15px}
+.ab-ec-comparison .owl-item:first-child .ab-ec-product-item{border-left-color:transparent}
+.ab-ec-comparison .ab-ec-product-item__img-block img{border-radius:12px}
+.ab-ec-comparison .ab-ec-product-item__name .product-title{font-size:14px;line-height:1.35;color:#1c1c1c}
+
+/* Характеристики: белая карточка, группы, строки через одну с фоном */
+.ab-ec-comparison .ab-ec-comparison-features__wrapper{margin:12px 0 0;border-radius:16px;background:#fff;overflow:hidden}
+.ab-ec-comparison .ab-ec-comparison-features__group{margin:0;border:0}
+.ab-ec-comparison .ab-ec-comparison-features__group-name{padding:18px 20px 10px;background:#fff;border:0;font-size:17px;font-weight:600}
+.ab-ec-comparison .ab-ec-comparison-features__group-name span{padding:0;font-size:17px;font-weight:600}
+.ab-ec-comparison .ab-ec-comparison-features__item{margin:0;border:0;background:#fff}
+.ab-ec-comparison .ab-ec-comparison-features__group-content>.ab-ec-comparison-features__item:nth-child(odd){background:#f7f7f9}
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name,
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name span{background:none;border:0}
+.ab-ec-comparison .ab-ec-comparison-features__item .ab-ec-comparison-features__item-name span{padding:12px 20px 0;font-size:13px;line-height:1.3;color:#8a8a93}
+.ab-ec-comparison .ab-ec-comparison-features__item-content{padding:0 5px 12px}
+.ab-ec-comparison .ab-ec-comparison-features__variants{margin:0;padding:4px 0 0}
+.ab-ec-comparison .ab-ec-comparison-features__variant{margin:0;padding:2px 15px;border-left:1px dashed #d9d9de}
+.ab-ec-comparison .ab-ec-comparison-features__variant:first-child{border-left-color:transparent}
+.ab-ec-comparison .ab-ec-comparison-features__variant-product{display:none}
+.ab-ec-comparison .ab-ec-comparison-features__value{font-size:15px;line-height:1.35;color:#1c1c1c}
+
+/* Выбранная категория: модуль выводит её тегом span (без ссылки), остальные – ссылками a */
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14);font-weight:600;cursor:default}
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item:hover{background:#fff}
+.main-content-grid:has(.ab-ec-comparison) span.ab-ec-comparison-list__item .ab-ec-comparison-list__count{color:#0071e3;font-weight:600}
+
+
+/* Правка 2026-10-08 (секция MM-2, избранное): порядок в карточке – цена, название, отзывы, наличие, кнопка
+   Строки выровнены между карточками: название всегда в две строки,
+   у товара без отзывов оставлено место под звёзды (24px вместо 25px из секции 33 – здесь у названия нет нижнего отступа). */
+.ut2-wl__grid .ut2-gl__name{min-height:42px}
+.ut2-wl__grid.grid-list.ut2-gl:has(.ut2-rating-stars) .ut2-gl__content>.ut2-gl__name:not(:has(+ .ut2-rating-stars)){margin-bottom:24px}
+
+
+/* Правка 2026-10-08 (секция MM-2, избранное): в теме включена кнопка с надписью «В КОРЗИНУ», поэтому наша подпись через ::after
+   задваивала текст – убрана. Под цену оставлено место на две строки (старая цена с процентом идёт второй строкой),
+   чтобы название и остальные строки стояли на одной высоте во всех карточках. */
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart>span::after,.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart.ut2-added-to-cart>span::after{content:none}
+.ut2-wl__grid .ut2-gl__control .ty-btn__add-to-cart{white-space:nowrap}
+.ut2-wl__grid .ut2-gl__price{min-height:44px;justify-content:flex-start;align-content:flex-start}
+
+/* Секция MM-2, правка 2026-10-11: тема ограничивает высоту карточки (max-height у .ut2-gl__body, 400px на телефоне) и обрезает содержимое; с блоком сроков получения кнопка «В корзину» уходила под обрез. Высота карточки – по содержимому. Область фото – по пропорции миниатюр 240×200 (было квадратом: пустые полосы сверху и снизу), отступ под фото меньше. */
+.ut2-wl__grid .ut2-gl__body{max-height:none;height:auto}
+.ut2-wl__grid .ut2-gl__item,.ut2-wl__grid .ut2-gl__item>form{height:auto;min-height:100%}
+.ut2-wl__grid .ut2-gl__image{aspect-ratio:1.2}
+.ut2-wl__grid .ut2-gl__content{margin-top:0;padding-top:6px}
+
+/* Секция MM-1, дополнение 2026-10-14: Корзина: строка модуля «Интересные аксессуары» («Рекомендуем добавить к заказу») – пристыкована к карточке своего товара */
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr.ut2-ab__ia_joins-in-cart{display:block;margin-top:-14px;padding:0 20px 16px;border-radius:0 0 16px 16px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tr.ut2-ab__ia_joins-in-cart>td{display:block;width:auto;padding:12px 0 0;border:0;border-top:1px solid #ececf0;background:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tr:has(+ tr.ut2-ab__ia_joins-in-cart){border-radius:16px 16px 0 0}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins>.cm-combination{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:#0071e3;text-decoration:none;border:0;white-space:nowrap}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin:10px 0 0;padding:0}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list>div:empty{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list__item{width:auto;margin:0;padding:10px 12px;border:0;border-radius:12px;background:#f4f4f6;box-shadow:none}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list__content{align-items:center;gap:12px;border:0;padding:0}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list__image img{border-radius:10px}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list__name .product-title{font-size:14px;font-weight:500;color:#1c1c1c}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list__content,.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list__content>*:not(.ty-compact-list__image){background:none;box-shadow:none;border:0}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .cm-combination.hidden{display:none}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tr:has(+ tr.ut2-ab__ia_joins-in-cart){margin-bottom:0}
+@media (max-width:767px){
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tbody tr.ut2-ab__ia_joins-in-cart{margin-top:-10px;padding:0 14px 14px}
+.main-content-grid:has(.ty-cart-content) .ty-cart-content tr:has(+ tr.ut2-ab__ia_joins-in-cart){padding-bottom:4px}
+.main-content-grid:has(.ty-cart-content) .ty-ab__ia_joins .ty-compact-list{grid-template-columns:minmax(0,1fr)}
+}

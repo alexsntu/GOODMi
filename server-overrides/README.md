@@ -172,6 +172,33 @@
 `server-overrides/usr/local/sbin/` и `server-overrides/etc/cron.d/`. Бэкап и проверка на подставных данных –
 `/root/gm-backups/2026-10-14-maldet-alerts/` (`store.php.orig`, `test/run.php`).
 
+## Maxmobiles (company_id = 1): перенос оформления с GOODMi
+
+У Maxmobiles свои файлы, файлы GOODMi не трогаем. Стили – в «Своём CSS» витрины
+`design/themes/abt__unitheme2/styles/data/Gray Maxmobiles - work new.css` (точная копия – в этой папке), секции MM-*.
+Шаблоны – в штатном модуле «Мои изменения» (`templates/addons/my_changes/`), каждый с условием `company_id == 1`;
+модуль `my_changes` должен быть включён (Дополнения → Управление), иначе его шаблоны не подключаются.
+
+### Этап 1: корзина, избранное, сравнение (2026-10-14)
+
+- Стили – секции MM-1 (корзина, вкл. строку «Рекомендуем добавить к заказу» модуля «Интересные аксессуары»),
+  MM-2 (избранное), MM-3 (сравнение `/compare/`) в конце файла стилей Maxmobiles.
+- `addons/my_changes/hooks/checkout/product_options.post.tpl` – кнопки «В избранное» и «Сравнить» у товара в корзине.
+- `addons/my_changes/hooks/ab__extended_comparison_wishlist/top_lists.pre.tpl` – сравнение сразу открывается на первой вкладке.
+- Бэкап, проверки и откат – `/root/gm-backups/2026-10-14-mm-stage1/` (`ROLLBACK.txt`).
+
+### Сравнение: группировка «По разделам» (2026-10-14, обе витрины)
+
+- `app/addons/my_changes/func.php`, `init.php`, `GmSectionComparisonGrouper.php` – свой вариант настройки «Группировать по» модуля
+  ab__extended_comparison_wishlist: крупные группы (iPhone, MacBook, Смартфоны…) из `fn_my_changes_gm_compare_groups()`,
+  остальное – по разделу второго уровня; понимает `?product_id=`. Включается в настройках модуля сравнения отдельно на
+  каждой витрине. **Пока выбран этот вариант, модуль «Мои изменения» выключать нельзя** – страница сравнения упадёт
+  (модуль сравнения не найдёт класс группировки). Откат – вернуть «Главная категория» в настройке.
+- `js/addons/my_changes/compare_notice.js` (Maxmobiles, подключает `addons/my_changes/hooks/index/scripts.post.tpl`) и
+  `js/addons/gm_delivery_date/compare_notice.js` (GOODMi, подключает scripts.post.tpl модуля gm_delivery_date) – кнопка
+  «Список сравнения» в уведомлении «Товар добавлен» ведёт сразу на список товара, без окна «Списки сравнений» поверх уведомления.
+- Бэкап и проверки – `/root/gm-backups/2026-10-14-compare-groups/` (`test/grouper-test.php`).
+
 ## Настройки nginx (не файлы CS-Cart)
 
 Лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в `server-overrides/etc/nginx/`.
