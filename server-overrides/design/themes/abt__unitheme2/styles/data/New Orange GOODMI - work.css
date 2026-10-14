@@ -4738,3 +4738,22 @@ a.gm-pp-item__name:hover{color:#ff6900}
 body .ut2-sw-w nav.ut2-fm .ut2-lfl.gm-mi:not(.active)::before{content:"";flex:0 0 28px;inline-size:28px;block-size:28px;margin:0 14px 0 0;background-color:var(--gm-mm-ink,#1b1d24);-webkit-mask:var(--gm-mi-icon) center/contain no-repeat;mask:var(--gm-mi-icon) center/contain no-repeat}
 /* активный пункт (страница этого раздела): тема делает свой ::before ссылки плавающим – возвращаем иконку в строку */
 .top-menu-grid-vertical .ut2-menu.ut2-v__menu .ut2-menu__item.gm-mi > .ut2-menu__link .ut2-menu__link__in::before{position:static;inset:auto;transform:none;border-radius:0;opacity:1}
+
+/* ================================================================
+   67. Каталог-меню, телефон: модели раскрываются списком под подразделом
+   ================================================================
+   Дополнение к секции 20. Скрипт js/addons/gm_delivery_date/flymenu.js
+   ставит подразделу с моделями класс gm-acc-open вместо перехода на
+   экран моделей; здесь – стрелка вниз/вверх и вид раскрытого списка.
+   Подразделы без моделей (нет .ut2-tlw) выглядят как раньше.
+   ================================================================ */
+body .ut2-sw-w nav.ut2-fm .ut2-lsl:not(.active):has(> .ut2-tlw) > i{display:none}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl:not(.active):has(> .ut2-tlw) > p{position:relative}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl:not(.active):has(> .ut2-tlw) > p::after{content:"";position:absolute;right:-22px;top:50%;inline-size:18px;block-size:18px;margin-top:-9px;background-color:#9a9da6;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E") center/contain no-repeat;transition:transform .2s ease}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > p::after{transform:rotate(180deg)}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl:not(.active):not(.gm-acc-open) > .ut2-tlw{display:none !important}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw{display:block !important;position:static !important;inset:auto !important;transform:none !important;visibility:visible !important;opacity:1 !important;inline-size:auto !important;block-size:auto !important;margin:0 !important;padding:0 0 10px !important;background:none !important;overflow:visible !important}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw p{display:block !important;padding:0 !important;border-bottom:0 !important}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw a:not(.hidden){display:flex !important;align-items:center;min-height:42px;padding:0 !important;font-size:15px;font-weight:400;color:var(--gm-mm-ink,#1d1d1f)}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw .gm-acc-all a{font-weight:500;color:var(--gm-mm-accent,#ff6800)}
+body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active){background:none}
