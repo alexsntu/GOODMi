@@ -250,6 +250,14 @@
   `index/scripts.post.tpl`; поле только для чтения – `auth.js`; стили – секция 68 GOODMi и MM-12 Maxmobiles.
 - Бэкапы и откаты: `/root/gm-backups/2026-10-15-phone-lock{,-mm}/`, `/root/gm-backups/2026-10-15-phone-checkout{,-mm}/`.
 
+### «Все заказы» на странице «Заказ оформлен» ведёт в кабинет (2026-10-15, GOODMi и Maxmobiles)
+
+Кнопки страницы `checkout.complete` (общий шаблон `responsive/templates/views/checkout/complete.tpl`) подменены через хук
+`checkout:complete_button`: `addons/gm_delivery_date/hooks/checkout/complete_button.override.tpl` (только витрина 2 →
+`gm_cabinet.orders`, `/cabinet/`) и `addons/my_changes/hooks/checkout/complete_button.override.tpl` (только витрина 1 →
+`mm_cabinet.orders`). На другой витрине подмена пустая, и CS-Cart выводит штатные кнопки. После выкладки нужно удалить кэш
+списка хуков `var/cache/registry/thooks_C/{1,2}`. Откат: `/root/gm-backups/2026-10-15-complete-button/ROLLBACK.txt`.
+
 ## Настройки nginx (не файлы CS-Cart)
 
 Лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в `server-overrides/etc/nginx/`.
