@@ -258,6 +258,15 @@
 `mm_cabinet.orders`). На другой витрине подмена пустая, и CS-Cart выводит штатные кнопки. После выкладки нужно удалить кэш
 списка хуков `var/cache/registry/thooks_C/{1,2}`. Откат: `/root/gm-backups/2026-10-15-complete-button/ROLLBACK.txt`.
 
+### Служебные команды `bonusplus.*` закрыты для посетителей (2026-10-15, все витрины)
+
+`app/addons/my_changes/controllers/frontend/bonusplus.pre.php`: команды контроллера разработчика
+`app/controllers/frontend/bonusplus.php` – `aj1`, `ajdel`, `aj` (подписки на вебхуки БонусПлюс), `orderinfo` (данные заказа),
+`bonus`, `bonusfile` (перезапись баллов CS-Cart), `clearphone` – работают только из cron (CLI) и для вошедшего администратора,
+остальным 404. Открыта `ajax` (проверка баланса, `js/tygh/bonus.js`); вебхуки `bonusplus.php`/`bonuspluscard.php` в корне не
+затронуты. Сам контроллер не менялся (в нём ключ API БонусПлюс открытым текстом). Откат: `rm` этого файла
+(`/root/gm-backups/2026-10-15-bonusplus-close/ROLLBACK.txt`).
+
 ## Настройки nginx (не файлы CS-Cart)
 
 Лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в `server-overrides/etc/nginx/`.
