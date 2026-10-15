@@ -11,3 +11,4 @@ server-overrides/app/gm_cabinet/secrets.php
 # Локальные настройки MCP с ключами доступа
 .codex/config.toml
 .cursor/mcp.json
+server-overrides/app/mm_cabinet/secrets.php
