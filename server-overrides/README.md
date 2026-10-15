@@ -215,6 +215,28 @@
   «Список сравнения» в уведомлении «Товар добавлен» ведёт сразу на список товара, без окна «Списки сравнений» поверх уведомления.
 - Бэкап и проверки – `/root/gm-backups/2026-10-14-compare-groups/` (`test/grouper-test.php`).
 
+### Личный кабинет Maxmobiles (`mm_cabinet`, выложен 2026-10-15 по этапам)
+
+Отдельная копия кабинета GOODMi (решение пользователя 2026-10-14), код GOODMi не трогается. Подробный ход, решения и откаты
+по этапам – `_DEV/mm-cabinet/PLAN.md`.
+- `app/mm_cabinet/lib.php`, `store.php` (+ `secrets.php` – **в репозитории нет**, на сервере, права 600: ключи БонусПлюс, МойСклад,
+  Таргет СМС, `phone_verify => true`, `status_key` = `MAXMOBILES_STATUS_KEY` из `cscart-mcp-server/.env`), таблицы `cscart_mm_*`
+  (`_DEV/mm-cabinet/tables.sql`).
+- `app/controllers/frontend/mm_cabinet.php`, `backend/mm_cabinet.php`; шаблоны `views/mm_cabinet/*` (витрина и админка).
+- Модуль «Мои изменения»: `func.php`/`init.php` (обработчики входа по номеру, регистрации, доступа к заказу, отзывов от купивших
+  в магазине, блокировки до подтверждения), `controllers/frontend/{auth,profiles,checkout}.pre.php`, `schemas/menu/menu.post.php`,
+  админ-хуки `design/backend/templates/addons/my_changes/hooks/{orders,profiles}/*`, хуки темы
+  `addons/my_changes/hooks/{profiles/my_account_menu.post,wrapper/mainbox_general_title_wrapper.pre,index/scripts.post}.tpl`,
+  `addons/my_changes/views/{profiles/components/profiles_info,blocks/profile_info_benefits}.tpl`, `js/addons/my_changes/auth.js`.
+- Развилки `elseif company_id == 1` в общих файлах темы: `views/profiles/components/profiles_info.tpl`,
+  `blocks/static_templates/profile_info.tpl` (ветки GOODMi не менялись).
+- Стили – секции MM-7…MM-11 в конце «Своего CSS» Maxmobiles (исходники – `_DEV/mm-cabinet/MM-*.css`).
+- Cron пользователя maxmobiles: `20 4 * * * … --dispatch=mm_cabinet.sync_orders --minutes=40`.
+- Настройки в базе: капча витрины 1 – register + recover, «не показывать после первой проверки» – N; «Отзыв только после
+  покупки» Maxmobiles включил пользователь. Массовое подтверждение номеров и объединение дублей – скрипты
+  `_DEV/mm-cabinet/server-scripts/`.
+- После обновления CS-Cart: если пункты меню кабинета пропали – удалить кэш списка хуков `var/cache/registry/thooks_C/1/*`.
+
 ## Настройки nginx (не файлы CS-Cart)
 
 Лежат вне папки сайта, обновление CS-Cart их не трогает; копии – в `server-overrides/etc/nginx/`.

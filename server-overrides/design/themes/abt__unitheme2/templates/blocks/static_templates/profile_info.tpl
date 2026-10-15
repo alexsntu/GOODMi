@@ -1,5 +1,6 @@
 {* GOODMi: блок справа от формы регистрации и профиля. Перекрывает штатный файл темы responsive:
    на витрине GOODMi на странице регистрации – свой текст преимуществ (с бонусами и личным кабинетом),
+   на витрине Maxmobiles – свой текст из addons/my_changes/views/blocks/profile_info_benefits.tpl;
    во всех остальных случаях – штатное содержимое без изменений (сверять с оригиналом после обновления CS-Cart).
    Языковая переменная text_profile_benefits общая для всех витрин, поэтому текст задан здесь. *}
 {if $runtime.controller === 'profiles'}
@@ -13,6 +14,8 @@
                 <li>Купленные товары под рукой: повторить заказ или оставить отзыв в пару нажатий</li>
                 <li>Быстрое оформление: контакты подставятся сами</li>
             </ul>
+        {elseif $runtime.company_id == 1}
+            {include file="addons/my_changes/views/blocks/profile_info_benefits.tpl"}
         {else}
             {__("text_profile_benefits") nofilter}
         {/if}

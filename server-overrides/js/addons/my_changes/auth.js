@@ -11,28 +11,38 @@
 (function (_, $) {
   var RECOVER_URL = 'index.php?dispatch=mm_cabinet.recover';
   var STUB_EMAIL = /^(mail|7\d{10}(-\d+)?)@maxmobiles\.ru$/i;
+  // Включаются по этапам (2026-10-15): сначала только вход по номеру. E-mail необязательным делать вместе с регистрацией
+  // по номеру (phone_verify => true в secrets.php – иначе сервер не подставит заглушку и регистрация без почты не пройдёт),
+  // «Забыли пароль?» на СМС – вместе с восстановлением по СМС.
+  var STAGE = {login: true, emailOptional: true, recoverSms: true};
 
   function tune(context) {
     var $ctx = $(context || _.doc);
 
-    $ctx.find('label.ty-login__filed-label.cm-email').each(function () {
-      var $label = $(this);
-      $label.removeClass('cm-email').text('Телефон или e-mail');
-      $('#' + $label.attr('for')).attr({placeholder: '+7 978 000-00-00 или e-mail', autocomplete: 'username'});
-    });
+    if (STAGE.login) {
+      $ctx.find('label.ty-login__filed-label.cm-email').each(function () {
+        var $label = $(this);
+        $label.removeClass('cm-email').text('Телефон или e-mail');
+        $('#' + $label.attr('for')).attr({placeholder: '+7 978 000-00-00 или e-mail', autocomplete: 'username'});
+      });
+    }
 
-    $ctx.find('form[name="profiles_register_form"] label[for="email"], form[name="profile_form"] label[for="email"]').each(function () {
-      var $label = $(this);
-      if ($label.hasClass('cm-required')) {
-        $label.removeClass('cm-required').append(' <span class="gm-opt">(необязательно)</span>');
-      }
-      var $input = $('#' + $label.attr('for'));
-      if (STUB_EMAIL.test($.trim(String($input.val() || '')))) {
-        $input.val('');
-      }
-    });
+    if (STAGE.emailOptional) {
+      $ctx.find('form[name="profiles_register_form"] label[for="email"], form[name="profile_form"] label[for="email"]').each(function () {
+        var $label = $(this);
+        if ($label.hasClass('cm-required')) {
+          $label.removeClass('cm-required').append(' <span class="gm-opt">(необязательно)</span>');
+        }
+        var $input = $('#' + $label.attr('for'));
+        if (STUB_EMAIL.test($.trim(String($input.val() || '')))) {
+          $input.val('');
+        }
+      });
+    }
 
-    $ctx.find('a.ty-password-forgot__a').attr('href', RECOVER_URL);
+    if (STAGE.recoverSms) {
+      $ctx.find('a.ty-password-forgot__a').attr('href', RECOVER_URL);
+    }
   }
 
   $(function () {

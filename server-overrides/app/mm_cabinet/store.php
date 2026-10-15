@@ -1038,6 +1038,44 @@ function fn_mm_cab_phone_owners($phone, $active_only = false)
 }
 
 /**
+ * Кому можно войти по этому номеру (решение пользователя 2026-10-15: «независимо от подтверждения номера вход по номеру
+ * телефона должен работать»; подтверждение нужно только для «Моих заказов», «Моих бонусов» и при регистрации).
+ * Сначала те, у кого номер подтверждён (fn_mm_cab_phone_owners), затем включённые покупатели Maxmobiles, у которых этот
+ * номер стоит в профиле (поле phone, при пустом – телефон из адреса профиля, как в fn_mm_cab_user_phone), последний
+ * вошедший первым. Поле clear_phone не используем: магазин не обновляет его при смене номера. Пароль сверяется у
+ * каждого по очереди (fn_mm_cab_login_by_phone), поэтому при нескольких записях с одним номером войдёт та, чей пароль введён.
+ */
+function fn_mm_cab_login_owners($phone)
+{
+    $owners = fn_mm_cab_phone_owners($phone);
+    if (strlen((string) $phone) !== 11) {
+        return $owners;
+    }
+    $tail = substr($phone, 1);
+    $ids = array_merge(
+        db_get_fields(
+            "SELECT user_id FROM ?:users WHERE company_id = 1 AND user_type = 'C' AND status = 'A'"
+            . " AND RIGHT(REGEXP_REPLACE(phone, '[^0-9]', ''), 10) = ?s ORDER BY last_login DESC, user_id DESC",
+            $tail
+        ),
+        db_get_fields(
+            "SELECT DISTINCT u.user_id FROM ?:users u JOIN ?:user_profiles p ON p.user_id = u.user_id"
+            . " WHERE u.company_id = 1 AND u.user_type = 'C' AND u.status = 'A' AND TRIM(u.phone) = ''"
+            . " AND (RIGHT(REGEXP_REPLACE(p.s_phone, '[^0-9]', ''), 10) = ?s OR RIGHT(REGEXP_REPLACE(p.b_phone, '[^0-9]', ''), 10) = ?s)",
+            $tail, $tail
+        )
+    );
+    foreach ($ids as $id) {
+        $id = (int) $id;
+        if (!in_array($id, $owners, true) && fn_mm_cab_user_phone($id) === $phone) {
+            $owners[] = $id;
+        }
+    }
+
+    return $owners;
+}
+
+/**
  * Вход по номеру: кого искать штатной проверке входа. null – введён не номер (пусть ищет по e-mail как обычно);
  * иначе ['user_id' => покупатель или 0, 'locked' => вход по номеру временно закрыт из-за неверных паролей].
  * Пароль сверяется здесь же только ради счётчика неудачных попыток: сам вход выполняет CS-Cart.
@@ -1048,7 +1086,7 @@ function fn_mm_cab_login_by_phone($login, $password)
     if ($phone === '') {
         return null;
     }
-    $owners = fn_mm_cab_phone_owners($phone);
+    $owners = fn_mm_cab_login_owners($phone);
     if (!$owners) {
         return ['user_id' => 0, 'locked' => false];
     }
@@ -1095,7 +1133,11 @@ function fn_mm_cab_recover_state($phone)
     ];
 }
 
-/** Отправить код восстановления пароля на подтверждённый номер. Возвращает ['ok' => bool, 'message' => текст покупателю]. */
+/**
+ * Отправить код восстановления пароля на номер из профиля (2026-10-15: подтверждение номера не требуется – код из СМС сам
+ * доказывает, что номер у покупателя). Запись – как при входе (fn_mm_cab_login_owners): подтвердившая номер, иначе
+ * последняя вошедшая. Возвращает ['ok' => bool, 'message' => текст покупателю].
+ */
 function fn_mm_cab_recover_send($phone)
 {
     if ((string) $phone === '') {
@@ -1107,10 +1149,10 @@ function fn_mm_cab_recover_send($phone)
     if (fn_mm_cab_phone_blocked($phone)) {
         return ['ok' => false, 'message' => MM_CAB_BLOCKED_TEXT];
     }
-    $owners = fn_mm_cab_phone_owners($phone, true);
+    $owners = fn_mm_cab_login_owners($phone);
     if (!$owners) {
-        return ['ok' => false, 'message' => 'Этот номер не подтверждён ни в одной учётной записи, поэтому восстановить пароль по СМС нельзя.'
-            . ' Восстановите пароль по e-mail или позвоните оператору интернет-магазина по номеру 8 (800) 250-81-58 с этого телефона.'];
+        return ['ok' => false, 'message' => 'Этот номер не указан ни в одной учётной записи. Проверьте номер, восстановите пароль по e-mail'
+            . ' или позвоните оператору интернет-магазина по номеру 8 (800) 250-81-58.'];
     }
     $now = TIME;
     $row = db_get_row('SELECT * FROM ?:mm_phone_auth WHERE phone = ?s', $phone);
@@ -1184,11 +1226,11 @@ function fn_mm_cab_recover_check($phone, $code, $password1, $password2)
 
         return ['ok' => false, 'message' => 'Неверный код. Проверьте СМС и попробуйте ещё раз.', 'user_id' => 0];
     }
-    // Номер за время ожидания кода могли сменить или снять с него подтверждение
-    if (!in_array($user_id, fn_mm_cab_phone_owners($phone, true), true)) {
+    // Номер за время ожидания кода могли убрать из профиля или отключить запись
+    if (!in_array($user_id, fn_mm_cab_login_owners($phone), true)) {
         db_query("UPDATE ?:mm_phone_auth SET code_hash = '', code_expires = 0 WHERE phone = ?s", $phone);
 
-        return ['ok' => false, 'message' => 'Этот номер больше не подтверждён. ' . MM_CAB_OPERATOR_TEXT, 'user_id' => 0];
+        return ['ok' => false, 'message' => 'Этот номер больше не указан в учётной записи. ' . MM_CAB_OPERATOR_TEXT, 'user_id' => 0];
     }
     db_query(
         "UPDATE ?:users SET password = ?s, salt = '', password_change_timestamp = ?i WHERE user_id = ?i",
@@ -1418,27 +1460,17 @@ function fn_mm_cab_auth_status($hours = 1)
         $status['alerts'][] = 'Пауза входа по номеру сработала ' . $status['hour']['login_locks'] . ' раз';
     }
 
-    // Антивирус maldet: выжимку последней ежедневной проверки раз в час кладёт root (/usr/local/sbin/gm-maldet-status).
-    // Находки сообщаем один раз – в окне, куда попало окончание проверки; «проверка не шла 30 часов» – тоже один раз.
+    // Антивирус maldet: сервер у витрин один, тревоги о нём уже даёт сводка GOODMi (fn_gm_cab_auth_status). Здесь – только
+    // справка без тревог, чтобы одно и то же сообщение не приходило в Telegram дважды (2026-10-15).
     $scan = json_decode((string) @file_get_contents('/var/lib/gm-status/maldet.json'), true);
     if (!is_array($scan) || empty($scan['written_at']) || (int) $scan['written_at'] < $now - 3 * 3600) {
         $status['malware'] = null;
-        $status['alerts'][] = 'Нет свежих данных о проверке сайтов на вирусы – не работает выжимка /usr/local/sbin/gm-maldet-status';
     } else {
         $done = (int) $scan['completed_at'];
         $status['malware'] = [
             'last_scan' => $done ? date('Y-m-d H:i', $done) : '', 'files' => (int) $scan['files'],
             'hits' => (int) $scan['hits'], 'cleaned' => (int) $scan['cleaned'],
         ];
-        if ($scan['hits'] > 0 && $done > $hour) {
-            $files = array_slice((array) $scan['hit_files'], 0, 5);
-            $status['alerts'][] = 'Антивирус нашёл подозрительные файлы на сервере: ' . (int) $scan['hits'] . ' (проверка ' . date('d.m H:i', $done) . ')'
-                . ($files ? ': ' . implode('; ', $files) : '') . '. Отчёт: maldet --report ' . $scan['scan_id'];
-        }
-        $stale = $now - 30 * 3600;
-        if ($done < $stale && $done >= $stale - 3600 * $hours) {
-            $status['alerts'][] = 'Проверка сайтов на вирусы не запускалась больше 30 часов (последняя – ' . ($done ? date('d.m H:i', $done) : 'неизвестно') . ')';
-        }
     }
 
     return $status;

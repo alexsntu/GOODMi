@@ -3,6 +3,7 @@
    «как получить заказ» по способу доставки и «получатель». Адрес плательщика не показываем.
    Способ определяется по названию: «Пункт выдачи - <адрес>» – свой пункт выдачи, «СДЭК» – пункт СДЭК
    (на сайте не выбирается, его подбирает менеджер), «курьер» – доставка по адресу.
+   На витрине Maxmobiles – свой файл addons/my_changes/views/profiles/components/profiles_info.tpl (развилка company_id == 1).
    На остальных витринах и страницах – штатное содержимое темы responsive без изменений (ветка else).
    Оформление – секция 54 «Своего CSS» (.gm-ord-info). *}
 {if $runtime.company_id == 2 && $runtime.controller == "orders" && $runtime.mode == "details" && $order_info}
@@ -48,6 +49,8 @@
             </div>
         </div>
     </div>
+{elseif $runtime.company_id == 1 && $runtime.controller == "orders" && $runtime.mode == "details" && $order_info}
+    {include file="addons/my_changes/views/profiles/components/profiles_info.tpl"}
 {else}
 {include file="common/subheader.tpl" title=__("customer_information")}
 
