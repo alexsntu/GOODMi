@@ -120,12 +120,16 @@ if ($mode === 'phone') {
         return [CONTROLLER_STATUS_REDIRECT, 'profiles.update'];
     }
     $phone = fn_gm_cab_user_phone($user_id);
+    // Подтверждённый номер покупатель не меняет сам (2026-10-15): номер – ключ покупателя в МойСклад и БонусПлюс,
+    // меняет администратор по заявке на store@goodmi.ru; e-mail из профиля нужен для подсказки, заглушку не показываем
+    $email = (string) db_get_field('SELECT email FROM ?:users WHERE user_id = ?i', $user_id);
     Tygh::$app['view']->assign('gm_cab', [
         'nav' => fn_gm_cab_nav($user_id, 'profile'),
         'profile_url' => fn_url('profiles.update'),
         'has_phone' => $phone !== '',
         'state' => fn_gm_cab_verify_state($user_id, $phone),
         'url' => fn_url('gm_cabinet.verify'),
+        'email' => gm_cab_is_stub_email($email) ? '' : $email,
     ]);
     fn_add_breadcrumb('Номер телефона');
 }
@@ -191,10 +195,14 @@ if ($mode === 'verify') {
             $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
             $state = fn_gm_cab_verify_state($user_id, $phone);
             $result = null;
+            $locked_msg = 'Подтверждённый номер меняет интернет-магазин по заявке: напишите на store@goodmi.ru.';
             if ($action === 'change') {
-                // Смена номера: код уходит на новый номер, в профиль он попадёт только после ввода кода
+                // Смена номера: код уходит на новый номер, в профиль он попадёт только после ввода кода.
+                // Только для неподтверждённого номера – подтверждённый меняет администратор (см. mode=phone)
                 $new_phone = gm_cab_phone(isset($_REQUEST['new_phone']) ? $_REQUEST['new_phone'] : '');
-                if ($new_phone === '') {
+                if ($state['verified']) {
+                    $result = ['ok' => false, 'message' => $locked_msg];
+                } elseif ($new_phone === '') {
                     $result = ['ok' => false, 'message' => 'Введите номер полностью, например +7 978 000-00-00.'];
                 } elseif ($new_phone === $phone) {
                     $result = ['ok' => false, 'message' => 'Это ваш текущий номер.'];
@@ -203,7 +211,12 @@ if ($mode === 'verify') {
                 }
             } elseif ($action === 'check') {
                 $target = $state['change_phone'] !== '' ? $state['change_phone'] : $phone;
-                $result = fn_gm_cab_verify_check($user_id, $target, isset($_REQUEST['code']) ? $_REQUEST['code'] : '');
+                if ($state['verified'] && $target !== $phone) {
+                    // Код на новый номер, отправленный до запрета, подтверждённый номер не заменяет
+                    $result = ['ok' => false, 'message' => $locked_msg];
+                } else {
+                    $result = fn_gm_cab_verify_check($user_id, $target, isset($_REQUEST['code']) ? $_REQUEST['code'] : '');
+                }
                 if ($result['ok'] && $target !== $phone) {
                     fn_gm_cab_set_user_phone($user_id, $target);
                     $result['message'] = 'Номер изменён и подтверждён.';

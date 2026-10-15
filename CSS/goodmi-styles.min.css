@@ -4043,3 +4043,7 @@ body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw p{display
 body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw a:not(.hidden){display:flex !important;align-items:center;min-height:42px;padding:0 !important;font-size:15px;font-weight:400;color:var(--gm-mm-ink,#1d1d1f)}
 body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active) > .ut2-tlw .gm-acc-all a{font-weight:500;color:var(--gm-mm-accent,#ff6800)}
 body .ut2-sw-w nav.ut2-fm .ut2-lsl.gm-acc-open:not(.active){background:none}
+
+#litecheckout_form .litecheckout__input.gm-phone-ro{border-color:#ececf0 !important;background:#f4f4f6 !important;color:#8a8a93 !important;cursor:default;pointer-events:none}
+#litecheckout_form .gm-phone-ro-note{margin:6px 2px 0;font-family:Roboto,Arial,sans-serif;font-size:13px;line-height:1.4;color:#8a8a93}
+#litecheckout_form .gm-phone-ro-note a{font-weight:500;color:#ff6900;white-space:nowrap}

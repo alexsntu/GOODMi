@@ -31,7 +31,7 @@
 {* Подтверждённый номер в профиле не правится (profiles.pre.php модуля my_changes выставляет $gm_phone_locked):
    поле телефона гасится стилями MM-6m, смена номера – на странице mm_cabinet.phone *}
 {if $mm_lk_active == "profile" && $gm_phone_locked}
-<div class="gm-phone-lock">Номер телефона подтверждён и защищён от изменений. <a href="{"mm_cabinet.phone"|fn_url}">Изменить номер</a></div>
+<div class="gm-phone-lock">Номер телефона подтверждён и защищён от изменений. <a href="{"mm_cabinet.phone"|fn_url}">Как сменить номер</a></div>
 {/if}
 {/if}
 {if $runtime.company_id == 1 && !$auth.user_id && !isset($mm_lk_std_done) && isset($block.type) && $block.type == "main"

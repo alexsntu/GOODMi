@@ -2,5 +2,7 @@
 {if $runtime.company_id == 1}
     {script src="js/addons/my_changes/compare_notice.js"}
     {script src="js/addons/my_changes/checkout_city.js"}
+    {* Подтверждённый номер на оформлении заказа – только для чтения (флаг ставит checkout.pre.php модуля my_changes) *}
+    {if $gm_phone_locked && $runtime.controller == "checkout"}<script>Tygh.gm_phone_locked = true;</script>{/if}
     {script src="js/addons/my_changes/auth.js"}
 {/if}

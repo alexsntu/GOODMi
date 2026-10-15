@@ -6,10 +6,12 @@
  * 2) e-mail в форме регистрации и в профиле необязателен (см. profiles.pre.php модуля gm_delivery_date); покупателю без
  *    почты записана заглушка из номера, 79780000000@goodmi.ru (gm_cab_is_stub_email в app/gm_cabinet/store.php) –
  *    в форме профиля она не показывается;
- * 3) «Забыли пароль?» ведёт на восстановление по СМС (gm_cabinet.recover), оттуда есть ссылка на восстановление по e-mail.
+ * 3) «Забыли пароль?» ведёт на восстановление по СМС (gm_cabinet.recover), оттуда есть ссылка на восстановление по e-mail;
+ * 4) на оформлении заказа подтверждённый номер – только для чтения, с подсказкой «Как сменить номер» (секция 68 CSS).
  */
 (function (_, $) {
   var RECOVER_URL = 'index.php?dispatch=gm_cabinet.recover';
+  var PHONE_URL = 'index.php?dispatch=gm_cabinet.phone';
   var STUB_EMAIL = /^(mail|7\d{10}(-\d+)?)@goodmi\.ru$/i;
 
   function tune(context) {
@@ -33,6 +35,21 @@
     });
 
     $ctx.find('a.ty-password-forgot__a').attr('href', RECOVER_URL);
+
+    // 4) Оформление заказа: подтверждённый номер не правится (2026-10-15). Флаг Tygh.gm_phone_locked выставляет хук
+    //    index:scripts модуля gm_delivery_date; номер из формы подменяет и сервер (checkout.pre.php), здесь – только вид поля
+    if (_.gm_phone_locked) {
+      $ctx.find('#litecheckout_phone, #litecheckout_s_phone, #litecheckout_b_phone').each(function () {
+        var $input = $(this);
+        if ($input.hasClass('gm-phone-ro')) {
+          return;
+        }
+        $input.prop('readOnly', true).attr('tabindex', '-1').addClass('gm-phone-ro');
+        $input.closest('.litecheckout__field').append(
+          '<div class="gm-phone-ro-note">Номер подтверждён. <a href="' + PHONE_URL + '">Как сменить номер</a></div>'
+        );
+      });
+    }
   }
 
   $(function () {

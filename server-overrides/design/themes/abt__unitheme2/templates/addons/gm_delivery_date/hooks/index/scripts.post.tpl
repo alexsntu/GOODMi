@@ -4,6 +4,8 @@
     {script src="js/addons/gm_delivery_date/jivo.js"}
     {script src="js/addons/gm_delivery_date/about.js"}
     {script src="js/addons/gm_delivery_date/share.js"}
+    {* Подтверждённый номер на оформлении заказа – только для чтения (флаг ставит checkout.pre.php модуля gm_delivery_date) *}
+    {if $gm_phone_locked && $runtime.controller == "checkout"}<script>Tygh.gm_phone_locked = true;</script>{/if}
     {script src="js/addons/gm_delivery_date/auth.js"}
     {script src="js/addons/gm_delivery_date/seomenu.js"}
     {script src="js/addons/gm_delivery_date/flymenu.js"}

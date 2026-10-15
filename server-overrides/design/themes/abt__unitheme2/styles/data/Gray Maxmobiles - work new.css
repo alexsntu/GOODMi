@@ -4073,3 +4073,15 @@ body:not(.user-is-guest) .ut2-sticky-panel .ty-dropdown-box:has(.ty-account-info
 .main-content-grid:has(.ty-recover-password) h1.ty-mainbox-title{font-size:22px}
 }
 
+
+/* ================================================================
+   MM-12. Оформление заказа: подтверждённый номер не правится, 2026-10-15
+   ================================================================
+   Копия секции 68 GOODMi в цветах Maxmobiles. Вошедшему покупателю с подтверждённым
+   номером поле «Телефон» – только для чтения: класс gm-phone-ro и подсказку
+   .gm-phone-ro-note ставит js/addons/my_changes/auth.js, номер из формы подменяет
+   и сервер (controllers/frontend/checkout.pre.php модуля my_changes).
+   ================================================================ */
+#litecheckout_form .litecheckout__input.gm-phone-ro{border-color:#ececf0 !important;background:#f4f4f6 !important;color:#8a8a93 !important;cursor:default;pointer-events:none}
+#litecheckout_form .gm-phone-ro-note{margin:6px 2px 0;font-size:13px;line-height:1.4;color:#8a8a93}
+#litecheckout_form .gm-phone-ro-note a{font-weight:500;color:#0071e3;white-space:nowrap}
