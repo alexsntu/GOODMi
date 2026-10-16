@@ -46,8 +46,11 @@ if (isset($_GET['ev']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($sid === '' || !is_array($e) || !isset($e['source']) || !in_array($e['source'], $sources, true)) { http_response_code(204); exit; }
     define('BOOTSTRAP', 1);
     define('DIR_ROOT', __DIR__);
-    $config = [];
+    // config.local.php включает E_ALL и ждёт PRODUCT_STATUS и $config['dir'] – без них каждое событие писало Notice в журнал
+    define('PRODUCT_STATUS', '');
+    $config = ['dir' => ['root' => __DIR__, 'var' => __DIR__ . '/var/', 'cache_misc' => __DIR__ . '/var/cache/misc/']];
     @include __DIR__ . '/config.local.php';
+    error_reporting(E_ERROR);
     $db = @new mysqli($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
     if ($db->connect_errno) { http_response_code(204); exit; }
     $db->set_charset('utf8mb4');
