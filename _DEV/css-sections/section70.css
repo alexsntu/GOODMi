@@ -1,0 +1,13 @@
+
+/* ================================================================
+   70. Категории: выбранная подборка в строке быстрых ссылок (.seomenu), 2026-10-16
+   ================================================================
+   Дополнение к секциям 63 и 65. На странице подборки её плашка (пункт .active – скрипт
+   js/addons/gm_delivery_date/seomenu.js ставит класс gm-seomenu-sel и переносит её в начало)
+   выделена и с крестиком «Сбросить выбор» – он ведёт в сам раздел (как у DNS).
+   ================================================================ */
+.seomenu .ty-text-links .ty-text-links__item.gm-seomenu-sel{display:flex !important;align-items:center;border-radius:10px !important;background:#fff0e6 !important;box-shadow:inset 0 0 0 1px #ff6900}
+.seomenu .ty-text-links__item.gm-seomenu-sel .ty-text-links__a,.seomenu .ty-text-links__item.gm-seomenu-sel .ty-text-links__a:hover{padding-right:2px;background:none;font-weight:600;color:#ff6900}
+.seomenu .gm-seomenu-x{display:flex;align-items:center;justify-content:center;width:28px;height:28px;margin:0 4px 0 0;border-radius:8px;color:#ff6900;transition:background-color .2s ease}
+.seomenu .gm-seomenu-x:hover,.seomenu .gm-seomenu-x:focus-visible{background:#ffdcc4;outline:0}
+.seomenu .gm-seomenu-x svg{width:16px;height:16px}
