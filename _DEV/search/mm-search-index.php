@@ -26,6 +26,19 @@ require '/var/www/maxmobiles/data/www/maxmobiles.ru/app/mm_search/lib.php';
 function rows($db, $sql) { $r = $db->query($sql); if (!$r) { throw new Exception($db->error . ' :: ' . substr($sql, 0, 200)); } $o = []; while ($x = $r->fetch_assoc()) { $o[] = $x; } return $o; }
 function mq($mc, $sql) { if (!$mc->query($sql)) { throw new Exception('manticore: ' . $mc->error . ' :: ' . substr($sql, 0, 200)); } }
 function esc($mc, $s) { return "'" . $mc->real_escape_string((string) $s) . "'"; }
+/**
+ * Начальные формы слов (лемматизатор Manticore той же таблицы, что ищет): «Фонарики» → [фонарик], «Ножей» → [нож].
+ * Нужны для правил «раздел запроса первым» и «тип товара в названии» (2026-10-16, перенесено с GOODMi по просьбе пользователя).
+ */
+function lemmas($mc, $text, $table)
+{
+    $out = [];
+    $t = trim(preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', mb_strtolower(str_replace('ё', 'е', (string) $text), 'UTF-8')));
+    if ($t === '') { return $out; }
+    $r = $mc->query("CALL KEYWORDS('" . $mc->real_escape_string($t) . "', '$table')");
+    while ($r && ($x = $r->fetch_assoc())) { if ($x['normalized'] !== '') { $out[] = ltrim($x['normalized'], '='); } }
+    return $out;
+}
 function split_num($s) { return trim(preg_replace('/\s+/u', ' ', preg_replace(['/(\d)([^\d\s.,])/u', '/([^\d\s.,])(\d)/u'], '$1 $2', (string) $s))); }
 
 $t0 = microtime(true);
@@ -121,7 +134,7 @@ mq($mc, 'DROP TABLE IF EXISTS mm_products_new');
 mq($mc, "CREATE TABLE mm_products_new (
     title text, brand text, model text, category text, extra text,
     name string, url string, price float, amount int, in_stock bool, popularity bigint, is_acc bool,
-    cat_ids multi, main_cat int, added timestamp, mods multi, demand int, img string
+    cat_ids multi, main_cat int, added timestamp, mods multi, demand int, img string, head multi
 ) morphology = 'lemmatize_ru,stem_en' min_infix_len = '2' index_exact_words = '1' expand_keywords = '0'");
 
 $batch = []; $n = 0; $skipped = 0; $sugg_items = [];
@@ -148,19 +161,25 @@ foreach ($products as $x) {
     // Услуга ремонта – всё из раздела «Сервисный центр» (названия услуг слишком разные, чтобы узнавать их по словам)
     if (preg_match('/сервисный центр|^ремонт/ui', implode('|', $cat_names))) { $mods[] = 10; }
     $url = isset($seo[$id]) ? 'https://maxmobiles.ru/' . $seo[$id] . '/' : 'https://maxmobiles.ru/index.php?dispatch=products.view&product_id=' . $id;
-    $batch[] = sprintf('(%d,%s,%s,%s,%s,%s,%s,%s,%F,%d,%d,%d,%d,(%s),%d,%d,(%s),%d,%s)', $id,
+    // «Тип товара» – начальные формы первых двух слов названия (crc32): «Чехол для iPhone 17» → чехол, для;
+    // «Apple iPhone 17» → apple, iphone (по запросу «iphone 17» телефон выше чехла)
+    $head = [];
+    // Слово «Apple» не считаем: у «Apple iPhone Air» тип товара – iphone, air, у «Наушники Apple AirPods Pro 3» – наушник, airpods
+    // (иначе по «air» iPhone Air уступал MacBook Air, а по «airpods» AirPods Pro 3 – AirPods 5)
+    foreach (array_slice(lemmas($mc, implode(' ', array_slice(preg_split('/[\s\-]+/u', trim(preg_replace('/(^|\s)apple(?=\s)/iu', ' ', trim($x['product'])))), 0, 2)), 'mm_products_new'), 0, 3) as $lw) { $head[] = crc32($lw); }
+    $batch[] = sprintf('(%d,%s,%s,%s,%s,%s,%s,%s,%F,%d,%d,%d,%d,(%s),%d,%d,(%s),%d,%s,(%s))', $id,
         esc($mc, $x['product']), esc($mc, $brand), esc($mc, $model), esc($mc, implode(' ', $cat_names)), esc($mc, $extra),
         esc($mc, $x['product']), esc($mc, $url), isset($prices[$id]) ? $prices[$id] : 0, (int) $x['amount'], (int) $x['amount'] > 0 ? 1 : 0,
-        isset($pop[$id]) ? $pop[$id] : 0, $is_acc, implode(',', array_unique($cat_ids)), $main, (int) $x['timestamp'], implode(',', $mods ?: [0]), isset($demand[$id]) ? $demand[$id] : 0, esc($mc, isset($img[$id]) ? $img[$id] : ''));
+        isset($pop[$id]) ? $pop[$id] : 0, $is_acc, implode(',', array_unique($cat_ids)), $main, (int) $x['timestamp'], implode(',', $mods ?: [0]), isset($demand[$id]) ? $demand[$id] : 0, esc($mc, isset($img[$id]) ? $img[$id] : ''), implode(',', array_unique($head) ?: [0]));
     $sugg_items[] = ['title' => $x['product'], 'model' => isset($f['model']) ? $f['model'] : [], 'demand' => isset($demand[$id]) ? $demand[$id] : 0,
         'pop' => isset($pop[$id]) ? $pop[$id] : 0, 'stock' => (int) $x['amount'] > 0, 'service' => in_array(10, $mods, true)];
     if (count($batch) >= 200) {
-        mq($mc, 'INSERT INTO mm_products_new (id,title,brand,model,category,extra,name,url,price,amount,in_stock,popularity,is_acc,cat_ids,main_cat,added,mods,demand,img) VALUES ' . implode(',', $batch));
+        mq($mc, 'INSERT INTO mm_products_new (id,title,brand,model,category,extra,name,url,price,amount,in_stock,popularity,is_acc,cat_ids,main_cat,added,mods,demand,img,head) VALUES ' . implode(',', $batch));
         $n += count($batch); $batch = [];
     }
 }
 if ($batch) {
-    mq($mc, 'INSERT INTO mm_products_new (id,title,brand,model,category,extra,name,url,price,amount,in_stock,popularity,is_acc,cat_ids,main_cat,added,mods,demand,img) VALUES ' . implode(',', $batch));
+    mq($mc, 'INSERT INTO mm_products_new (id,title,brand,model,category,extra,name,url,price,amount,in_stock,popularity,is_acc,cat_ids,main_cat,added,mods,demand,img,head) VALUES ' . implode(',', $batch));
     $n += count($batch);
 }
 // Подмена без простоя: старая таблица удаляется только после того, как новая собрана
@@ -185,7 +204,7 @@ foreach (rows($db, "SELECT l.object_id, i.image_path, l.detailed_id FROM {$p}ima
     if ($u === '' && is_file($root . $rel)) { $u = '/images/' . $rel; }
     $cimg[(int) $y['object_id']] = $u;
 }
-mq($mc, "CREATE TABLE mm_categories (title text, name string, path string, url string, products int, img string) morphology = 'lemmatize_ru,stem_en' min_infix_len = '2'");
+mq($mc, "CREATE TABLE mm_categories (title text, name string, path string, url string, products int, img string, lem string) morphology = 'lemmatize_ru,stem_en' min_infix_len = '2'");
 $rows_c = [];
 foreach ($cat_count as $cid => $cnt) {
     $names = $cat_text($cid);
@@ -194,9 +213,11 @@ foreach ($cat_count as $cid => $cnt) {
     $chain = [];
     foreach (explode('/', $cats[$cid]['id_path']) as $pid) { $chain[] = isset($cseo[(int) $pid]) ? $cseo[(int) $pid] : null; }
     $url = !in_array(null, $chain, true) ? 'https://maxmobiles.ru/' . implode('/', $chain) . '/' : 'https://maxmobiles.ru/index.php?dispatch=categories.view&category_id=' . $cid;
-    $rows_c[] = sprintf('(%d,%s,%s,%s,%s,%d,%s)', $cid, esc($mc, implode(' ', $names)), esc($mc, end($names)), esc($mc, implode(' › ', $names)), esc($mc, $url), $cnt, esc($mc, isset($cimg[$cid]) ? $cimg[$cid] : ''));
+    // Начальные формы слов названия раздела («Чехлы для iPhone 17» → чехол для iphone 17) – для правила «раздел запроса первым»
+    $lem = implode(' ', lemmas($mc, end($names), 'mm_products'));
+    $rows_c[] = sprintf('(%d,%s,%s,%s,%s,%d,%s,%s)', $cid, esc($mc, implode(' ', $names)), esc($mc, end($names)), esc($mc, implode(' › ', $names)), esc($mc, $url), $cnt, esc($mc, isset($cimg[$cid]) ? $cimg[$cid] : ''), esc($mc, $lem));
 }
-if ($rows_c) { mq($mc, 'INSERT INTO mm_categories (id,title,name,path,url,products,img) VALUES ' . implode(',', $rows_c)); }
+if ($rows_c) { mq($mc, 'INSERT INTO mm_categories (id,title,name,path,url,products,img,lem) VALUES ' . implode(',', $rows_c)); }
 
 // «Часто ищут»: до появления своего журнала запросов – частые запросы покупателей из журналов сайта (queries.txt)
 mq($mc, 'DROP TABLE IF EXISTS mm_queries');

@@ -87,14 +87,13 @@
     var mobile = window.innerWidth < 768;
     var width = mobile ? window.innerWidth - 16 : Math.min(760, Math.max(r.width, 640));
     var left = mobile ? 8 : Math.max(8, Math.min(r.left, window.innerWidth - width - 8));
-    // ПК: затемнение и панель – под белой строкой шапки, а не вплотную к полю (иначе серая полоса наезжает на шапку)
+    // ПК и телефон: затемнение и панель – под белой строкой шапки с полем, а не вплотную к полю (иначе серая полоса наезжает
+    // на шапку, а панель прилипает к полю), и с отступом 8 px
     var bottom = r.bottom;
-    if (!mobile) {
-      var row = input.closest('.container-fluid-row')[0];
-      var rb = row ? row.getBoundingClientRect().bottom : 0;
-      if (rb > bottom && rb - bottom < 60) { bottom = rb; }
-    }
-    panel.css({top: Math.round(bottom + (mobile ? 6 : 8)) + 'px', left: Math.round(left) + 'px', width: Math.round(width) + 'px'});
+    var row = input.closest('.container-fluid-row')[0];
+    var rb = row ? row.getBoundingClientRect().bottom : 0;
+    if (rb > bottom && rb - bottom < 60) { bottom = rb; }
+    panel.css({top: Math.round(bottom + 8) + 'px', left: Math.round(left) + 'px', width: Math.round(width) + 'px'});
     dim.css({top: Math.round(bottom) + 'px'});
   }
 

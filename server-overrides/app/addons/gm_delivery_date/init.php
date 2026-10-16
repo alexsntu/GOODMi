@@ -25,5 +25,13 @@ fn_register_hooks(
     'before_dispatch',
     'top_menu_form_post',
     // Меню админки: пункты кабинета GOODMi – только при выбранной витрине GOODMi
-    'backend_menu_generate_before_process_item'
+    'backend_menu_generate_before_process_item',
+    // Свой поиск GOODMi (этап 3, 2026-10-16): страница результатов products.search – товары из Manticore
+    'get_products_pre',
+    'get_products',
+    'get_products_post',
+    'products_sorting',
+    // Статистика поиска GOODMi (этап 4): корзина и заказ после поиска
+    'add_to_cart',
+    'place_order'
 );

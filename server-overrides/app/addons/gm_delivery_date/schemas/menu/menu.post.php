@@ -21,4 +21,12 @@ $schema['central']['customers']['items']['gm_phone_blocked'] = [
     'position' => 151,
 ];
 
+// Свой поиск GOODMi (2026-10-16): статистика, проверка запроса, синонимы, закрепления, индекс – app/controllers/backend/gm_search.php.
+// Виден только при выбранной витрине GOODMi (хук backend_menu_generate_before_process_item в func.php)
+$schema['central']['products']['items']['gm_search'] = [
+    'title' => 'Поиск GOODMi',
+    'href' => 'gm_search.manage',
+    'position' => 1501,
+];
+
 return $schema;

@@ -281,7 +281,12 @@
 
 После правки: `nginx -t && systemctl reload nginx`. Бэкап прежних настроек – `/root/gm-backups/2026-10-13-bot-filter/`.
 
-### Свой поиск Maxmobiles вместо Diginetica (с 2026-10-16, пока только в браузере с кукой `mm_search_test`)
+### Свой поиск Maxmobiles вместо Diginetica (с 2026-10-16 у всех покупателей Maxmobiles; Diginetica на Maxmobiles удалена)
+
+С включения для всех кука `mm_search_test` ничего не включает (`?test=` только стирает её), скрипт `mm_search.js` – в общем
+бандле через хук my_changes, стили – секция MM-13 «Своего CSS» Maxmobiles (= `app/mm_search/suggest.css`), статистика – таблицы
+`cscart_mm_search_*` и админка `mm_search.*` (Товары → «Поиск Maxmobiles»). Откат включения – `/root/gm-backups/2026-10-16-mm-search-golive/`.
+Ниже – как было на этапах до включения.
 
 Движок – Manticore Search 29.9 на этом же сервере (служба `manticore`, слушает только 127.0.0.1:9306/9308/9312; репозиторий
 `/etc/apt/sources.list.d/manticoresearch.sources`). Индексы: `mm_products` (товары витрины 1), `mm_suggest` (словарь подсказок),
@@ -296,3 +301,23 @@
   подключает `/mm-search.php?asset=js`. Секция MM-13 «Своего CSS» Maxmobiles – старая версия стилей, при включении для всех заменить
   содержимым `app/mm_search/suggest.css`.
 - Откаты: `/root/gm-backups/2026-10-16-manticore/`, `…-mm-search/`, `…-mm-search-results/` (ROLLBACK.txt в каждой).
+
+### Свой поиск GOODMi (с 2026-10-16, этапы 2–3 – только в браузере с отметкой `gm_search_test`; у покупателей – Diginetica)
+
+Отдельная копия поиска Maxmobiles: свои индексы Manticore `gm_products`, `gm_suggest`, `gm_categories`, `gm_queries`, `gm_status`,
+кука `gm_sid`, история `gm_search_history`, классы `gm-*` – с Maxmobiles не смешивается. Адрес категории – только своё имя (без родителей).
+Сборка – `/root/gm-search/` (исходники – `_DEV/search-gm/`): `gm-search-index.php` (25 */2), `gm-search-queries.php` (частые запросы:
+автодополнение Diginetica по буквам + журналы nginx, 05:40), `gm-search-demand.php` (спрос за 90 дней из МойСклад GOODMi) – `/etc/cron.d/gm-search`.
+- Файлы сайта: `gm-search.php` (корень: подсказки `?q=`, `?cats=1`, `?chips=1`, отметка `?test=on|off`, `?asset=js|css`; не goodmi.ru → 404;
+  `?ev=1` до этапа 4 ничего не пишет), `app/gm_search/lib.php`, `app/gm_search/suggest.css` (цвета GOODMi), `js/addons/gm_delivery_date/gm_search.js`
+  (флаги STATS и RESULTS – выключены до этапов 3–4).
+- Шаблоны: `common/scripts.tpl` – Diginetica GOODMi (10125) не грузится при отметке `gm_search_test`; хук gm_delivery_date `index/scripts.post.tpl` –
+  при отметке подключает `/gm-search.php?asset=js` (скрипт сам подключает стили).
+- Этап 3 (страница результатов, при отметке): `app/addons/gm_delivery_date/controllers/frontend/products.pre.php` (поиск по Manticore →
+  Registry `runtime.gm_search`, плитка `gm_cat`, сортировка «По релевантности»), хуки `get_products_pre`, `get_products`, `get_products_post`,
+  `products_sorting` в `func.php`/`init.php` модуля gm_delivery_date (ключи `gm_search` – с хуками Maxmobiles `mm_search` не пересекаются).
+- Откаты: `/root/gm-backups/2026-10-16-gm-search-s2/ROLLBACK.txt`, `…-gm-search-s3/ROLLBACK.txt`.
+- Этап 4 и правки: статистика `cscart_gm_search_*` и админка «Товары → Поиск GOODMi» (`app/controllers/backend/gm_search.php`,
+  `app/gm_search/stats.php`, `design/backend/templates/views/gm_search/*`, пункт в `gm_delivery_date/schemas/menu/menu.post.php`), синонимы
+  в админке (196), правила порядка выдачи «раздел запроса» и «тип товара» (`gm_search_intent`; на Maxmobiles – `mm_search_intent`).
+  Откаты: `…-gm-search-s4/`, `…-gm-search-admin/`, `…-gm-search-intent/`, `…-mm-intent/`, `…-mobile-gap/`.

@@ -27,7 +27,7 @@
     <td>{$i.pos}</td>
     <td><a href="{$i.url}" target="_blank">{$i.name}</a> <span class="muted">#{$i.id}</span>{if !$i.in_stock} <span class="label">нет в наличии</span>{/if}</td>
     <td class="right">{$i.w}</td>
-    <td class="mm-st-f">{foreach $i.factors as $fname => $fv}{if $fv != 1}{$fname} ×{$fv}{if !$fv@last}; {/if}{/if}{/foreach}</td>
+    <td class="mm-st-f">{foreach $i.factors as $fname => $fv}{if $fv != 1}{$fname} ×{$fv}{if !$fv@last}; {/if}{/if}{/foreach}{if $i.order}<br><b>{$i.order}</b>{/if}</td>
     <td class="right">{$i.score}</td>
 </tr>{foreachelse}<tr><td colspan="5" class="no-items">Ничего не найдено</td></tr>{/foreach}
 </tbody></table>

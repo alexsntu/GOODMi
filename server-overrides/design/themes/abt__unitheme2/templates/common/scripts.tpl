@@ -163,12 +163,16 @@ width: 30% !important;
    из России, браузер ждёт его и не завершает загрузку карточки товара). Поиск не затронут.
    Откат: удалить этот script. Бэкап: /root/gm-backups/2026-10-14-diginetica-pixel/ *}
 <script type="text/javascript">(function(){ldelim}var d=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');if(!d||!d.set)return;Object.defineProperty(HTMLImageElement.prototype,'src',{ldelim}configurable:true,enumerable:d.enumerable,get:d.get,set:function(v){ldelim}if(typeof v==='string'&&v.indexOf('tracking.diginetica.net')!==-1)return;d.set.call(this,v);{rdelim}{rdelim});{rdelim})();</script>
+{* GOODMi 2026-10-16: свой поиск, этап 2 – в браузере с тестовой отметкой gm_search_test (/gm-search.php?test=on) Diginetica
+   не грузится, подсказки даёт свой скрипт (хук index:scripts модуля gm_delivery_date). У остальных покупателей – как было. *}
+{if !isset($smarty.cookies.gm_search_test)}
 <script type="text/javascript"> var digiScript = document.createElement('script');
 digiScript.src = '//cdn.diginetica.net/10125/client.js';
 digiScript.defer = true;
 digiScript.async = true;
 document.head.appendChild(digiScript);
 </script>
+{/if}
 
 
 

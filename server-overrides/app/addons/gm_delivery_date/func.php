@@ -1001,4 +1001,124 @@ function fn_gm_delivery_date_backend_menu_generate_before_process_item(&$menu, $
     if ($root === 'customers' && (int) \Tygh\Registry::get('runtime.company_id') !== 2) {
         unset($items['items']['gm_phone_verify'], $items['items']['gm_phone_blocked']);
     }
+    if ($root === 'products' && (int) \Tygh\Registry::get('runtime.company_id') !== 2) {
+        unset($items['items']['gm_search']);
+    }
+}
+
+/**
+ * Свой поиск GOODMi (этап 3, 2026-10-16; копия хуков поиска Maxmobiles в my_changes/func.php): на странице результатов
+ * (products.search) вместо поиска CS-Cart по словам – товары, найденные Manticore (app/gm_search/lib.php), в порядке
+ * релевантности. Набор (до 1000 товаров) кладёт controllers/frontend/products.pre.php модуля в Registry 'runtime.gm_search';
+ * фильтры, цены, страницы и карточки остаются штатными и считаются по этому набору. Действует только для того же запроса q
+ * и только пока набор задан (витрина 2; на этапе 3 – браузер с отметкой gm_search_test) – остальные списки товаров на
+ * странице и другие витрины не затрагиваются. Свои ключи gm_search – с хуками Maxmobiles (mm_search) не пересекаются.
+ */
+function fn_gm_delivery_date_gm_search_for($params)
+{
+    $s = Registry::get('runtime.gm_search');
+    if (!$s || !isset($params['q']) || !is_string($params['q']) || trim($params['q']) !== $s['q']) {
+        return null;
+    }
+
+    return $s;
+}
+
+function fn_gm_delivery_date_get_products_pre(&$params, $items_per_page, $lang_code)
+{
+    $s = fn_gm_delivery_date_gm_search_for($params);
+    if (!$s) {
+        return;
+    }
+    // Ничего не найдено – пустой список, а не «все товары»
+    $params['pid'] = $s['ids'] ? $s['ids'] : [0];
+    unset($params['q'], $params['pname'], $params['pshort'], $params['pfull'], $params['pkeywords'], $params['pcode_from_q']);
+    $params['gm_search'] = true;
+}
+
+function fn_gm_delivery_date_get_products(&$params, &$fields, &$sortings, &$condition, &$join, &$sorting, &$group_by, $lang_code, &$having)
+{
+    if (empty($params['gm_search'])) {
+        return;
+    }
+    $s = Registry::get('runtime.gm_search');
+    $sortings['relevance'] = db_quote('FIELD(products.product_id, ?n)', $s && $s['ids'] ? $s['ids'] : [0]);
+}
+
+function fn_gm_delivery_date_get_products_post(&$products, &$params, $lang_code)
+{
+    if (empty($params['gm_search'])) {
+        return;
+    }
+    // Запрос остаётся в поле поиска и в ссылках фильтров (Baymard: не терять введённое)
+    $s = Registry::get('runtime.gm_search');
+    if ($s) {
+        $params['q'] = $s['q'];
+        // Статистика: какие товары показаны на странице и в каком порядке (один раз на поиск)
+        if (!empty($s['log_id']) && empty($s['shown_saved']) && is_array($products)) {
+            Registry::set('runtime.gm_search.shown_saved', true);
+            try {
+                db_query('UPDATE ?:gm_search_log SET shown = ?s WHERE id = ?i', implode(',', array_map('intval', array_keys($products))), $s['log_id']);
+            } catch (\Throwable $e) {
+            }
+        }
+    }
+}
+
+/**
+ * Статистика своего поиска GOODMi: корзина и заказы покупателей, которые искали недавно (корзина – поиск за 2 часа, заказ – за
+ * сутки), – в cscart_gm_search_events с последним поиском. Только витрина 2 и только с меткой gm_sid (её ставит поиск). Любой сбой
+ * записи пропускается – корзина и оформление заказа работают как обычно.
+ */
+function fn_gm_delivery_date_gm_search_last($within)
+{
+    if ((int) Registry::get('runtime.company_id') !== 2 || !isset($_COOKIE['gm_sid']) || !preg_match('/^[a-f0-9]{16}$/', (string) $_COOKIE['gm_sid'])) {
+        return [null, 0];
+    }
+    $sid = (string) $_COOKIE['gm_sid'];
+    $id = (int) db_get_field('SELECT id FROM ?:gm_search_log WHERE sid = ?s AND ts > ?i ORDER BY id DESC LIMIT 1', $sid, TIME - $within);
+
+    return [$sid, $id];
+}
+
+function fn_gm_delivery_date_add_to_cart(&$cart, $product_id, $_id, $_data)
+{
+    try {
+        list($sid, $search_id) = fn_gm_delivery_date_gm_search_last(7200);
+        if (!$search_id) {
+            return;
+        }
+        $item = isset($cart['products'][$_id]) ? $cart['products'][$_id] : [];
+        db_query('INSERT INTO ?:gm_search_events ?e', [
+            'ts' => TIME, 'sid' => $sid, 'type' => 'cart', 'search_id' => $search_id, 'product_id' => (int) $product_id,
+            'qty' => isset($item['amount']) ? (int) $item['amount'] : 1, 'price' => isset($item['price']) ? (float) $item['price'] : 0, 'order_id' => 0,
+        ]);
+    } catch (\Throwable $e) {
+    }
+}
+
+function fn_gm_delivery_date_place_order($order_id, $action, $order_status, $cart, $auth)
+{
+    try {
+        list($sid, $search_id) = fn_gm_delivery_date_gm_search_last(86400);
+        if (!$search_id || !$order_id || empty($cart['products'])
+            || db_get_field('SELECT 1 FROM ?:gm_search_events WHERE order_id = ?i LIMIT 1', $order_id)) {
+            return;
+        }
+        foreach ($cart['products'] as $item) {
+            db_query('INSERT INTO ?:gm_search_events ?e', [
+                'ts' => TIME, 'sid' => $sid, 'type' => 'order', 'search_id' => $search_id, 'product_id' => (int) $item['product_id'],
+                'qty' => (int) $item['amount'], 'price' => isset($item['price']) ? (float) $item['price'] : 0, 'order_id' => (int) $order_id,
+            ]);
+        }
+    } catch (\Throwable $e) {
+    }
+}
+
+function fn_gm_delivery_date_products_sorting(&$sorting, $simple_mode)
+{
+    if (!Registry::get('runtime.gm_search')) {
+        return;
+    }
+    $sorting = ['relevance' => ['description' => 'По релевантности', 'default_order' => 'asc', 'desc' => false]] + $sorting;
 }
