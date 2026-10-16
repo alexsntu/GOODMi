@@ -5,6 +5,6 @@
     {* Подтверждённый номер на оформлении заказа – только для чтения (флаг ставит checkout.pre.php модуля my_changes) *}
     {if $gm_phone_locked && $runtime.controller == "checkout"}<script>Tygh.gm_phone_locked = true;</script>{/if}
     {script src="js/addons/my_changes/auth.js"}
-    {* Свой поиск, этап 2: подсказки только в браузере с кукой mm_search_test (вместо Diginetica, см. common/scripts.tpl) *}
-    {if isset($smarty.cookies.mm_search_test) && $smarty.cookies.mm_search_test == "1"}<link rel="stylesheet" href="/mm-search.php?asset=css&amp;v={$smarty.const.TIME}"><script src="/mm-search.php?asset=js&amp;v={$smarty.const.TIME}"></script>{/if}
+    {* Свой поиск (с 2026-10-16 у всех покупателей Maxmobiles вместо Diginetica): подсказки, история, плитки категорий, статистика *}
+    {script src="js/addons/my_changes/mm_search.js"}
 {/if}

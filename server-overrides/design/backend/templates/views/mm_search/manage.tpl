@@ -28,7 +28,7 @@
     </tbody></table>
     <h4>Подсказки</h4>
     <table class="table table-middle"><tbody>
-    {foreach $o.suggest as $s => $n}<tr><td>{if $s == "sg_query"}выбрали вариант запроса{elseif $s == "sg_history"}выбрали из истории{elseif $s == "sg_scope"}выбрали «в категории»{elseif $s == "sg_product"}перешли к товару из подсказок{elseif $s == "sg_all"}«Все N товаров»{elseif $s == "tile"}плитка категории в результатах{elseif $s == "sg_exit"}набрали и ушли (подсказки были){elseif $s == "sg_none"}набрали и ушли (подсказок не было){else}{$s}{/if}</td><td class="right">{$n}</td></tr>{foreachelse}<tr><td class="no-items">Нет данных</td></tr>{/foreach}
+    {foreach $o.suggest as $s => $n}<tr><td>{if $s == "sg_query"}выбрали вариант запроса{elseif $s == "sg_history"}выбрали из истории{elseif $s == "sg_scope"}выбрали «в категории»{elseif $s == "sg_product"}перешли к товару из подсказок{elseif $s == "sg_all"}«Все N товаров»{elseif $s == "tile"}плитка категории в результатах{elseif $s == "sg_chip"}плашка-уточнение в подсказках{elseif $s == "chip"}плашка «Уточнить» в результатах{elseif $s == "sg_exit"}набрали и ушли (подсказки были){elseif $s == "sg_none"}набрали и ушли (подсказок не было){else}{$s}{/if}</td><td class="right">{$n}</td></tr>{foreachelse}<tr><td class="no-items">Нет данных</td></tr>{/foreach}
     </tbody></table>
 </div>
 <div>

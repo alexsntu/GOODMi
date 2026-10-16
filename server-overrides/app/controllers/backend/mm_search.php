@@ -57,6 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_set_notification($res['ok'] ? 'N' : 'E', $res['ok'] ? 'Готово' : 'Ошибка', $res['message']);
     }
     $back = $mode === 'pins' && !empty($_REQUEST['q']) ? 'mm_search.pins?q=' . urlencode((string) $_REQUEST['q']) : 'mm_search.' . $mode;
+    // Синонимы: вернуться на ту же страницу списка и с тем же поиском
+    if ($mode === 'synonyms' && (!empty($_REQUEST['find']) || !empty($_REQUEST['page']))) {
+        $back .= '?find=' . urlencode((string) ($_REQUEST['find'] ?? '')) . '&page=' . (int) ($_REQUEST['page'] ?? 1);
+    }
 
     return [CONTROLLER_STATUS_OK, $back];
 }
@@ -97,7 +101,9 @@ if ($mode === 'manage') {
     }
     $view->assign('mm_engine', (bool) $mm_mc);
 } elseif ($mode === 'synonyms') {
-    $view->assign('mm_rows', mm_stats_synonyms());
+    $mm_list = mm_stats_synonyms(isset($_REQUEST['find']) ? mb_substr((string) $_REQUEST['find'], 0, 60) : '', isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1, 25);
+    $view->assign('mm_list', $mm_list);
+    $view->assign('mm_rows', $mm_list['rows']);
     $view->assign('mm_src', isset($_REQUEST['src']) ? mb_substr((string) $_REQUEST['src'], 0, 80) : '');
     $view->assign('mm_builtin', count(mm_search_synonyms()) - count(db_get_fields('SELECT src FROM ?:mm_search_synonyms WHERE active = 1')));
 } elseif ($mode === 'pins') {

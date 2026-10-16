@@ -1,22 +1,15 @@
 /**
- * Maxmobiles: выпадающие подсказки своего поиска в шапке (этап 2, 2026-10-16). Подключается только в браузере с кукой
- * mm_search_test=1 (включается ссылкой /mm-search.php?test=on) – хук index:scripts модуля my_changes; в таком браузере
- * не загружается Diginetica (common/scripts.tpl). Данные – /mm-search.php?q=… (варианты запроса, «в категории», товары).
+ * Maxmobiles: выпадающие подсказки своего поиска в шапке (с 2026-10-16 – у всех покупателей Maxmobiles вместо Diginetica;
+ * хук index:scripts модуля my_changes; Diginetica на Maxmobiles отключена совсем, см. common/scripts.tpl).
+ * Данные – /mm-search.php?q=… (варианты запроса, «в категории», товары).
  *
  * Как устроено (по исследованиям Baymard и подсказкам Amazon/Apple/Ozon): слева варианты запроса с выделенной ДОПИСАННОЙ
  * частью, затем «в категории» с числом товаров; справа до 4 товаров с фото и ценой и «Все N товаров». Стрелки ↑↓ ходят
  * по пунктам по кругу, выбранный вариант запроса сразу попадает в поле; Enter открывает выбранное, Esc закрывает.
- * Фон страницы затемняется. Пустое поле – «Часто ищут». Оформление – секция MM-13 «Своего CSS» Maxmobiles.
+ * Фон страницы затемняется. Пустое поле – «Вы искали» и «Часто ищут». Оформление – секция MM-13 «Своего CSS» Maxmobiles.
  */
 (function (_, $) {
   var URL = '/mm-search.php';
-  // На время настройки стили приходят с /mm-search.php (CS-Cart вырезает <link> из хука index:scripts); при запуске
-  // для всех они переедут в «Свой CSS» Maxmobiles (секция MM-13), и эта строка не понадобится
-  if (!document.getElementById('mm-sg-css')) {
-    var css = document.createElement('link');
-    css.id = 'mm-sg-css'; css.rel = 'stylesheet'; css.href = URL + '?asset=css&v=' + Date.now();
-    document.head.appendChild(css);
-  }
   var DELAY = 120;
   var panel = null, dim = null, input = null, form = null, typed = '', items = [], active = -1, timer = null, ctrl = null, last = null;
 
@@ -78,6 +71,12 @@
       e.preventDefault(); e.stopPropagation();
       histSet([]); last = null; load('');
     });
+    panel.on('click', '.mm-sg__chip', function (e) {
+      e.preventDefault();
+      var v = $(this).attr('data-chip');
+      track({source: 'sg_chip', q: v, typed: typed});
+      input.val(v + ' '); typed = input.val(); last = null; load($.trim(v)); input[0].focus();
+    });
     panel.on('click', '[data-i]', function (e) { e.preventDefault(); choose(+$(this).attr('data-i')); });
     panel.on('mousemove', '[data-i]', function () { mark(+$(this).attr('data-i'), false); });
     $(window).on('resize scroll', function () { if (!panel.prop('hidden')) { place(); } });
@@ -130,14 +129,21 @@
         h = '<div class="mm-sg__h mm-sg__h--hist">Вы искали<span class="mm-sg__clear" role="button">Очистить</span></div>' + h;
       }
     }
+    // Плашки-уточнения: следующее слово к запросу (нажатие дописывает слово и обновляет подсказки, поиск не запускает)
+    var c = '';
+    if (!d.popular && d.chips && d.chips.length) {
+      c = '<div class="mm-sg__chips">' + $.map(d.chips, function (w) {
+        return '<button type="button" class="mm-sg__chip" data-chip="' + esc((d.chips_base ? d.chips_base + ' ' : '') + w) + '">' + esc(w) + '</button>';
+      }).join('') + '</div>';
+    }
     shownCount = items.length;
     if (!h && !q && !s && !p) { hide(); return; }
     panel.html(
-      h
+      c + h
       + (d.popular && q ? '<div class="mm-sg__h">Часто ищут</div>' : '')
       + (d.layout ? '<div class="mm-sg__h">Показаны результаты для «' + esc(d.layout) + '»</div>' : '')
       + '<div class="mm-sg__cols' + (p ? '' : ' mm-sg__cols--one') + '"><div class="mm-sg__left">' + q + s + '</div>'
-      + (p ? '<div class="mm-sg__right">' + p + '</div>' : '') + '</div>'
+      + (p ? '<div class="mm-sg__right">' + (d.popular ? '<div class="mm-sg__h">Популярные товары</div>' : '') + p + '</div>' : '') + '</div>'
     );
     show();
   }
@@ -220,7 +226,11 @@
       }
     });
     $inp.on('input', function () { chosen = false; });
-    $inp.closest('form').on('submit', function () { submitted = true; });
+    // Enter без выбора в подсказках: CS-Cart (cm-hint) мог оставить полю имя hint_q – тогда поиск ушёл бы без запроса
+    $inp.closest('form').on('submit', function () {
+      submitted = true;
+      if ($.trim($inp.val()) !== '' && $inp.attr('name') !== 'q') { $inp.attr('name', 'q'); }
+    });
   }
 
   function init(ctx) {
@@ -298,6 +308,28 @@
       .catch(function () {});
   }
 
+  // Страница результатов: ряд «Уточнить» – плашки со следующим словом к запросу (как у Diginetica), над плитками категорий
+  function refineChips(q) {
+    var $list = $('[id^="products_search_"]').filter(function () { return /^products_search_\d+$/.test(this.id); }).first();
+    if (!$list.length || $('.mm-refine').length) { return; }
+    fetch(URL + '?chips=1&q=' + encodeURIComponent(q), {credentials: 'omit'})
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.chips || !d.chips.length) { return; }
+        var html = $.map(d.chips, function (w) {
+          var u = new window.URL(window.location.href);
+          u.searchParams.set('q', (d.base ? d.base + ' ' : '') + w);
+          u.searchParams.delete('page'); u.searchParams.delete('mm_cat');
+          return '<a class="mm-refine__chip" href="' + esc(u.pathname + u.search) + '">' + esc(w) + '</a>';
+        }).join('');
+        var $block = $('<div class="mm-refine"><span class="mm-refine__h">Уточнить:</span>' + html + '</div>');
+        var $cats = $('.mm-cats');
+        if ($cats.length) { $cats.before($block); } else { $list.before($block); }
+      })
+      .catch(function () {});
+    $(document).on('click', '.mm-refine__chip', function () { track({source: 'chip', q: $(this).text(), typed: q}); });
+  }
+
   // Страница результатов: клик по товару (один раз на товар) – в статистику с запросом страницы; место считает сервер
   function resultClicks(q) {
     var seen = {};
@@ -321,7 +353,7 @@
     // Страница результатов поиска – запрос в историю
     try {
       var sp = new URLSearchParams(window.location.search);
-      if (sp.get('dispatch') === 'products.search' && sp.get('q')) { sid(); histAdd(sp.get('q')); categoryTiles(sp.get('q')); resultClicks(sp.get('q')); }
+      if (sp.get('dispatch') === 'products.search' && sp.get('q')) { sid(); histAdd(sp.get('q')); refineChips(sp.get('q')); categoryTiles(sp.get('q')); resultClicks(sp.get('q')); }
     } catch (e) {}
   });
   $.ceEvent('on', 'ce.commoninit', function (ctx) { init(ctx); });

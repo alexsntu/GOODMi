@@ -150,7 +150,7 @@ function mm_stats_suggest($from, $limit = 100)
     return [
         'chosen' => db_get_array(
             "SELECT source, q, COUNT(*) n, COUNT(DISTINCT sid) people, ROUND(AVG(pos), 1) pos FROM ?:mm_search_clicks"
-            . " WHERE ts >= ?i AND source IN ('sg_query', 'sg_history', 'sg_scope', 'sg_product', 'sg_all') GROUP BY source, q ORDER BY n DESC LIMIT ?i", $from, (int) $limit
+            . " WHERE ts >= ?i AND source IN ('sg_query', 'sg_history', 'sg_scope', 'sg_product', 'sg_all', 'sg_chip', 'chip') GROUP BY source, q ORDER BY n DESC LIMIT ?i", $from, (int) $limit
         ),
         'abandoned' => db_get_array(
             "SELECT LOWER(typed) typed, SUM(source = 'sg_none') empty, SUM(source = 'sg_exit') ignored, COUNT(DISTINCT sid) people, MAX(ts) last_ts FROM ?:mm_search_clicks"
@@ -216,13 +216,19 @@ function mm_stats_export_custom()
     return $ok;
 }
 
-function mm_stats_synonyms()
+/** Свои синонимы: поиск по «что пишут» / «как в каталоге» / заметке и страницы по $per строк. */
+function mm_stats_synonyms($find = '', $page = 1, $per = 25)
 {
-    $rows = db_get_array('SELECT * FROM ?:mm_search_synonyms ORDER BY active DESC, src');
+    $find = trim((string) $find);
+    $where = $find !== '' ? db_quote('WHERE src LIKE ?l OR dst LIKE ?l OR note LIKE ?l', '%' . $find . '%', '%' . $find . '%', '%' . $find . '%') : '';
+    $total = (int) db_get_field('SELECT COUNT(*) FROM ?:mm_search_synonyms ?p', $where);
+    $pages = max(1, (int) ceil($total / $per));
+    $page = max(1, min($pages, (int) $page));
+    $rows = db_get_array('SELECT * FROM ?:mm_search_synonyms ?p ORDER BY active DESC, src LIMIT ?i, ?i', $where, ($page - 1) * $per, $per);
     foreach ($rows as &$r) { $r['when'] = $r['created'] ? date('d.m.Y', (int) $r['created']) : ''; }
     unset($r);
 
-    return $rows;
+    return ['rows' => $rows, 'total' => $total, 'page' => $page, 'pages' => $pages, 'find' => $find];
 }
 
 function mm_stats_synonym_save($src, $dst, $note = '')

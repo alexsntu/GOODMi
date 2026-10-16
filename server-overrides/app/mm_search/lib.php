@@ -346,16 +346,60 @@ function mm_search_suggest($mc, $q, $products = 4)
             'price' => (float) $it['price'] > 0 ? number_format((float) $it['price'], 0, '', "\u{00A0}") . "\u{00A0}₽" : ''];
     }
     return ['q' => $q, 'layout' => $layout, 'target' => $target, 'queries' => $queries, 'scopes' => array_slice($scopes, 0, 2),
-        'products' => $items, 'total' => (int) $found['total']];
+        'products' => $items, 'total' => (int) $found['total'], 'chips' => mm_search_chips($mc, $target), 'chips_base' => mm_search_display_norm($target)];
 }
 
-/** «Часто ищут» для пустого поля: самые частые запросы покупателей. */
+/** Пустое поле: «Часто ищут» – самые частые запросы покупателей, «Популярные товары» – с наибольшей выручкой за 90 дней, в наличии. */
 function mm_search_popular($mc, $limit = 8)
 {
     $out = [];
     $r = $mc->query('SELECT query FROM mm_queries ORDER BY freq DESC LIMIT ' . (int) $limit);
     while ($r && ($x = $r->fetch_row())) { $out[] = ['text' => $x[0], 'typed' => '', 'rest' => $x[0]]; }
-    return ['q' => '', 'layout' => '', 'target' => '', 'queries' => $out, 'scopes' => [], 'products' => [], 'total' => 0, 'popular' => true];
+    $items = [];
+    // Без услуг ремонта (mods 10) – в «популярное» попадают только товары
+    // По выручке за 90 дней (спрос × цена): наверху AirPods и iPhone, а не защитные стёкла, которых продают больше штук
+    $r = $mc->query('SELECT id, name, url, img, price, in_stock, demand * price AS rev FROM mm_products WHERE in_stock = 1 AND ALL(mods) != 10 AND demand > 0 ORDER BY rev DESC LIMIT 4');
+    while ($r && ($it = $r->fetch_assoc())) {
+        $items[] = ['id' => (int) $it['id'], 'name' => $it['name'], 'url' => $it['url'], 'img' => $it['img'], 'in_stock' => 1,
+            'price' => (float) $it['price'] > 0 ? number_format((float) $it['price'], 0, '', "\u{00A0}") . "\u{00A0}₽" : ''];
+    }
+    return ['q' => '', 'layout' => '', 'target' => '', 'queries' => $out, 'scopes' => [], 'products' => $items, 'total' => 0, 'popular' => true, 'chips' => []];
+}
+
+/**
+ * Плашки-уточнения: следующее слово к запросу (как у Diginetica) – из словаря подсказок, по весу фраз, которые продолжают
+ * запрос: «iphone» → 17, 16, pro…; «iphone 17» → pro, 256gb, esim… До $limit штук, без повторов слов запроса.
+ */
+function mm_search_chips($mc, $base, $limit = 6)
+{
+    $base = mm_search_display_norm($base);
+    if ($base === '') { return []; }
+    $r = $mc->query('SELECT phrase, weight FROM mm_suggest WHERE MATCH(' . mm_search_q($mc, '"' . mm_search_escape($base) . '"') . ') ORDER BY weight DESC LIMIT 300');
+    $have = array_flip(explode(' ', $base));
+    $next = [];
+    while ($r && ($x = $r->fetch_assoc())) {
+        $phrase = $x['phrase'];
+        if (strpos($phrase, 'apple ' . $base . ' ') === 0) { $phrase = substr($phrase, 6); } // «apple iphone 17 pro» → «iphone 17 pro»
+        if (strpos($phrase, $base . ' ') !== 0) { continue; }
+        $w = explode(' ', substr($phrase, strlen($base) + 1))[0];
+        if ($w === '' || isset($have[$w]) || mb_strlen($w) > 20 || strpos($w, '/') !== false) { continue; }
+        $next[$w] = (isset($next[$w]) ? $next[$w] : 0) + (float) $x['weight'];
+    }
+    // Бренды аксессуаров (чехлы VLP, Moft…) – не уточнение к модели: убираем слова, которые в индексе встречаются только у аксессуаров
+    if ($next) {
+        $acc_only = [];
+        foreach (array_slice(array_keys($next), 0, 20) as $w) {
+            $q = mm_search_q($mc, '"' . mm_search_escape($base . ' ' . $w) . '"');
+            $all = $mc->query("SELECT COUNT(*) FROM mm_products WHERE MATCH($q)");
+            $dev = $mc->query("SELECT COUNT(*) FROM mm_products WHERE MATCH($q) AND is_acc = 0");
+            $a = $all ? (int) $all->fetch_row()[0] : 0; $d = $dev ? (int) $dev->fetch_row()[0] : 0;
+            if ($a > 0 && $d === 0 && !preg_match('/^\d/', $w)) { $acc_only[$w] = 1; }
+        }
+        $next = array_diff_key($next, $acc_only);
+    }
+    arsort($next);
+
+    return array_slice(array_keys($next), 0, $limit);
 }
 
 /**

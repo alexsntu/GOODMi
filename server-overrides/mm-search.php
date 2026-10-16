@@ -7,9 +7,7 @@
  * /mm-search.php?q=iph        – JSON для выпадающих подсказок (варианты запроса, «в категории», до 4 товаров, сколько всего);
  *                               пустой q – «Часто ищут»; &cats=1 – категории найденного для плиток на странице результатов
  * /mm-search.php?ev=1 (POST JSON) – события для статистики: клики, выбор в подсказках, плитки, брошенный ввод
- * /mm-search.php?test=on|off  – включить/выключить тестовый поиск в этом браузере (кука mm_search_test): в таком браузере
- *                               не загружается Diginetica и работают свои подсказки (common/scripts.tpl, хук index:scripts
- *                               модуля my_changes). Остальные покупатели ничего не замечают.
+ * С 2026-10-16 наш поиск у всех, Diginetica на Maxmobiles отключена; ?test= / ?diginetica= только стирают старые куки.
  */
 $host = strtolower(preg_replace('/:\d+$/', '', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''));
 if ($host !== 'maxmobiles.ru' && $host !== 'www.maxmobiles.ru') {
@@ -28,9 +26,11 @@ if (isset($_GET['asset'])) {
     exit;
 }
 
-if (isset($_GET['test'])) {
-    $on = $_GET['test'] === 'on';
-    setcookie('mm_search_test', $on ? '1' : '', ['expires' => $on ? time() + 30 * 86400 : time() - 3600, 'path' => '/', 'secure' => true, 'samesite' => 'Lax']);
+// Прежние переключатели (?test=…, ?diginetica=…) больше ничего не включают: убираем их куки и ведём на главную
+if (isset($_GET['test']) || isset($_GET['diginetica'])) {
+    foreach (['mm_search_test', 'mm_diginetica'] as $c) {
+        setcookie($c, '', ['expires' => time() - 3600, 'path' => '/', 'secure' => true, 'samesite' => 'Lax']);
+    }
     header('Cache-Control: no-store');
     header('Location: /', true, 302);
     exit;
@@ -42,7 +42,7 @@ if (isset($_GET['ev']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Cache-Control: no-store');
     $sid = isset($_COOKIE['mm_sid']) && preg_match('/^[a-f0-9]{16}$/', (string) $_COOKIE['mm_sid']) ? (string) $_COOKIE['mm_sid'] : '';
     $e = json_decode((string) file_get_contents('php://input', false, null, 0, 4096), true);
-    $sources = ['results', 'sg_query', 'sg_history', 'sg_scope', 'sg_product', 'sg_all', 'tile', 'sg_exit', 'sg_none'];
+    $sources = ['results', 'sg_query', 'sg_history', 'sg_scope', 'sg_product', 'sg_all', 'sg_chip', 'tile', 'chip', 'sg_exit', 'sg_none'];
     if ($sid === '' || !is_array($e) || !isset($e['source']) || !in_array($e['source'], $sources, true)) { http_response_code(204); exit; }
     define('BOOTSTRAP', 1);
     define('DIR_ROOT', __DIR__);
@@ -100,6 +100,11 @@ if ($mc->connect_errno) {
     exit;
 }
 $mc->set_charset('utf8mb4');
+// Плашки-уточнения для страницы результатов
+if (isset($_GET['chips'])) {
+    echo json_encode(['base' => mm_search_display_norm($q), 'chips' => mm_search_chips($mc, $q, 8)], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 // Категории найденного – для плиток на странице результатов
 if (isset($_GET['cats'])) {
     echo json_encode(mm_search_found_categories($mc, $q), JSON_UNESCAPED_UNICODE);

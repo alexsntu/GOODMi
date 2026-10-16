@@ -69,3 +69,20 @@ body.mm-sg-open > jdiv{display:none !important}
 .mm-cats__row::-webkit-scrollbar{display:block;height:3px}
 .mm-cats__row::-webkit-scrollbar-thumb{border-radius:3px;background:#c7c7cc}
 }
+
+/* Плашки-уточнения: в подсказках (.mm-sg__chips) и на странице результатов (.mm-refine) – следующее слово к запросу */
+.mm-sg__chips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 6px 8px}
+.mm-sg__chip{padding:5px 12px;border:1px solid #d2d2d7;border-radius:16px;background:#fff;font-size:13px;line-height:1.2;color:#1d1d1f;cursor:pointer}
+.mm-sg__chip:hover{border-color:#0071e3;color:#0071e3}
+.mm-refine{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px}
+.mm-refine__h{margin-right:4px;font-size:14px;color:#6e6e73}
+.mm-refine__chip{padding:6px 14px;border:1px solid #d2d2d7;border-radius:16px;background:#fff;font-size:14px;color:#1d1d1f;text-decoration:none}
+.mm-refine__chip:hover{border-color:#0071e3;color:#0071e3}
+@media (max-width:767px){
+.mm-sg__chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.mm-sg__chips::-webkit-scrollbar{display:none}
+.mm-sg__chip{flex:0 0 auto}
+.mm-refine{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.mm-refine::-webkit-scrollbar{display:none}
+.mm-refine__chip{flex:0 0 auto}
+}

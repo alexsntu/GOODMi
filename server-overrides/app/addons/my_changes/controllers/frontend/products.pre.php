@@ -3,8 +3,8 @@
  * Maxmobiles: свой поиск, этап 3 (2026-10-16) – штатная страница результатов (products.search) с товарами, найденными
  * Manticore (app/mm_search/lib.php), в порядке релевантности. Здесь – поиск и набор найденных товаров в Registry
  * 'runtime.mm_search'; подмена условия и сортировка «По релевантности» – хуки get_products_pre, get_products,
- * products_sorting в func.php модуля. Только витрина Maxmobiles и пока только в браузере с кукой mm_search_test
- * (/mm-search.php?test=on). Если индекс недоступен – страница работает штатно.
+ * products_sorting в func.php модуля. Только витрина Maxmobiles, у всех покупателей с 2026-10-16 (Diginetica отключена).
+ * Если индекс недоступен – страница работает штатно.
  */
 
 use Tygh\Registry;
@@ -13,8 +13,14 @@ if (!defined('BOOTSTRAP')) {
     die('Access denied');
 }
 
+// Запрос пришёл в поле hint_q (CS-Cart cm-hint не вернул полю имя q) – считаем его запросом
+if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 1 && (!isset($_REQUEST['q']) || trim((string) $_REQUEST['q']) === '')
+    && isset($_REQUEST['hint_q']) && trim((string) $_REQUEST['hint_q']) !== '') {
+    $_REQUEST['q'] = (string) $_REQUEST['hint_q'];
+    $_GET['q'] = $_REQUEST['q'];
+}
+
 if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 1
-    && isset($_COOKIE['mm_search_test']) && $_COOKIE['mm_search_test'] === '1'
     && isset($_REQUEST['q']) && trim((string) $_REQUEST['q']) !== ''
 ) {
     $mm_lib = Registry::get('config.dir.root') . '/app/mm_search/lib.php';
