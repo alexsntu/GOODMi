@@ -227,6 +227,8 @@ function gm_search_intent($mc, array $tokens, array $words)
     foreach ($cats as $lem) { $firsts[$lem[0]] = 1; }
     $head_tok = '';
     foreach ($tokens as $t) {
+        // только русские слова: в «стекло iphone 18» главное – стекло, а не iphone (раздел «iPhone …» начинается с iphone)
+        if (!preg_match('/[а-я]/u', $t)) { continue; }
         $tl = gm_search_lemmas($mc, $t);
         if ($tl && isset($firsts[$tl[0]])) { $head_tok = $t; break; }
     }
@@ -275,12 +277,19 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
     // Раздел – любой из разделов товара, не только основной (телефон Redmi Note 15 лежит в «Смартфоны Redmi» и в «Redmi Note 15 4G»)
     $cb = $intent['cats'] ? 'IN(cat_ids, ' . implode(',', $intent['cats']) . ')' : '0';
     $hb = $intent['head'] ? 'IN(head, ' . implode(',', $intent['head']) . ')' : '0';
+    // Аксессуары, о которых в запросе не просили, всегда ниже устройств – даже если устройства нет в наличии, а аксессуар есть
+    // (решение пользователя 2026-10-16: «по наличию аксессуары всегда проигрывали устройствам»)
+    // Услуги ремонта / подарочные сертификаты (mods 10), о которых не просили, – ещё ниже аксессуаров; запчасти (mods 9) – как аксессуары
+    // Аксессуар, названный в запросе по имени (главное слово – в начале его названия: «pencil» → «Стилус Apple Pencil», «хаб» → «USB-хаб»),
+    // и есть искомый товар – его не опускаем
+    $ab_acc = trim(($wants_acc ? '' : "(is_acc = 1 AND $hb = 0)") . (!empty($penalized['spare']) ? ($wants_acc ? '' : ' OR ') . 'IN(mods, 9)' : ''));
+    $ab = 'IF(' . (!empty($penalized['service']) ? 'IN(mods, 10)' : '0') . ', 2, IF(' . ($ab_acc !== '' ? $ab_acc : '0') . ', 1, 0))';
     $penalized['cats'] = $intent['cats'];
     // Короткий запрос (до 3 слов: «нож», «фонарик», «стекло iphone 18») – тип товара ступенью сортировки; длинный, где названа
     // конкретная модель («колонка беспроводная harman kardon aura studio 5»), – только прибавкой ×1.3, чтобы точная модель не уступала
     $short = count(array_diff($tokens0 = explode(' ', $norm), ['на', 'для', 'в', 'во', 'с', 'со', 'и', 'к', 'по', 'от', 'из', 'под', 'без'])) <= 3;
     $hb_mul = $short || $hb === '0' ? '' : " * IF($hb, 1.3, 1.0)";
-    $select = "SELECT id, name, price, in_stock, is_acc, url, img, main_cat, WEIGHT() AS w, mods, demand, popularity, $cb AS cb, $hb AS hb, WEIGHT() * IF(in_stock = 1, 1.0, 0.4) * IF(is_acc = 1, $acc_mul, 1.0)$mods$bu$spare$hb_mul * (1 + LN(demand + 1) / 4) * (1 + LN(popularity + 1) / 40) AS score FROM gm_products";
+    $select = "SELECT id, name, price, in_stock, is_acc, url, img, main_cat, WEIGHT() AS w, mods, demand, popularity, $ab AS ab, $cb AS cb, $hb AS hb, WEIGHT() * IF(in_stock = 1, 1.0, 0.4) * IF(is_acc = 1, $acc_mul, 1.0)$mods$bu$spare$hb_mul * (1 + LN(demand + 1) / 4) * (1 + LN(popularity + 1) / 40) AS score FROM gm_products";
     $opts = "OPTION ranker = expr('sum((4*lcs + 3*(min_hit_pos==1) + 2*exact_order)*user_weight)*1000 + bm25'),"
         . " field_weights = (title = 10, brand = 5, model = 4, category = 3, extra = 1), max_matches = 1000";
     // Начало последнего слова («сте» → «стекло»); нечёткий поиск по коротким словам – не больше одной ошибки
@@ -308,7 +317,7 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
         if ($t[1] === '') { continue; }
         // Сначала товары в наличии, потом остальные – везде (решение пользователя 2026-10-16); внутри – товары названного
         // в запросе раздела, затем со словом запроса в начале названия, затем по релевантности
-        $sql = "$select {$t[1]} ORDER BY in_stock DESC, cb DESC, " . ($short ? 'hb DESC, ' : '') . "score DESC LIMIT " . (int) $offset . ', ' . (int) $limit . " {$t[2]}";
+        $sql = "$select {$t[1]} ORDER BY ab ASC, in_stock DESC, cb DESC, " . ($short ? 'hb DESC, ' : '') . "score DESC LIMIT " . (int) $offset . ', ' . (int) $limit . " {$t[2]}";
         $r = $mc->query($sql);
         if (!$r) { continue; }
         $items = [];
@@ -609,7 +618,7 @@ function gm_search($mc, $query, $limit = 20, $offset = 0)
         return $f;
     }
     $rows = [];
-    $r = $mc->query('SELECT id, name, price, in_stock, is_acc, url, img, main_cat, 0 AS w, mods, demand, popularity, 0 AS cb, 0 AS hb, 0 AS score FROM gm_products WHERE id IN ('
+    $r = $mc->query('SELECT id, name, price, in_stock, is_acc, url, img, main_cat, 0 AS w, mods, demand, popularity, 0 AS ab, 0 AS cb, 0 AS hb, 0 AS score FROM gm_products WHERE id IN ('
         . implode(',', $pins) . ') LIMIT ' . count($pins));
     while ($r && ($x = $r->fetch_assoc())) { $x['pinned'] = 1; $rows[(int) $x['id']] = $x; }
     if (!$rows) {

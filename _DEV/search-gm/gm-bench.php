@@ -19,7 +19,7 @@ $mc->set_charset('utf8mb4');
 
 // Товары и разделы из своего индекса
 $prod = [];
-$r = $mc->query('SELECT id, name, main_cat, in_stock, is_acc, mods FROM gm_products LIMIT 10000 OPTION max_matches = 10000');
+$r = $mc->query('SELECT id, name, main_cat, cat_ids, in_stock, is_acc, mods FROM gm_products LIMIT 10000 OPTION max_matches = 10000');
 while ($x = $r->fetch_assoc()) { $prod[(int) $x['id']] = $x; }
 $cats = [];
 $r = $mc->query('SELECT id, name, lem, products FROM gm_categories LIMIT 2000');
@@ -54,11 +54,16 @@ function to_ru($s, $ru, $letter)
 }
 
 $tests = [];
+$seen_cat = [];
 // 1) Разделы
 foreach ($cats as $id => $c) {
     if ((int) $c['products'] < 3 || preg_match('/архив|уценка|подарочн/ui', $c['name'])) { continue; }
     $q = trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($c['name'], 'UTF-8')));
-    $tests[] = ['kind' => 'cat', 'q' => $q, 'cat' => $id];
+    if (isset($seen_cat[$q])) { continue; } // одинаковые названия («iPhone 17 Pro Max» у смартфонов, чехлов, стёкол) – один запрос
+    $seen_cat[$q] = 1;
+    $same = [];
+    foreach ($cats as $id2 => $c2) { if (mb_strtolower($c2['name'], 'UTF-8') === mb_strtolower($c['name'], 'UTF-8')) { $same[] = (string) $id2; } }
+    $tests[] = ['kind' => 'cat', 'q' => $q, 'cat' => $id, 'same' => $same];
 }
 // 2) Модели: латинская часть названия устройства до памяти / цвета («Redmi Note 15 Pro 4G»)
 $stop = '/^(\d+\/\d+|\d+(gb|tb|mb)|black|white|blue|green|gray|grey|silver|gold|pink|purple|red|yellow|orange|titanium|global|eu|ru|cn|\(.*)$/i';
@@ -120,14 +125,16 @@ function judge($t, $ids, $prod)
     if (!$ids) { return 0; }
     if ($t['kind'] === 'cat') {
         $in = 0;
-        foreach ($ids as $id) { if (isset($prod[$id]) && (int) $prod[$id]['main_cat'] === $t['cat']) { $in++; } }
-        return isset($prod[$ids[0]]) && (int) $prod[$ids[0]]['main_cat'] === $t['cat'] && $in >= min(3, count($ids)) ? 1 : 0;
+        // товар раздела – если раздел среди любых его разделов (основной у товара может быть другим)
+        $inc = function ($id) use ($prod, $t) { return isset($prod[$id]) && array_intersect(isset($t['same']) ? $t['same'] : [(string) $t['cat']], explode(',', (string) $prod[$id]['cat_ids'])); };
+        foreach ($ids as $id) { if ($inc($id)) { $in++; } }
+        return $inc($ids[0]) ? 1 : 0; // первый товар – из раздела (дальше могут идти б/у и другие товары в наличии)
     }
     if ($t['kind'] === 'model' || $t['kind'] === 'model_ru') {
         return array_intersect(array_slice($ids, 0, 3), $t['ids']) ? 1 : 0;
     }
     $p = isset($prod[$ids[0]]) ? $prod[$ids[0]] : null;
-    return $p && (int) $p['main_cat'] === $t['cat'] && stripos($p['name'], $t['brand']) !== false ? 1 : 0;
+    return $p && in_array((string) $t['cat'], explode(',', (string) $p['cat_ids']), true) && stripos($p['name'], $t['brand']) !== false ? 1 : 0;
 }
 
 $res = [];
