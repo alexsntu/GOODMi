@@ -126,7 +126,8 @@
     }
     var h = '';
     if (d.popular) {
-      var hist = histGet();
+      // В виджете – не больше 4 последних запросов (пользователь: иначе занимает слишком много места)
+      var hist = histGet().slice(0, 4);
       $.each(hist, function (k, x) {
         var i = items.push({type: 'q', text: x, src: 'sg_history'}) - 1;
         h += '<a class="mm-sg__q mm-sg__q--hist" href="#" data-i="' + i + '" role="option"><span class="mm-sg__t"></span><b>' + esc(x)
