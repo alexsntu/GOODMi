@@ -54,7 +54,9 @@ function gm_search_synonyms()
         // GOODMi: бренды и линейки экосистемы Xiaomi и других брендов каталога, набранные по-русски или с ошибкой
         'шаоми' => 'xiaomi', 'сиоми' => 'xiaomi', 'ксаоми' => 'xiaomi', 'ксиаоми' => 'xiaomi', 'xiomi' => 'xiaomi', 'xaomi' => 'xiaomi', 'xiami' => 'xiaomi',
         'рэдми' => 'redmi', 'редмибук' => 'redmibook', 'покофон' => 'poco',
-        'ноут' => 'note', 'лайт' => 'lite', 'пад' => 'pad', 'бэнд' => 'band', 'бенд' => 'band', 'банд' => 'band',
+        'ноут' => 'note', 'нот' => 'note', 'ноте' => 'note', 'нoт' => 'note', 'лайт' => 'lite', 'ми' => 'mi', 'кью' => 'q', 'рево' => 'revo', 'ревo' => 'revo', 'вотч' => 'watch', 'бадс' => 'buds',
+        'смарт' => 'smart', 'вакуум' => 'vacuum', 'актив' => 'active', 'эдж' => 'edge', 'клинер' => 'cleaner', 'бокс' => 'box', 'стик' => 'stick',
+        'нео' => 'neo', 'турбо' => 'turbo', 'фолд' => 'fold', 'флип' => 'flip', 'плей' => 'play', 'плэй' => 'play', 'пад' => 'pad', 'бэнд' => 'band', 'бенд' => 'band', 'банд' => 'band',
         'ми бэнд' => 'band', 'ми бенд' => 'band', 'mi band' => 'band', 'бадс' => 'buds', 'бадсы' => 'buds',
         'мижия' => 'mijia', 'миджия' => 'mijia', 'мийя' => 'mijia', 'роборок' => 'roborock', 'дриме' => 'dreame',
         'виоми' => 'viomi', 'амазфит' => 'amazfit', 'экофлоу' => 'ecoflow', 'экофлов' => 'ecoflow',
@@ -89,7 +91,9 @@ function gm_search_mods()
     return [1 => ['pro'], 2 => ['max'], 3 => ['plus', '+'], 4 => ['mini'], 5 => ['ultra'], 6 => ['air'], 7 => ['se'],
         // GOODMi: 8 – уценка (раздел «Уценка», б/у), 10 – подарочные сертификаты
         8 => ['бу', 'б/у', 'уценка', 'уцененный', 'уцененные', 'витринный', 'used'], 9 => ['правый', 'левый', 'кейс', 'запасной'],
-        10 => ['сертификат', 'сертификаты', 'подарочный']];
+        10 => ['сертификат', 'сертификаты', 'подарочный'],
+        // GOODMi: облегчённые и спортивные версии – ниже основной модели, если их не просили («redmi watch 5» → Watch 5, а не 5 Lite)
+        11 => ['lite', 'лайт'], 12 => ['active', 'актив'], 13 => ['play', 'плей', 'плэй']];
 }
 
 /** «xiaomi » перед суббрендом (redmi, poco, mijia…) убирается: в каталоге пишут и так, и так. */
@@ -131,9 +135,11 @@ function gm_search_normalize($q)
     $q = mb_strtolower(trim((string) $q), 'UTF-8');
     $q = str_replace('ё', 'е', $q);
     $q = preg_replace('/[^\p{L}\p{N}\s.+\-]/u', ' ', $q);
-    // Модели, набранные русскими буквами-двойниками латиницы: «а16» → «a16», «м4» → «m4» (в каталоге – латиница)
-    $q = preg_replace_callback('/(?<!\p{L})[авекмнорстухi]{1,2}\d+[авекмнорстух]?(?!\p{L})|(?<!\p{L})\d+[авекмнорстух]{1,2}(?!\p{L})/u', function ($m) {
-        return strtr($m[0], ['а' => 'a', 'в' => 'b', 'е' => 'e', 'к' => 'k', 'м' => 'm', 'н' => 'h', 'о' => 'o', 'р' => 'p', 'с' => 'c', 'т' => 't', 'у' => 'y', 'х' => 'x']);
+    // Модели, набранные русскими буквами-двойниками латиницы: «а16» → «a16», «м4» → «m4» (в каталоге – латиница); GOODMi
+    // (2026-10-16): и буквами, которые звучат как латинские, – «поко ф7» → f7, «дриме л10» → l10 (только вплотную к цифрам)
+    $q = preg_replace_callback('/(?<!\p{L})[авекмнорстухiфлгдзпибж]{1,2}\d+[авекмнорстухфлгдзпибж]?(?!\p{L})|(?<!\p{L})\d+[авекмнорстухфлгдзпибж]{1,2}(?!\p{L})/u', function ($m) {
+        return strtr($m[0], ['а' => 'a', 'в' => 'b', 'е' => 'e', 'к' => 'k', 'м' => 'm', 'н' => 'h', 'о' => 'o', 'р' => 'p', 'с' => 'c', 'т' => 't', 'у' => 'y', 'х' => 'x',
+            'ф' => 'f', 'л' => 'l', 'г' => 'g', 'д' => 'd', 'з' => 'z', 'п' => 'p', 'и' => 'i', 'б' => 'b', 'ж' => 'j']);
     }, $q);
     $q = preg_replace(['/(\d)([^\d\s.,])/u', '/([^\d\s.,])(\d)/u'], '$1 $2', $q); // «256гб» → «256 гб», «ps5» → «ps 5»
     return trim(preg_replace('/\s+/u', ' ', $q));
@@ -152,6 +158,7 @@ function gm_search_match_expr($norm, &$words_out = null)
         if ($kept) { $tokens = $kept; }
     }
     $groups = []; $words = [];
+    $amb = ['c' => 's', 'b' => 'v', 'h' => 'n', 'p' => 'r', 'y' => 'u'];
     for ($i = 0; $i < count($tokens); $i++) {
         $hit = null;
         foreach ([3, 2, 1] as $len) { // сначала самые длинные фразы
@@ -164,6 +171,19 @@ function gm_search_match_expr($norm, &$words_out = null)
             $groups[] = '(' . implode(' | ', array_map(function ($a) { return strpos($a, ' ') !== false ? '"' . gm_search_escape($a) . '"' : gm_search_escape($a); }, $alts)) . ')';
             $words = array_merge($words, explode(' ', $hit[1]));
             $i += $hit[2] - 1;
+        } elseif (preg_match('/^[a-z]{1,2}$/', $tokens[$i]) && preg_match('/[cbhpy]/', $tokens[$i])
+            && (isset($tokens[$i + 1]) && preg_match('/^\d+$/', $tokens[$i + 1]) || $i > 0 && preg_match('/^\d+$/', $tokens[$i - 1]))) {
+            // Буквы модели рядом с номером, набранные русскими двойниками: «с» – C или S («с81» POCO C81, «с25» Galaxy S25),
+            // «в» – B или V («в12» Dreame V12), «н» – H или N («н1»), «р» – P или R («р20»), «у» – Y или U («фу006»)
+            $alts = [''];
+            foreach (str_split($tokens[$i]) as $ch) {
+                $opts = isset($amb[$ch]) ? [$ch, $amb[$ch]] : [$ch];
+                $next = [];
+                foreach ($alts as $a) { foreach ($opts as $o) { $next[] = $a . $o; } }
+                $alts = array_slice($next, 0, 4);
+            }
+            $groups[] = '(' . implode(' | ', $alts) . ')';
+            $words[] = $tokens[$i];
         } else {
             $groups[] = gm_search_escape($tokens[$i]);
             $words[] = $tokens[$i];
@@ -196,17 +216,25 @@ function gm_search_intent($mc, array $tokens, array $words)
 {
     static $cats = null;
     $syn = gm_search_synonyms();
-    $head_tok = '';
-    foreach ($tokens as $t) { if (preg_match('/[а-я]/u', $t)) { $head_tok = $t; break; } }
-    if ($head_tok === '') { foreach ($tokens as $t) { if (!preg_match('/^\d+$/', $t)) { $head_tok = $t; break; } } }
-    if ($head_tok === '') { return ['cats' => [], 'head' => []]; }
-    $head = gm_search_lemmas($mc, $head_tok . (isset($syn[$head_tok]) && strpos($syn[$head_tok], ' ') === false ? ' ' . $syn[$head_tok] : ''));
-    $q = array_flip(gm_search_lemmas($mc, implode(' ', array_unique(array_merge($tokens, $words)))));
     if ($cats === null) {
         $cats = [];
         $r = $mc->query('SELECT id, lem, products FROM gm_categories WHERE products >= 2 LIMIT 2000');
         while ($r && ($x = $r->fetch_assoc())) { $cats[(int) $x['id']] = explode(' ', (string) $x['lem']); }
     }
+    // Главное слово: то, с которого начинается название какого-нибудь раздела («юсб кабель» → кабель, а не юсб: иначе первыми
+    // шли USB-хабы), иначе первое русское слово, иначе первое слово
+    $firsts = [];
+    foreach ($cats as $lem) { $firsts[$lem[0]] = 1; }
+    $head_tok = '';
+    foreach ($tokens as $t) {
+        $tl = gm_search_lemmas($mc, $t);
+        if ($tl && isset($firsts[$tl[0]])) { $head_tok = $t; break; }
+    }
+    if ($head_tok === '') { foreach ($tokens as $t) { if (preg_match('/[а-я]/u', $t)) { $head_tok = $t; break; } } }
+    if ($head_tok === '') { foreach ($tokens as $t) { if (!preg_match('/^\d+$/', $t)) { $head_tok = $t; break; } } }
+    if ($head_tok === '') { return ['cats' => [], 'head' => []]; }
+    $head = gm_search_lemmas($mc, $head_tok . (isset($syn[$head_tok]) && strpos($syn[$head_tok], ' ') === false ? ' ' . $syn[$head_tok] : ''));
+    $q = array_flip(gm_search_lemmas($mc, implode(' ', array_unique(array_merge($tokens, $words)))));
     $generic = ['и', 'для', 'в', 'с', 'на', 'аксессуар', 'принадлежность', 'товар', 'все'];
     $ids = [];
     foreach ($cats as $id => $lem) {
@@ -237,14 +265,15 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
     $mod_codes = []; $bu = ''; $spare = '';
     foreach (gm_search_mods() as $code => $allow) {
         if (array_intersect($words, $allow)) { continue; }
-        if ($code <= 7) { $mod_codes[] = $code; } elseif ($code === 8) { $bu = ' * IF(IN(mods, 8), 0.8, 1.0)'; } elseif ($code === 9) { $spare .= ' * IF(IN(mods, 9), 0.12, 1.0)'; } else { $spare .= ' * IF(IN(mods, 10), 0.15, 1.0)'; }
+        if ($code <= 7 || $code >= 11) { $mod_codes[] = $code; } elseif ($code === 8) { $bu = ' * IF(IN(mods, 8), 0.8, 1.0)'; } elseif ($code === 9) { $spare .= ' * IF(IN(mods, 9), 0.12, 1.0)'; } else { $spare .= ' * IF(IN(mods, 10), 0.15, 1.0)'; }
     }
     $mods = $mod_codes ? ' * IF(IN(mods, ' . implode(',', $mod_codes) . '), 0.75, 1.0)' : '';
     // Для разбора в админке (gm_search_explain): что штрафовалось в этом запросе
     $penalized = ['acc' => !$wants_acc, 'mods' => $mod_codes, 'bu' => $bu !== '', 'spare' => strpos($spare, 'IN(mods, 9)') !== false, 'service' => strpos($spare, 'IN(mods, 10)') !== false];
     // Раздел запроса и тип товара (gm_search_intent): cb – товар из названного раздела, hb – слово запроса в начале названия
     $intent = gm_search_intent($mc, array_values(array_filter(explode(' ', $norm), function ($t) { return !in_array($t, ['на', 'для', 'в', 'во', 'с', 'со', 'и', 'к', 'по', 'от', 'из', 'под', 'без'], true); })), $words);
-    $cb = $intent['cats'] ? 'IN(main_cat, ' . implode(',', $intent['cats']) . ')' : '0';
+    // Раздел – любой из разделов товара, не только основной (телефон Redmi Note 15 лежит в «Смартфоны Redmi» и в «Redmi Note 15 4G»)
+    $cb = $intent['cats'] ? 'IN(cat_ids, ' . implode(',', $intent['cats']) . ')' : '0';
     $hb = $intent['head'] ? 'IN(head, ' . implode(',', $intent['head']) . ')' : '0';
     $penalized['cats'] = $intent['cats'];
     // Короткий запрос (до 3 слов: «нож», «фонарик», «стекло iphone 18») – тип товара ступенью сортировки; длинный, где названа

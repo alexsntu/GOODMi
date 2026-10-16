@@ -53,7 +53,8 @@ function gm_index_mods($title)
 {
     $t = ' ' . mb_strtolower(str_replace('ё', 'е', (string) $title), 'UTF-8') . ' ';
     $map = [1 => '/\bpro\b/u', 2 => '/\bmax\b/u', 3 => '/\bplus\b|\+/u', 4 => '/\bmini\b/u', 5 => '/\bultra\b/u', 6 => '/\bair\b/u',
-        7 => '/\bse\b/u', 8 => '/уценк|уценен|\bб\/?у\b|витринн/u', 9 => '/правый|левый|зарядный кейс|кейс для беспроводных/u'];
+        7 => '/\bse\b/u', 8 => '/уценк|уценен|\bб\/?у\b|витринн/u', 9 => '/правый|левый|зарядный кейс|кейс для беспроводных/u',
+        11 => '/\blite\b/u', 12 => '/\bactive\b/u', 13 => '/\bplay\b/u'];
     $out = [];
     foreach ($map as $code => $re) { if (preg_match($re, $t)) { $out[] = $code; } }
     return $out;
@@ -171,9 +172,17 @@ foreach ($products as $x) {
     // «Тип товара» – начальные формы первых двух слов названия (crc32): «Портативный фонарик …» → портативный, фонарик;
     // «Автоматический зонт … с фонариком» – автоматический, зонт (по запросу «фонарик» зонт ниже фонарика)
     $head = [];
-    foreach (array_slice(lemmas($mc, implode(' ', array_slice(preg_split('/[\s\-]+/u', trim($x['product'])), 0, 2)), 'gm_products_new'), 0, 3) as $lw) { $head[] = crc32($lw); }
+    // До трёх первых слов, но не дальше предлога: «Игровая консоль Sony PlayStation 5» → игровой, консоль, sony;
+    // «Чехол для POCO X8» → чехол; «Автоматический зонт с фонариком» → автоматический, зонт
+    $hw = [];
+    foreach (array_slice(preg_split('/[\s\-]+/u', trim($x['product'])), 0, 3) as $w) {
+        if (in_array(mb_strtolower($w, 'UTF-8'), ['для', 'с', 'со', 'на', 'под', 'в', 'к', 'от', 'из', 'и'], true)) { break; }
+        $hw[] = $w;
+    }
+    foreach (array_slice(lemmas($mc, split_num(implode(' ', $hw)), 'gm_products_new'), 0, 5) as $lw) { $head[] = crc32($lw); }
     $batch[] = sprintf('(%d,%s,%s,%s,%s,%s,%s,%s,%F,%d,%d,%d,%d,(%s),%d,%d,(%s),%d,%s,(%s))', $id,
-        esc($mc, $x['product']), esc($mc, $brand), esc($mc, $model), esc($mc, implode(' ', $cat_names)), esc($mc, $extra),
+        // разделы – и с числами отдельно («Redmi Note 15 4G» → … 4 g): запрос «redmi note 15 4g» делится так же, а в названиях телефонов «4G» нет
+        esc($mc, $x['product']), esc($mc, $brand), esc($mc, $model), esc($mc, implode(' ', $cat_names) . ' ' . split_num(implode(' ', $cat_names))), esc($mc, $extra),
         esc($mc, $x['product']), esc($mc, $url), isset($prices[$id]) ? $prices[$id] : 0, (int) $x['amount'], (int) $x['amount'] > 0 ? 1 : 0,
         isset($pop[$id]) ? $pop[$id] : 0, $is_acc, implode(',', array_unique($cat_ids)), $main, (int) $x['timestamp'], implode(',', $mods ?: [0]), isset($demand[$id]) ? $demand[$id] : 0, esc($mc, isset($img[$id]) ? $img[$id] : ''), implode(',', array_unique($head) ?: [0]));
     $sugg_items[] = ['title' => $x['product'], 'model' => isset($f['model']) ? $f['model'] : [], 'demand' => isset($demand[$id]) ? $demand[$id] : 0,
@@ -217,7 +226,8 @@ foreach ($cat_count as $cid => $cnt) {
     // Адрес категории на GOODMi – только имя самой категории, без родителей (пользователь 2026-10-16): /smartfonyi/
     $url = isset($cseo[$cid]) ? 'https://goodmi.ru/' . $cseo[$cid] . '/' : 'https://goodmi.ru/index.php?dispatch=categories.view&category_id=' . $cid;
     // Начальные формы слов названия раздела («Ножи и аксессуары» → нож аксессуар) – для правила «раздел запроса первым»
-    $lem = implode(' ', lemmas($mc, end($names), 'gm_products'));
+    // числа отдельно, как в запросе («Redmi Note 15 4G» → redmi note 15 4 g), иначе раздел модели не узнавался
+    $lem = implode(' ', lemmas($mc, split_num(end($names)), 'gm_products'));
     $rows_c[] = sprintf('(%d,%s,%s,%s,%s,%d,%s,%s)', $cid, esc($mc, implode(' ', $names)), esc($mc, end($names)), esc($mc, implode(' › ', $names)), esc($mc, $url), $cnt, esc($mc, isset($cimg[$cid]) ? $cimg[$cid] : ''), esc($mc, $lem));
 }
 if ($rows_c) { mq($mc, 'INSERT INTO gm_categories (id,title,name,path,url,products,img,lem) VALUES ' . implode(',', $rows_c)); }
