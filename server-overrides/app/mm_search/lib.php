@@ -110,6 +110,10 @@ function mm_search_normalize($q)
     $q = mb_strtolower(trim((string) $q), 'UTF-8');
     $q = str_replace('ё', 'е', $q);
     $q = preg_replace('/[^\p{L}\p{N}\s.+\-]/u', ' ', $q);
+    // Модели, набранные русскими буквами-двойниками латиницы: «а16» → «a16», «м4» → «m4» (в каталоге – латиница)
+    $q = preg_replace_callback('/(?<!\p{L})[авекмнорстухi]{1,2}\d+[авекмнорстух]?(?!\p{L})|(?<!\p{L})\d+[авекмнорстух]{1,2}(?!\p{L})/u', function ($m) {
+        return strtr($m[0], ['а' => 'a', 'в' => 'b', 'е' => 'e', 'к' => 'k', 'м' => 'm', 'н' => 'h', 'о' => 'o', 'р' => 'p', 'с' => 'c', 'т' => 't', 'у' => 'y', 'х' => 'x']);
+    }, $q);
     $q = preg_replace(['/(\d)([^\d\s.,])/u', '/([^\d\s.,])(\d)/u'], '$1 $2', $q); // «256гб» → «256 гб», «ps5» → «ps 5»
     return trim(preg_replace('/\s+/u', ' ', $q));
 }
@@ -119,6 +123,13 @@ function mm_search_match_expr($norm, &$words_out = null)
 {
     $syn = mm_search_synonyms();
     $tokens = $norm === '' ? [] : explode(' ', $norm);
+    // Предлоги не обязательны («чехол на 18», «стекло для iphone»): их почти нет в названиях товаров
+    // «про» сюда не входит – это синоним «pro»
+    $stop = ['на', 'для', 'в', 'во', 'с', 'со', 'и', 'к', 'по', 'от', 'из', 'под', 'без'];
+    if (count($tokens) > 1) {
+        $kept = array_values(array_filter($tokens, function ($t) use ($stop) { return !in_array($t, $stop, true); }));
+        if ($kept) { $tokens = $kept; }
+    }
     $groups = []; $words = [];
     for ($i = 0; $i < count($tokens); $i++) {
         $hit = null;
@@ -175,12 +186,19 @@ function mm_search_raw($mc, $query, $limit = 20, $offset = 0)
     $prefix = mb_strlen($last) >= 2 && !preg_match('/^\d+$/', $last) ? preg_replace('/' . preg_quote(mm_search_escape($last), '/') . '$/u', mm_search_escape($last) . '*', $expr) : '';
     $min_len = min(array_map('mb_strlen', $tokens));
     $translit = mm_search_fix_unknown($mc, $norm);
+    // Неверная раскладка со знаками препинания («rf,tkm» → «кабель»): разбор выкидывает запятые, поэтому меняем раскладку
+    // у исходного текста
+    $layout_expr = '';
+    if (preg_match('/^[a-z\[\];\',.`\s]+$/i', trim((string) $query)) && preg_match('/[\[\];\',.`]/', (string) $query)) {
+        $layout_expr = mm_search_match_expr(mm_search_normalize(mm_search_switch_layout(mb_strtolower(trim((string) $query), 'UTF-8'))));
+    }
     $distance = $min_len <= 4 ? 1 : 2;
     $tries = [
         ['all', "WHERE MATCH(" . mm_search_q($mc, $expr) . ")", $opts],
         ['prefix', $prefix !== '' && $prefix !== $expr ? "WHERE MATCH(" . mm_search_q($mc, $prefix) . ")" : '', $opts],
         ['fuzzy', "WHERE MATCH(" . mm_search_q($mc, $norm) . ")", $opts . ", fuzzy = 1, distance = $distance, layouts = 'us,ru'"],
         ['translit', $translit !== '' ? "WHERE MATCH(" . mm_search_q($mc, $translit) . ")" : '', $opts . ", fuzzy = 1, distance = 2"],
+        ['layout', $layout_expr !== '' ? "WHERE MATCH(" . mm_search_q($mc, $layout_expr) . ")" : '', $opts],
         ['quorum', "WHERE MATCH(" . mm_search_q($mc, '"' . mm_search_escape($norm) . '"/' . max(1, (int) floor(count($words) * 0.6))) . ")", $opts],
     ];
     foreach ($tries as $t) {
