@@ -10,8 +10,8 @@
     {script src="js/addons/gm_delivery_date/seomenu.js"}
     {script src="js/addons/gm_delivery_date/flymenu.js"}
     {script src="js/addons/gm_delivery_date/compare_notice.js"}
-    {* Свой поиск, этап 2 (2026-10-16): только в браузере с тестовой отметкой gm_search_test – подсказки вместо Diginetica *}
-    {if isset($smarty.cookies.gm_search_test)}<script src="/gm-search.php?asset=js" defer></script>{/if}
+    {* Свой поиск (с 2026-10-16 у всех покупателей GOODMi вместо Diginetica): подсказки, история, плитки категорий, статистика *}
+    {script src="js/addons/gm_delivery_date/gm_search.js"}
 {/if}
 {* Отложенный запрос сопутствующих товаров в карточке (ia_defer.js) – на витринах Maxmobiles (1) и GOODMi (2), 2026-10-14 *}
 {if $runtime.company_id == 1 || $runtime.company_id == 2}

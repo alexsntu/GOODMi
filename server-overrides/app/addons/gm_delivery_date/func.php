@@ -922,6 +922,11 @@ function fn_gm_delivery_date_before_dispatch($controller, $mode, $action, $dispa
     if ($area !== 'C' || defined('CONSOLE') || (int) \Tygh\Registry::get('runtime.company_id') !== fn_gm_delivery_date_company_id()) {
         return;
     }
+    // Свой поиск (с 2026-10-16): старые ссылки на результаты Diginetica (?digiSearch=true&term=…, закладки и поисковики) –
+    // на нашу страницу результатов
+    if (!empty($_GET['digiSearch']) && isset($_GET['term']) && is_string($_GET['term']) && trim($_GET['term']) !== '') {
+        fn_redirect(fn_url('products.search?search_performed=Y&q=' . urlencode(mb_substr(trim($_GET['term']), 0, 100))), false, true);
+    }
     $user_id = isset(\Tygh::$app['session']['auth']['user_id']) ? (int) \Tygh::$app['session']['auth']['user_id'] : 0;
     if ($user_id <= 0) {
         return;

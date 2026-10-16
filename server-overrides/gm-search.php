@@ -6,7 +6,7 @@
  *
  * /gm-search.php?q=redm       – JSON для выпадающих подсказок (варианты запроса, «в категории», до 4 товаров, сколько всего);
  *                               пустой q – «Часто ищут» и «Популярные товары»; &cats=1 – категории найденного; &chips=1 – плашки
- * /gm-search.php?test=on|off  – ЭТАП 2: включить / выключить свой поиск в этом браузере (кука gm_search_test; у остальных – Diginetica)
+ * С 2026-10-16 свой поиск у всех покупателей GOODMi, Diginetica отключена; ?test= только стирает старую куку.
  * /gm-search.php?asset=js|css – скрипт и стили подсказок без кэша на время теста
  * /gm-search.php?ev=1 (POST)  – события для статистики (cscart_gm_search_clicks): клики, выбор в подсказках, плитки, брошенный ввод
  */
@@ -25,10 +25,9 @@ if (isset($_GET['asset'])) {
     exit;
 }
 
-// Тестовая отметка: свой поиск только в этом браузере (кука на 30 дней), ?test=off – вернуть Diginetica
+// Прежний переключатель (?test=…) больше ничего не включает: с 2026-10-16 свой поиск у всех – стираем куку и ведём на главную
 if (isset($_GET['test'])) {
-    $on = $_GET['test'] === 'on';
-    setcookie('gm_search_test', $on ? '1' : '', ['expires' => $on ? time() + 30 * 86400 : time() - 3600, 'path' => '/', 'secure' => true, 'samesite' => 'Lax']);
+    setcookie('gm_search_test', '', ['expires' => time() - 3600, 'path' => '/', 'secure' => true, 'samesite' => 'Lax']);
     header('Cache-Control: no-store');
     header('Location: /', true, 302);
     exit;

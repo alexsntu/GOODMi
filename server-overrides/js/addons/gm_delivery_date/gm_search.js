@@ -1,9 +1,8 @@
 /**
  * GOODMi: выпадающие подсказки своего поиска в шапке (копия поиска Maxmobiles js/addons/my_changes/mm_search.js, 2026-10-16).
  * Свои адрес /gm-search.php, кука gm_sid, история gm_search_history, классы gm-* – с Maxmobiles не смешивается.
- * ЭТАП 2 (тест): подключается только в браузере с отметкой gm_search_test (хук index:scripts модуля gm_delivery_date), там же
- * не грузится Diginetica (common/scripts.tpl); стили – /gm-search.php?asset=css. ЭТАП 3: своя страница результатов (плашки
- * «Уточнить», плитки «Найдено в категориях», ?gm_cat=) включена; статистика (события) – этап 4 (флаг STATS ниже).
+ * С 2026-10-16 у всех покупателей GOODMi вместо Diginetica (хук index:scripts модуля gm_delivery_date, общий бандл скриптов;
+ * Diginetica на GOODMi отключена, см. common/scripts.tpl). Оформление – секция 69 «Своего CSS» GOODMi (= app/gm_search/suggest.css).
  *
  * Как устроено (Baymard, подсказки Amazon/Apple/Ozon): слева варианты запроса с выделенной ДОПИСАННОЙ частью, затем «в категории»
  * с числом товаров; справа до 4 товаров с фото и ценой и «Все N товаров». Стрелки ↑↓ по кругу, выбранный вариант – сразу в поле;
@@ -12,12 +11,6 @@
 (function (_, $) {
   var URL = '/gm-search.php';
   var STATS = true, RESULTS = true; // этапы 3–4: своя страница результатов и статистика включены
-  // На время теста стили отдаёт /gm-search.php (CS-Cart вырезает <link> из хука) – подключаем их сами
-  if (!document.querySelector('link[href^="/gm-search.php?asset=css"]')) {
-    var css = document.createElement('link');
-    css.rel = 'stylesheet'; css.href = '/gm-search.php?asset=css&v=' + Math.floor(Date.now() / 600000);
-    document.head.appendChild(css);
-  }
   var DELAY = 120;
   var panel = null, dim = null, input = null, form = null, typed = '', items = [], active = -1, timer = null, ctrl = null, last = null;
 

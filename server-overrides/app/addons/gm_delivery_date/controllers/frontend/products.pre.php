@@ -5,7 +5,7 @@
  * релевантности. Здесь – поиск и набор найденных товаров в Registry 'runtime.gm_search'; подмена условия и сортировка
  * «По релевантности» – хуки get_products_pre, get_products, get_products_post, products_sorting в func.php модуля (свои ключи
  * gm_search – с поиском Maxmobiles 'runtime.mm_search' не пересекается).
- * ЭТАП 3: только витрина GOODMi и только в браузере с отметкой gm_search_test – у покупателей страница работает как раньше.
+ * Только витрина GOODMi, у всех покупателей с 2026-10-16 (Diginetica отключена).
  * Если индекс недоступен – штатный поиск. Статистика (этап 4): каждый поиск – в cscart_gm_search_log (показанные товары допишет
  * хук get_products_post), метка браузера gm_sid без IP и личных данных.
  */
@@ -16,7 +16,7 @@ if (!defined('BOOTSTRAP')) {
     die('Access denied');
 }
 
-if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 2 && isset($_COOKIE['gm_search_test'])) {
+if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 2) {
     // Запрос пришёл в поле hint_q (CS-Cart cm-hint не вернул полю имя q) – считаем его запросом
     if ((!isset($_REQUEST['q']) || trim((string) $_REQUEST['q']) === '') && isset($_REQUEST['hint_q']) && trim((string) $_REQUEST['hint_q']) !== '') {
         $_REQUEST['q'] = (string) $_REQUEST['hint_q'];

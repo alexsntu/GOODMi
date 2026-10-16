@@ -174,6 +174,10 @@
 
 ## Maxmobiles (company_id = 1): перенос оформления с GOODMi
 
+> С 2026-10-16 файлы, которые относятся только к Maxmobiles, и стили Maxmobiles (`maxmobiles-styles.css`) продублированы в репозитории
+> владельца `https://github.com/alexsntu/Maxmobiles` (папки `server-overrides/`, `_DEV/`). При правке файла Maxmobiles на сервере обновлять
+> обе копии. Общие файлы обеих витрин хранятся только здесь.
+
 У Maxmobiles свои файлы, файлы GOODMi не трогаем. Стили – в «Своём CSS» витрины
 `design/themes/abt__unitheme2/styles/data/Gray Maxmobiles - work new.css` (точная копия – в этой папке), секции MM-*.
 Шаблоны – в штатном модуле «Мои изменения» (`templates/addons/my_changes/`), каждый с условием `company_id == 1`;
@@ -302,7 +306,12 @@
   содержимым `app/mm_search/suggest.css`.
 - Откаты: `/root/gm-backups/2026-10-16-manticore/`, `…-mm-search/`, `…-mm-search-results/` (ROLLBACK.txt в каждой).
 
-### Свой поиск GOODMi (с 2026-10-16, этапы 2–3 – только в браузере с отметкой `gm_search_test`; у покупателей – Diginetica)
+### Свой поиск GOODMi (с 2026-10-16 у всех покупателей GOODMi; Diginetica на GOODMi удалена)
+
+Включение для всех: скрипт `gm_search.js` – в общем бандле через хук gm_delivery_date `index/scripts.post.tpl`, стили – секция 69 «Своего CSS»
+GOODMi (= `app/gm_search/suggest.css`), Diginetica 10125 (и защита от её пикселя) убрана из `common/scripts.tpl`, условие отметки снято в
+`products.pre.php`, `?digiSearch=…&term=` → 301 на нашу выдачу (before_dispatch gm_delivery_date), `?test=` только стирает куку.
+Откат включения – `/root/gm-backups/2026-10-16-gm-search-golive/ROLLBACK.txt`. Ниже – как было на этапах до включения.
 
 Отдельная копия поиска Maxmobiles: свои индексы Manticore `gm_products`, `gm_suggest`, `gm_categories`, `gm_queries`, `gm_status`,
 кука `gm_sid`, история `gm_search_history`, классы `gm-*` – с Maxmobiles не смешивается. Адрес категории – только своё имя (без родителей).
