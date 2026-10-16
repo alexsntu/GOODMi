@@ -8,12 +8,16 @@
    из России, браузер ждёт его и не завершает загрузку карточки товара). Поиск не затронут.
    Откат: удалить этот script. Бэкап: /root/gm-backups/2026-10-14-diginetica-pixel/ *}
 <script type="text/javascript">(function(){ldelim}var d=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');if(!d||!d.set)return;Object.defineProperty(HTMLImageElement.prototype,'src',{ldelim}configurable:true,enumerable:d.enumerable,get:d.get,set:function(v){ldelim}if(typeof v==='string'&&v.indexOf('tracking.diginetica.net')!==-1)return;d.set.call(this,v);{rdelim}{rdelim});{rdelim})();</script>
+{* Maxmobiles 2026-10-16: в браузере с тестовым своим поиском (кука mm_search_test, /mm-search.php?test=on) Diginetica не
+   загружается – вместо неё подсказки js/addons/my_changes/mm_search.js. У остальных покупателей всё как было. *}
+{if !isset($smarty.cookies.mm_search_test) || $smarty.cookies.mm_search_test != "1"}
 <script type="text/javascript"> var digiScript = document.createElement('script');
 digiScript.src = '//cdn.diginetica.net/10127/client.js';
 digiScript.defer = true;
 digiScript.async = true;
 document.head.appendChild(digiScript);
 </script>
+{/if}
 
 
 

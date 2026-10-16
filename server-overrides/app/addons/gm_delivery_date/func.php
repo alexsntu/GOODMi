@@ -989,3 +989,16 @@ function fn_gm_delivery_date_top_menu_form_post(&$top_menu, $level, $active)
     }
     unset($item);
 }
+
+/**
+ * Меню админки: «Покупатели → Подтверждение номера» и «Заблокированные номера» (schemas/menu/menu.post.php) – пункты кабинета
+ * GOODMi – показываются только при выбранной витрине GOODMi (company_id = 2); на Maxmobiles, Xione и «Всех витринах» их нет
+ * (2026-10-16, так же, как пункты Maxmobiles в модуле my_changes). Схема меню кэшируется одна на все витрины – скрываем при
+ * каждом построении меню.
+ */
+function fn_gm_delivery_date_backend_menu_generate_before_process_item(&$menu, $group, $root, &$items)
+{
+    if ($root === 'customers' && (int) \Tygh\Registry::get('runtime.company_id') !== 2) {
+        unset($items['items']['gm_phone_verify'], $items['items']['gm_phone_blocked']);
+    }
+}

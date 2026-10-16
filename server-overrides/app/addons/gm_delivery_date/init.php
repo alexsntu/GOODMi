@@ -23,5 +23,7 @@ fn_register_hooks(
     'update_user_pre',
     'update_profile',
     'before_dispatch',
-    'top_menu_form_post'
+    'top_menu_form_post',
+    // Меню админки: пункты кабинета GOODMi – только при выбранной витрине GOODMi
+    'backend_menu_generate_before_process_item'
 );

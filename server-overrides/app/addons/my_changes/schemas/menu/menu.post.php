@@ -20,4 +20,11 @@ $schema['central']['customers']['items']['mm_phone_blocked'] = [
     'position' => 153,
 ];
 
+// Свой поиск Maxmobiles (2026-10-16): статистика, проверка запроса, индекс – app/controllers/backend/mm_search.php
+$schema['central']['products']['items']['mm_search'] = [
+    'title' => 'Поиск Maxmobiles',
+    'href' => 'mm_search.manage',
+    'position' => 1500,
+];
+
 return $schema;

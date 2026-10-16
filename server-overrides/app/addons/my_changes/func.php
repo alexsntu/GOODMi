@@ -362,3 +362,136 @@ function fn_my_changes_mm_phone_mark($phone, $user_id = 0)
 
     return $cache[$key];
 }
+
+/**
+ * Свой поиск Maxmobiles (этап 3, 2026-10-16): на странице результатов (products.search) вместо поиска CS-Cart по словам –
+ * товары, найденные Manticore (app/mm_search/lib.php), в порядке релевантности. Набор (до 1000 товаров) кладёт
+ * controllers/frontend/products.pre.php модуля в Registry 'runtime.mm_search' = ['q' => запрос, 'ids' => [...]]; фильтры,
+ * цены, страницы и карточки остаются штатными и считаются по этому набору. Действует только для того же запроса q и только
+ * пока набор задан (витрина 1, браузер с кукой mm_search_test) – остальные списки товаров на странице не затрагиваются.
+ */
+function fn_my_changes_mm_search_for($params)
+{
+    $s = \Tygh\Registry::get('runtime.mm_search');
+    if (!$s || !isset($params['q']) || trim((string) $params['q']) !== $s['q']) {
+        return null;
+    }
+
+    return $s;
+}
+
+function fn_my_changes_get_products_pre(&$params, $items_per_page, $lang_code)
+{
+    $s = fn_my_changes_mm_search_for($params);
+    if (!$s) {
+        return;
+    }
+    // Ничего не найдено – пустой список, а не «все товары»
+    $params['pid'] = $s['ids'] ? $s['ids'] : [0];
+    unset($params['q'], $params['pname'], $params['pshort'], $params['pfull'], $params['pkeywords'], $params['pcode_from_q']);
+    $params['mm_search'] = true;
+}
+
+function fn_my_changes_get_products(&$params, &$fields, &$sortings, &$condition, &$join, &$sorting, &$group_by, $lang_code, &$having)
+{
+    if (empty($params['mm_search'])) {
+        return;
+    }
+    $s = \Tygh\Registry::get('runtime.mm_search');
+    $sortings['relevance'] = db_quote('FIELD(products.product_id, ?n)', $s && $s['ids'] ? $s['ids'] : [0]);
+}
+
+function fn_my_changes_get_products_post(&$products, &$params, $lang_code)
+{
+    if (empty($params['mm_search'])) {
+        return;
+    }
+    // Запрос остаётся в поле поиска и в ссылках фильтров (Baymard: не терять введённое)
+    $s = \Tygh\Registry::get('runtime.mm_search');
+    if ($s) {
+        $params['q'] = $s['q'];
+        // Статистика: какие товары показаны на странице и в каком порядке (один раз на поиск)
+        if (!empty($s['log_id']) && empty($s['shown_saved']) && is_array($products)) {
+            \Tygh\Registry::set('runtime.mm_search.shown_saved', true);
+            try {
+                db_query('UPDATE ?:mm_search_log SET shown = ?s WHERE id = ?i', implode(',', array_map('intval', array_keys($products))), $s['log_id']);
+            } catch (\Throwable $e) {
+            }
+        }
+    }
+}
+
+/**
+ * Статистика своего поиска Maxmobiles: корзина и заказы покупателей, которые искали недавно (корзина – поиск за 2 часа,
+ * заказ – за сутки), – в cscart_mm_search_events с последним поиском. Только витрина 1 и только с меткой mm_sid. Любой
+ * сбой записи пропускается – корзина и оформление заказа работают как обычно.
+ */
+function fn_my_changes_mm_search_last($within)
+{
+    if ((int) \Tygh\Registry::get('runtime.company_id') !== 1 || !isset($_COOKIE['mm_sid']) || !preg_match('/^[a-f0-9]{16}$/', (string) $_COOKIE['mm_sid'])) {
+        return [null, 0];
+    }
+    $sid = (string) $_COOKIE['mm_sid'];
+    $id = (int) db_get_field('SELECT id FROM ?:mm_search_log WHERE sid = ?s AND ts > ?i ORDER BY id DESC LIMIT 1', $sid, TIME - $within);
+
+    return [$sid, $id];
+}
+
+function fn_my_changes_add_to_cart(&$cart, $product_id, $_id, $_data)
+{
+    try {
+        list($sid, $search_id) = fn_my_changes_mm_search_last(7200);
+        if (!$search_id) {
+            return;
+        }
+        $item = isset($cart['products'][$_id]) ? $cart['products'][$_id] : [];
+        db_query('INSERT INTO ?:mm_search_events ?e', [
+            'ts' => TIME, 'sid' => $sid, 'type' => 'cart', 'search_id' => $search_id, 'product_id' => (int) $product_id,
+            'qty' => isset($item['amount']) ? (int) $item['amount'] : 1, 'price' => isset($item['price']) ? (float) $item['price'] : 0, 'order_id' => 0,
+        ]);
+    } catch (\Throwable $e) {
+    }
+}
+
+function fn_my_changes_place_order($order_id, $action, $order_status, $cart, $auth)
+{
+    try {
+        list($sid, $search_id) = fn_my_changes_mm_search_last(86400);
+        if (!$search_id || !$order_id || empty($cart['products'])
+            || db_get_field('SELECT 1 FROM ?:mm_search_events WHERE order_id = ?i LIMIT 1', $order_id)) {
+            return;
+        }
+        foreach ($cart['products'] as $item) {
+            db_query('INSERT INTO ?:mm_search_events ?e', [
+                'ts' => TIME, 'sid' => $sid, 'type' => 'order', 'search_id' => $search_id, 'product_id' => (int) $item['product_id'],
+                'qty' => (int) $item['amount'], 'price' => isset($item['price']) ? (float) $item['price'] : 0, 'order_id' => (int) $order_id,
+            ]);
+        }
+    } catch (\Throwable $e) {
+    }
+}
+
+function fn_my_changes_products_sorting(&$sorting, $simple_mode)
+{
+    if (!\Tygh\Registry::get('runtime.mm_search')) {
+        return;
+    }
+    $sorting = ['relevance' => ['description' => 'По релевантности', 'default_order' => 'asc', 'desc' => false]] + $sorting;
+}
+
+/**
+ * Меню админки: пункты Maxmobiles (schemas/menu/menu.post.php) – «Товары → Поиск Maxmobiles», «Покупатели → Подтверждение
+ * номера Maxmobiles» и «Заблокированные номера Maxmobiles» – показываются только при выбранной витрине Maxmobiles
+ * (company_id = 1); на GOODMi, Xione и «Всех витринах» их нет (пункты GOODMi скрывает так же модуль gm_delivery_date).
+ * Схема меню кэшируется одна на все витрины, поэтому скрываем при каждом построении меню.
+ */
+function fn_my_changes_backend_menu_generate_before_process_item(&$menu, $group, $root, &$items)
+{
+    if ((int) \Tygh\Registry::get('runtime.company_id') === 1) {
+        return;
+    }
+    $own = ['products' => ['mm_search'], 'customers' => ['mm_phone_verify', 'mm_phone_blocked']];
+    foreach (isset($own[$root]) ? $own[$root] : [] as $key) {
+        unset($items['items'][$key]);
+    }
+}

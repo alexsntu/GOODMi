@@ -280,3 +280,19 @@
 | `/etc/nginx/vhosts-resources/xione.ru/gm-bot-filter.conf` | xione.ru: три правила против обходчиков + боты по названию + поиск уязвимостей (с 2026-10-13) |
 
 После правки: `nginx -t && systemctl reload nginx`. Бэкап прежних настроек – `/root/gm-backups/2026-10-13-bot-filter/`.
+
+### Свой поиск Maxmobiles вместо Diginetica (с 2026-10-16, пока только в браузере с кукой `mm_search_test`)
+
+Движок – Manticore Search 29.9 на этом же сервере (служба `manticore`, слушает только 127.0.0.1:9306/9308/9312; репозиторий
+`/etc/apt/sources.list.d/manticoresearch.sources`). Индексы: `mm_products` (товары витрины 1), `mm_suggest` (словарь подсказок),
+`mm_categories`, `mm_queries`. Сборка – скрипты `/root/mm-search/` (исходники и сравнение с Diginetica – `_DEV/search/`):
+`mm-search-index.php` (каждые 2 часа, 20 */2), `mm-search-demand.php` (спрос за 90 дней из МойСклад, 05:10) – `/etc/cron.d/mm-search`.
+- Файлы сайта: `mm-search.php` (корень: подсказки `?q=`, категории `?cats=1&q=`, включение `?test=on|off`, скрипт и стили на время
+  настройки `?asset=js|css`; не maxmobiles.ru → 404), `app/mm_search/lib.php` (поиск, синонимы, подсказки), `app/mm_search/suggest.css`,
+  `js/addons/my_changes/mm_search.js` (подсказки, история «Вы искали», плитки «Найдено в категориях»).
+- Модуль «Мои изменения»: `controllers/frontend/products.pre.php` (страница результатов products.search – наши товары, `mm_cat` – одна
+  категория), хуки `get_products_pre`, `get_products`, `get_products_post`, `products_sorting` в `func.php` (сортировка «По релевантности»).
+- Шаблоны: `common/scripts.tpl` – Diginetica Maxmobiles не грузится при куке; хук my_changes `index/scripts.post.tpl` – при куке
+  подключает `/mm-search.php?asset=js`. Секция MM-13 «Своего CSS» Maxmobiles – старая версия стилей, при включении для всех заменить
+  содержимым `app/mm_search/suggest.css`.
+- Откаты: `/root/gm-backups/2026-10-16-manticore/`, `…-mm-search/`, `…-mm-search-results/` (ROLLBACK.txt в каждой).
