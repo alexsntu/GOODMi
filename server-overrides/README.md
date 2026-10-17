@@ -295,7 +295,8 @@
 Движок – Manticore Search 29.9 на этом же сервере (служба `manticore`, слушает только 127.0.0.1:9306/9308/9312; репозиторий
 `/etc/apt/sources.list.d/manticoresearch.sources`). Индексы: `mm_products` (товары витрины 1), `mm_suggest` (словарь подсказок),
 `mm_categories`, `mm_queries`. Сборка – скрипты `/root/mm-search/` (исходники и сравнение с Diginetica – `_DEV/search/`):
-`mm-search-index.php` (каждые 2 часа, 20 */2), `mm-search-demand.php` (спрос за 90 дней из МойСклад, 05:10) – `/etc/cron.d/mm-search`.
+`mm-search-index.php` (каждые 2 часа, :15 нечётных часов), `mm-search-demand.php` (спрос за 90 дней из МойСклад, 05:10) – `/etc/cron.d/mm-search`
+(копия – `_DEV/search/cron.d-mm-search`).
 - Файлы сайта: `mm-search.php` (корень: подсказки `?q=`, категории `?cats=1&q=`, включение `?test=on|off`, скрипт и стили на время
   настройки `?asset=js|css`; не maxmobiles.ru → 404), `app/mm_search/lib.php` (поиск, синонимы, подсказки), `app/mm_search/suggest.css`,
   `js/addons/my_changes/mm_search.js` (подсказки, история «Вы искали», плитки «Найдено в категориях»).
@@ -315,8 +316,24 @@ GOODMi (= `app/gm_search/suggest.css`), Diginetica 10125 (и защита от �
 
 Отдельная копия поиска Maxmobiles: свои индексы Manticore `gm_products`, `gm_suggest`, `gm_categories`, `gm_queries`, `gm_status`,
 кука `gm_sid`, история `gm_search_history`, классы `gm-*` – с Maxmobiles не смешивается. Адрес категории – только своё имя (без родителей).
-Сборка – `/root/gm-search/` (исходники – `_DEV/search-gm/`): `gm-search-index.php` (25 */2), `gm-search-queries.php` (частые запросы:
-автодополнение Diginetica по буквам + журналы nginx, 05:40), `gm-search-demand.php` (спрос за 90 дней из МойСклад GOODMi) – `/etc/cron.d/gm-search`.
+Сборка – `/root/gm-search/` (исходники – `_DEV/search-gm/`): `gm-search-index.php` (:15 чётных часов), `gm-search-queries.php` (частые запросы:
+автодополнение Diginetica по буквам + журналы nginx, 05:40), `gm-search-demand.php` (спрос за 90 дней из МойСклад GOODMi) – `/etc/cron.d/gm-search`
+(копия – `_DEV/search-gm/cron.d-gm-search`).
+
+### Защита поиска обеих витрин от зависания Manticore (2026-10-17)
+
+2026-10-16 в 22:20 Manticore завис на `CREATE TABLE` (журнал binlog ссылался на несозданный файл), и 14 часов все сборки копились
+в очереди. Перезапуск не шёл, пока журнал не убрали в `/root/gm-backups/2026-10-17-search-hang/manticore-binlog/`. Что сделано:
+- Расписание: GOODMi – :15 чётных часов, Maxmobiles – :15 нечётных; все сборки под общим замком `/run/lock/search-index.lock`
+  (`flock`) и с пределом времени (`timeout`); любой сбой – строка «не завершён, код …» в `cron.log`.
+- Сборщики (`*-search-index.php`, `*-search-demand.php`): ждут ответа Manticore не дольше 2 мин (`MYSQLI_OPT_READ_TIMEOUT`).
+- Сайт (`gm-search.php`, `mm-search.php`, оба `products.pre.php`): 1 с на соединение, 3 с на ответ; страница результатов при сбое
+  показывает штатную выдачу CS-Cart, а не висит (обработчиков PHP всего 5, `fastcgi_read_timeout` – 10 суток).
+- Сводка `gm_cabinet.auth_status` (`app/gm_cabinet/store.php`, облачная задача → Telegram): поле `search` со временем сборок обеих
+  витрин и тревоги «Manticore не отвечает» / «индекс не обновлялся больше 5 часов».
+- Порядок выдачи: модуль `ecl_instock_sorting` («сначала в наличии») переписывал ORDER BY страницы результатов – хуки `get_products`
+  (my_changes и gm_delivery_date) убирают его метку `instock_marker` при сортировке «По релевантности».
+- Откат – `/root/gm-backups/2026-10-17-search-hang/ROLLBACK.txt`.
 - Файлы сайта: `gm-search.php` (корень: подсказки `?q=`, `?cats=1`, `?chips=1`, отметка `?test=on|off`, `?asset=js|css`; не goodmi.ru → 404;
   `?ev=1` до этапа 4 ничего не пишет), `app/gm_search/lib.php`, `app/gm_search/suggest.css` (цвета GOODMi), `js/addons/gm_delivery_date/gm_search.js`
   (флаги STATS и RESULTS – выключены до этапов 3–4).

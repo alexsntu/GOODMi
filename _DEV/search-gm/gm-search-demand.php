@@ -81,7 +81,10 @@ $cut = time() - 180 * 86400;
 foreach (['gm_search_log', 'gm_search_clicks', 'gm_search_events'] as $t) { $db->query("DELETE FROM {$p}{$t} WHERE ts < $cut"); }
 
 // Статус для админки (gm_search.index)
-$mc = @new mysqli('127.0.0.1', '', '', '', 9306);
+// Manticore не ответил за 2 мин – ошибка в журнал вместо зависания (2026-10-16 22:20 он завис на CREATE TABLE на 14 ч)
+$mc = mysqli_init();
+$mc->options(MYSQLI_OPT_READ_TIMEOUT, 120);
+@$mc->real_connect('127.0.0.1', '', '', '', 9306);
 if (!$mc->connect_errno) {
     $mc->set_charset('utf8mb4');
     $mc->query("CREATE TABLE IF NOT EXISTS gm_status (kind string, ts timestamp, seconds float, items int, note text stored)");

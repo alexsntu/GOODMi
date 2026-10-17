@@ -1514,6 +1514,36 @@ function fn_gm_cab_auth_status($hours = 1)
         }
     }
 
+    // Свой поиск обеих витрин (Manticore, общий для сервера): индекс собирается каждые 2 часа (GOODMi – :15 чётных часов,
+    // Maxmobiles – :15 нечётных). «Не обновлялся 5 часов» сообщаем один раз – в окне, куда попал порог; «Manticore не отвечает» –
+    // при каждой сводке (2026-10-17: Manticore завис, сборки 14 ч не проходили, и никто об этом не узнал).
+    $status['search'] = [];
+    $mc = mysqli_init();
+    $mc->options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
+    $mc->options(MYSQLI_OPT_READ_TIMEOUT, 3);
+    if (!@$mc->real_connect('127.0.0.1', '', '', '', 9306)) {
+        $status['search'] = null;
+        $status['alerts'][] = 'Поиск на сайтах не работает: Manticore не отвечает (служба manticore на сервере магазинов)';
+    } else {
+        foreach (['gm' => 'GOODMi', 'mm' => 'Maxmobiles'] as $px => $name) {
+            $r = @$mc->query("SELECT MAX(ts) AS last FROM {$px}_status WHERE kind = 'index'");
+            $row = $r ? $r->fetch_assoc() : null;
+            if (!$row) {
+                $status['search'][$px] = null;
+                $status['alerts'][] = 'Поиск ' . $name . ': не прочитать время последней сборки индекса (' . ($mc->error !== '' ? $mc->error : 'нет данных') . ')';
+                continue;
+            }
+            $last = (int) $row['last'];
+            $status['search'][$px] = $last ? date('Y-m-d H:i', $last) : '';
+            $stale = $now - 5 * 3600;
+            if ($last < $stale && $last >= $stale - 3600 * $hours) {
+                $status['alerts'][] = 'Поиск ' . $name . ': индекс не обновлялся больше 5 часов (последняя сборка – ' . date('d.m H:i', $last)
+                    . '). Журнал: /root/' . $px . '-search/cron.log';
+            }
+        }
+        $mc->close();
+    }
+
     return $status;
 }
 

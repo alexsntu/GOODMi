@@ -26,11 +26,19 @@ if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 2) {
     if (isset($_REQUEST['q']) && is_string($_REQUEST['q']) && trim($_REQUEST['q']) !== '' && is_file($gm_lib)) {
         try {
             require_once $gm_lib;
-            $gm_mc = @new mysqli('127.0.0.1', '', '', '', 9306);
+            // Индекс не отвечает – не держим обработчик PHP: 1 с на соединение, 3 с на ответ (2026-10-17: Manticore завис на 14 ч)
+            $gm_mc = mysqli_init();
+            $gm_mc->options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
+            $gm_mc->options(MYSQLI_OPT_READ_TIMEOUT, 3);
+            @$gm_mc->real_connect('127.0.0.1', '', '', '', 9306);
             if (!$gm_mc->connect_errno) {
                 $gm_mc->set_charset('utf8mb4');
                 $gm_t0 = microtime(true);
                 $gm_found = gm_search($gm_mc, (string) $_REQUEST['q'], 1000);
+                // Ответ не пришёл за 3 с (2006/2013 – соединение потеряно) – штатный поиск, см. catch ниже
+                if (in_array($gm_mc->errno, [2006, 2013], true)) {
+                    throw new \RuntimeException('manticore: ' . $gm_mc->error);
+                }
                 $gm_ms = (int) round((microtime(true) - $gm_t0) * 1000);
                 // Плитка «Найдено в категориях» (gm_cat) – только товары этой категории (по основной категории товара)
                 $gm_cat = isset($_REQUEST['gm_cat']) ? (int) $_REQUEST['gm_cat'] : 0;
