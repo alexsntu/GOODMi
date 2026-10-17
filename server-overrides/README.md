@@ -335,6 +335,11 @@ GOODMi (= `app/gm_search/suggest.css`), Diginetica 10125 (и защита от �
 - Порядок выдачи: модуль `ecl_instock_sorting` («сначала в наличии») переписывал ORDER BY страницы результатов – хуки `get_products`
   (my_changes и gm_delivery_date) убирают его метку `instock_marker` при сортировке «По релевантности».
 - Откат – `/root/gm-backups/2026-10-17-search-hang/ROLLBACK.txt`.
+- Проверка (2026-10-17, всё прошло): `_DEV/search-tests/test-safe.sh` – без влияния на сайт (зависшая сборка снимается по времени, занятый
+  замок не копит очередь, сборщик на «молчащем» порту падает с ошибкой); `_DEV/search-tests/run-hole-test.sh` – с Mac, через веб-сервер
+  GOODMi на минуту (тестовая страница + посредник `hole-proxy.py`): зависший запрос отпускается за 3 с, главная открывается как обычно.
+  Не проверено на живом сбое: переход страницы результатов на штатную выдачу именно при зависании и доставка тревоги в Telegram –
+  для этого «заморозить» Manticore (`kill -STOP` / `kill -CONT` процесса searchd) на 30 с ночью.
 - Файлы сайта: `gm-search.php` (корень: подсказки `?q=`, `?cats=1`, `?chips=1`, отметка `?test=on|off`, `?asset=js|css`; не goodmi.ru → 404;
   `?ev=1` до этапа 4 ничего не пишет), `app/gm_search/lib.php`, `app/gm_search/suggest.css` (цвета GOODMi), `js/addons/gm_delivery_date/gm_search.js`
   (флаги STATS и RESULTS – выключены до этапов 3–4).
