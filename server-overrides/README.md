@@ -295,7 +295,7 @@
 Движок – Manticore Search 29.9 на этом же сервере (служба `manticore`, слушает только 127.0.0.1:9306/9308/9312; репозиторий
 `/etc/apt/sources.list.d/manticoresearch.sources`). Индексы: `mm_products` (товары витрины 1), `mm_suggest` (словарь подсказок),
 `mm_categories`, `mm_queries`. Сборка – скрипты `/root/mm-search/` (исходники и сравнение с Diginetica – `_DEV/search/`):
-`mm-search-index.php` (каждые 2 часа, :15 нечётных часов), `mm-search-demand.php` (спрос за 90 дней из МойСклад, 05:10) – `/etc/cron.d/mm-search`
+`mm-search-index.php` (каждые 2 часа, :15 нечётных часов), `mm-search-demand.php` (спрос за 90 дней из МойСклад, с 2026-10-17 раз в неделю – понедельник 05:10) – `/etc/cron.d/mm-search`
 (копия – `_DEV/search/cron.d-mm-search`).
 - Файлы сайта: `mm-search.php` (корень: подсказки `?q=`, категории `?cats=1&q=`, включение `?test=on|off`, скрипт и стили на время
   настройки `?asset=js|css`; не maxmobiles.ru → 404), `app/mm_search/lib.php` (поиск, синонимы, подсказки), `app/mm_search/suggest.css`,
@@ -317,7 +317,8 @@ GOODMi (= `app/gm_search/suggest.css`), Diginetica 10125 (и защита от �
 Отдельная копия поиска Maxmobiles: свои индексы Manticore `gm_products`, `gm_suggest`, `gm_categories`, `gm_queries`, `gm_status`,
 кука `gm_sid`, история `gm_search_history`, классы `gm-*` – с Maxmobiles не смешивается. Адрес категории – только своё имя (без родителей).
 Сборка – `/root/gm-search/` (исходники – `_DEV/search-gm/`): `gm-search-index.php` (:15 чётных часов), `gm-search-queries.php` (частые запросы:
-автодополнение Diginetica по буквам + журналы nginx, 05:40), `gm-search-demand.php` (спрос за 90 дней из МойСклад GOODMi) – `/etc/cron.d/gm-search`
+автодополнение Diginetica по буквам + журналы nginx, каждый день 05:40), `gm-search-demand.php` (спрос за 90 дней из МойСклад GOODMi,
+с 2026-10-17 раз в неделю – понедельник 05:40, ~12 мин) – `/etc/cron.d/gm-search`
 (копия – `_DEV/search-gm/cron.d-gm-search`).
 
 ### Защита поиска обеих витрин от зависания Manticore (2026-10-17)
