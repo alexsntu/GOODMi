@@ -507,3 +507,17 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   MoneyCare, PayLate, предоплата; ни один включённый способ оплаты его не использовал), с ним `phpqrcode/` и `qrpng/` – всё в
   `/root/backup-2026-10-18-pre-php83/removed/{payments,testpage}/` (README там же). `payments.*` и `testpage.*` теперь 404; способы
   оплаты в админке (ядро) не затронуты.
+
+### Предел процессов PHP 5 → 20 и мягкий перезапуск (2026-10-18 20:44, боевые на 7.4, решение пользователя – делать при нём, не ночью)
+
+Пулы goodmi.ru/maxmobiles.ru/xione.ru упирались в `pm.max_children = 5` (стандарт шаблона ISPmanager для мелкого хостинга, шаблон
+от 13.06.2023 никто не менял) – 46 тыс. раз с июля, 3 660 за 17–18.10, при нагрузке сервера ~1 из 24 ядер.
+- `/opt/php74/etc/php-fpm.d/pool.d/{goodmi.ru,maxmobiles.ru,xione.ru}.conf`: `pm.max_children = 20`.
+- Шаблон панели `/usr/local/mgr5/etc/templates/fpm_site_pool.conf`: `pm.max_children = 20` – иначе ISPmanager вернёт 5 при любой
+  правке сайта и при смене версии PHP; обновление ISPmanager может вернуть шаблон – сверить.
+- `/opt/php74/etc/php-fpm.conf` и `/opt/php83/etc/php-fpm.conf`: `process_control_timeout = 10s` – перезапуск PHP-FPM ждёт, пока
+  процессы допишут ответы (раньше 0 – перезапуск по правке в панели обрывал запросы, 18.10 18:29 – один 502).
+- Перезапуск 20:44:05: 5xx 0, обрывов 0. Через 3 мин: goodmi 9–17 процессов, maxmobiles 7–9, вся память PHP боевых 1,1–1,9 ГБ
+  (свободно 33 ГБ), load ≤1,05, упираний в предел 0; средний ответ PHP goodmi 0,14 → 0,09 с, дольше 1 с – 14 → 0.
+- Копии до правки – `/root/backup-2026-10-18-pre-php83/before-max-children/`. Откат: вернуть 5 в трёх файлах и в шаблоне,
+  `systemctl reload php-fpm74`. Следить: блокировки MyISAM (224 таблицы) при большем числе параллельных запросов.
