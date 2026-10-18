@@ -495,8 +495,9 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
 ### `testpage` закрыт, PHPExcel и трейд-ин из Excel убраны (2026-10-18, решение пользователя, все витрины)
 
 `app/addons/my_changes/controllers/frontend/testpage.pre.php` (копия здесь): самописный `app/controllers/frontend/testpage.php`
-(24 команды без проверки доступа, часть пишет в базу) из интернета больше не отвечает (404); с сервера работает только команда
-cron `updateprice` (раз в час цены других витрин → Xione). Лента Мегамаркета `generatesearch` (`mi92_s.xml`, забирал goods.ru)
+(24 команды без проверки доступа, часть пишет в базу) не выполняет ни одной команды – ни из интернета, ни с сервера (404).
+Задание cron `updateprice` (раз в час цены других витрин → Xione) остановлено тем же вечером – пользователь напишет своё заново
+(прежний crontab – `removed/crontab-maxmobiles.before-updateprice`); цены Xione пока не обновляются. Лента Мегамаркета `generatesearch` (`mi92_s.xml`, забирал goods.ru)
 остановлена тем же днём – пользователь давно её не использует: строка убрана из crontab maxmobiles (прежний –
 `/root/backup-2026-10-18-pre-php83/removed/crontab-maxmobiles.before`), файлы ленты – там же, `megamarket-feed/`. `PHPExcel-1.8/` (нужна была только `testpage.gettraidin` и `bonusplus.bonusfile`; на PHP 8 не работает)
 и `traidin.xlsx` (последний раз 27.01.2025) перенесены в `/root/backup-2026-10-18-pre-php83/removed/` (там README, как вернуть).
