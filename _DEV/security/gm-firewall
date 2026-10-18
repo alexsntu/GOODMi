@@ -19,3 +19,18 @@ for ipt in iptables ip6tables; do
         $ipt -C INPUT -p tcp --dport "$p" -j GM_CLOSED >/dev/null 2>&1 || $ipt -I INPUT 1 -p tcp --dport "$p" -j GM_CLOSED
     done
 done
+
+# Тестовые копии (2026-10-18, тест PHP 8.3 на копии боевых витрин): пользователь www-root (dev.maxmobiles.ru, dev.goodmi.ru,
+# dev.mi92.ru) не ходит наружу совсем – ни СМС, ни МойСклад, ни БонусПлюс, ни почта, ни платежи, ни боевые сайты; только сам
+# сервер через lo (база – через сокет). Снять: DEV_NO_OUT="" и iptables -D OUTPUT -m owner --uid-owner www-root -j GM_DEV_OUT
+DEV_NO_OUT="www-root"
+for ipt in iptables ip6tables; do
+    $ipt -N GM_DEV_OUT 2>/dev/null || true
+    $ipt -F GM_DEV_OUT
+    $ipt -A GM_DEV_OUT -o lo -j RETURN
+    $ipt -A GM_DEV_OUT -p tcp -j REJECT --reject-with tcp-reset
+    $ipt -A GM_DEV_OUT -j REJECT
+    for u in $DEV_NO_OUT; do
+        $ipt -C OUTPUT -m owner --uid-owner "$u" -j GM_DEV_OUT >/dev/null 2>&1 || $ipt -I OUTPUT 1 -m owner --uid-owner "$u" -j GM_DEV_OUT
+    done
+done
