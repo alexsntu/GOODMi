@@ -16,10 +16,14 @@ CREATE TABLE IF NOT EXISTS cscart_sms_stat (
   part_no tinyint unsigned NOT NULL DEFAULT 1,
   phone_hash char(12) NOT NULL DEFAULT '',
   phone_tail char(2) NOT NULL DEFAULT '',
+  collected_at int unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (id_state),
   KEY ts (ts),
-  KEY kind_ts (kind, ts)
+  KEY kind_ts (kind, ts),
+  KEY collected_at (collected_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 2026-10-18, к уже созданной таблице: ALTER TABLE cscart_sms_stat ADD collected_at int unsigned NOT NULL DEFAULT 0, ADD KEY collected_at (collected_at);
+-- (у загруженной истории 0 – по ней тревог нет)
 
 -- Баланс раз в час; error – сбой сбора (пусто – всё в порядке)
 CREATE TABLE IF NOT EXISTS cscart_sms_balance (

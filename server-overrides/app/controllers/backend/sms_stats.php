@@ -21,5 +21,6 @@ if ($mode === 'manage') {
         $days = 7;
     }
     Tygh::$app['view']->assign('sms', sms_stats_overview($days));
+    Tygh::$app['view']->assign('sms_health', sms_stats_health());
     Tygh::$app['view']->assign('sms_days', $days);
 }

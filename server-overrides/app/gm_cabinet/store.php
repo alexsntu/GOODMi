@@ -1544,6 +1544,21 @@ function fn_gm_cab_auth_status($hours = 1)
         $mc->close();
     }
 
+    // СМС всех витрин (2026-10-18): Таргет СМС отвечает, баланс, доставка, коды Maxmobiles – app/sms_stats/stats.php
+    // (та же проверка – плашка на странице «Покупатели → СМС: работа и баланс»). Сбой расчёта не ломает сводку
+    try {
+        require_once __DIR__ . '/../sms_stats/stats.php';
+        $sms_health = sms_stats_health();
+        $status['sms'] = ['level' => $sms_health['level'], 'checks' => []];
+        foreach ($sms_health['checks'] as $c) {
+            $status['sms']['checks'][] = $c['title'] . ': ' . $c['text'];
+        }
+        $status['alerts'] = array_merge($status['alerts'], sms_stats_alerts($hours));
+    } catch (\Throwable $e) {
+        $status['sms'] = null;
+        $status['alerts'][] = 'СМС: не удалось проверить состояние – ' . $e->getMessage();
+    }
+
     return $status;
 }
 

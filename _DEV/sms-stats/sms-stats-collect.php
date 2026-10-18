@@ -42,9 +42,12 @@ try {
     $money = isset($b['money']['value']) ? (float) $b['money']['value'] : 0.0;
 
     // По одному дню за запрос – ответ без постраничной выдачи
-    $st = $db->prepare("INSERT INTO {$p}sms_stat (id_state, id_sms, ts, changed, kind, originator, operator, status, price, parts, part_no, phone_hash, phone_tail)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE changed = VALUES(changed), status = VALUES(status), price = VALUES(price), operator = VALUES(operator)");
+    // collected_at – когда мы впервые увидели этот статус: тревоги в Telegram считают окно по нему, чтобы каждое недоставленное
+    // СМС попало ровно в одну сводку (статус у оператора меняется раньше, чем мы его забираем). Присваивается до status
+    $st = $db->prepare("INSERT INTO {$p}sms_stat (id_state, id_sms, ts, changed, kind, originator, operator, status, price, parts, part_no, phone_hash, phone_tail, collected_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP())
+        ON DUPLICATE KEY UPDATE collected_at = IF(status <> VALUES(status), VALUES(collected_at), collected_at),
+            changed = VALUES(changed), status = VALUES(status), price = VALUES(price), operator = VALUES(operator)");
     for ($i = $days - 1; $i >= 0; $i--) {
         $day = date('Y-m-d', time() - $i * 86400);
         $d = tsms($secrets, ['type' => 'list_stats', 'stats' => ['date_start' => $day, 'date_stop' => $day, 'from_hour' => '00', 'from_minute' => '00',

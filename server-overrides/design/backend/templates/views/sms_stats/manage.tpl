@@ -12,7 +12,22 @@
 .sms-note{color:#777;font-size:12px;margin:4px 0 12px}
 .sms-alert{padding:10px 14px;border-radius:8px;background:#fdf3f2;border:1px solid #e8b4ae;color:#8a2a20;margin:0 0 14px}
 .sms-warn{color:#c0392b}
+.sms-health{padding:12px 16px;border-radius:10px;margin:0 0 16px;border:1px solid}
+.sms-health.ok{background:#eef8f0;border-color:#b7dfc0}.sms-health.warn{background:#fff8e6;border-color:#f0d58c}.sms-health.bad{background:#fdf3f2;border-color:#e8b4ae}
+.sms-health h3{margin:0 0 8px;font-size:16px}.sms-health.ok h3{color:#1e7e34}.sms-health.warn h3{color:#9a6700}.sms-health.bad h3{color:#b02a1e}
+.sms-health ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px}
+.sms-health li{font-size:13px}.sms-health li i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.sms-health li.ok i{background:#2e9e4f}.sms-health li.warn i{background:#e0a800}.sms-health li.bad i{background:#d33c2c}
 {/literal}</style>
+
+<div class="sms-health {$sms_health.level}">
+    <h3>{if $sms_health.level == "ok"}СМС работают{elseif $sms_health.level == "warn"}СМС работают, но есть замечания{else}С СМС проблема{/if}</h3>
+    <ul>
+    {foreach $sms_health.checks as $c}
+        <li class="{$c.level}"><i></i><strong>{$c.title}:</strong> {$c.text}</li>
+    {/foreach}
+    </ul>
+</div>
 
 <div class="sms-tabs">
     <a href="{"sms_stats.manage?days=0"|fn_url}" {if $sms_days == 0}class="on"{/if}>Сегодня</a>

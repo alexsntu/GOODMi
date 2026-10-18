@@ -58,6 +58,141 @@ function sms_stats_money($v)
     return number_format((float) $v, 2, ',', ' ');
 }
 
+/** Сколько отправленных кодов подряд никто не ввёл (без отправленных за последние 10 минут) – признак, что СМС не доходят. */
+function sms_stats_code_streak($log)
+{
+    $last_ok = (int) db_get_field("SELECT MAX(ts) FROM ?:{$log} WHERE event IN ('code_ok', 'recover_ok')");
+
+    return (int) db_get_field("SELECT COUNT(*) FROM ?:{$log} WHERE event IN ('sms_verify', 'sms_recover') AND ts > ?i AND ts < ?i", $last_ok, TIME - 600);
+}
+
+/**
+ * Состояние СМС сейчас – плашка на странице: оператор отвечает, баланс, доставка, ошибки отправки, коды вводят.
+ * Отдельного запроса «сервис исправен» у Таргет СМС нет – судим по этим признакам.
+ * Возвращает ['level' => ok|warn|bad, 'checks' => [['level', 'title', 'text']]].
+ */
+function sms_stats_health()
+{
+    $checks = [];
+    $add = function ($level, $title, $text) use (&$checks) { $checks[] = ['level' => $level, 'title' => $title, 'text' => $text]; };
+
+    $last = db_get_row('SELECT * FROM ?:sms_balance ORDER BY ts DESC LIMIT 1');
+    $ok = db_get_row("SELECT * FROM ?:sms_balance WHERE error = '' ORDER BY ts DESC LIMIT 1");
+    if (!$last) {
+        $add('bad', 'Сбор данных', 'ещё не запускался');
+    } elseif ($last['error'] !== '') {
+        $add('bad', 'Оператор', 'не отвечает или не принял вход: ' . $last['error'] . ' (' . date('d.m H:i', $last['ts']) . ')');
+    } elseif ((int) $last['ts'] < TIME - 9000) {
+        $add('bad', 'Сбор данных', 'не запускался с ' . date('d.m H:i', $last['ts']) . ' – cron /etc/cron.d/sms-stats');
+    } else {
+        $add('ok', 'Оператор', 'отвечает, вход принят (' . date('H:i', $last['ts']) . ')');
+    }
+
+    if ($ok) {
+        $money = (float) $ok['money'];
+        $spent7 = (float) db_get_field('SELECT SUM(price) FROM ?:sms_stat WHERE ts > ?i', TIME - 7 * 86400);
+        $left = $spent7 > 0 ? (int) floor($money / ($spent7 / 7)) : null;
+        $text = sms_stats_money($money) . ' ₽' . ($left !== null ? ', хватит примерно на ' . $left . ' дн.' : '');
+        $add($money < SMS_STATS_LOW_BALANCE ? 'bad' : ($left !== null && $left < 7 ? 'warn' : 'ok'), 'Баланс', $text);
+    }
+
+    // Доставка за сутки – среди СМС с окончательным статусом; «зависшие» – оператор принял, статуса нет больше 30 минут
+    $d = db_get_row(
+        "SELECT SUM(status <> 'send') AS final, SUM(status = 'deliver') AS deliver,
+            SUM(status = 'send' AND ts < ?i) AS stuck
+         FROM ?:sms_stat WHERE part_no = 1 AND ts > ?i", TIME - 1800, TIME - 86400
+    );
+    $final = (int) $d['final'];
+    $pct = sms_stats_pct((int) $d['deliver'], $final);
+    $add(!$final ? 'ok' : ($pct < 70 ? 'bad' : ($pct < 90 ? 'warn' : 'ok')), 'Доставка за сутки',
+        $final ? $pct . '% (' . (int) $d['deliver'] . ' из ' . $final . ')' : 'СМС не было');
+    if ((int) $d['stuck'] >= 3) {
+        $add('warn', 'Без статуса', (int) $d['stuck'] . ' СМС больше 30 минут ждут статуса доставки');
+    }
+
+    foreach (sms_stats_stores() as $s) {
+        $errors = (int) db_get_field("SELECT COUNT(*) FROM ?:{$s['log']} WHERE event = 'sms_error' AND ts > ?i", TIME - 86400);
+        if ($errors) {
+            $info = (string) db_get_field("SELECT info FROM ?:{$s['log']} WHERE event = 'sms_error' ORDER BY id DESC LIMIT 1");
+            $add('bad', 'Коды ' . $s['name'], 'оператор отказал в отправке ' . $errors . ' раз за сутки' . ($info !== '' ? ' (' . $info . ')' : ''));
+        }
+        $streak = sms_stats_code_streak($s['log']);
+        if ($streak >= 5) {
+            $add('bad', 'Коды ' . $s['name'], $streak . ' кодов подряд отправлено, ни один не введён – похоже, СМС не доходят');
+        }
+    }
+
+    $level = 'ok';
+    foreach ($checks as $c) {
+        if ($c['level'] === 'bad') { $level = 'bad'; break; }
+        if ($c['level'] === 'warn') { $level = 'warn'; }
+    }
+
+    return ['level' => $level, 'checks' => $checks];
+}
+
+/**
+ * Тревоги СМС для сводки в Telegram (fn_gm_cab_auth_status, облачная задача) за последние $hours часов. Постоянная беда
+ * (оператор не отвечает, сбор не идёт) – в каждой сводке; события – один раз: недоставленные СМС – по времени, когда мы
+ * их увидели (collected_at), баланс – при переходе ниже порога, «хватит меньше чем на неделю» – раз в день, в окне с 10:00.
+ * Отказы оператора и «коды не вводят» по GOODMi сводка считает сама – здесь только Maxmobiles.
+ */
+function sms_stats_alerts($hours)
+{
+    $alerts = [];
+    $now = TIME;
+    $from = $now - 3600 * max(1, (int) $hours);
+
+    $last = db_get_row('SELECT * FROM ?:sms_balance ORDER BY ts DESC LIMIT 1');
+    if ($last && $last['error'] !== '') {
+        $alerts[] = 'СМС: Таргет СМС не отвечает или не принял вход – ' . $last['error'] . '. Коды подтверждения и СМС о заказах могут не уходить';
+    } elseif (!$last || (int) $last['ts'] < $now - 9000) {
+        $alerts[] = 'СМС: сбор данных оператора не запускался больше 2,5 часов (cron /etc/cron.d/sms-stats, журнал /root/sms-stats/cron.log)';
+    }
+
+    $cur = db_get_row("SELECT * FROM ?:sms_balance WHERE error = '' ORDER BY ts DESC LIMIT 1");
+    if ($cur) {
+        $money = (float) $cur['money'];
+        $prev = db_get_field("SELECT money FROM ?:sms_balance WHERE error = '' AND ts <= ?i ORDER BY ts DESC LIMIT 1", $from);
+        if ($money < SMS_STATS_LOW_BALANCE && ($prev === null || $prev === false || (float) $prev >= SMS_STATS_LOW_BALANCE)) {
+            $alerts[] = 'СМС: на балансе Таргет СМС ' . sms_stats_money($money) . ' ₽ – меньше ' . SMS_STATS_LOW_BALANCE . ' ₽, пополните';
+        }
+        $ten = strtotime('today 10:00', $now);
+        $spent7 = (float) db_get_field('SELECT SUM(price) FROM ?:sms_stat WHERE ts > ?i', $now - 7 * 86400);
+        if ($ten > $from && $ten <= $now && $spent7 > 0 && $money >= SMS_STATS_LOW_BALANCE) {
+            $left = (int) floor($money / ($spent7 / 7));
+            if ($left < 7) {
+                $alerts[] = 'СМС: баланса Таргет СМС (' . sms_stats_money($money) . ' ₽) хватит примерно на ' . $left . ' дн. – пора пополнить';
+            }
+        }
+    }
+
+    $failed = db_get_array(
+        "SELECT kind, status, COUNT(*) AS n FROM ?:sms_stat WHERE part_no = 1 AND collected_at > ?i
+            AND status IN ('not_deliver', 'expired', 'partly_deliver') GROUP BY kind, status", $from
+    );
+    $seen = (int) db_get_field("SELECT COUNT(*) FROM ?:sms_stat WHERE part_no = 1 AND collected_at > ?i AND status <> 'send'", $from);
+    $n_failed = array_sum(array_column($failed, 'n'));
+    if ($n_failed >= 3 && sms_stats_pct($n_failed, $seen) > 20) {
+        $parts = [];
+        foreach ($failed as $r) { $parts[] = sms_stats_kind_title($r['kind']) . ' – ' . sms_stats_status_title($r['status']) . ': ' . $r['n']; }
+        $alerts[] = 'СМС: не доставлено ' . $n_failed . ' из ' . $seen . ' (' . implode('; ', $parts) . ')';
+    }
+
+    $mm = sms_stats_stores()['mm'];
+    $errors = (int) db_get_field("SELECT COUNT(*) FROM ?:{$mm['log']} WHERE event = 'sms_error' AND ts > ?i", $from);
+    if ($errors) {
+        $info = (string) db_get_field("SELECT info FROM ?:{$mm['log']} WHERE event = 'sms_error' ORDER BY id DESC LIMIT 1");
+        $alerts[] = 'Maxmobiles: сервис СМС отказал в отправке кода ' . $errors . ' раз' . ($info !== '' ? ' (' . $info . ')' : '');
+    }
+    $streak = sms_stats_code_streak($mm['log']);
+    if ($streak >= 5) {
+        $alerts[] = 'Maxmobiles: СМС, похоже, не доходят – ' . $streak . ' кодов подряд отправлено, ни один не введён';
+    }
+
+    return $alerts;
+}
+
 /** Всё для страницы за период: $days = 0 – сегодня, иначе последние N дней. */
 function sms_stats_overview($days)
 {
