@@ -1,0 +1,3 @@
+# Сторож кода сайтов (2026-10-18, после веб-шеллов): свои правила ClamAV + новые/изменённые PHP-файлы → /var/lib/gm-status/webshell.json
+# и code-changes.jsonl → сводка gm_cabinet.auth_status → Telegram. Раз в час в :25 (поиск – :15, СМС – :05). Исходник – _DEV/security/
+25 * * * * root timeout 1800 /usr/local/sbin/gm-webshell-watch >> /var/log/gm-webshell-watch.log 2>&1

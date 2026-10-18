@@ -1514,6 +1514,35 @@ function fn_gm_cab_auth_status($hours = 1)
         }
     }
 
+    // Сторож кода сайтов (2026-10-18, после найденных веб-шеллов): раз в час /usr/local/sbin/gm-webshell-watch проверяет своими
+    // правилами ClamAV все файлы с кодом в /var/www (официальные базы и maldet закладки не узнали) и сравнивает PHP-файлы с прошлым
+    // запуском. Закладка – в каждой сводке, пока её не убрали; новые и изменённые файлы – по журналу code-changes.jsonl за окно
+    // сводки (каждое изменение один раз); нет свежих данных 3 часа – тоже тревога.
+    $watch = json_decode((string) @file_get_contents('/var/lib/gm-status/webshell.json'), true);
+    if (!is_array($watch) || empty($watch['written_at']) || (int) $watch['written_at'] < $now - 3 * 3600) {
+        $status['code_watch'] = null;
+        $status['alerts'][] = 'Нет свежих данных сторожа кода сайтов – не работает /usr/local/sbin/gm-webshell-watch (cron /etc/cron.d/gm-webshell-watch)';
+    } else {
+        $status['code_watch'] = ['checked' => date('Y-m-d H:i', (int) $watch['written_at']), 'files' => (int) $watch['files'], 'hits' => count((array) $watch['hits'])];
+        foreach ((array) $watch['hits'] as $h) {
+            $status['alerts'][] = 'ЗАКЛАДКА ВЗЛОМЩИКА на сервере: ' . $h['file'] . ' (' . $h['rule'] . '). Убрать в карантин, как в /root/incident-2026-10-18/';
+        }
+        if (!empty($watch['error'])) {
+            $status['alerts'][] = 'Сторож кода сайтов: ' . $watch['error'];
+        }
+        $changes = [];
+        foreach ((array) @file('/var/lib/gm-status/code-changes.jsonl', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            $c = json_decode($line, true);
+            if (is_array($c) && (int) $c['ts'] > $hour) {
+                $changes[] = ($c['kind'] === 'added' ? 'новый ' : 'изменён ') . str_replace('/var/www/maxmobiles/data/www/maxmobiles.ru/', '', $c['file']);
+            }
+        }
+        if ($changes) {
+            $status['alerts'][] = 'Код сайтов изменился (' . count($changes) . '): ' . implode('; ', array_slice($changes, 0, 10))
+                . (count($changes) > 10 ? '; …' : '') . '. Если это не наша правка – проверить';
+        }
+    }
+
     // Свой поиск обеих витрин (Manticore, общий для сервера): индекс собирается каждые 2 часа (GOODMi – :15 чётных часов,
     // Maxmobiles – :15 нечётных). «Не обновлялся 5 часов» сообщаем один раз – в окне, куда попал порог; «Manticore не отвечает» –
     // при каждой сводке (2026-10-17: Manticore завис, сборки 14 ч не проходили, и никто об этом не узнал).

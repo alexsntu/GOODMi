@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+# Сторож кода сайтов (2026-10-18, после инцидента с веб-шеллами): раз в час (/etc/cron.d/gm-webshell-watch, :25)
+# 1) проверяет все файлы с кодом в /var/www своими правилами ClamAV (/var/lib/clamav/gm-webshells.yar – официальные базы
+#    и maldet закладки не узнают); 2) сравнивает список PHP-файлов и их контрольные суммы с прошлым запуском – новые
+#    и изменённые файлы с кодом. Итог – /var/lib/gm-status/webshell.json, его читает сводка gm_cabinet.auth_status → Telegram.
+# Список и суммы прошлого запуска – /var/lib/gm-status/php-baseline.json, журнал новых и изменённых файлов со временем –
+# code-changes.jsonl (по нему сводка за окно). Первый запуск только запоминает состояние.
+import hashlib, json, os, re, subprocess, sys, time
+
+ROOT = '/var/www'
+RULES = '/var/lib/clamav/gm-webshells.yar'
+STATE_DIR = '/var/lib/gm-status'
+OUT = STATE_DIR + '/webshell.json'
+BASE = STATE_DIR + '/php-baseline.json'
+LOG = STATE_DIR + '/code-changes.jsonl'
+CODE = re.compile(r'\.(php\d?|phtml|pht|phar|inc)$|(^|/)\.htaccess$|(^|/)\.user\.ini$', re.I)
+SKIP = re.compile(r'/var/(cache|compiled)/|/var/www/[^/]+/data/(tmp|mod-tmp|logs)/')
+MAX_LIST = 30
+
+started = time.time()
+files = {}
+for dirpath, dirnames, filenames in os.walk(ROOT):
+    if SKIP.search(dirpath + '/'):
+        dirnames[:] = []
+        continue
+    for name in filenames:
+        path = os.path.join(dirpath, name)
+        if not CODE.search(path) or not os.path.isfile(path):
+            continue
+        try:
+            h = hashlib.sha1()
+            with open(path, 'rb') as f:
+                for chunk in iter(lambda: f.read(1 << 20), b''):
+                    h.update(chunk)
+            files[path] = h.hexdigest()
+        except OSError:
+            pass
+
+# Свои правила ClamAV – по тем же файлам
+hits = []
+error = ''
+listfile = STATE_DIR + '/scan-list.txt'
+with open(listfile, 'w') as f:
+    f.write('\n'.join(files) + '\n')
+try:
+    r = subprocess.run(['nice', '-n', '15', 'clamscan', '--no-summary', '-i', '-d', RULES, '-f', listfile],
+                       capture_output=True, text=True, timeout=1800)
+    for line in r.stdout.splitlines():
+        if line.endswith(' FOUND'):
+            path, sig = line[:-6].rsplit(': ', 1)
+            hits.append({'file': path, 'rule': sig.replace('YARA.', '').replace('.UNOFFICIAL', '')})
+    if r.returncode not in (0, 1):
+        error = 'clamscan: код ' + str(r.returncode) + ' ' + r.stderr.strip()[:200]
+except Exception as e:
+    error = 'clamscan: ' + str(e)[:200]
+
+# Сравнение с прошлым запуском
+first_run = not os.path.exists(BASE)
+old = {}
+if not first_run:
+    try:
+        with open(BASE) as f:
+            old = json.load(f)
+    except Exception:
+        first_run = True
+added = sorted(p for p in files if p not in old) if not first_run else []
+changed = sorted(p for p in files if p in old and old[p] != files[p]) if not first_run else []
+removed = sorted(p for p in old if p not in files) if not first_run else []
+
+def info(path):
+    try:
+        st = os.stat(path)
+        return {'file': path, 'owner': str(st.st_uid), 'mtime': time.strftime('%Y-%m-%d %H:%M', time.localtime(st.st_mtime)),
+                'ctime': time.strftime('%Y-%m-%d %H:%M', time.localtime(st.st_ctime))}
+    except OSError:
+        return {'file': path}
+
+tmp = BASE + '.tmp'
+with open(tmp, 'w') as f:
+    json.dump(files, f)
+os.replace(tmp, BASE)
+
+# Журнал изменений: сводка за ночь читает всё, что попало в её окно, а не только последний запуск. Храним 5000 строк
+now = int(time.time())
+if added or changed:
+    with open(LOG, 'a') as f:
+        for kind, paths in (('added', added), ('changed', changed)):
+            for p in paths:
+                f.write(json.dumps(dict(info(p), ts=now, kind=kind), ensure_ascii=False) + '\n')
+    with open(LOG) as f:
+        lines = f.readlines()
+    if len(lines) > 5000:
+        with open(LOG, 'w') as f:
+            f.writelines(lines[-5000:])
+    os.chmod(LOG, 0o644)
+
+result = {
+    'written_at': int(time.time()), 'seconds': round(time.time() - started, 1), 'files': len(files),
+    'first_run': first_run, 'error': error, 'hits': hits,
+    'added_count': len(added), 'added': [info(p) for p in added[:MAX_LIST]],
+    'changed_count': len(changed), 'changed': [info(p) for p in changed[:MAX_LIST]],
+    'removed_count': len(removed), 'removed': removed[:MAX_LIST],
+}
+tmp = OUT + '.tmp'
+with open(tmp, 'w') as f:
+    json.dump(result, f, ensure_ascii=False)
+os.chmod(tmp, 0o644)
+os.replace(tmp, OUT)
+print(time.strftime('%Y-%m-%d %H:%M:%S'), 'файлов', len(files), 'закладок', len(hits), 'новых', len(added), 'изменённых', len(changed),
+      'удалённых', len(removed), ('ОШИБКА ' + error) if error else '', 'за', result['seconds'], 'с')
+sys.exit(0)
