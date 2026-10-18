@@ -353,3 +353,17 @@ GOODMi (= `app/gm_search/suggest.css`), Diginetica 10125 (и защита от �
   `app/gm_search/stats.php`, `design/backend/templates/views/gm_search/*`, пункт в `gm_delivery_date/schemas/menu/menu.post.php`), синонимы
   в админке (196), правила порядка выдачи «раздел запроса» и «тип товара» (`gm_search_intent`; на Maxmobiles – `mm_search_intent`).
   Откаты: `…-gm-search-s4/`, `…-gm-search-admin/`, `…-gm-search-intent/`, `…-mm-intent/`, `…-mobile-gap/`.
+
+### Статистика поиска без ботов, «Часто ищут» по своему журналу (2026-10-18, обе витрины)
+
+17.10 в 00:11 бот без cookie за 35 с сделал на GOODMi 49 поисков («xjp», «jinping»…): каждый записался новым посетителем и через
+журналы nginx попал в «Часто ищут». Что сделано:
+- Оба `products.pre.php`: поиск без cookie сессии сайта (`sid_customer_…`, её ставит первая же страница) выполняется, но в журнал
+  `cscart_{gm,mm}_search_log` не пишется.
+- Сборщики индекса (`_DEV/search*/{gm,mm}-search-index.php`): «Часто ищут» и запросы в подсказках = основа (`queries.txt`) + свой журнал
+  за 90 дней, по 3 за посетителя, только где что-то нашлось; запрос только из журнала – если его искали минимум двое.
+- `gm-search-queries.php` больше не читает журналы nginx (за NGENIX там адреса его узлов) – в `queries.txt` только Diginetica.
+- Из журналов удалены строки бота и наших проверок 17.10 (GOODMi 56, Maxmobiles 7). Копии таблиц и прежних файлов –
+  `/root/gm-backups/2026-10-18-search-stats/` (`old/`, `search-stats-tables.sql.gz`).
+- NGENIX: в набор № 6177742 добавлено правило № 2322118 – Referer ровно `https://www.google.com/` на поиск, «в сравнение», `/wishlist/`,
+  `/yith-compare/` → 403 (так ходили этот бот и бот корзин 10–13.10). До/после – `_DEV/ngenix/ruleset-6177742-*-2026-10-18.json`.

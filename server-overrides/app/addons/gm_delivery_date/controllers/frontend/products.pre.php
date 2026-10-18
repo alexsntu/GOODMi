@@ -52,6 +52,11 @@ if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 2) {
                 ]);
                 // Статистика: что искали, как нашли; сбой записи не мешает поиску
                 try {
+                    // Нет cookie сессии сайта (её ставит первая же страница) – это бот, не покупатель: ищем, но в статистику
+                    // не пишем (2026-10-18: бот без cookie – 49 поисков за 35 с, каждый как новый посетитель)
+                    if (!preg_grep('/^sid_customer_/', array_keys($_COOKIE))) {
+                        throw new \RuntimeException('no session cookie');
+                    }
                     // Метка браузера – сразу на сервере, чтобы первый же поиск, клик и корзина связались между собой
                     if (gm_search_sid() === '') {
                         $_COOKIE['gm_sid'] = bin2hex(random_bytes(8));
