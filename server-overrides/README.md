@@ -390,3 +390,20 @@ GOODMi и Maxmobiles), расход в день и прогноз, путь по
   при переходе ниже 300 ₽, «хватит меньше чем на неделю» – раз в день в сводке с 10:00; отказы и «коды не вводят» Maxmobiles
   (GOODMi сводка считала и раньше).
 - Откат – `/root/gm-backups/2026-10-18-sms-stats/ROLLBACK.txt`.
+
+### Инцидент 2026-10-18: закладки взломщика (веб-шеллы) в папке сайтов
+
+Найдены при разборе перехода на PHP 8.3 и убраны в карантин `/root/incident-2026-10-18/quarantine/` (с путями; там же
+`files-stat.txt`, `files-sha256.txt`, `webshells-evidence.tgz`): `images/ab__webp/thumbnails/3603/3602/api.php`,
+`images/thumbnails/856/728/modules.php`, `images/thumbnails/1273/1083/scripts.php`, `images/thumbnails/1943/1457/detailed/theme-settings.php`,
+`app/lib/vendor/tijsverkoyen/functions.php` (все созданы 2025-09-30 18:55:32–33), `upgrades/source_restora.php`, `upgrades/source_restors.php`
+(дата подделана под 2025-02-11; приехали с прежнего сервера при переносе 2025-09-04), и те же два загрузчика на копии dev.maxmobiles.ru.
+10.10.2026 загрузчики в `upgrades/` открывали на goodmi.ru (ответ 200). maldet их не видел: проверяет только файлы за сутки,
+подписи от 25.05.2026, ClamAV не установлен.
+- `gm-no-php-in-data.conf` (копия – `server-overrides/etc/nginx/`) в `/etc/nginx/vhosts-resources/{goodmi.ru,maxmobiles.ru,xione.ru,
+  dev.maxmobiles.ru,dev.goodmi.ru,dev.mi92.ru}/`: запрет запуска PHP в `images|img|upgrades|var|wp-content|app/lib|design|js|css`
+  и закрытие снаружи папок с данными покупателей и журналами обмена `bonusplus/`, `logsklad/`, `mc_log/`, `sber/` (их пишут
+  скрипты в корне сайта, через сайт их никто не читал). Уровень server (`if … return 403`) – срабатывает до выбора location.
+  Копия nginx до правки – `/root/incident-2026-10-18/nginx-before-block.tgz`.
+- Проверено: закладок с теми же признаками и других PHP-файлов в папках данных на сервере нет, подозрительных процессов,
+  соединений, cron и ключей SSH нет, внедрённых скриптов в базе нет; администраторы – на проверке у пользователя.
