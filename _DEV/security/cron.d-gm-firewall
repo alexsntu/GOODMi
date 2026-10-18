@@ -1,0 +1,3 @@
+# Закрытые снаружи порты 3306, 21, 6081 (2026-10-18) – вернуть правила, если их снесли панель или fail2ban; см. /usr/local/sbin/gm-firewall
+@reboot root sleep 30; /usr/local/sbin/gm-firewall
+*/10 * * * * root /usr/local/sbin/gm-firewall >/dev/null 2>&1

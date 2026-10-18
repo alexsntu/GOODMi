@@ -1,0 +1,21 @@
+#!/bin/sh
+# Закрытые снаружи порты (2026-10-18, после инцидента с веб-шеллами): 3306 – MariaDB (внешних пользователей нет, сайты
+# ходят через сокет), 21 – FTP (не используется, только перебор паролей), 6081 – Varnish (ни один сайт через него не идёт).
+# Сам сервер (127.0.0.1, ::1, свои адреса) пускаем. Идемпотентно: cron раз в 10 минут (/etc/cron.d/gm-firewall) и при загрузке
+# возвращает правила, если их снесли панель ISPmanager, fail2ban или перезагрузка. Открыть порт: убрать его из PORTS и выполнить
+# iptables -D INPUT -p tcp --dport N -j GM_CLOSED (и ip6tables), см. /root/incident-2026-10-18/ и server-overrides/README.md.
+PORTS="3306 21 6081"
+OWN4="127.0.0.0/8 176.123.171.223 82.202.160.72"
+for ipt in iptables ip6tables; do
+    $ipt -N GM_CLOSED 2>/dev/null || true
+    $ipt -F GM_CLOSED
+    if [ "$ipt" = iptables ]; then
+        for a in $OWN4; do $ipt -A GM_CLOSED -s "$a" -j RETURN; done
+    else
+        $ipt -A GM_CLOSED -s ::1 -j RETURN
+    fi
+    $ipt -A GM_CLOSED -j DROP
+    for p in $PORTS; do
+        $ipt -C INPUT -p tcp --dport "$p" -j GM_CLOSED >/dev/null 2>&1 || $ipt -I INPUT 1 -p tcp --dport "$p" -j GM_CLOSED
+    done
+done

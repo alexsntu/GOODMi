@@ -5,7 +5,7 @@
 #    и изменённые файлы с кодом. Итог – /var/lib/gm-status/webshell.json, его читает сводка gm_cabinet.auth_status → Telegram.
 # Список и суммы прошлого запуска – /var/lib/gm-status/php-baseline.json, журнал новых и изменённых файлов со временем –
 # code-changes.jsonl (по нему сводка за окно). Первый запуск только запоминает состояние.
-import hashlib, json, os, re, subprocess, sys, time
+import hashlib, json, os, re, subprocess, sys, time, urllib.parse
 
 ROOT = '/var/www'
 RULES = '/var/lib/clamav/gm-webshells.yar'
@@ -94,12 +94,81 @@ if added or changed:
             f.writelines(lines[-5000:])
     os.chmod(LOG, 0o644)
 
+# Журналы сайтов (2026-10-18, после снятия «записи для всех» и запрета PHP в папках данных): дочитываем с прошлого места
+# 1) журналы ошибок – ошибки доступа к файлам (их не было ни одной до правки прав); 2) журналы запросов – отказы 403 по нашему
+# правилу gm-no-php-in-data.conf, которые могли быть нужными: любые запросы к закрытым папкам данных и запросы к PHP-файлам
+# в папках данных, которые реально есть на диске (несуществующие – сканеры, о них не сообщаем). Новое – в events.jsonl.
+OFFSETS = STATE_DIR + '/log-offsets.json'
+EVENTS = STATE_DIR + '/events.jsonl'
+PERM = re.compile(r'permission denied|not writable|operation not permitted|unable to (create|write)', re.I)
+DATA_DIR = re.compile(r'^/(bonusplus|logsklad|mc_log|sber)/', re.I)
+PHP_IN_DATA = re.compile(r'^/(images|img|upgrades|var|wp-content|app/lib|design|js|css)/.*\.(php\d*|phtml|phar|pht|inc)(/|$)', re.I)
+PHP_FILE = re.compile(r'^(.*?\.(?:php\d*|phtml|phar|pht|inc))(?:/|$)', re.I)
+REQ = re.compile(r'^(\S+) .*?"(?:GET|POST|HEAD|PUT|DELETE|OPTIONS|PATCH) (\S+)[^"]*" (\d{3}) ')
+SITE_ROOT = {'/var/www/maxmobiles/data/logs/': '/var/www/maxmobiles/data/www/maxmobiles.ru',
+             '/var/www/www-root/data/logs/': '/var/www/www-root/data/www/dev.maxmobiles.ru'}
+WATCHED = ('goodmi.ru', 'maxmobiles.ru', 'xione.ru', 'dev.maxmobiles.ru', 'dev.goodmi.ru', 'dev.mi92.ru')
+
+try:
+    with open(OFFSETS) as f:
+        offsets = json.load(f)
+except Exception:
+    offsets = {}
+events = []
+first_logs = not offsets
+for logdir, site_root in SITE_ROOT.items():
+    for site in WATCHED:
+        for kind in ('error', 'access'):
+            path = logdir + site + '.' + kind + '.log'
+            if not os.path.isfile(path):
+                continue
+            st = os.stat(path)
+            prev = offsets.get(path, {})
+            start = prev.get('pos', 0) if prev.get('ino') == st.st_ino and prev.get('pos', 0) <= st.st_size else 0
+            if first_logs:
+                start = st.st_size  # первый запуск – только запоминаем конец журналов
+            with open(path, 'rb') as f:
+                f.seek(start)
+                data = f.read(50 * 1024 * 1024)
+                pos = f.tell()
+            offsets[path] = {'ino': st.st_ino, 'pos': pos}
+            for raw in data.decode('utf-8', 'replace').splitlines():
+                if kind == 'error':
+                    if PERM.search(raw) and 'No such file' not in raw:
+                        events.append({'ts': int(time.time()), 'kind': 'perm_error', 'site': site, 'line': raw[:300]})
+                    continue
+                m = REQ.match(raw)
+                if not m or m.group(3) != '403':
+                    continue
+                uri = urllib.parse.unquote(m.group(2).split('?', 1)[0])
+                if DATA_DIR.search(uri):
+                    events.append({'ts': int(time.time()), 'kind': 'blocked_data', 'site': site, 'ip': m.group(1), 'uri': uri[:200]})
+                    continue
+                script = PHP_FILE.match(uri) if PHP_IN_DATA.search(uri) else None
+                if script and os.path.isfile(os.path.normpath(site_root + script.group(1))):
+                    events.append({'ts': int(time.time()), 'kind': 'blocked_php', 'site': site, 'ip': m.group(1), 'uri': uri[:200]})
+tmp = OFFSETS + '.tmp'
+with open(tmp, 'w') as f:
+    json.dump(offsets, f)
+os.replace(tmp, OFFSETS)
+if events:
+    with open(EVENTS, 'a') as f:
+        for e in events[:500]:
+            f.write(json.dumps(e, ensure_ascii=False) + '\n')
+    with open(EVENTS) as f:
+        lines = f.readlines()
+    if len(lines) > 5000:
+        with open(EVENTS, 'w') as f:
+            f.writelines(lines[-5000:])
+    os.chmod(EVENTS, 0o644)
+
 result = {
     'written_at': int(time.time()), 'seconds': round(time.time() - started, 1), 'files': len(files),
     'first_run': first_run, 'error': error, 'hits': hits,
     'added_count': len(added), 'added': [info(p) for p in added[:MAX_LIST]],
     'changed_count': len(changed), 'changed': [info(p) for p in changed[:MAX_LIST]],
     'removed_count': len(removed), 'removed': removed[:MAX_LIST],
+    'log_events': len(events),
 }
 tmp = OUT + '.tmp'
 with open(tmp, 'w') as f:
@@ -107,5 +176,5 @@ with open(tmp, 'w') as f:
 os.chmod(tmp, 0o644)
 os.replace(tmp, OUT)
 print(time.strftime('%Y-%m-%d %H:%M:%S'), 'файлов', len(files), 'закладок', len(hits), 'новых', len(added), 'изменённых', len(changed),
-      'удалённых', len(removed), ('ОШИБКА ' + error) if error else '', 'за', result['seconds'], 'с')
+      'удалённых', len(removed), 'событий в журналах', len(events), ('ОШИБКА ' + error) if error else '', 'за', result['seconds'], 'с')
 sys.exit(0)

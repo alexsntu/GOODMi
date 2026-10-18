@@ -1541,6 +1541,25 @@ function fn_gm_cab_auth_status($hours = 1)
             $status['alerts'][] = 'Код сайтов изменился (' . count($changes) . '): ' . implode('; ', array_slice($changes, 0, 10))
                 . (count($changes) > 10 ? '; …' : '') . '. Если это не наша правка – проверить';
         }
+        // События из журналов сайтов за окно сводки: ошибки доступа к файлам (после снятия «записи для всех») и отказы нашего
+        // правила gm-no-php-in-data.conf, которые могли быть нужными (закрытые папки данных, существующий PHP в папке данных)
+        $events = ['perm_error' => [], 'blocked_data' => [], 'blocked_php' => []];
+        foreach ((array) @file('/var/lib/gm-status/events.jsonl', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            $e = json_decode($line, true);
+            if (is_array($e) && (int) $e['ts'] > $hour && isset($events[$e['kind']])) {
+                $events[$e['kind']][] = $e['kind'] === 'perm_error' ? $e['site'] . ': ' . mb_substr($e['line'], 0, 200) : $e['site'] . $e['uri'] . ' (' . $e['ip'] . ')';
+            }
+        }
+        $titles = [
+            'perm_error' => 'Ошибки доступа к файлам на сайтах – возможно, после снятия «записи для всех» что-то не может записать файл',
+            'blocked_data' => 'Заблокированы запросы к закрытым папкам данных (bonusplus, logsklad, mc_log, sber) – если это нужная интеграция, разобраться',
+            'blocked_php' => 'Заблокирован запуск существующего PHP-файла в папке данных – проверить, что это за файл',
+        ];
+        foreach ($events as $kind => $list) {
+            if ($list) {
+                $status['alerts'][] = $titles[$kind] . ' (' . count($list) . '): ' . implode('; ', array_slice(array_unique($list), 0, 3)) . (count($list) > 3 ? '; …' : '');
+            }
+        }
     }
 
     // Свой поиск обеих витрин (Manticore, общий для сервера): индекс собирается каждые 2 часа (GOODMi – :15 чётных часов,

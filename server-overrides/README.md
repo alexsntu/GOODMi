@@ -415,3 +415,16 @@ GOODMi и Maxmobiles), расход в день и прогноз, путь по
   webshell.json` и журнал `code-changes.jsonl` → сводка `gm_cabinet.auth_status` (поле `code_watch`; закладка – тревога в каждой
   сводке, новые/изменённые PHP-файлы – один раз за окно). Исходники – `_DEV/security/`. Полная проверка официальными базами
   ClamAV (33 182 файла) – чисто.
+- 2026-10-18, закрытие и права (пользователь: «1 – да, 2 – закрыть пока, 3 – если не используется, 4 – с мониторингом»):
+  - `/usr/local/sbin/gm-firewall` (копия `_DEV/security/`): цепочка `GM_CLOSED` в iptables и ip6tables – снаружи закрыты 3306
+    (MariaDB; внешних пользователей нет, а `bind-address = *` в `50-server.cnf` вписала панель ISPmanager), 21 (FTP; за 6 недель
+    ни одного входа, только перебор паролей) и 6081 (Varnish – ни один сайт через него не идёт, nginx ходит прямо в Apache :8080).
+    Сам сервер пускается. `/etc/cron.d/gm-firewall`: при загрузке и раз в 10 минут возвращает правила, если их снесли панель или
+    fail2ban. Открыть порт – убрать его из `PORTS` и `iptables -D INPUT -p tcp --dport N -j GM_CLOSED` (и ip6tables).
+  - Снята «запись для всех» (o+w) с 3,36 млн файлов и папок сайта (все принадлежали `maxmobiles` – от него и работает сайт);
+    список для отката – `/root/incident-2026-10-18/o+w-before.list0.gz`, команда – `ROLLBACK-permissions.txt`. В `config.local.php`
+    `DEFAULT_FILE_PERMISSIONS` 0666 → 0644 и `DEFAULT_DIR_PERMISSIONS` 0777 → 0755 (иначе CS-Cart создавал новые файлы кэша и
+    картинок с записью для всех), сам файл (пароль БД) – 600; прежний – `/root/incident-2026-10-18/config.local.php.before`.
+  - Мониторинг в сторож `gm-webshell-watch`: дочитывает журналы ошибок и запросов goodmi, maxmobiles, xione и dev-копий
+    (`log-offsets.json`) → `events.jsonl` → сводка Telegram: ошибки доступа к файлам («Permission denied», «not writable»…; до правки
+    их не было ни одной), запросы к закрытым папкам данных и запуск существующего PHP в папке данных (несуществующие – сканеры, молчим).
