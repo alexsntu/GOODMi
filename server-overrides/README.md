@@ -466,3 +466,18 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
 параметры сохраняются; совпадений названий городов с ЧПУ сайта нет. Вернуть: включить модуль в админке (или
 `fn_update_addon_status('ab__geo_pages','A')`) и удалить файл переадресации, `nginx -t && systemctl reload nginx`.
 Там же: `cp_json_ld` – для Xione задано `review_qty = 2` (как у GOODMi и Maxmobiles): без него на PHP 8.3 карточки Xione с отзывами – 500.
+
+### Подготовка боевых к PHP 8.3, сделанное 2026-10-18 вечером (на 7.4 ничего не меняет)
+
+- `@fallback` (ЧПУ CS-Cart) вынесен из `/etc/nginx/vhosts/maxmobiles/{goodmi.ru,maxmobiles.ru,xione.ru}.conf` в
+  `vhosts-resources/<сайт>/gm-cscart-fallback.conf` (копия – `server-overrides/etc/nginx/gm-cscart-fallback.conf`): ISPmanager при
+  смене версии PHP стирает этот блок из vhost, и весь каталог отдаёт 500. Если панель когда-нибудь вернёт блок в vhost – nginx
+  не стартует из-за дубля: убрать блок из vhost. Копия до правки – `/root/backup-2026-10-18-pre-php83/before-fallback/nginx.tar`.
+- `gm-search.php` и `mm-search.php`: первой строкой `mysqli_report(MYSQLI_REPORT_OFF)` – на PHP 8.1+ mysqli бросает исключения,
+  и недоступный Manticore давал бы фатальную ошибку вместо мягкого 503.
+- `/opt/php83/etc/php-fpm.d/user.d/maxmobiles.conf` = как у 7.4 (загрузка 1024M, error_reporting без DEPRECATED); панель может
+  перезаписать при смене версии – сверить при переходе.
+- Найдено, не исправлено (ждёт решения): «Deprecated: html_entity_decode(null)» – шаблоны метатегов темы (abt__unitheme2 `meta.tpl`:8,
+  `addons/abt__unitheme2/hooks/index/meta.post.tpl`:4, responsive `addons/seo/hooks/index/meta_description.override.tpl`:2) на страницах
+  без своего описания; ядро ставит Smarty `error_reporting = E_ALL & ~E_NOTICE` (`fn.init.php`:78), поэтому DEPRECATED из шаблонов
+  попадает в журнал, хотя `config.local.php` его гасит.
