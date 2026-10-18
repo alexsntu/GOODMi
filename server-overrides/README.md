@@ -428,3 +428,22 @@ GOODMi и Maxmobiles), расход в день и прогноз, путь по
   - Мониторинг в сторож `gm-webshell-watch`: дочитывает журналы ошибок и запросов goodmi, maxmobiles, xione и dev-копий
     (`log-offsets.json`) → `events.jsonl` → сводка Telegram: ошибки доступа к файлам («Permission denied», «not writable»…; до правки
     их не было ни одной), запросы к закрытым папкам данных и запуск существующего PHP в папке данных (несуществующие – сканеры, молчим).
+- 2026-10-18, вечер: облачная задача оповещений (`goodmi-sms-watch-tick`) с 17.10 12:24 не забирает сводку – запасной путь на Mac,
+  системная служба `ru.goodmi.alerts` (исходники и установка – `_DEV/security/mac-alerts/`).
+
+### Тест PHP 8.3 на свежей копии боевых витрин (с 2026-10-18, идёт несколько дней)
+
+Боевые – НЕ переключались (7.4). Резервная копия боевых перед тестом – `/root/backup-2026-10-18-pre-php83/` (база, база панели,
+код без картинок, настройки nginx/PHP/cron/панели; `RESTORE.txt`). Скрипты подготовки – `_DEV/php83-test/`.
+- Копия: `/var/www/www-root/data/www/dev.maxmobiles.ru` (пользователь www-root), база `mm_dev`, адреса dev.maxmobiles.ru /
+  dev.goodmi.ru / dev.mi92.ru (Xione) – в ДВУХ таблицах: `cscart_companies.storefront` и `cscart_storefronts.url`. Картинки –
+  `mount --bind` боевой `images` только для чтения (не в fstab: после перезагрузки сервера смонтировать заново).
+- Ограждения: `gm-firewall` – пользователю www-root запрещены любые соединения наружу (цепочка `GM_DEV_OUT`); в
+  `/etc/nginx/vhosts-resources/dev.*/` (копии – `server-overrides/etc/nginx/dev-copies/`): `gm-dev-auth.conf` (адрес пользователя
+  без пароля, остальным – логин/пароль `/etc/nginx/gm-dev.htpasswd`), `gm-dev-noindex.conf` (X-Robots-Tag noindex + robots.txt
+  «Disallow: /»), `gm-cscart-fallback.conf`.
+- **Находка:** ISPmanager при смене версии PHP удаляет из vhost ручной `location @fallback` (ЧПУ CS-Cart), а `try_files … @fallback`
+  остаётся – весь каталог, корзина и кабинет отдают 500. Поэтому `@fallback` – в `gm-cscart-fallback.conf` (папку vhosts-resources
+  панель не трогает). Для боевых: до смены версии одним заходом убрать `@fallback` из vhost и положить этот файл (иначе дубль location).
+  Пока этого не сделано – не править боевые сайты в панели. Сайты уже работали на 8.3 с 20.11.2025 по 24.04.2026, причина отката неизвестна.
+- Расширения 8.3 bcmath, dba, timezonedb, xsl включены через панель (на 8.3 работают только dev).
