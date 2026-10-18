@@ -1,0 +1,144 @@
+/  среднее 140.499 мс, 95% 488 мс, ошибок 0, не-2xx 
+/smartfonyi/  среднее 132.077 мс, 95% 152 мс, ошибок 0, не-2xx 
+/redmi-note-17-pro-max-8-512gb-white/  среднее 113.863 мс, 95% 141 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.198612 с, замеров 6
+/redmi-note-17-pro-max-8-512gb-white/ параллельно 10: 51.57 запр/с, среднее 193.924 мс, 50% 187, 95% 202, макс 226 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.182912 с, замеров 2
+/redmi-note-17-pro-max-8-512gb-white/ параллельно 10: 86.80 запр/с, среднее 115.205 мс, 50% 104, 95% 139, макс 208 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.192884 с, замеров 2
+bokovaya-schetka-dlya-robota-pylesosa-dreame-x40-ultra-2sht
+zont-zuodu-capsule-umbrella-fioletovyy
+model-avianosca-sciencecan
+setevoe-zaryadnoe-ustroystvo-aigo-p20
+vremennaya-karta-parkovki-bcase-tita-black-temporary-parking-card
+bokovaya-schetka-dlya-pylesosa-dreame-x60-ultra-2sht
+nakladka-nillkin-camshield-prop-magnetic-dlya-xiaomi-17-ultra-black
+solncezaschitnye-ochki-montma-american-retro-m276-green
+avtomobilnyy-derzhatel-arroys-dash-c1-black
+datchik-vibracii-aqara-vibration-sensor-white-djt11lm
+datchik-vody-aqara-flooding-sensor-e1-sjcgq13lm
+setevoe-zaryadnoe-ustroystvo-baseus-quick-charger-24w-1-usb-qc-3-0
+chehol-iz-nano-kozhi-dlya-xiaomi-13-ultra-tech-green
+umnye-chasy-amazfit-balance-3-standard
+rolikovaya-schetka-dreame-atb4-dlya-dreame-t10
+remeshok-neylonovyy-20mm-lyambda-steropa-green-dsn-08-20-dg
+umnyy-nastolnyy-obogrevatel-polar-egg-white
+filtr-beheart-dlya-ochistitelya-vozduha-xiaomi-air-purifier-4-green
+bokovaya-schetka-dlya-robota-pylesosa-xiaomi-s20-plus-2sht
+besprovodnoy-pylesos-mijia-vacuum-cleaner-4-pro-eu
+zaschitnyy-chehol-dlya-magsafe-charger-nomad-leather-case-black
+usb-fleshka-netac-u352-32gb
+shtativ-tripod-ulanzi-tt88-magsafe-selfie-stick-white
+nastolnaya-lampa-xiaomi-smart-led-desk-lamp-1s-mjtd01syl
+aromaticheskie-tabletki-dlya-avtomobilnogo-aromatizatora-carfook-air-force-one-5sht-lemon
+filtr-dlya-robota-pylesosa-lydsto-w2
+besprovodnoy-moyuschiy-pylesos-dreame-h12-flex-reach-wet-and-dry-vacuum
+redmi-note-17-pro-5g-8-256gb-black
+zaschitnyy-chehol-dlya-xiaomi-band-8-9-10-transparent
+zaschitnoe-steklo-dlya-xiaomi-17t-pro
+chehol-nakladka-silikonovaya-s-mikrofibroy-dlya-redmi-note-13-pro-temno-zelenyy
+batareyki-alkalinovye-pleomax-economy-lr6-aa-4-sht
+usilitel-signala-xiaomi-mi-wi-fi-range-extender-n300-dvb4398gl-global-white
+kabel-cabletime-cu07h-240w-usb-c-to-usb-c-100cm
+avtomaticheskaya-tochilka-dlya-karandashey-chat-rabbit-pink
+konstruktor-vooruzhennaya-mashina-onebot-jupiter-dawn-sabre-tooth-tiger-building-blocks-obwzkc20aiqi
+nakladka-nillkin-silikonovaya-frostedshield-dlya-xiaomi-14t-siniy
+portativnyy-uvlazhnitel-lomy-cyberpunk-black-500ml
+fonarik-nextool-induction-flashlight-ne0137
+remeshok-silikonovyy-sportivnyy-22mm-krasnyy-seryy
+komplekt-zaschity-acton-shlem-nalokotniki-nakolenniki-zaschita-ruk-razmer-l
+konstruktor-custom-mecha-transformation
+komplekt-rolikov-valikov-dlya-roborock-flexi-lite
+nakladka-nillkin-superfrostedshield-pro-dlya-poco-f8-ultra-chernyy
+konstruktor-wange-zamok-noyshvanshtayn-germaniya
+usilitel-signala-xiaomi-mi-wi-fi-amplifier-pro
+umnaya-kolonka-yandeks-stanciya-mini-3-lilovyy-yndx-00027lil
+komplekt-aksessuarov-dlya-robota-pylesosa-roborock-qrevo-curv-2-flow-osnovnaya-2-filtra-2-meshka-2-bokovye
+besprovodnoy-pylesos-dreame-h14-dual-eu
+nakladka-nillkin-silikonovaya-frostedshield-dlya-xiaomi-12t-chernyy
+ryukzak-sunshine-s-8-tochechnoy-zaschitoy-pozvonochnika-i-snizheniem-nagruzki-42sm29-5sm14-5sm-fioletovyy
+odnorazovaya-smennaya-fibra-tryapka-dlya-mijia-sweeping-robot-1c-1sht
+usb-fleshka-sandisk-cz550-ultra-curve-512gb-usb-3-2-black-sdcz550-512g-g46
+redmi-17-8-256gb-black
+portativnaya-igrovaya-pristavka-anbernic-rg35xx-64gb128gb-igry-ot-nes-snes-smd-ps1-gameboy-black
+fen-dreame-pocket-ahd51-space-gray
+remeshok-silikonovyy-nike-sport-dlya-xiaomi-mi-band-8-chernyy-zelenyy
+takticheskaya-lopata-skladnaya-nextool-shovel-ne20033
+kabel-hoco-x88-usb-a-micro-200cm-white
+saundbar-xiaomi-tv-soundbar-430vt-dolbyatmos-3-1
+/redmi-note-17-pro-max-8-512gb-white/ параллельно 20: 126.63 запр/с, среднее 157.935 мс, 50% 136, 95% 173, макс 257 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.222050 с, замеров 1
+/  среднее 97.582 мс, 95% 295 мс, ошибок 0, не-2xx 
+/smartfonyi/  среднее 120.235 мс, 95% 141 мс, ошибок 0, не-2xx 
+/redmi-note-17-pro-max-8-512gb-white/  среднее 113.800 мс, 95% 129 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.194408 с, замеров 6
+/redmi-note-17-pro-max-8-512gb-white/ параллельно 10: 84.80 запр/с, среднее 117.924 мс, 50% 107, 95% 129, макс 224 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.093695 с, замеров 2
+/  среднее 72.442 мс, 95% 90 мс, ошибок 0, не-2xx 
+/smartfonyi/  среднее 134.080 мс, 95% 151 мс, ошибок 0, не-2xx 
+/redmi-note-17-pro-max-8-512gb-white/  среднее 109.617 мс, 95% 133 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.193208 с, замеров 5
+/  среднее 76.371 мс, 95% 93 мс, ошибок 0, не-2xx 
+/smartfonyi/  среднее 127.857 мс, 95% 151 мс, ошибок 0, не-2xx 
+/redmi-note-17-pro-max-8-512gb-white/  среднее 112.550 мс, 95% 134 мс, ошибок 0, не-2xx 
+боевой goodmi.ru во время теста: макс 0.178074 с, замеров 6
+200 0.307421
+200 0.286026
+200 0.212188
+200 0.255706
+200 0.181899
+200 0.176557
+200 0.251706
+200 0.263080
+200 0.261823
+200 0.299095
+200 0.212597
+200 0.208859
+200 0.187230
+200 0.253238
+200 0.523107
+200 0.259748
+200 0.190324
+200 0.155123
+200 0.211141
+200 0.230553
+404 0.091462
+200 0.232445
+200 0.228046
+200 0.335283
+200 0.184963
+200 0.186625
+200 0.258072
+200 0.215751
+200 0.156220
+200 0.208627
+200 0.219911
+200 0.205722
+200 0.212789
+200 0.236012
+200 0.259554
+200 0.220471
+200 0.219900
+200 0.236696
+200 0.240372
+200 0.229615
+200 0.193227
+200 0.249516
+200 0.204922
+200 0.201228
+200 0.202641
+200 0.230119
+200 0.254400
+200 0.195504
+200 0.225674
+200 0.221074
+200 0.232601
+200 0.184677
+200 0.194301
+200 0.285302
+200 0.290177
+200 0.281449
+200 0.190336
+200 0.234701
+200 0.206955
+200 0.189053

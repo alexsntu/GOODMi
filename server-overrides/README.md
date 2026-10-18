@@ -447,3 +447,12 @@ GOODMi и Maxmobiles), расход в день и прогноз, путь по
   панель не трогает). Для боевых: до смены версии одним заходом убрать `@fallback` из vhost и положить этот файл (иначе дубль location).
   Пока этого не сделано – не править боевые сайты в панели. Сайты уже работали на 8.3 с 20.11.2025 по 24.04.2026, причина отката неизвестна.
 - Расширения 8.3 bcmath, dba, timezonedb, xsl включены через панель (на 8.3 работают только dev).
+
+### Журнал времени ответа PHP боевых сайтов (с 2026-10-18)
+
+Пулы PHP 7.4 боевых упираются в предел 5 процессов (с 13–14.10 в десятки раз чаще), а время ответа nginx не записывал.
+`/etc/nginx/conf.d/gm-timing-format.conf` (копия – `server-overrides/etc/nginx/conf.d/`) + `vhosts-resources/{goodmi.ru,maxmobiles.ru,
+xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.log gm_timing if=$gm_to_php;`) – отдельный журнал
+только запросов, дошедших до PHP, рядом с прежними (они не изменены). Ротация – стандартная `/etc/logrotate.d/nginx` (14 дней).
+Убрать – удалить три `gm-timing-log.conf` и `gm-timing-format.conf`, `nginx -t && systemctl reload nginx`.
+Нагрузочные испытания на dev – `_DEV/php83-test/gm-bench.sh`, итоги – `bench-results-2026-10-18.txt`.
