@@ -501,3 +501,9 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
 остановлена тем же днём – пользователь давно её не использует: строка убрана из crontab maxmobiles (прежний –
 `/root/backup-2026-10-18-pre-php83/removed/crontab-maxmobiles.before`), файлы ленты – там же, `megamarket-feed/`. `PHPExcel-1.8/` (нужна была только `testpage.gettraidin` и `bonusplus.bonusfile`; на PHP 8 не работает)
 и `traidin.xlsx` (последний раз 27.01.2025) перенесены в `/root/backup-2026-10-18-pre-php83/removed/` (там README, как вернуть).
+
+- Тем же вечером (пользователь: «убирай это всё – это старьё») из папки сайта убраны и сами контроллеры: `app/controllers/frontend/
+  testpage.php` и самописный `app/controllers/frontend/payments.php` (QR-оплата СБП el-plat.ru – последний QR 05.04.2024, кредит
+  MoneyCare, PayLate, предоплата; ни один включённый способ оплаты его не использовал), с ним `phpqrcode/` и `qrpng/` – всё в
+  `/root/backup-2026-10-18-pre-php83/removed/{payments,testpage}/` (README там же). `payments.*` и `testpage.*` теперь 404; способы
+  оплаты в админке (ядро) не затронуты.
