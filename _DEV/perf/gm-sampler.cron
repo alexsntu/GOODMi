@@ -1,0 +1,2 @@
+# Ежеминутный снимок сервера: что тормозит, зависает, ждёт (2026-10-18) – /usr/local/sbin/gm-sampler
+* * * * * root /usr/local/sbin/gm-sampler

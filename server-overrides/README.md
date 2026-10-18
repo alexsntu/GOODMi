@@ -521,3 +521,16 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   (свободно 33 ГБ), load ≤1,05, упираний в предел 0; средний ответ PHP goodmi 0,14 → 0,09 с, дольше 1 с – 14 → 0.
 - Копии до правки – `/root/backup-2026-10-18-pre-php83/before-max-children/`. Откат: вернуть 5 в трёх файлах и в шаблоне,
   `systemctl reload php-fpm74`. Следить: блокировки MyISAM (224 таблицы) при большем числе параллельных запросов.
+
+### Сбор данных «что тормозит, зависает, ждёт» (с 2026-10-18 20:53, боевые)
+
+Пользователь: «надо отследить всё, что тормозит, зависает, долго ждёт – разобрать проблемные места и откуда они идут». Только наблюдение:
+- PHP-FPM slowlog (pool.d goodmi/maxmobiles/xione на 7.4 и шаблон панели `fpm_site_pool.conf`): `request_slowlog_timeout = 3s`,
+  `slowlog = /var/log/php-fpm-slow/$pool.log`, глубина стека 30 – для каждого запроса дольше 3 с – где он стоит (функция, файл).
+- MariaDB: `/etc/mysql/mariadb.conf.d/99-gm-slowlog.cnf` (+ `SET GLOBAL` без перезапуска) – запросы дольше 1 с с Lock_time и планом,
+  `/var/log/mysql/mariadb-slow.log` (ротация – стандартная `/etc/logrotate.d/mariadb`).
+- `/usr/local/sbin/gm-sampler` (`/etc/cron.d/gm-sampler`, раз в минуту) → `/var/log/gm-sampler.log`: занятые процессы PHP по сайтам,
+  load, память, выполняющиеся запросы БД, прирост ожиданий блокировок таблиц и медленных запросов, отклик Manticore; запросы к базе
+  дольше 5 с – строками DBLONG. Ротация – `/etc/logrotate.d/gm-perf` (14 дней). Исходники и копии – `_DEV/perf/`.
+- Вместе с журналом времени ответа `/var/log/nginx/gm-timing-*.log`. Выключить: убрать 3 строки slowlog из пулов и шаблона
+  (reload php-fpm74), удалить 99-gm-slowlog.cnf и `SET GLOBAL slow_query_log=0`, удалить /etc/cron.d/gm-sampler.

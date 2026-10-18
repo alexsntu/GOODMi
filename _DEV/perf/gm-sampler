@@ -1,0 +1,24 @@
+#!/bin/bash
+# Ежеминутный снимок сервера магазинов (2026-10-18): что тормозит, зависает и ждёт. Cron /etc/cron.d/gm-sampler, журнал
+# /var/log/gm-sampler.log (ротация /etc/logrotate.d/gm-perf, 14 дней). Одна строка в минуту + подробности, только если есть что:
+#   php=<занято процессов по пулам боевых> load=<1 мин> mem=<доступно МБ> db_run=<выполняется запросов> lock_wait=<прирост
+#   ожиданий блокировок таблиц за минуту> slowq=<прирост медленных запросов> manticore=<мс или FAIL>
+#   DBLONG – запросы к базе, которые выполняются дольше 5 с (кто, сколько, состояние, начало текста).
+# Только чтение. Запросы к базе и к Manticore – с тайм-аутом, чтобы снимок сам не зависал.
+set -u
+LOG=/var/log/gm-sampler.log
+ST=/var/lib/gm-status/sampler.state
+now=$(date '+%F %T')
+php=$(ps -o cmd= -C php-fpm | awk '/pool (goodmi|maxmobiles|xione)\.ru/ {n[$NF]++} END {for (k in n) printf "%s:%d,", k, n[k]}' | sed 's/,$//; s/\.ru//g')
+load=$(cut -d' ' -f1 /proc/loadavg)
+mem=$(awk '/MemAvailable/ {printf "%d", $2/1024}' /proc/meminfo)
+read -r lw sq tr < <(timeout 10 mysql -N -e "SELECT (SELECT VARIABLE_VALUE FROM information_schema.GLOBAL_STATUS WHERE VARIABLE_NAME='TABLE_LOCKS_WAITED'), (SELECT VARIABLE_VALUE FROM information_schema.GLOBAL_STATUS WHERE VARIABLE_NAME='SLOW_QUERIES'), (SELECT VARIABLE_VALUE FROM information_schema.GLOBAL_STATUS WHERE VARIABLE_NAME='THREADS_RUNNING')" 2>/dev/null || echo "x x x")
+read -r plw psq 2>/dev/null < "$ST" || { plw=$lw; psq=$sq; }
+echo "$lw $sq" > "$ST"
+dlw=$([ "$lw" != x ] && [ "$plw" != x ] && echo $((lw - plw)) || echo "?")
+dsq=$([ "$sq" != x ] && [ "$psq" != x ] && echo $((sq - psq)) || echo "?")
+t0=$(date +%s%N)
+if timeout 3 mysql -N -h 127.0.0.1 -P 9306 -e "SHOW TABLES" >/dev/null 2>&1; then mc=$(( ($(date +%s%N) - t0) / 1000000 ))ms; else mc=FAIL; fi
+echo "$now php=$php load=$load mem=${mem}M db_run=$tr lock_wait=+$dlw slowq=+$dsq manticore=$mc" >> $LOG
+timeout 10 mysql -N -e "SELECT CONCAT('$now DBLONG ', TIME, 'с ', DB, ' ', IFNULL(STATE,''), ' | ', REPLACE(LEFT(INFO,200), '\n', ' ')) FROM information_schema.PROCESSLIST WHERE COMMAND='Query' AND TIME>=5 AND INFO NOT LIKE '%PROCESSLIST%' ORDER BY TIME DESC LIMIT 10" 2>/dev/null >> $LOG
+exit 0

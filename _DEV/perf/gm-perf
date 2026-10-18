@@ -1,0 +1,9 @@
+/var/log/gm-sampler.log /var/log/php-fpm-slow/*.log {
+	daily
+	rotate 14
+	compress
+	delaycompress
+	missingok
+	notifempty
+	copytruncate
+}
