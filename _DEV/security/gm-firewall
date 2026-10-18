@@ -24,10 +24,19 @@ done
 # dev.mi92.ru) не ходит наружу совсем – ни СМС, ни МойСклад, ни БонусПлюс, ни почта, ни платежи, ни боевые сайты; только сам
 # сервер через lo (база – через сокет). Снять: DEV_NO_OUT="" и iptables -D OUTPUT -m owner --uid-owner www-root -j GM_DEV_OUT
 DEV_NO_OUT="www-root"
+# DNS к серверам имён из /etc/resolv.conf разрешён: иначе каждое обращение наружу ждёт тайм-аутов резолвера (ответы REJECT на
+# UDP ограничены ядром по частоте) и админка копии «тупит» по 3–36 с; сами соединения наружу по-прежнему обрываются сразу.
+DNS4=$(awk '/^nameserver/ && $2 !~ /:/ {print $2}' /etc/resolv.conf)
 for ipt in iptables ip6tables; do
     $ipt -N GM_DEV_OUT 2>/dev/null || true
     $ipt -F GM_DEV_OUT
     $ipt -A GM_DEV_OUT -o lo -j RETURN
+    if [ "$ipt" = iptables ]; then
+        for ns in $DNS4; do
+            $ipt -A GM_DEV_OUT -d "$ns" -p udp --dport 53 -j RETURN
+            $ipt -A GM_DEV_OUT -d "$ns" -p tcp --dport 53 -j RETURN
+        done
+    fi
     $ipt -A GM_DEV_OUT -p tcp -j REJECT --reject-with tcp-reset
     $ipt -A GM_DEV_OUT -j REJECT
     for u in $DEV_NO_OUT; do
