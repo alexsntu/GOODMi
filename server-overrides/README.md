@@ -491,3 +491,11 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
 `responsive/templates/addons/seo/hooks/index/meta_description.override.tpl`:2. Метатеги не изменились (сверено побайтно на 18 страницах
 боевых и 20 dev). Обновление UniTheme2 / CS-Cart перезапишет файлы – вернуть отсюда и удалить скомпилированные
 `var/cache/templates/abt__unitheme2/*meta*.tpl.php`. Оригиналы – `/root/backup-2026-10-18-pre-php83/meta-templates/orig/`.
+
+### `testpage` закрыт, PHPExcel и трейд-ин из Excel убраны (2026-10-18, решение пользователя, все витрины)
+
+`app/addons/my_changes/controllers/frontend/testpage.pre.php` (копия здесь): самописный `app/controllers/frontend/testpage.php`
+(24 команды без проверки доступа, часть пишет в базу) из интернета больше не отвечает (404); с сервера работают только две
+команды cron – `updateprice` (раз в час цены других витрин → Xione) и `generatesearch` (раз в 15 мин лента `mi92_s.xml`, её забирает
+goods.ru / Мегамаркет). `PHPExcel-1.8/` (нужна была только `testpage.gettraidin` и `bonusplus.bonusfile`; на PHP 8 не работает)
+и `traidin.xlsx` (последний раз 27.01.2025) перенесены в `/root/backup-2026-10-18-pre-php83/removed/` (там README, как вернуть).
