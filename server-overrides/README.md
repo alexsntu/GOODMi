@@ -456,3 +456,13 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
 только запросов, дошедших до PHP, рядом с прежними (они не изменены). Ротация – стандартная `/etc/logrotate.d/nginx` (14 дней).
 Убрать – удалить три `gm-timing-log.conf` и `gm-timing-format.conf`, `nginx -t && systemctl reload nginx`.
 Нагрузочные испытания на dev – `_DEV/php83-test/gm-bench.sh`, итоги – `bench-results-2026-10-18.txt`.
+
+### Гео-страницы (`ab__geo_pages`) выключены, переадресация городов GOODMi (2026-10-18)
+
+Пользователь: модуль не нужен. На PHP 8.3 он даёт «Deprecated» на каждой странице (`ab__geo_pages/func.php:279`). Модуль
+ВЫКЛЮЧЕН (не удалён – данные целы): 42 города (40 у GOODMi), 20 шаблонов, 63 232 привязки; копия таблиц –
+`/root/backup-2026-10-18-pre-php83/geo-pages/`. За 7 дней до выключения: 5 054 запроса к гео-адресам, 139 переходов из поиска.
+`vhosts-resources/goodmi.ru/gm-geo-redirect.conf` (копия здесь): 301 с `/<город>/<адрес>` на `/<адрес>`, `/<город>/` – на главную,
+параметры сохраняются; совпадений названий городов с ЧПУ сайта нет. Вернуть: включить модуль в админке (или
+`fn_update_addon_status('ab__geo_pages','A')`) и удалить файл переадресации, `nginx -t && systemctl reload nginx`.
+Там же: `cp_json_ld` – для Xione задано `review_qty = 2` (как у GOODMi и Maxmobiles): без него на PHP 8.3 карточки Xione с отзывами – 500.
