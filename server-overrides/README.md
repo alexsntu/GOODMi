@@ -481,3 +481,13 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   `addons/abt__unitheme2/hooks/index/meta.post.tpl`:4, responsive `addons/seo/hooks/index/meta_description.override.tpl`:2) на страницах
   без своего описания; ядро ставит Smarty `error_reporting = E_ALL & ~E_NOTICE` (`fn.init.php`:78), поэтому DEPRECATED из шаблонов
   попадает в журнал, хотя `config.local.php` его гасит.
+
+### Шаблоны метатегов: пустое описание без предупреждений PHP 8 (2026-10-18, все витрины)
+
+На страницах без своего описания (главная, корзина, кабинет, избранное, поиск, отзывы) в `html_entity_decode` попадал null –
+на PHP 8.1+ «Deprecated» в журнал на каждой такой странице (ядро ставит Smarty `error_reporting = E_ALL & ~E_NOTICE`, `fn.init.php`:78).
+Перед `html_entity_decode` добавлено `|default:""` в трёх файлах (копии здесь, в `server-overrides/design/themes/`):
+`abt__unitheme2/templates/meta.tpl`:8, `abt__unitheme2/templates/addons/abt__unitheme2/hooks/index/meta.post.tpl`:4,
+`responsive/templates/addons/seo/hooks/index/meta_description.override.tpl`:2. Метатеги не изменились (сверено побайтно на 18 страницах
+боевых и 20 dev). Обновление UniTheme2 / CS-Cart перезапишет файлы – вернуть отсюда и удалить скомпилированные
+`var/cache/templates/abt__unitheme2/*meta*.tpl.php`. Оригиналы – `/root/backup-2026-10-18-pre-php83/meta-templates/orig/`.
