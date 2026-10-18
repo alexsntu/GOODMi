@@ -282,6 +282,7 @@
 | `/etc/nginx/vhosts-resources/maxmobiles.ru/gm-bot-filter.conf` | то же для maxmobiles.ru (с 2026-10-13) |
 | `/etc/nginx/conf.d/gm-bot-names.conf` | условия отсева ботов по названию (Meta, Ahrefs, Semrush, MJ12bot и др.) и поиска уязвимостей (`.env`, `/.git`, `wp-login.php`) – для сайтов не за NGENIX |
 | `/etc/nginx/vhosts-resources/xione.ru/gm-bot-filter.conf` | xione.ru: три правила против обходчиков + боты по названию + поиск уязвимостей (с 2026-10-13) |
+| `/etc/nginx/vhosts-resources/{goodmi.ru,maxmobiles.ru}/ngenix-realip.conf` (копия – `ngenix-realip.conf`) | настоящий адрес посетителя за NGENIX: `X-Real-IP` (NGENIX перезаписывает подделку клиента) только от 63 диапазонов NGENIX (API `api/v3/ip-prefix`); журнал, `limit_req` (у maxmobiles.ru 20 запросов/с) и REMOTE_ADDR – по посетителю, а не по узлу CDN. Адресами NGENIX в журнале остаются только их проверки доступности (NCDN Health Checking). Если NGENIX добавит диапазоны – обновить список. С 2026-10-18, откат – `/root/gm-backups/2026-10-18-ngenix-realip/ROLLBACK.txt` |
 
 После правки: `nginx -t && systemctl reload nginx`. Бэкап прежних настроек – `/root/gm-backups/2026-10-13-bot-filter/`.
 
