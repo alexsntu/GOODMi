@@ -369,3 +369,18 @@ GOODMi (= `app/gm_search/suggest.css`), Diginetica 10125 (и защита от �
   `/root/gm-backups/2026-10-18-search-stats/` (`old/`, `search-stats-tables.sql.gz`).
 - NGENIX: в набор № 6177742 добавлено правило № 2322118 – Referer ровно `https://www.google.com/` на поиск, «в сравнение», `/wishlist/`,
   `/yith-compare/` → 403 (так ходили этот бот и бот корзин 10–13.10). До/после – `_DEV/ngenix/ruleset-6177742-*-2026-10-18.json`.
+
+### СМС всех витрин: страница «Покупатели → СМС: работа и баланс» (2026-10-18)
+
+Общая для всех витрин страница админки (`heaven.php?dispatch=sms_stats.manage&days=0|7|30|90`): баланс Таргет СМС (один кабинет на
+GOODMi и Maxmobiles), расход в день и прогноз, путь покупателя по кодам каждой витрины (запросил → отправлено → ошибка/лимит →
+доставлено → ввёл), все СМС кабинета оператора по видам (коды, статусы заказов из МойСклад, «Шлюз GET») с расходом, отправители у
+покупателя, операторы связи, ошибки, по дням.
+- Файлы сайта: `app/controllers/backend/sms_stats.php`, `app/sms_stats/stats.php`, `design/backend/templates/views/sms_stats/manage.tpl`,
+  пункт меню – в `app/addons/gm_delivery_date/schemas/menu/menu.post.php` (меню дополняется только из модулей; пункт виден на всех витринах).
+- Сбор раз в час: `/etc/cron.d/sms-stats` (:05) → `/root/sms-stats/sms-stats-collect.php` (исходники и таблицы – `_DEV/sms-stats/`):
+  JSON API Таргет СМС `type=balance` и `type=list_stats` за 3 дня (статусы приходят с опозданием) → `cscart_sms_stat` (часть СМС –
+  строка, без текста и номера: отпечаток + 2 последние цифры), `cscart_sms_balance` (почасовые отметки, ошибка сбора). Журнал –
+  `/root/sms-stats/cron.log`. Оператор хранит статистику 3 месяца; первая загрузка – `--days=90`.
+- Путь покупателя – из `cscart_gm_auth_log` / `cscart_mm_auth_log` на момент открытия страницы.
+- Откат – `/root/gm-backups/2026-10-18-sms-stats/ROLLBACK.txt`.

@@ -21,6 +21,14 @@ $schema['central']['customers']['items']['gm_phone_blocked'] = [
     'position' => 151,
 ];
 
+// СМС всех витрин (2026-10-18): баланс Таргет СМС, путь покупателя по кодам GOODMi и Maxmobiles, расход, ошибки – общий пункт
+// для всех витрин (app/controllers/backend/sms_stats.php)
+$schema['central']['customers']['items']['sms_stats'] = [
+    'title' => 'СМС: работа и баланс',
+    'href' => 'sms_stats.manage',
+    'position' => 154,
+];
+
 // Свой поиск GOODMi (2026-10-16): статистика, проверка запроса, синонимы, закрепления, индекс – app/controllers/backend/gm_search.php.
 // Виден только при выбранной витрине GOODMi (хук backend_menu_generate_before_process_item в func.php)
 $schema['central']['products']['items']['gm_search'] = [
