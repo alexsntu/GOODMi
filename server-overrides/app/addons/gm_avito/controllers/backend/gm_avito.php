@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'fields' => json_encode(fn_gm_avito_parse_fields($template['fields'] ?? ''), JSON_UNESCAPED_UNICODE),
                     'auto_fields' => implode(',', $auto),
                     'required_fields' => implode(',', array_filter(array_map('trim', explode(',', (string) ($template['required_fields'] ?? ''))), static function ($tag) {
-                        return preg_match('/^[A-Za-z][A-Za-z0-9]*$/', $tag);
+                        return preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $tag);
                     })),
                     'updated_at' => TIME,
                 ],
@@ -102,6 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $view = Tygh::$app['view'];
 $view->assign('gm_avito_allowed', $allowed);
+$view->assign('gm_avito_company_id', $company_id);
+$view->assign('gm_avito_companies', db_get_hash_single_array(
+    'SELECT company_id, company FROM ?:companies WHERE company_id IN (?n) ORDER BY company_id DESC',
+    ['company_id', 'company'],
+    array_keys(GM_AVITO_COMPANIES)
+));
 if (!$allowed) {
     return;
 }
@@ -183,6 +189,18 @@ if ($mode === 'manage') {
         'images_limit' => fn_gm_avito_get_setting($company_id, 'images_limit', 10),
         'specs_limit' => fn_gm_avito_get_setting($company_id, 'specs_limit', 10),
         'feed_url' => fn_gm_avito_feed_url($company_id),
+        'cron' => GM_AVITO_CRON[$company_id] ?? [],
+        'profile' => $profile = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'profile', '{}'), true),
+        'profile_hours' => implode(', ', array_unique(array_merge(...array_map(static function ($slot) {
+            $hours = array_map('intval', (array) ($slot['time_slots'] ?? []));
+            sort($hours);
+            return array_map(static function ($hour) {
+                return sprintf('%02d', $hour);
+            }, $hours);
+        }, (array) ($profile['schedule'] ?? []) ?: [[]])))),
+        'profile_feed' => implode(', ', array_map(static function ($url) {
+            return strpos($url, 'gm_avito') !== false ? 'наш модуль' : (strpos($url, 'unitxml') !== false ? 'UnitXML' : $url);
+        }, (array) ($profile['feeds'] ?? []))),
         'last_build' => $last_build,
         'items_total' => count($items),
         'items_enabled' => count(array_filter($items, static function ($item) {

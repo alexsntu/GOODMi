@@ -45,6 +45,12 @@ const GM_AVITO_WARRANTY_LABELS = ['y1' => '1 год', 'm6' => '6 месяцев'
 const GM_AVITO_COMPANIES = [1 => 'mm', 2 => 'gm'];
 
 /**
+ * Минуты запуска по cron (crontab пользователя maxmobiles, держать в согласии): сборка файла – до того, как Авито его
+ * заберёт (GOODMi – в :08 каждый час, Maxmobiles – в :47 по чётным часам), отчёт Авито – после загрузки
+ */
+const GM_AVITO_CRON = [2 => ['build' => 55, 'sync' => 30], 1 => ['build' => 35, 'sync' => 10]];
+
+/**
  * Настройка витрины (cscart_gm_avito_settings)
  */
 function fn_gm_avito_get_setting($company_id, $name, $default = null)
@@ -100,7 +106,7 @@ function fn_gm_avito_parse_fields($text)
             continue;
         }
         list($tag, $value) = array_map('trim', explode('=', $line, 2));
-        if ($tag !== '' && $value !== '' && preg_match('/^[A-Za-z][A-Za-z0-9]*$/', $tag) && !in_array($tag, GM_AVITO_OWN_TAGS, true)) {
+        if ($tag !== '' && $value !== '' && preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', $tag) && !in_array($tag, GM_AVITO_OWN_TAGS, true)) {
             $fields[$tag] = fn_gm_avito_db_text($value);
         }
     }
@@ -671,7 +677,7 @@ function fn_gm_avito_build_feed($company_id, $test = 0)
         $xml->startElement('Ad');
         $xml->writeElement('Id', $ad['id']);
         foreach ($ad['fields'] as $tag => $value) {
-            if (in_array($tag, GM_AVITO_OWN_TAGS, true) || !preg_match('/^[A-Za-z][A-Za-z0-9]*$/', (string) $tag)) {
+            if (in_array($tag, GM_AVITO_OWN_TAGS, true) || !preg_match('/^[A-Za-z][A-Za-z0-9_]*$/', (string) $tag)) {
                 continue;
             }
             $xml->writeElement($tag, fn_gm_avito_xml_text($value));
@@ -1002,13 +1008,13 @@ function fn_gm_avito_api_get($company_id, $path)
         }
         list($code, $response, $error) = fn_gm_avito_api_request('GET', 'https://api.avito.ru' . $path, ['Authorization: Bearer ' . fn_gm_avito_api_token($company_id)]);
         $last = microtime(true);
-        if ($code !== 429) {
+        if ($code !== 429 && $code !== 0 && $code < 500) {
             break;
         }
         sleep(10 * ($attempt + 1));
     }
     if ($code !== 200) {
-        throw new Exception('Авито ' . $path . ': ответ ' . $code . ' ' . $error . ' ' . mb_substr($response, 0, 200));
+        throw new Exception('Авито ' . strtok($path, '?') . ': ответ ' . $code . ' ' . $error . ' ' . mb_substr($response, 0, 200));
     }
 
     return (array) json_decode($response, true);
@@ -1024,6 +1030,15 @@ function fn_gm_avito_api_get($company_id, $path)
 function fn_gm_avito_sync_report($company_id)
 {
     $summary = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/last_successful');
+    $profile = fn_gm_avito_api_get($company_id, '/autoload/v2/profile');
+    fn_gm_avito_set_setting($company_id, 'profile', json_encode([
+        'time' => TIME,
+        'autoload_enabled' => !empty($profile['autoload_enabled']),
+        'feeds' => array_values(array_filter(array_map(static function ($feed) {
+            return (string) ($feed['feed_url'] ?? '');
+        }, (array) ($profile['feeds_data'] ?? [])))),
+        'schedule' => (array) ($profile['schedule'] ?? []),
+    ], JSON_UNESCAPED_UNICODE));
     $by_ad = [];
     foreach ((array) ($summary['stats']['sections'] ?? []) as $section) {
         $slug = (string) ($section['slug'] ?? '');

@@ -71,6 +71,26 @@
         </div>
     </div>
 
+    {include file="common/subheader.tpl" title="Расписание" target="#gm_avito_schedule"}
+    <div id="gm_avito_schedule" class="in collapse">
+        <div class="control-group">
+            <label class="control-label">Модуль</label>
+            <div class="controls"><p>Файл собирается каждый час в :{$gm_avito.cron.build|string_format:"%02d"}, отчёт Авито забирается каждый час в :{$gm_avito.cron.sync|string_format:"%02d"}.</p></div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Кабинет Авито</label>
+            <div class="controls">
+                {if $gm_avito.profile.time}
+                    <p>Автозагрузка {if $gm_avito.profile.autoload_enabled}включена{else}<strong>выключена</strong>{/if}; Авито забирает файл в часы: {$gm_avito.profile_hours|default:"&#8211;"}{if $gm_avito.profile.schedule.0.rate}, лимит {$gm_avito.profile.schedule.0.rate} объявлений{/if}.</p>
+                    <p>В кабинете указан файл: <strong>{$gm_avito.profile_feed|default:"&#8211;"}</strong>.</p>
+                    <p class="muted">Расписание меняется в кабинете Авито; данные обновляются вместе с отчётом.</p>
+                {else}
+                    <p class="muted">Появится после первого получения отчёта Авито.</p>
+                {/if}
+            </div>
+        </div>
+    </div>
+
     {include file="common/subheader.tpl" title="Файл для Авито" target="#gm_avito_file"}
     <div id="gm_avito_file" class="in collapse">
         <div class="control-group">
