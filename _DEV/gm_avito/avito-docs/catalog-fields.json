@@ -1,0 +1,1886 @@
+{
+"fields": {
+"277345": {
+"Vendor": "Xiaomi",
+"Model": "Poco F7 Pro",
+"MemorySize": "512 ГБ",
+"Color": "серебристый",
+"RamSize": "12 ГБ"
+},
+"277389": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "64 ГБ",
+"Color": "зеленый",
+"RamSize": "3 ГБ"
+},
+"277390": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "64 ГБ",
+"Color": "черный",
+"RamSize": "3 ГБ"
+},
+"277391": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "64 ГБ",
+"Color": "голубой",
+"RamSize": "3 ГБ"
+},
+"277392": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "64 ГБ",
+"Color": "золотистый",
+"RamSize": "3 ГБ"
+},
+"277393": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "128 ГБ",
+"Color": "зеленый",
+"RamSize": "4 ГБ"
+},
+"277394": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"277395": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A5 4G",
+"MemorySize": "128 ГБ",
+"Color": "голубой",
+"RamSize": "4 ГБ"
+},
+"277560": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"277561": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "серый",
+"RamSize": "12 ГБ"
+},
+"277562": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "серебристый",
+"RamSize": "12 ГБ"
+},
+"277563": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"277564": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25+",
+"MemorySize": "512 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"277565": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25+",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"277566": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25",
+"MemorySize": "128 ГБ",
+"Color": "серый",
+"RamSize": "12 ГБ"
+},
+"277570": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"277582": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"277583": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"277584": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"277585": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"277586": {
+"Vendor": "Samsung",
+"Model": "Galaxy A26",
+"MemorySize": "256 ГБ",
+"Color": "розовый",
+"RamSize": "8 ГБ"
+},
+"277587": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "128 ГБ",
+"Color": "белый",
+"RamSize": "6 ГБ"
+},
+"277588": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "128 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"277589": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "128 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"277590": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"277591": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "128 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"277592": {
+"Vendor": "Samsung",
+"Model": "Galaxy A36",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "6 ГБ"
+},
+"277596": {
+"Vendor": "Samsung",
+"Model": "Galaxy A06",
+"MemorySize": "64 ГБ",
+"Color": "золотистый",
+"RamSize": "4 ГБ"
+},
+"277597": {
+"Vendor": "Samsung",
+"Model": "Galaxy A06",
+"MemorySize": "64 ГБ",
+"Color": "голубой",
+"RamSize": "4 ГБ"
+},
+"277598": {
+"Vendor": "Samsung",
+"Model": "Galaxy A06",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "6 ГБ"
+},
+"277599": {
+"Vendor": "Samsung",
+"Model": "Galaxy A06",
+"MemorySize": "128 ГБ",
+"Color": "голубой",
+"RamSize": "6 ГБ"
+},
+"277600": {
+"Vendor": "Samsung",
+"Model": "Galaxy A06",
+"MemorySize": "128 ГБ",
+"Color": "золотистый",
+"RamSize": "6 ГБ"
+},
+"277605": {
+"Vendor": "Samsung",
+"Model": "Galaxy A26",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"277606": {
+"Vendor": "Samsung",
+"Model": "Galaxy A26",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"278276": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25",
+"MemorySize": "256 ГБ",
+"Color": "серый",
+"RamSize": "12 ГБ"
+},
+"278277": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"278280": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "1024 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"278437": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25",
+"MemorySize": "128 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"278491": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 Ultra",
+"MemorySize": "1024 ГБ",
+"Color": "серый",
+"RamSize": "12 ГБ"
+},
+"278943": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"279082": {
+"Vendor": "Google",
+"Model": "Pixel 10",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"279083": {
+"Vendor": "Google",
+"Model": "Pixel 10",
+"MemorySize": "128 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"279087": {
+"Vendor": "Google",
+"Model": "Pixel 10 Pro XL",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "16 ГБ"
+},
+"279088": {
+"Vendor": "Google",
+"Model": "Pixel 10 Pro XL",
+"MemorySize": "256 ГБ",
+"Color": "серый",
+"RamSize": "16 ГБ"
+},
+"279383": {
+"Vendor": "Xiaomi",
+"Model": "Poco M7 4G",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "6 ГБ"
+},
+"279528": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 FE",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"279537": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"279763": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25 FE",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"279803": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25",
+"MemorySize": "128 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"279809": {
+"Vendor": "Samsung",
+"Model": "Galaxy S25+",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"280153": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro+",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"280154": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 5G",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280155": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro+",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"280156": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"280158": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"280159": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"280160": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "серебристый",
+"RamSize": "12 ГБ"
+},
+"280161": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280162": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 4G",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280164": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 5G",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"280166": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 4G",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"280168": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro+",
+"MemorySize": "512 ГБ",
+"Color": "коричневый",
+"RamSize": "12 ГБ"
+},
+"280169": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro+",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280170": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro+",
+"MemorySize": "256 ГБ",
+"Color": "коричневый",
+"RamSize": "8 ГБ"
+},
+"280238": {
+"Vendor": "Samsung",
+"Model": "Galaxy A07",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"280239": {
+"Vendor": "Samsung",
+"Model": "Galaxy A17",
+"MemorySize": "128 ГБ",
+"Color": "серый",
+"RamSize": "4 ГБ"
+},
+"280240": {
+"Vendor": "Samsung",
+"Model": "Galaxy A17",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280287": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "16 ГБ"
+},
+"280288": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "синий",
+"RamSize": "16 ГБ"
+},
+"280293": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280294": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "128 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"280295": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "128 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"280514": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280515": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "256 ГБ",
+"Color": "серебристый",
+"RamSize": "8 ГБ"
+},
+"280516": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280517": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 5G",
+"MemorySize": "512 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"280519": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 5G",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"280520": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "128 ГБ",
+"Color": "фиолетовый",
+"RamSize": "6 ГБ"
+},
+"280521": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "128 ГБ",
+"Color": "голубой",
+"RamSize": "6 ГБ"
+},
+"280522": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "6 ГБ"
+},
+"280523": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"280567": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"280570": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "серебристый",
+"RamSize": "8 ГБ"
+},
+"280571": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"280572": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"280576": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro+",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"280605": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 4G",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"280654": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 5G",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"280655": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 4G",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"280656": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 4G",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"280682": {
+"Vendor": "Xiaomi",
+"Model": "17",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"280683": {
+"Vendor": "Xiaomi",
+"Model": "17 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "16 ГБ"
+},
+"280684": {
+"Vendor": "Xiaomi",
+"Model": "17",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"280685": {
+"Vendor": "Xiaomi",
+"Model": "17",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"280686": {
+"Vendor": "Xiaomi",
+"Model": "17 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "16 ГБ"
+},
+"280687": {
+"Vendor": "Xiaomi",
+"Model": "17 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "16 ГБ"
+},
+"280688": {
+"Vendor": "Xiaomi",
+"Model": "17 Ultra",
+"MemorySize": "1024 ГБ",
+"Color": "белый",
+"RamSize": "16 ГБ"
+},
+"280689": {
+"Vendor": "Xiaomi",
+"Model": "17 Ultra",
+"MemorySize": "1024 ГБ",
+"Color": "зеленый",
+"RamSize": "16 ГБ"
+},
+"280690": {
+"Vendor": "Xiaomi",
+"Model": "17 Ultra",
+"MemorySize": "1024 ГБ",
+"Color": "черный",
+"RamSize": "16 ГБ"
+},
+"280862": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"280873": {
+"Vendor": "Samsung",
+"Model": "Galaxy A07",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "6 ГБ"
+},
+"280940": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"280941": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "серебристый",
+"RamSize": "12 ГБ"
+},
+"281016": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "512 ГБ",
+"Color": "серебристый",
+"RamSize": "8 ГБ"
+},
+"281017": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"281061": {
+"Vendor": "Xiaomi",
+"Model": "Poco F8 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281065": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"281066": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"281067": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"281068": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"281069": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"281070": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"281071": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281072": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"281073": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"281074": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281075": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"281076": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"281077": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281078": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"281080": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"281093": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 4G",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"281098": {
+"Vendor": "Xiaomi",
+"Model": "17",
+"MemorySize": "512 ГБ",
+"Color": "розовый",
+"RamSize": "12 ГБ"
+},
+"281136": {
+"Vendor": "Samsung",
+"Model": "Galaxy S26 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281578": {
+"Vendor": "Samsung",
+"Model": "Galaxy A57",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"281579": {
+"Vendor": "Samsung",
+"Model": "Galaxy A57",
+"MemorySize": "512 ГБ",
+"Color": "серый",
+"RamSize": "12 ГБ"
+},
+"281603": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281604": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"281605": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "512 ГБ",
+"Color": "фиолетовый",
+"RamSize": "12 ГБ"
+},
+"281606": {
+"Vendor": "Xiaomi",
+"Model": "17T Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281607": {
+"Vendor": "Xiaomi",
+"Model": "17T Pro",
+"MemorySize": "512 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"281608": {
+"Vendor": "Xiaomi",
+"Model": "17T Pro",
+"MemorySize": "512 ГБ",
+"Color": "фиолетовый",
+"RamSize": "12 ГБ"
+},
+"281609": {
+"Vendor": "Xiaomi",
+"Model": "17T Pro",
+"MemorySize": "1024 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281610": {
+"Vendor": "Xiaomi",
+"Model": "17T Pro",
+"MemorySize": "1024 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"281611": {
+"Vendor": "Xiaomi",
+"Model": "17T Pro",
+"MemorySize": "1024 ГБ",
+"Color": "фиолетовый",
+"RamSize": "12 ГБ"
+},
+"281616": {
+"Vendor": "Samsung",
+"Model": "Galaxy S26 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"281644": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"281761": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "оранжевый",
+"RamSize": "12 ГБ"
+},
+"281831": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "256 ГБ",
+"Color": "желтый",
+"RamSize": "8 ГБ"
+},
+"281927": {
+"Vendor": "Samsung",
+"Model": "Galaxy S26",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"281928": {
+"Vendor": "Samsung",
+"Model": "Galaxy S26 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "12 ГБ"
+},
+"281951": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "оранжевый",
+"RamSize": "12 ГБ"
+},
+"281990": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A7 Pro",
+"MemorySize": "64 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"281991": {
+"Vendor": "Samsung",
+"Model": "Galaxy S26 Ultra",
+"MemorySize": "1024 ГБ",
+"Color": "черный",
+"RamSize": "16 ГБ"
+},
+"281993": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A7 Pro",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"282035": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A7 Pro",
+"MemorySize": "64 ГБ",
+"Color": "голубой",
+"RamSize": "4 ГБ"
+},
+"282079": {
+"Vendor": "Samsung",
+"Model": "Galaxy S26 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"282081": {
+"Vendor": "Samsung",
+"Model": "Galaxy A57",
+"MemorySize": "512 ГБ",
+"Color": "синий",
+"RamSize": "12 ГБ"
+},
+"282082": {
+"Vendor": "Samsung",
+"Model": "Galaxy A57",
+"MemorySize": "256 ГБ",
+"Color": "серый",
+"RamSize": "8 ГБ"
+},
+"282142": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"282143": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "12 ГБ"
+},
+"282165": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"282166": {
+"Vendor": "Xiaomi",
+"Model": "Redmi A7 Pro",
+"MemorySize": "128 ГБ",
+"Color": "голубой",
+"RamSize": "4 ГБ"
+},
+"282209": {
+"Vendor": "Xiaomi",
+"Model": "17T",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "12 ГБ"
+},
+"282213": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 15 Pro 5G",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"282242": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "желтый",
+"RamSize": "12 ГБ"
+},
+"282251": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "256 ГБ",
+"Color": "золотистый",
+"RamSize": "4 ГБ"
+},
+"282252": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "4 ГБ"
+},
+"282253": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"282254": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "8 ГБ"
+},
+"282266": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"282279": {
+"Vendor": "Samsung",
+"Model": "Galaxy A17",
+"MemorySize": "256 ГБ",
+"Color": "серый",
+"RamSize": "8 ГБ"
+},
+"282291": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"282292": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"282293": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"282294": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "256 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"282299": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 4G",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "6 ГБ"
+},
+"282300": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 4G",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "6 ГБ"
+},
+"282301": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 4G",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "6 ГБ"
+},
+"282302": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "128 ГБ",
+"Color": "синий",
+"RamSize": "4 ГБ"
+},
+"282303": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"282360": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"282361": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"282365": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"282366": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"282367": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"282368": {
+"Vendor": "Xiaomi",
+"Model": "Poco M8",
+"MemorySize": "512 ГБ",
+"Color": "серебристый",
+"RamSize": "12 ГБ"
+},
+"282373": {
+"Vendor": "Xiaomi",
+"Model": "Poco X8 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"282403": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "256 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"282404": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "256 ГБ",
+"Color": "оранжевый",
+"RamSize": "8 ГБ"
+},
+"282405": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"282424": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"282425": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "8 ГБ"
+},
+"282434": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 4G",
+"MemorySize": "128 ГБ",
+"Color": "фиолетовый",
+"RamSize": "4 ГБ"
+},
+"282435": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "128 ГБ",
+"Color": "фиолетовый",
+"RamSize": "4 ГБ"
+},
+"282436": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "128 ГБ",
+"Color": "зеленый",
+"RamSize": "4 ГБ"
+},
+"282445": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "64 ГБ",
+"Color": "золотистый",
+"RamSize": "4 ГБ"
+},
+"282461": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 4G",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"282462": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "512 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"282463": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"282464": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "4 ГБ"
+},
+"282465": {
+"Vendor": "Xiaomi",
+"Model": "Redmi 17",
+"MemorySize": "256 ГБ",
+"Color": "зеленый",
+"RamSize": "4 ГБ"
+},
+"282617": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "512 ГБ",
+"Color": "оранжевый",
+"RamSize": "8 ГБ"
+},
+"282618": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "8 ГБ"
+},
+"282619": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro",
+"MemorySize": "512 ГБ",
+"Color": "голубой",
+"RamSize": "8 ГБ"
+},
+"282620": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"282621": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Ultra",
+"MemorySize": "256 ГБ",
+"Color": "красный",
+"RamSize": "12 ГБ"
+},
+"282622": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "16 ГБ"
+},
+"282634": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Pro",
+"MemorySize": "512 ГБ",
+"Color": "зеленый",
+"RamSize": "12 ГБ"
+},
+"282636": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Pro",
+"MemorySize": "512 ГБ",
+"Color": "черный",
+"RamSize": "12 ГБ"
+},
+"282637": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Pro",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "12 ГБ"
+},
+"282658": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "128 ГБ",
+"Color": "зеленый",
+"RamSize": "4 ГБ"
+},
+"282659": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "128 ГБ",
+"Color": "золотистый",
+"RamSize": "4 ГБ"
+},
+"282682": {
+"Vendor": "Samsung",
+"Model": "Galaxy A57",
+"MemorySize": "256 ГБ",
+"Color": "фиолетовый",
+"RamSize": "8 ГБ"
+},
+"282683": {
+"Vendor": "Samsung",
+"Model": "Galaxy A57",
+"MemorySize": "256 ГБ",
+"Color": "синий",
+"RamSize": "8 ГБ"
+},
+"282714": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "128 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"282777": {
+"Vendor": "Xiaomi",
+"Model": "Poco F9 Ultra",
+"MemorySize": "512 ГБ",
+"Color": "красный",
+"RamSize": "16 ГБ"
+},
+"282834": {
+"Vendor": "Samsung",
+"Model": "Galaxy A07",
+"MemorySize": "128 ГБ",
+"Color": "зеленый",
+"RamSize": "4 ГБ"
+},
+"282835": {
+"Vendor": "Samsung",
+"Model": "Galaxy A07",
+"MemorySize": "128 ГБ",
+"Color": "фиолетовый",
+"RamSize": "4 ГБ"
+},
+"282890": {
+"Vendor": "Xiaomi",
+"Model": "Poco C81 Pro",
+"MemorySize": "256 ГБ",
+"Color": "черный",
+"RamSize": "4 ГБ"
+},
+"282967": {
+"Vendor": "Xiaomi",
+"Model": "Redmi Note 17 Pro Max",
+"MemorySize": "512 ГБ",
+"Color": "белый",
+"RamSize": "8 ГБ"
+},
+"270323": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"271036": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Синий"
+},
+"278104": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2 4G",
+"MemorySize": "256",
+"SimSlot": "Есть",
+"RamSize": "8",
+"Color": "Зелёный"
+},
+"278105": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2 4G",
+"MemorySize": "256",
+"SimSlot": "Есть",
+"RamSize": "8",
+"Color": "Серый"
+},
+"278106": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Зелёный"
+},
+"278107": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Фиолетовый"
+},
+"278335": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"278942": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"278508": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "128",
+"SimSlot": "Нет",
+"RamSize": "4",
+"Color": "Фиолетовый"
+},
+"279072": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "128",
+"SimSlot": "Нет",
+"RamSize": "6",
+"Color": "Серый"
+},
+"279073": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "128",
+"SimSlot": "Нет",
+"RamSize": "6",
+"Color": "Зелёный"
+},
+"279074": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "128",
+"SimSlot": "Нет",
+"RamSize": "6",
+"Color": "Фиолетовый"
+},
+"282334": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "4",
+"Color": "Серый"
+},
+"282335": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "4",
+"Color": "Фиолетовый"
+},
+"282336": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "4",
+"Color": "Зелёный"
+},
+"279694": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2 Pro",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"280247": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2 Pro",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серебряный"
+},
+"280248": {
+"Brand": "Xiaomi",
+"Model": "Redmi Pad 2 Pro",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Фиолетовый"
+},
+"279948": {
+"Brand": "Xiaomi",
+"Model": "REDMI Pad 2 Pro 5G",
+"MemorySize": "256",
+"SimSlot": "Есть",
+"RamSize": "8",
+"Color": "Серебряный"
+},
+"280425": {
+"Brand": "Xiaomi",
+"Model": "REDMI Pad 2 Pro 5G",
+"MemorySize": "256",
+"SimSlot": "Есть",
+"RamSize": "8",
+"Color": "Серый"
+},
+"280860": {
+"Brand": "Xiaomi",
+"Model": "REDMI Pad 2 Pro 5G",
+"MemorySize": "128",
+"SimSlot": "Есть",
+"RamSize": "6",
+"Color": "Серебряный"
+},
+"280861": {
+"Brand": "Xiaomi",
+"Model": "REDMI Pad 2 Pro 5G",
+"MemorySize": "128",
+"SimSlot": "Есть",
+"RamSize": "6",
+"Color": "Серый"
+},
+"280419": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad M1",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"280420": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad M1",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Синий"
+},
+"280714": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad X1",
+"MemorySize": "512",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Синий"
+},
+"280715": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad X1",
+"MemorySize": "512",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"280824": {
+"Brand": "Xiaomi",
+"Model": "Pad 8",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Зелёный"
+},
+"280825": {
+"Brand": "Xiaomi",
+"Model": "Pad 8",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Синий"
+},
+"280827": {
+"Brand": "Xiaomi",
+"Model": "Pad 8",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"280826": {
+"Brand": "Xiaomi",
+"Model": "Pad 8 Pro",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Серый"
+},
+"280828": {
+"Brand": "Xiaomi",
+"Model": "Pad 8 Pro",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Голубой"
+},
+"282144": {
+"Brand": "Xiaomi",
+"Model": "Pad 8 Pro",
+"MemorySize": "256",
+"SimSlot": "Нет",
+"RamSize": "8",
+"Color": "Зелёный"
+},
+"280829": {
+"Brand": "Xiaomi",
+"Model": "Pad 8 Pro",
+"MemorySize": "512",
+"SimSlot": "Нет",
+"RamSize": "12",
+"Color": "Серый"
+},
+"282145": {
+"Brand": "Xiaomi",
+"Model": "Pad 8 Pro",
+"MemorySize": "512",
+"SimSlot": "Нет",
+"RamSize": "12",
+"Color": "Зелёный"
+},
+"282641": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad C1",
+"MemorySize": "128",
+"SimSlot": "Нет",
+"RamSize": "6",
+"Color": "Серый"
+},
+"282642": {
+"Brand": "Xiaomi",
+"Model": "Poco Pad C1",
+"MemorySize": "128",
+"SimSlot": "Нет",
+"RamSize": "6",
+"Color": "Голубой"
+},
+"239004": {
+"Vendor": "Xiaomi",
+"Model": "TV MAX 86"
+},
+"270057": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 75 2025"
+},
+"273558": {
+"Vendor": "Xiaomi",
+"Model": "MI TV A Pro 55 2025"
+},
+"278951": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 50 2026"
+},
+"279821": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 43 2026"
+},
+"279822": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 55 2026"
+},
+"279865": {
+"Vendor": "Xiaomi",
+"Model": "TV A 43 2026"
+},
+"279866": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 65 2026"
+},
+"280296": {
+"Vendor": "Xiaomi",
+"Model": "TV A 50 2026"
+},
+"280404": {
+"Vendor": "Xiaomi",
+"Model": "TV A 55 2026"
+},
+"280415": {
+"Vendor": "Xiaomi",
+"Model": "TV MAX 100 2025"
+},
+"280675": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 32 2026"
+},
+"281432": {
+"Vendor": "Xiaomi",
+"Model": "TV S Pro Mini LED 75 2026"
+},
+"281756": {
+"Vendor": "Xiaomi",
+"Model": "TV S Mini LED 55 2026"
+},
+"281824": {
+"Vendor": "Xiaomi",
+"Model": "TV S Mini LED 65 2026"
+},
+"282282": {
+"Vendor": "Xiaomi",
+"Model": "TV A Pro 75 2026"
+},
+"282383": {
+"Vendor": "Xiaomi",
+"Model": "TV X Mini LED 43 2026"
+},
+"282794": {
+"Vendor": "Xiaomi",
+"Model": "TV A 32 2026 (L32MB-ARU)"
+},
+"280851": {
+"Vendor": "Dreame",
+"Model": "55Q100"
+},
+"281759": {
+"Vendor": "Dreame",
+"Model": "TV 75S100"
+},
+"281760": {
+"Vendor": "Dreame",
+"Model": "TV 65S100"
+}
+},
+"brands": {
+"fashion": {
+"categories": [
+660,
+661,
+656,
+653,
+662,
+654,
+659
+],
+"known": [
+"90 Points",
+"Mijia",
+"Ninetygo",
+"Sunshine",
+"Ts",
+"Xiaomi"
+]
+},
+"light": {
+"categories": [
+616
+],
+"known": [
+"Mijia",
+"Sunshine",
+"Xiaomi",
+"Яндекс"
+]
+}
+},
+"other": "Другой"
+}

@@ -14,7 +14,8 @@
                 <td><strong>{$t.path}</strong><br /><span class="muted">id {$t.category_id}{if $t.note} &#183; {$t.note}{/if}</span><br />
                     <label class="checkbox"><input type="checkbox" name="templates[{$t.category_id}][delete]" value="Y" /> удалить</label></td>
                 <td><textarea name="templates[{$t.category_id}][fields]" rows="4" class="input-full">{$t.fields}</textarea></td>
-                <td>{foreach from=$gm_avito_auto_fields item="f"}<label class="checkbox"><input type="checkbox" name="templates[{$t.category_id}][auto_fields][]" value="{$f}" {if $f|in_array:$t.auto_fields}checked="checked"{/if} /> {$f}</label>{/foreach}</td>
+                <td>{foreach from=$gm_avito_auto_fields item="f"}<label class="checkbox"><input type="checkbox" name="templates[{$t.category_id}][auto_fields][]" value="{$f}" {if $f|in_array:$t.auto_fields}checked="checked"{/if} /> {$f}</label>{/foreach}
+                    <span class="muted">Обязательно у товара:</span><br /><input type="text" name="templates[{$t.category_id}][required_fields]" value="{$t.required_fields}" class="input-full" placeholder="Model, Color" /></td>
                 <td>{$t.enabled} из {$t.total}<br /><span class="muted">включено</span></td>
             </tr>
         {/foreach}

@@ -87,7 +87,14 @@
 | `app/addons/gm_avito/bin/build.php` | сборка файла: `php app/addons/gm_avito/bin/build.php 2` (номер витрины) |
 | `app/addons/gm_avito/bin/fill.php` | заполнение «о товаре» всем включённым товарам (правленое вручную не трогает) |
 | `design/backend/templates/addons/gm_avito/hooks/products/tabs_content.post.tpl` | разметка вкладки «Авито» |
-| `design/backend/templates/addons/gm_avito/views/gm_avito/manage.tpl`, `templates.tpl` | страницы модуля |
+| `design/backend/templates/addons/gm_avito/views/gm_avito/manage.tpl`, `templates.tpl`, `problems.tpl` | страницы модуля; «Авито: проблемы» – итог проверки `fn_gm_avito_check` (включённые не в файле и почему, незаполненные обязательные поля по категориям, длинные заголовки, категории без шаблона) |
+
+Шаблоны категорий (160) собраны по справочнику автозагрузки Авито (`/autoload/v1/user-docs/node/<раздел>/fields`):
+постоянные поля, допустимые «Состояние» и «Вид продажи», обязательные поля (`required_fields` – без них товар не
+выгружается и попадает на страницу проблем). Марка/модель/память/цвет телефонов, планшетов и телевизоров и бренды
+одежды и освещения – из каталогов Авито, записаны в поля товаров. Генераторы и сопоставление – `_DEV/gm_avito/avito-docs/`
+и `_DEV/gm_avito/tools/`. Пробный файл для проверки шаблонов на autoload.avito.ru/format/xmlcheck –
+`bin/build.php 2 --test` → `feed-test.xml`, ссылка с `&test=1`.
 
 Файл витрины – `var/files/<номер>/gm_avito/feed.xml`. После выкладки шаблонов админки или меню – убрать
 `var/cache/templates/backend` и сбросить реестр (`fn_clear_cache('registry')`). Откат: выключить модуль в админке

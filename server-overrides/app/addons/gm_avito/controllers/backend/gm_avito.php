@@ -3,7 +3,9 @@
  * GOODMi: страницы модуля Авито в админке (2026-10-19), для витрины, выбранной вверху админки (GOODMi или Maxmobiles).
  *   gm_avito.manage    – настройки: какие товары выгружать, текст объявлений, общий блок, поля по умолчанию, ссылка на файл
  *   gm_avito.templates – шаблоны категорий: категория Авито и её поля для категории сайта (и вложенных)
- *   POST gm_avito.update / build / fill / update_templates – сохранить, собрать файл, заполнить описания, сохранить шаблоны
+ *   gm_avito.problems  – что мешает выгрузке: включённые товары не в файле, незаполненные поля, категории без шаблона
+ *   POST gm_avito.update / build / fill / update_templates / check – сохранить, собрать файл, заполнить описания,
+ *   сохранить шаблоны, проверить
  */
 
 if (!defined('BOOTSTRAP')) {
@@ -14,7 +16,7 @@ $company_id = (int) fn_get_runtime_company_id();
 $allowed = array_key_exists($company_id, GM_AVITO_COMPANIES);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $return = $mode === 'update_templates' ? 'gm_avito.templates' : 'gm_avito.manage';
+    $return = $mode === 'update_templates' ? 'gm_avito.templates' : ($mode === 'check' ? 'gm_avito.problems' : 'gm_avito.manage');
     if (!$allowed) {
         return [CONTROLLER_STATUS_OK, $return];
     }
@@ -33,8 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_set_notification('N', __('notice'), 'Настройки Авито сохранены. Файл пересоберётся при следующей сборке или по кнопке «Собрать файл сейчас».');
     }
 
+    if ($mode === 'check') {
+        $check = fn_gm_avito_check($company_id);
+        fn_set_notification('N', __('notice'), 'Проверено: включено ' . $check['enabled'] . ', в файле ' . $check['in_file'] . '.');
+    }
+
     if ($mode === 'build') {
         $result = fn_gm_avito_build_feed($company_id);
+        fn_gm_avito_check($company_id);
         fn_set_notification('N', __('notice'), 'Файл собран: объявлений ' . $result['ads'] . ', не попали ' . count($result['skipped']) . '.');
     }
 
@@ -57,6 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 [
                     'fields' => json_encode(fn_gm_avito_parse_fields($template['fields'] ?? ''), JSON_UNESCAPED_UNICODE),
                     'auto_fields' => implode(',', $auto),
+                    'required_fields' => implode(',', array_filter(array_map('trim', explode(',', (string) ($template['required_fields'] ?? ''))), static function ($tag) {
+                        return preg_match('/^[A-Za-z][A-Za-z0-9]*$/', $tag);
+                    })),
                     'updated_at' => TIME,
                 ],
                 $company_id,
@@ -83,6 +94,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $view = Tygh::$app['view'];
 $view->assign('gm_avito_allowed', $allowed);
 if (!$allowed) {
+    return;
+}
+
+if ($mode === 'problems') {
+    $view->assign('gm_avito_check', (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'check', '{}'), true));
+    $view->assign('gm_avito_company', fn_get_company_name($company_id));
+
     return;
 }
 
@@ -161,6 +179,7 @@ if ($mode === 'templates') {
             'path' => $category_paths[$category_id] ?? ('категория ' . $category_id),
             'fields' => fn_gm_avito_fields_text($template['fields']),
             'auto_fields' => $template['auto_fields'],
+            'required_fields' => implode(', ', $template['required_fields']),
             'note' => $template['note'],
             'total' => $counts[$category_id]['total'] ?? 0,
             'enabled' => $counts[$category_id]['enabled'] ?? 0,

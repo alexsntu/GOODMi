@@ -1,0 +1,2133 @@
+[
+ {
+  "category_id": 474,
+  "slug": "aromatizatory",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "ProductType": "Для салона",
+   "AccessoryType": "Ароматизаторы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Для салона / Ароматизаторы"
+ },
+ {
+  "category_id": 2189,
+  "slug": "moiki_vysokogo_davleniya_sadovaya",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Для сада и дачи",
+   "ProductGardenType": "Садовая техника",
+   "GardenEquipmentSubType": "Мойки высокого давления"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Для сада и дачи / Садовая техника / Мойки высокого давления"
+ },
+ {
+  "category_id": 527,
+  "slug": "giroskutery",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Самокаты и гироскутеры",
+   "GoodsSubCategory": "Гироскутеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Самокаты и гироскутеры / Гироскутеры"
+ },
+ {
+  "category_id": 528,
+  "slug": "aksessuary_samokaty_i_giroskutery",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Самокаты и гироскутеры",
+   "GoodsSubCategory": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Самокаты и гироскутеры / Аксессуары"
+ },
+ {
+  "category_id": 529,
+  "slug": "elektrovelosipedy",
+  "fields": {
+   "Category": "Велосипеды",
+   "VehicleType": "Электровелосипеды"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Хобби и отдых / Велосипеды / Электровелосипеды"
+ },
+ {
+  "category_id": 517,
+  "slug": "aksessuary_dlya_videokamer",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Аксессуары для видеокамер"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Аксессуары для видеокамер"
+ },
+ {
+  "category_id": 462,
+  "slug": "aksessuary_571",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Чехлы и плёнки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Аксессуары"
+ },
+ {
+  "category_id": 1406,
+  "slug": "aksessuary_571",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Стилусы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Аксессуары"
+ },
+ {
+  "category_id": 477,
+  "slug": "aksessuary_dlya_smart_chasov_i_brasletov",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Аксессуары для смарт-часов и браслетов"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Аксессуары для смарт-часов и браслетов"
+ },
+ {
+  "category_id": 516,
+  "slug": "styokla_2303941",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Чехлы и плёнки",
+   "ProductType": "Стёкла"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Чехлы и плёнки / Стёкла"
+ },
+ {
+  "category_id": 509,
+  "slug": "podstavki_i_derzhateli_2303944",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Чехлы и плёнки",
+   "ProductType": "Подставки и держатели"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Чехлы и плёнки / Подставки и держатели"
+ },
+ {
+  "category_id": 675,
+  "slug": "chekhly_2303940",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Чехлы и плёнки",
+   "ProductType": "Чехлы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Чехлы и плёнки / Чехлы"
+ },
+ {
+  "category_id": 524,
+  "slug": "aksessuary_samokaty_i_giroskutery",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Самокаты и гироскутеры",
+   "GoodsSubCategory": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Самокаты и гироскутеры / Аксессуары"
+ },
+ {
+  "category_id": 525,
+  "slug": "fleshki_i_karty_pamyati_i",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Флешки и карты памяти"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Флешки и карты памяти"
+ },
+ {
+  "category_id": 547,
+  "slug": "bloki_pitaniya_i_batarei",
+  "fields": {
+   "Category": "Оргтехника и расходники",
+   "GoodsType": "Блоки питания и батареи"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Оргтехника и расходники / Расходные материалы / Блоки питания и батареи"
+ },
+ {
+  "category_id": 550,
+  "slug": "kabeli_i_adaptery_3732",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Кабели и адаптеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Кабели и адаптеры"
+ },
+ {
+  "category_id": 639,
+  "slug": "ukhod_za_polostyu_rta",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Уход за полостью рта"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Уход за полостью рта"
+ },
+ {
+  "category_id": 638,
+  "slug": "ukhod_za_polostyu_rta",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Уход за полостью рта"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Уход за полостью рта"
+ },
+ {
+  "category_id": 577,
+  "slug": "pribory_i_aksessuary_150095",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Приборы и аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Приборы и аксессуары"
+ },
+ {
+  "category_id": 545,
+  "slug": "aksessuary_282",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Аксессуары"
+ },
+ {
+  "category_id": 541,
+  "slug": "nausniki",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Наушники"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Наушники"
+ },
+ {
+  "category_id": 665,
+  "slug": "aksessuary",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Аксессуары"
+ },
+ {
+  "category_id": 500,
+  "slug": "kabeli_i_adaptery",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Кабели и адаптеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Кабели и адаптеры"
+ },
+ {
+  "category_id": 501,
+  "slug": "aksessuary",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Аксессуары"
+ },
+ {
+  "category_id": 676,
+  "slug": "aksessuary",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Аксессуары"
+ },
+ {
+  "category_id": 663,
+  "slug": "detskii_transport",
+  "fields": {
+   "Category": "Товары для детей и игрушки",
+   "GoodsType": "Игрушки",
+   "Toys": "Детский транспорт",
+   "Condition": "Новый"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Товары для детей и игрушки / Игрушки / Детский транспорт"
+ },
+ {
+  "category_id": 668,
+  "slug": "konstruktory",
+  "fields": {
+   "Category": "Товары для детей и игрушки",
+   "GoodsType": "Игрушки",
+   "Toys": "Конструкторы",
+   "Condition": "Новый"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Товары для детей и игрушки / Игрушки / Конструкторы"
+ },
+ {
+  "category_id": 664,
+  "slug": "radioupravlyaemye_modeli",
+  "fields": {
+   "Category": "Коллекционирование",
+   "GoodsType": "Модели, фигурки, куклы",
+   "GoodsSubType": "Модели",
+   "ProductType": "Радиоуправляемые модели"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Радиоуправляемые модели"
+ },
+ {
+  "category_id": 660,
+  "slug": "platki_i_sharfy",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Аксессуары",
+   "Apparel": "Платки и шарфы",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Аксессуары / Платки и шарфы"
+ },
+ {
+  "category_id": 661,
+  "slug": "zonty",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Аксессуары",
+   "Apparel": "Зонты",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Аксессуары / Зонты"
+ },
+ {
+  "category_id": 656,
+  "slug": "ochki",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Аксессуары",
+   "Apparel": "Очки",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Аксессуары / Очки"
+ },
+ {
+  "category_id": 653,
+  "slug": "perchatki_i_varezhki",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Аксессуары",
+   "Apparel": "Перчатки и варежки",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Аксессуары / Перчатки и варежки"
+ },
+ {
+  "category_id": 662,
+  "slug": "riukzaki",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Сумки, рюкзаки и чемоданы",
+   "Apparel": "Рюкзаки",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Сумки, рюкзаки и чемоданы / Рюкзаки"
+ },
+ {
+  "category_id": 654,
+  "slug": "sumki",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Сумки, рюкзаки и чемоданы",
+   "Apparel": "Сумки",
+   "ApparelType": "Через плечо",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Сумки, рюкзаки и чемоданы / Сумки"
+ },
+ {
+  "category_id": 659,
+  "slug": "cemodany_i_doroznye_sumki",
+  "fields": {
+   "Category": "Одежда, обувь, аксессуары",
+   "GoodsType": "Сумки, рюкзаки и чемоданы",
+   "Apparel": "Чемоданы и дорожные сумки",
+   "Gender": "Унисекс",
+   "Condition": "Новое с биркой",
+   "AdType": "Товар приобретен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Личные вещи / Одежда, обувь, аксессуары / Сумки, рюкзаки и чемоданы / Чемоданы и дорожные сумки"
+ },
+ {
+  "category_id": 487,
+  "slug": "gadzhety_dlya_fitnesa",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Фитнес и тренажёры",
+   "FitnessType": "Аксессуары для фитнеса",
+   "GoodsSubType": "Гаджеты для фитнеса"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Фитнес и тренажёры / Аксессуары для фитнеса / Гаджеты для фитнеса"
+ },
+ {
+  "category_id": 1921,
+  "slug": "kompaktnye_fotoapparaty",
+  "fields": {
+   "Category": "Фототехника",
+   "GoodsType": "Компактные фотоаппараты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Фототехника / Компактные фотоаппараты"
+ },
+ {
+  "category_id": 534,
+  "slug": "ekshn_kamery",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Экшн-камеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Экшн-камеры"
+ },
+ {
+  "category_id": 448,
+  "slug": "plansety",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Планшеты",
+   "ProductsType": "Планшет",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand",
+   "Model",
+   "MemorySize",
+   "SimSlot",
+   "RamSize",
+   "Color"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Планшеты"
+ },
+ {
+  "category_id": 557,
+  "slug": "zapchasti_vacuum_cleaners",
+  "fields": {
+   "Category": "Бытовая техника",
+   "ProductType": "Пылесосы и запчасти",
+   "GoodsType": "Для дома",
+   "GoodsSubType": "Запчасти"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Пылесосы и запчасти / Запчасти"
+ },
+ {
+  "category_id": 564,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 554,
+  "slug": "roboty_pylesosy",
+  "fields": {
+   "Category": "Бытовая техника",
+   "ProductType": "Пылесосы и запчасти",
+   "GoodsType": "Для дома",
+   "GoodsSubType": "Пылесосы",
+   "ProductSubType": "Роботы-пылесосы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Пылесосы и запчасти / Пылесосы / Роботы-пылесосы"
+ },
+ {
+  "category_id": 412,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 458,
+  "slug": "drugoe_1147263",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Телевизоры и проекторы",
+   "ProductType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Телевизоры и проекторы / Другое"
+ },
+ {
+  "category_id": 721,
+  "slug": "drugoe_1147263",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Телевизоры и проекторы",
+   "ProductType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Телевизоры и проекторы / Другое"
+ },
+ {
+  "category_id": 455,
+  "slug": "televizory_1147261",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Телевизоры и проекторы",
+   "ProductType": "Телевизоры",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Телевизоры и проекторы / Телевизоры"
+ },
+ {
+  "category_id": 628,
+  "slug": "akvarium",
+  "fields": {
+   "Category": "Аквариум"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Животные / Аквариум"
+ },
+ {
+  "category_id": 613,
+  "slug": "polki_derzhateli_stakany",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Сантехника, водоснабжение и сауна",
+   "GoodsSubType": "Аксессуары для ванной",
+   "BathroomAccessoriestype": "Полки, держатели, стаканы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Сантехника, водоснабжение и сауна / Аксессуары для ванной / Полки, держатели, стаканы"
+ },
+ {
+  "category_id": 566,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 584,
+  "slug": "inventar_dlya_uborki",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Товары для кухни",
+   "GoodsSubType": "Хозяйственные товары",
+   "ProductType": "Инвентарь для уборки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Товары для кухни / Хозяйственные товары / Инвентарь для уборки"
+ },
+ {
+  "category_id": 630,
+  "slug": "kanceliariia",
+  "fields": {
+   "Category": "Оргтехника и расходники",
+   "GoodsType": "Канцелярия"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Оргтехника и расходники / Канцелярия"
+ },
+ {
+  "category_id": 551,
+  "slug": "kompiuternye_kresla_2170273",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Компьютерные столы и кресла",
+   "GoodsSubType": "Кресла и стулья",
+   "DeskChairType": "Компьютерные кресла",
+   "ComputerChairType": "Компьютерное",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [
+   "Color"
+  ],
+  "required_fields": [
+   "Color",
+   "UpholsteryMaterial",
+   "Width",
+   "MinHeight",
+   "MaxHeight",
+   "Depth",
+   "MaxWeight"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Компьютерные столы и кресла / Кресла и стулья / Компьютерные кресла"
+ },
+ {
+  "category_id": 620,
+  "slug": "spoty_i_tochechnye_svetilniki",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Потолочное и настенное",
+   "LigitingType": "Споты и точечные светильники",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Потолочное и настенное / Споты и точечные светильники"
+ },
+ {
+  "category_id": 616,
+  "slug": "svetodiodnaia_podsvetka",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Светодиодная подсветка",
+   "SubType": "Светодиодная лента",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Voltage",
+   "Brand"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Светодиодная подсветка"
+ },
+ {
+  "category_id": 2480,
+  "slug": "gazonokosilki",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Для сада и дачи",
+   "ProductGardenType": "Садовая техника",
+   "GardenEquipmentSubType": "Газонокосилки"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand",
+   "Model",
+   "LawnMowerType",
+   "SelfPropelled"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Для сада и дачи / Садовая техника / Газонокосилки"
+ },
+ {
+  "category_id": 2162,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 575,
+  "slug": "utyugi",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для дома",
+   "ProductType": "Гладильное оборудование",
+   "GoodsSubType": "Утюги"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Гладильное оборудование / Утюги"
+ },
+ {
+  "category_id": 2166,
+  "slug": "barnoe_oborudovanie",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Посуда",
+   "DishesType": "Сервировка стола",
+   "ServingDishesType": "Посуда для напитков",
+   "DrinkwareType": "Барное оборудование"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Посуда / Сервировка стола / Посуда для напитков / Барное оборудование"
+ },
+ {
+  "category_id": 600,
+  "slug": "filtry_kuvshiny_i_pompy_filtry",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Товары для кухни",
+   "GoodsSubType": "Фильтры-кувшины и помпы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Товары для кухни / Фильтры-кувшины и помпы"
+ },
+ {
+  "category_id": 597,
+  "slug": "khozyaistvennye_tovary",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Посуда",
+   "DishesType": "Хозяйственные товары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Посуда / Хозяйственные товары"
+ },
+ {
+  "category_id": 606,
+  "slug": "posuda_dlya_chaya_i_kofe",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Посуда",
+   "DishesType": "Сервировка стола",
+   "ServingDishesType": "Посуда для напитков",
+   "DrinkwareType": "Посуда для чая и кофе"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "ProductType",
+   "Material"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Посуда / Сервировка стола / Посуда для напитков / Посуда для чая и кофе"
+ },
+ {
+  "category_id": 601,
+  "slug": "stolovye_pribory",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Посуда",
+   "DishesType": "Сервировка стола",
+   "ServingDishesType": "Столовые приборы",
+   "ProductType": "Набор"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Material"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Посуда / Сервировка стола / Столовые приборы"
+ },
+ {
+  "category_id": 2165,
+  "slug": "kukhonnye_nozhi_tochilki",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Посуда",
+   "DishesType": "Кухонные принадлежности",
+   "KitchenwareType": "Кухонные ножи, точилки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Посуда / Кухонные принадлежности / Кухонные ножи, точилки"
+ },
+ {
+  "category_id": 2163,
+  "slug": "kofevarki_2303639",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления напитков",
+   "GoodsSubType": "Кофеварки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления напитков / Кофеварки"
+ },
+ {
+  "category_id": 716,
+  "slug": "filtry_i_kartridzhi",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Фильтры и картриджи"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Фильтры и картриджи"
+ },
+ {
+  "category_id": 568,
+  "slug": "osushiteli_vozdukha",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Осушители воздуха"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Осушители воздуха"
+ },
+ {
+  "category_id": 2269,
+  "slug": "kondicioneri",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Кондиционеры и запчасти",
+   "GoodsSubType": "Кондиционеры"
+  },
+  "auto_fields": [
+   "Vendor"
+  ],
+  "required_fields": [
+   "Vendor",
+   "AirConditionerType",
+   "AirConditionerSubType"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Кондиционеры и запчасти / Кондиционеры"
+ },
+ {
+  "category_id": 598,
+  "slug": "myasorubki_2303688",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для нарезки и смешивания",
+   "GoodsSubType": "Мясорубки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для нарезки и смешивания / Мясорубки"
+ },
+ {
+  "category_id": 718,
+  "slug": "setevoe_oborudovanie",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Сетевое оборудование"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Сетевое оборудование"
+ },
+ {
+  "category_id": 624,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 456,
+  "slug": "tv_pristavki",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Усилители и ресиверы",
+   "ProductType": "ТВ приставки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Усилители и ресиверы / ТВ приставки"
+ },
+ {
+  "category_id": 457,
+  "slug": "monitory_2300557",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Мониторы и запчасти",
+   "ProductsType": "Мониторы"
+  },
+  "auto_fields": [
+   "Brand",
+   "Model"
+  ],
+  "required_fields": [
+   "Brand",
+   "Model"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Мониторы и запчасти / Мониторы"
+ },
+ {
+  "category_id": 459,
+  "slug": "proektory_2304726",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Телевизоры и проекторы",
+   "ProductType": "Проекторы и аксессуары",
+   "ProductSubType": "Проекторы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Телевизоры и проекторы / Проекторы и аксессуары / Проекторы"
+ },
+ {
+  "category_id": 463,
+  "slug": "komplekty_klaviatury_i_myshi",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Клавиатуры и мыши",
+   "GoodsSubType": "Комплекты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Клавиатуры и мыши / Комплекты"
+ },
+ {
+  "category_id": 470,
+  "slug": "derzhateli_dlya_telefona",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "AccessoryType": "Держатели для телефона",
+   "ProductType": "Для салона"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Для салона / Держатели для телефона"
+ },
+ {
+  "category_id": 472,
+  "slug": "kompressory_i_nasosy",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "ProductType": "Набор автомобилиста",
+   "AccessorySubType": "Компрессоры и насосы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Набор автомобилиста / Компрессоры и насосы"
+ },
+ {
+  "category_id": 473,
+  "slug": "pusko_zaryadnye_ustroistva",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "ProductType": "Набор автомобилиста",
+   "AccessorySubType": "Пуско-зарядные устройства"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Набор автомобилиста / Пуско-зарядные устройства"
+ },
+ {
+  "category_id": 475,
+  "slug": "derzhateli_dlya_telefona",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "AccessoryType": "Держатели для телефона",
+   "ProductType": "Для салона"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Для салона / Держатели для телефона"
+ },
+ {
+  "category_id": 476,
+  "slug": "derzhateli_dlya_telefona",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "AccessoryType": "Держатели для телефона",
+   "ProductType": "Для салона"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Для салона / Держатели для телефона"
+ },
+ {
+  "category_id": 486,
+  "slug": "palatki",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Туризм и отдых на природе",
+   "TourismType": "Палатки, тенты, шатры",
+   "GoodsSubType": "Палатки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Туризм и отдых на природе / Палатки, тенты, шатры / Палатки"
+ },
+ {
+  "category_id": 499,
+  "slug": "komplekty_klaviatury_i_myshi",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Клавиатуры и мыши",
+   "GoodsSubType": "Комплекты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Клавиатуры и мыши / Комплекты"
+ },
+ {
+  "category_id": 502,
+  "slug": "myshi",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Клавиатуры и мыши",
+   "GoodsSubType": "Мыши"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Клавиатуры и мыши / Мыши"
+ },
+ {
+  "category_id": 506,
+  "slug": "geimpady_i_kontrollery",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Аксессуары",
+   "ProductSubType": "Геймпады и контроллеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Аксессуары / Геймпады и контроллеры"
+ },
+ {
+  "category_id": 526,
+  "slug": "elektrosamokaty_samokaty_i_giroskutery",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Самокаты и гироскутеры",
+   "GoodsSubCategory": "Электросамокаты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Самокаты и гироскутеры / Электросамокаты"
+ },
+ {
+  "category_id": 530,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 531,
+  "slug": "fitnes_braslety",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Фитнес-браслеты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Фитнес-браслеты"
+ },
+ {
+  "category_id": 532,
+  "slug": "okhrannye_sistemy_i_videonablyudenie",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Охранные системы и видеонаблюдение"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Охранные системы и видеонаблюдение"
+ },
+ {
+  "category_id": 533,
+  "slug": "videoregistratory",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аудио- и видеотехника",
+   "EquipmentType": "Видеорегистраторы"
+  },
+  "auto_fields": [
+   "Brand"
+  ],
+  "required_fields": [
+   "Brand",
+   "Design",
+   "CamsNumber",
+   "Resolution"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аудио- и видеотехника / Видеорегистраторы"
+ },
+ {
+  "category_id": 538,
+  "slug": "derzhateli_dlya_telefona",
+  "fields": {
+   "Category": "Запчасти и аксессуары",
+   "GoodsType": "Аксессуары",
+   "AccessoryType": "Держатели для телефона",
+   "ProductType": "Для салона"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Транспорт / Запчасти и аксессуары / Аксессуары / Для салона / Держатели для телефона"
+ },
+ {
+  "category_id": 539,
+  "slug": "nausniki",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Наушники"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Наушники"
+ },
+ {
+  "category_id": 542,
+  "slug": "umnye_kolonki_2304140",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Акустика, колонки, сабвуферы",
+   "GoodsSubType": "Умные колонки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Акустика, колонки, сабвуферы / Умные колонки"
+ },
+ {
+  "category_id": 543,
+  "slug": "akustika_dlya_domashnego_kinoteatra_2304143",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Акустика, колонки, сабвуферы",
+   "GoodsSubType": "Акустика для домашнего кинотеатра"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Акустика, колонки, сабвуферы / Акустика для домашнего кинотеатра"
+ },
+ {
+  "category_id": 546,
+  "slug": "setevye_zaryadnye_ustroistva",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Зарядные устройства",
+   "ProductType": "Сетевые зарядные устройства"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Зарядные устройства / Сетевые зарядные устройства"
+ },
+ {
+  "category_id": 548,
+  "slug": "poverbanki",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Зарядные устройства",
+   "ProductType": "Повербанки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Зарядные устройства / Повербанки"
+ },
+ {
+  "category_id": 549,
+  "slug": "besprovodnye_zaryadnye_ustroistva",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Зарядные устройства",
+   "ProductType": "Беспроводные зарядные устройства"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Зарядные устройства / Беспроводные зарядные устройства"
+ },
+ {
+  "category_id": 555,
+  "slug": "ruchnye",
+  "fields": {
+   "Category": "Бытовая техника",
+   "ProductType": "Пылесосы и запчасти",
+   "GoodsType": "Для дома",
+   "GoodsSubType": "Пылесосы",
+   "ProductSubType": "Ручные"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Пылесосы и запчасти / Пылесосы / Ручные"
+ },
+ {
+  "category_id": 556,
+  "slug": "ruchnye",
+  "fields": {
+   "Category": "Бытовая техника",
+   "ProductType": "Пылесосы и запчасти",
+   "GoodsType": "Для дома",
+   "GoodsSubType": "Пылесосы",
+   "ProductSubType": "Ручные"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Пылесосы и запчасти / Пылесосы / Ручные"
+ },
+ {
+  "category_id": 565,
+  "slug": "avtomaticheskie_osvezhiteli_i_aromadiffuzory",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Автоматические освежители и аромадиффузоры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Автоматические освежители и аромадиффузоры"
+ },
+ {
+  "category_id": 567,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 569,
+  "slug": "utyugi",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для дома",
+   "ProductType": "Гладильное оборудование",
+   "GoodsSubType": "Утюги"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Гладильное оборудование / Утюги"
+ },
+ {
+  "category_id": 571,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 572,
+  "slug": "elektricheskie_obogrevateli_2304782",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Обогреватели",
+   "GoodsSubType": "Электрические обогреватели"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Обогреватели / Электрические обогреватели"
+ },
+ {
+  "category_id": 573,
+  "slug": "ochistiteli_vozdukha",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Очистители воздуха"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Очистители воздуха"
+ },
+ {
+  "category_id": 578,
+  "slug": "drugoe_1210658",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Инструменты",
+   "ToolType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Инструменты / Другое"
+ },
+ {
+  "category_id": 579,
+  "slug": "drugoe_1210658",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Инструменты",
+   "ToolType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Инструменты / Другое"
+ },
+ {
+  "category_id": 580,
+  "slug": "drugoe_1210658",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Инструменты",
+   "ToolType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Инструменты / Другое"
+ },
+ {
+  "category_id": 581,
+  "slug": "drugoe_1210658",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Инструменты",
+   "ToolType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Инструменты / Другое"
+ },
+ {
+  "category_id": 583,
+  "slug": "ochistiteli_vozdukha",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Очистители воздуха"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Очистители воздуха"
+ },
+ {
+  "category_id": 585,
+  "slug": "ventilyatory",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Вентиляционное оборудование",
+   "GoodsSubType": "Вентиляторы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Вентиляционное оборудование / Вентиляторы"
+ },
+ {
+  "category_id": 586,
+  "slug": "ibp_setevye_filtry",
+  "fields": {
+   "Category": "Оргтехника и расходники",
+   "GoodsType": "ИБП, сетевые фильтры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Оргтехника и расходники / ИБП, сетевые фильтры"
+ },
+ {
+  "category_id": 587,
+  "slug": "setevoe_oborudovanie",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Сетевое оборудование"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Сетевое оборудование"
+ },
+ {
+  "category_id": 589,
+  "slug": "elektrochainiki_2303640",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления напитков",
+   "GoodsSubType": "Электрочайники",
+   "VideoURL": ""
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления напитков / Электрочайники"
+ },
+ {
+  "category_id": 590,
+  "slug": "pokhodnaya_posuda",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Туризм и отдых на природе",
+   "TourismType": "Походная посуда"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Туризм и отдых на природе / Походная посуда"
+ },
+ {
+  "category_id": 591,
+  "slug": "pokhodnaya_posuda",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Туризм и отдых на природе",
+   "TourismType": "Походная посуда"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Туризм и отдых на природе / Походная посуда"
+ },
+ {
+  "category_id": 592,
+  "slug": "blendery_2303686",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для нарезки и смешивания",
+   "GoodsSubType": "Блендеры",
+   "BlenderType": "Стационарный",
+   "Capacity": "1000"
+  },
+  "auto_fields": [
+   "Vendor"
+  ],
+  "required_fields": [
+   "Vendor"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для нарезки и смешивания / Блендеры"
+ },
+ {
+  "category_id": 593,
+  "slug": "kukhonnye_nozhi_tochilki",
+  "fields": {
+   "Category": "Посуда и товары для кухни",
+   "GoodsType": "Посуда",
+   "DishesType": "Кухонные принадлежности",
+   "KitchenwareType": "Кухонные ножи, точилки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Посуда и товары для кухни / Посуда / Кухонные принадлежности / Кухонные ножи, точилки"
+ },
+ {
+  "category_id": 594,
+  "slug": "aerogrili",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления блюд",
+   "GoodsSubType": "Аэрогрили"
+  },
+  "auto_fields": [
+   "Vendor"
+  ],
+  "required_fields": [
+   "Vendor"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления блюд / Аэрогрили"
+ },
+ {
+  "category_id": 596,
+  "slug": "kukhonnyie_vesy",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Прочая кухонная техника",
+   "GoodsSubType": "Весы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Прочая кухонная техника / Весы"
+ },
+ {
+  "category_id": 599,
+  "slug": "shtopory_elektricheskie",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Прочая кухонная техника",
+   "GoodsSubType": "Штопоры электрические"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Прочая кухонная техника / Штопоры электрические"
+ },
+ {
+  "category_id": 602,
+  "slug": "shtopory_elektricheskie",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Прочая кухонная техника",
+   "GoodsSubType": "Штопоры электрические"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Прочая кухонная техника / Штопоры электрические"
+ },
+ {
+  "category_id": 603,
+  "slug": "izmelchiteli_2303684",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для нарезки и смешивания",
+   "GoodsSubType": "Измельчители"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для нарезки и смешивания / Измельчители"
+ },
+ {
+  "category_id": 604,
+  "slug": "kofemashiny_2303637",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления напитков",
+   "GoodsSubType": "Кофемашины",
+   "CappuccinoMaker": "Отсутствует"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления напитков / Кофемашины"
+ },
+ {
+  "category_id": 605,
+  "slug": "aerogrili",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления блюд",
+   "GoodsSubType": "Аэрогрили"
+  },
+  "auto_fields": [
+   "Vendor"
+  ],
+  "required_fields": [
+   "Vendor"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления блюд / Аэрогрили"
+ },
+ {
+  "category_id": 607,
+  "slug": "toster",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления блюд",
+   "GoodsSubType": "Тостеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления блюд / Тостеры"
+ },
+ {
+  "category_id": 609,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 611,
+  "slug": "mylnicy_dozatory",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Сантехника, водоснабжение и сауна",
+   "GoodsSubType": "Аксессуары для ванной",
+   "BathroomAccessoriestype": "Мыльницы, дозаторы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Сантехника, водоснабжение и сауна / Аксессуары для ванной / Мыльницы, дозаторы"
+ },
+ {
+  "category_id": 617,
+  "slug": "lampochki",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Комплектующие",
+   "LigitingType": "Лампочки",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Комплектующие / Лампочки"
+ },
+ {
+  "category_id": 618,
+  "slug": "nastolnye_lampy",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Настольное и напольное",
+   "LigitingType": "Настольные лампы",
+   "LedLamp": "Да",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [
+   "Brand",
+   "Color"
+  ],
+  "required_fields": [
+   "Brand",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Настольное и напольное / Настольные лампы"
+ },
+ {
+  "category_id": 619,
+  "slug": "nochniki",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Настольное и напольное",
+   "LigitingType": "Ночники",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Настольное и напольное / Ночники"
+ },
+ {
+  "category_id": 621,
+  "slug": "fonari_i_lampy_turizm",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Туризм и отдых на природе",
+   "TourismType": "Фонари и лампы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Туризм и отдых на природе / Фонари и лампы"
+ },
+ {
+  "category_id": 622,
+  "slug": "okhrannye_sistemy_i_videonablyudenie",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Охранные системы и видеонаблюдение"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Охранные системы и видеонаблюдение"
+ },
+ {
+  "category_id": 623,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 625,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 626,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 627,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 629,
+  "slug": "gruming",
+  "fields": {
+   "Category": "Товары для животных",
+   "GoodsType": "Собаки и кошки",
+   "GoodsSubType": "Гигиена и уход",
+   "ProductType": "Груминг",
+   "AdType": "Товар приобретён на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Животные / Товары для животных / Собаки и кошки / Гигиена и уход / Груминг"
+ },
+ {
+  "category_id": 633,
+  "slug": "feny_klassicheskie",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Фены и приборы для укладки",
+   "ProductSubType": "Фены классические"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Фены и приборы для укладки / Фены классические"
+ },
+ {
+  "category_id": 634,
+  "slug": "oborudovanie_dlya_manikyura_i_pedikyura",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Макияж и маникюр",
+   "CosmeticsType": "Для ногтей",
+   "ProductType": "Оборудование для маникюра и педикюра"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Макияж и маникюр / Для ногтей / Оборудование для маникюра и педикюра"
+ },
+ {
+  "category_id": 635,
+  "slug": "mashinki_dlya_strizhki",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Машинки для стрижки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Машинки для стрижки"
+ },
+ {
+  "category_id": 637,
+  "slug": "ukhod_za_polostyu_rta",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Уход за полостью рта"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Уход за полостью рта"
+ },
+ {
+  "category_id": 640,
+  "slug": "ukhod_za_polostyu_rta",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Уход за полостью рта"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Уход за полостью рта"
+ },
+ {
+  "category_id": 641,
+  "slug": "feny_klassicheskie",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Фены и приборы для укладки",
+   "ProductSubType": "Фены классические"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Фены и приборы для укладки / Фены классические"
+ },
+ {
+  "category_id": 642,
+  "slug": "pribory_i_aksessuary_150095",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Приборы и аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Приборы и аксессуары"
+ },
+ {
+  "category_id": 643,
+  "slug": "britvy_i_trimmery",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Бритвы и триммеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Бритвы и триммеры"
+ },
+ {
+  "category_id": 644,
+  "slug": "pribory_i_aksessuary_150095",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Приборы и аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Приборы и аксессуары"
+ },
+ {
+  "category_id": 645,
+  "slug": "termometry",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Медицинские изделия",
+   "MedicalProductType": "Диагностика",
+   "DiagnosticProductType": "Термометры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Медицинские изделия / Диагностика / Термометры"
+ },
+ {
+  "category_id": 681,
+  "slug": "aksessuary_dlya_geimpadov",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Аксессуары",
+   "ProductSubType": "Аксессуары для геймпадов"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Аксессуары / Аксессуары для геймпадов"
+ },
+ {
+  "category_id": 713,
+  "slug": "mashinki_dlya_strizhki",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Машинки для стрижки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Машинки для стрижки"
+ },
+ {
+  "category_id": 717,
+  "slug": "pribory_i_aksessuary_150095",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Приборы и аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Приборы и аксессуары"
+ },
+ {
+  "category_id": 719,
+  "slug": "drugoe_248",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Другое"
+ },
+ {
+  "category_id": 720,
+  "slug": "komplekty_klaviatury_i_myshi",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Клавиатуры и мыши",
+   "GoodsSubType": "Комплекты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Клавиатуры и мыши / Комплекты"
+ },
+ {
+  "category_id": 728,
+  "slug": "okhrannye_sistemy_i_videonablyudenie",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Охранные системы и видеонаблюдение"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Охранные системы и видеонаблюдение"
+ },
+ {
+  "category_id": 2161,
+  "slug": "ochistiteli_vozdukha",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Очистители воздуха"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Очистители воздуха"
+ },
+ {
+  "category_id": 2164,
+  "slug": "blendery_2303686",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для нарезки и смешивания",
+   "GoodsSubType": "Блендеры",
+   "BlenderType": "Портативный",
+   "Capacity": "45"
+  },
+  "auto_fields": [
+   "Vendor"
+  ],
+  "required_fields": [
+   "Vendor"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для нарезки и смешивания / Блендеры"
+ },
+ {
+  "category_id": 2172,
+  "slug": "noutbuki",
+  "fields": {
+   "Category": "Ноутбуки",
+   "KBLayout": "Есть кириллица",
+   "DrivesConfig": "SSD",
+   "OperatingSystem": "Windows 11",
+   "VideocardType": "Встроенная",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Ноутбуки"
+ },
+ {
+  "category_id": 2208,
+  "slug": "elektroinstrument_drugoe",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Инструменты",
+   "ToolType": "Электроинструменты",
+   "ToolSubType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Инструменты / Электроинструменты / Другое"
+ },
+ {
+  "category_id": 2259,
+  "slug": "roliki_detskie",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Ролики и скейтбординг",
+   "GoodsSubCategory": "Ролики",
+   "GoodsSubType": "Детские"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Ролики и скейтбординг / Ролики / Детские"
+ },
+ {
+  "category_id": 2548,
+  "slug": "portativnye_elektrostancii",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Туризм и отдых на природе",
+   "TourismType": "Туристическое снаряжение",
+   "GoodsSubType": "Портативные электростанции"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Туризм и отдых на природе / Туристическое снаряжение / Портативные электростанции"
+ },
+ {
+  "category_id": 2549,
+  "slug": "solnechnye_paneli",
+  "fields": {
+   "Category": "Ремонт и строительство",
+   "GoodsType": "Стройматериалы",
+   "GoodsSubType": "Электрика",
+   "ElectricsType": "Солнечные панели",
+   "DeviceType": "Панели"
+  },
+  "auto_fields": [
+   "Brand"
+  ],
+  "required_fields": [
+   "Brand",
+   "Voltage",
+   "Capacity"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Ремонт и строительство / Стройматериалы / Электрика / Солнечные панели"
+ },
+ {
+  "category_id": 2556,
+  "slug": "igrovye_pristavki",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Игровые приставки",
+   "Gamepad": "1",
+   "BoxSealed": "Да",
+   "MemorySize": "2000",
+   "GoodsSubType": "стационарная",
+   "ScreenCondition": "Без дефектов",
+   "CaseCondition": "Без дефектов"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Игровые приставки"
+ }
+]

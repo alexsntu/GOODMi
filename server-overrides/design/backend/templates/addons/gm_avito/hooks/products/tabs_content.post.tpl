@@ -34,6 +34,19 @@
             <div class="controls"><p>{$gm_avito.avito_category}</p></div>
         </div>
         <div class="control-group">
+            <label class="control-label" for="gm_avito_fields">Поля объявления</label>
+            <div class="controls">
+                <textarea id="gm_avito_fields" name="product_data[gm_avito][fields]" rows="5" class="span9" placeholder="Поле = значение">{$gm_avito.own_fields}</textarea>
+                <p class="muted description">
+                    {if $gm_avito.imported}Перенесены из UnitXML и используются как есть (шаблон категории к ним не добавляется).
+                    {else}Только то, что отличается у этого товара; остальное берётся из шаблона категории.{/if}
+                    {if $gm_avito.required} Обязательные поля раздела: {$gm_avito.required}.{/if}
+                    {if $gm_avito.missing} <strong>Не заполнено: {$gm_avito.missing}</strong> &#8211; без них объявление не выгружается.{/if}
+                </p>
+                {if $gm_avito.template_fields && !$gm_avito.imported}<p class="muted">Шаблон категории: {$gm_avito.template_fields|nl2br nofilter}{if $gm_avito.template_auto}<br />Из характеристик товара: {$gm_avito.template_auto}{/if}</p>{/if}
+            </div>
+        </div>
+        <div class="control-group">
             <label class="control-label">Объявление</label>
             <div class="controls">
                 <p>Id в файле: {$gm_avito.ad_id}{if $gm_avito.avito_id} &#183; номер на Авито: {$gm_avito.avito_id}{/if} &#183; цена: {$gm_avito.price|format_price:$currencies.$primary_currency nofilter} &#183; фото: {$gm_avito.images}</p>

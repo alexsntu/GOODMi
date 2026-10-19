@@ -121,9 +121,9 @@ function fn_gm_avito_fields_text($fields)
 /**
  * Путь к файлу автозагрузки витрины
  */
-function fn_gm_avito_feed_path($company_id)
+function fn_gm_avito_feed_path($company_id, $test = false)
 {
-    return rtrim(fn_get_files_dir_path($company_id), '/') . '/gm_avito/feed.xml';
+    return rtrim(fn_get_files_dir_path($company_id), '/') . '/gm_avito/' . ($test ? 'feed-test.xml' : 'feed.xml');
 }
 
 function fn_gm_avito_site_url($company_id)
@@ -210,6 +210,7 @@ function fn_gm_avito_templates($company_id)
     foreach ($templates as &$template) {
         $template['fields'] = (array) json_decode((string) $template['fields'], true);
         $template['auto_fields'] = array_values(array_filter(explode(',', (string) $template['auto_fields'])));
+        $template['required_fields'] = array_values(array_filter(array_map('trim', explode(',', (string) ($template['required_fields'] ?? '')))));
     }
     unset($template);
 
@@ -567,8 +568,16 @@ function fn_gm_avito_prepare_ad($company_id, array $item, array $context)
         'images' => fn_gm_avito_product_images($product_id, $context['site_url'], $context['images_limit']),
         'template' => $template,
         'amount' => (int) ($product['amount'] ?? 0),
+        'missing' => [],
         'skip' => '',
     ];
+    if ($template && empty($own_fields['Category'])) {
+        foreach ($template['required_fields'] as $tag) {
+            if (!isset($fields[$tag]) || trim((string) $fields[$tag]) === '') {
+                $ad['missing'][] = $tag;
+            }
+        }
+    }
 
     if (empty($product) || $product['status'] !== 'A') {
         $ad['skip'] = 'товар выключен или скрыт на сайте';
@@ -582,6 +591,8 @@ function fn_gm_avito_prepare_ad($company_id, array $item, array $context)
         $ad['skip'] = 'нет фото';
     } elseif (empty($fields['Category'])) {
         $ad['skip'] = 'нет шаблона Авито для категории товара';
+    } elseif ($ad['missing']) {
+        $ad['skip'] = 'не заполнены обязательные поля Авито: ' . implode(', ', $ad['missing']);
     } elseif ($ad['title'] === '') {
         $ad['skip'] = 'нет заголовка';
     }
@@ -608,11 +619,13 @@ function fn_gm_avito_context($company_id, array $product_ids = [])
 
 /**
  * Собирает файл автозагрузки витрины. Возвращает ['ads' => число объявлений, 'skipped' => [product_id => причина],
- * 'reasons' => [причина => сколько], 'path' => файл]
+ * 'reasons' => [причина => сколько], 'path' => файл].
+ * $test – пробный файл для проверки шаблонов на autoload.avito.ru/format/xmlcheck (feed-test.xml, на Авито не подключается):
+ * по $test товаров в наличии из каждой категории с шаблоном, включены они или нет (перенесённые из UnitXML – не берутся).
  */
-function fn_gm_avito_build_feed($company_id)
+function fn_gm_avito_build_feed($company_id, $test = 0)
 {
-    $path = fn_gm_avito_feed_path($company_id);
+    $path = fn_gm_avito_feed_path($company_id, (bool) $test);
     fn_mkdir(dirname($path));
     $tmp = $path . '.tmp';
 
@@ -625,10 +638,30 @@ function fn_gm_avito_build_feed($company_id)
     $xml->writeAttribute('target', 'Avito.ru');
 
     $result = ['ads' => 0, 'skipped' => [], 'reasons' => [], 'path' => $path];
-    $items = db_get_array('SELECT * FROM ?:gm_avito_items WHERE company_id = ?i AND enabled = ?s ORDER BY ad_id', $company_id, 'Y');
+    if ($test) {
+        $items = db_get_array(
+            'SELECT i.* FROM ?:gm_avito_items AS i INNER JOIN ?:products AS p ON p.product_id = i.product_id'
+            . ' WHERE i.company_id = ?i AND p.status = ?s AND p.amount > 0 AND i.fields NOT LIKE ?l ORDER BY i.product_id DESC',
+            $company_id,
+            'A',
+            '%"Category"%'
+        );
+    } else {
+        $items = db_get_array('SELECT * FROM ?:gm_avito_items WHERE company_id = ?i AND enabled = ?s ORDER BY ad_id', $company_id, 'Y');
+    }
     $context = fn_gm_avito_context($company_id, array_column($items, 'product_id'));
+    $per_template = [];
     foreach ($items as $item) {
+        if ($test) {
+            $template = fn_gm_avito_template_for_path($context['templates'], $context['paths'][(int) $item['product_id']] ?? '');
+            if (!$template || ($per_template[$template['category_id']] ?? 0) >= $test) {
+                continue;
+            }
+        }
         $ad = fn_gm_avito_prepare_ad($company_id, $item, $context);
+        if ($test && $ad['skip'] === '') {
+            $per_template[$template['category_id']] = ($per_template[$template['category_id']] ?? 0) + 1;
+        }
         if ($ad['skip'] !== '') {
             $result['skipped'][(int) $item['product_id']] = $ad['skip'];
             $result['reasons'][$ad['skip']] = ($result['reasons'][$ad['skip']] ?? 0) + 1;
@@ -664,6 +697,9 @@ function fn_gm_avito_build_feed($company_id)
     $xml->flush();
     chmod($tmp, 0644);
     rename($tmp, $path);
+    if ($test) {
+        return $result;
+    }
     fn_gm_avito_set_setting($company_id, 'last_build', json_encode([
         'time' => TIME, 'ads' => $result['ads'], 'skipped' => count($result['skipped']), 'reasons' => $result['reasons'],
     ], JSON_UNESCAPED_UNICODE));
@@ -695,6 +731,17 @@ function fn_gm_avito_update_product_post($product_data, $product_id, $lang_code,
             $title = trim(preg_replace('/\s+/u', ' ', (string) $data['title']));
             if ($title !== '' && $title !== fn_gm_avito_xml_text($item['title'])) {
                 $update += ['title' => fn_gm_avito_db_text($title), 'title_auto' => 'N'];
+            }
+        }
+        if (isset($data['fields'])) {
+            // Сравниваем без пустых значений: у перенесённых из UnitXML бывают пустые поля, в форме их не видно –
+            // сохранение товара без правок не должно менять объявление
+            $new_fields = fn_gm_avito_parse_fields($data['fields']);
+            $old_fields = array_filter((array) json_decode((string) $item['fields'], true), static function ($value) {
+                return trim((string) $value) !== '';
+            });
+            if ($new_fields != $old_fields) {
+                $update['fields'] = $new_fields ? json_encode($new_fields, JSON_UNESCAPED_UNICODE) : '{}';
             }
         }
         if (isset($data['intro'])) {
@@ -748,9 +795,132 @@ function fn_gm_avito_admin_item($company_id, $product_id)
         'state' => $state,
         'stock_mode' => $stock_labels[$stock_mode] ?? $stock_mode,
         'avito_category' => $category ? implode(' / ', $category) : 'нет шаблона для категории товара',
+        'own_fields' => fn_gm_avito_fields_text((array) json_decode((string) $item['fields'], true)),
+        'imported' => !empty(((array) json_decode((string) $item['fields'], true))['Category']),
+        'template_fields' => $ad['template'] ? fn_gm_avito_fields_text($ad['template']['fields']) : '',
+        'template_auto' => $ad['template'] ? implode(', ', $ad['template']['auto_fields']) : '',
+        'required' => $ad['template'] ? implode(', ', $ad['template']['required_fields']) : '',
+        'missing' => implode(', ', $ad['missing']),
         'new_text' => $ad['new_text'],
         'preview' => $ad['description'],
         'price' => $ad['price'],
         'images' => count($ad['images']),
     ];
+}
+
+/**
+ * Проверка для страницы «Авито: проблемы»: включённые товары, которые не попадают в файл (причина), длинные заголовки,
+ * у всех включённых на сайте товаров – категории без шаблона и незаполненные обязательные поля раздела Авито.
+ * Результат – настройка check (JSON), её показывает gm_avito.problems; запускается после сборки файла и по кнопке.
+ */
+function fn_gm_avito_check($company_id)
+{
+    $rows = db_get_array(
+        'SELECT p.product_id, p.amount, pd.product, i.enabled, i.title, i.fields FROM ?:products AS p'
+        . ' INNER JOIN ?:product_descriptions AS pd ON pd.product_id = p.product_id AND pd.lang_code = ?s'
+        . ' LEFT JOIN ?:gm_avito_items AS i ON i.product_id = p.product_id AND i.company_id = ?i'
+        . ' WHERE p.company_id = ?i AND p.status = ?s',
+        'ru',
+        $company_id,
+        $company_id,
+        'A'
+    );
+    $context = fn_gm_avito_context($company_id, array_column($rows, 'product_id'));
+    $names = db_get_hash_single_array(
+        'SELECT c.category_id, cd.category FROM ?:categories AS c INNER JOIN ?:category_descriptions AS cd ON cd.category_id = c.category_id AND cd.lang_code = ?s WHERE c.company_id = ?i',
+        ['category_id', 'category'],
+        'ru',
+        $company_id
+    );
+    $path_name = static function ($path) use ($names) {
+        return implode(' / ', array_map(static function ($id) use ($names) {
+            return $names[$id] ?? $id;
+        }, explode('/', (string) $path)));
+    };
+
+    $check = [
+        'time' => TIME, 'products' => count($rows), 'enabled' => 0, 'in_file' => 0, 'reasons' => [],
+        'enabled_problems' => [], 'long_titles' => [], 'missing' => [], 'no_template' => [],
+    ];
+    foreach ($rows as $row) {
+        $product_id = (int) $row['product_id'];
+        $path = (string) ($context['paths'][$product_id] ?? '');
+        $main = (int) substr(strrchr('/' . $path, '/'), 1);
+        $own = (array) json_decode((string) $row['fields'], true);
+        $in_stock = (int) $row['amount'] > 0;
+
+        if ($row['enabled'] === 'Y') {
+            $check['enabled']++;
+            $ad = fn_gm_avito_prepare_ad($company_id, db_get_row('SELECT * FROM ?:gm_avito_items WHERE company_id = ?i AND product_id = ?i', $company_id, $product_id), $context);
+            if ($ad['skip'] === '') {
+                $check['in_file']++;
+            } else {
+                $check['reasons'][$ad['skip']] = ($check['reasons'][$ad['skip']] ?? 0) + 1;
+                $check['enabled_problems'][] = [$product_id, $row['product'], $ad['skip']];
+            }
+            $title_len = mb_strlen(fn_gm_avito_xml_text($row['title']));
+            if ($title_len > 50) {
+                $check['long_titles'][] = [$product_id, $row['product'], fn_gm_avito_xml_text($row['title']), $title_len];
+            }
+            continue;
+        }
+        if (!empty($own['Category'])) {
+            continue;
+        }
+
+        $template = fn_gm_avito_template_for_path($context['templates'], $path);
+        if (!$template) {
+            $key = $main;
+            if (!isset($check['no_template'][$key])) {
+                $check['no_template'][$key] = ['path' => $path_name($path), 'count' => 0, 'in_stock' => 0];
+            }
+            $check['no_template'][$key]['count']++;
+            $check['no_template'][$key]['in_stock'] += $in_stock ? 1 : 0;
+            continue;
+        }
+        if (!$template['required_fields']) {
+            continue;
+        }
+        $fields = array_merge($context['defaults'], $template['fields'], $own);
+        $features = null;
+        $missing = [];
+        foreach ($template['required_fields'] as $tag) {
+            if (isset($fields[$tag]) && trim((string) $fields[$tag]) !== '') {
+                continue;
+            }
+            if (in_array($tag, $template['auto_fields'], true) && array_key_exists($tag, GM_AVITO_FEATURE_FIELDS)) {
+                $features = $features ?? fn_gm_avito_product_features($product_id);
+                if (fn_gm_avito_feature_value($features, GM_AVITO_FEATURE_FIELDS[$tag]) !== '') {
+                    continue;
+                }
+            }
+            $missing[] = $tag;
+        }
+        if (!$missing) {
+            continue;
+        }
+        $key = (int) $template['category_id'];
+        if (!isset($check['missing'][$key])) {
+            $check['missing'][$key] = ['path' => $path_name(db_get_field('SELECT id_path FROM ?:categories WHERE category_id = ?i', $key)), 'count' => 0, 'in_stock' => 0, 'fields' => [], 'examples' => []];
+        }
+        $check['missing'][$key]['count']++;
+        $check['missing'][$key]['in_stock'] += $in_stock ? 1 : 0;
+        foreach ($missing as $tag) {
+            $check['missing'][$key]['fields'][$tag] = ($check['missing'][$key]['fields'][$tag] ?? 0) + 1;
+        }
+        if (count($check['missing'][$key]['examples']) < 15 && $in_stock) {
+            $check['missing'][$key]['examples'][] = [$product_id, $row['product'], implode(', ', $missing)];
+        }
+    }
+
+    arsort($check['reasons']);
+    uasort($check['missing'], static function ($a, $b) {
+        return $b['in_stock'] - $a['in_stock'];
+    });
+    uasort($check['no_template'], static function ($a, $b) {
+        return $b['in_stock'] - $a['in_stock'];
+    });
+    fn_gm_avito_set_setting($company_id, 'check', json_encode($check, JSON_UNESCAPED_UNICODE));
+
+    return $check;
 }

@@ -35,13 +35,16 @@ CREATE TABLE IF NOT EXISTS cscart_gm_avito_items (
     UNIQUE KEY ad_id (company_id, ad_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Шаблоны категорий: для категории сайта (и вложенных) – поля объявления Авито (JSON) и поля из характеристик товара
--- (auto_fields: Brand, Vendor, Model, Color).
+-- Шаблоны категорий: для категории сайта (и вложенных) – поля объявления Авито (JSON), поля из характеристик товара
+-- (auto_fields: Brand, Vendor, Model, Color) и обязательные поля раздела Авито, которые должны быть у товара
+-- (required_fields: без них объявление не выгружается).
+-- ALTER TABLE cscart_gm_avito_templates ADD COLUMN required_fields VARCHAR(500) NOT NULL DEFAULT '' AFTER auto_fields;
 CREATE TABLE IF NOT EXISTS cscart_gm_avito_templates (
     company_id INT UNSIGNED NOT NULL,
     category_id INT UNSIGNED NOT NULL,
     fields MEDIUMTEXT,
     auto_fields VARCHAR(255) NOT NULL DEFAULT '',
+    required_fields VARCHAR(500) NOT NULL DEFAULT '',
     note VARCHAR(255) NOT NULL DEFAULT '',
     updated_at INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (company_id, category_id)
