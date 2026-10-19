@@ -1,5 +1,6 @@
 {* GOODMi: «Товары → Авито: настройки» (2026-10-19), контроллер – app/addons/gm_avito/controllers/backend/gm_avito.php *}
 {capture name="mainbox"}
+{include file="addons/gm_avito/views/gm_avito/components/nav.tpl"}
 {if !$gm_avito_allowed}
     <p>Выберите витрину GOODMi или Maxmobiles в переключателе витрин вверху админки &#8211; у каждой свои настройки и свой аккаунт Авито.</p>
 {else}
@@ -31,9 +32,15 @@
         <div class="control-group">
             <label class="control-label">Категории с новым описанием</label>
             <div class="controls">
-                {foreach from=$gm_avito.templates key="category_id" item="path"}
-                    <label class="checkbox"><input type="checkbox" name="gm_avito[new_text_categories][]" value="{$category_id}" {if $category_id|in_array:$gm_avito.new_text_categories}checked="checked"{/if} /> {$path}</label>
-                {/foreach}
+                <details class="gm-avito-picker">
+                    <summary>Выбрано: {$gm_avito.new_text_count}{if $gm_avito.new_text_names} &#8211; {$gm_avito.new_text_names}{/if} <span class="muted">(нажмите, чтобы изменить)</span></summary>
+                    <input type="text" class="input-xlarge gm-avito-filter" placeholder="Найти категорию" data-target="gm_avito_new_text_list" />
+                    <div id="gm_avito_new_text_list" style="max-height: 320px; overflow-y: auto; border: 1px solid #ddd; padding: 6px 10px; margin-top: 6px;">
+                        {foreach from=$gm_avito.templates key="category_id" item="path"}
+                            <label class="checkbox gm-avito-filter-item"><input type="checkbox" name="gm_avito[new_text_categories][]" value="{$category_id}" {if $category_id|in_array:$gm_avito.new_text_categories}checked="checked"{/if} /> {$path}</label>
+                        {/foreach}
+                    </div>
+                </details>
             </div>
         </div>
         <div class="control-group">
@@ -90,6 +97,19 @@
     </div>
 </form>
 {/if}
+{literal}
+<script>
+document.addEventListener('input', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('gm-avito-filter')) return;
+    var q = e.target.value.toLowerCase().trim();
+    var box = document.getElementById(e.target.getAttribute('data-target'));
+    if (!box) return;
+    box.querySelectorAll('.gm-avito-filter-item').forEach(function (el) {
+        el.style.display = !q || el.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+});
+</script>
+{/literal}
 {/capture}
 {if $gm_avito.company}{$gm_avito_title = "Авито: настройки &#8211; `$gm_avito.company`"}{else}{$gm_avito_title = "Авито: настройки"}{/if}
 {include file="common/mainbox.tpl" title=$gm_avito_title content=$smarty.capture.mainbox}

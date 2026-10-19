@@ -4,8 +4,8 @@
  *   gm_avito.manage    – настройки: какие товары выгружать, текст объявлений, общий блок, поля по умолчанию, ссылка на файл
  *   gm_avito.templates – шаблоны категорий: категория Авито и её поля для категории сайта (и вложенных)
  *   gm_avito.problems  – что мешает выгрузке: включённые товары не в файле, незаполненные поля, категории без шаблона
- *   POST gm_avito.update / build / fill / update_templates / check – сохранить, собрать файл, заполнить описания,
- *   сохранить шаблоны, проверить
+ *   POST gm_avito.update / build / fill / update_templates / check / sync – сохранить, собрать файл, заполнить описания,
+ *   сохранить шаблоны, проверить, получить отчёт Авито (API)
  */
 
 if (!defined('BOOTSTRAP')) {
@@ -16,7 +16,7 @@ $company_id = (int) fn_get_runtime_company_id();
 $allowed = array_key_exists($company_id, GM_AVITO_COMPANIES);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $return = $mode === 'update_templates' ? 'gm_avito.templates' : ($mode === 'check' ? 'gm_avito.problems' : 'gm_avito.manage');
+    $return = $mode === 'update_templates' ? 'gm_avito.templates' : (in_array($mode, ['check', 'sync'], true) ? 'gm_avito.problems' : 'gm_avito.manage');
     if (!$allowed) {
         return [CONTROLLER_STATUS_OK, $return];
     }
@@ -33,6 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_gm_avito_set_setting($company_id, 'images_limit', (string) max(1, min(10, (int) ($data['images_limit'] ?? 10))));
         fn_gm_avito_set_setting($company_id, 'specs_limit', (string) max(0, min(30, (int) ($data['specs_limit'] ?? 10))));
         fn_set_notification('N', __('notice'), 'Настройки Авито сохранены. Файл пересоберётся при следующей сборке или по кнопке «Собрать файл сейчас».');
+    }
+
+    if ($mode === 'sync') {
+        try {
+            $report = fn_gm_avito_sync_report($company_id);
+            fn_set_notification('N', __('notice'), 'Отчёт Авито получен: объявлений ' . $report['ads'] . '.');
+        } catch (Exception $e) {
+            fn_set_notification('E', __('error'), 'Отчёт Авито не получен: ' . $e->getMessage());
+        }
     }
 
     if ($mode === 'check') {
@@ -99,6 +108,15 @@ if (!$allowed) {
 
 if ($mode === 'problems') {
     $view->assign('gm_avito_check', (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'check', '{}'), true));
+    $report = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'report', '{}'), true);
+    $labels = [];
+    foreach ((array) ($report['feed_urls'] ?? []) as $url) {
+        $url = is_array($url) ? (string) ($url['url'] ?? reset($url)) : (string) $url;
+        $labels[] = strpos($url, 'gm_avito') !== false ? 'наш модуль' : (strpos($url, 'unitxml') !== false ? 'UnitXML' : $url);
+    }
+    $report['feed_label'] = implode(', ', array_unique($labels));
+    $view->assign('gm_avito_report', $report);
+    $view->assign('gm_avito_report_problems', fn_gm_avito_report_problems($company_id));
     $view->assign('gm_avito_company', fn_get_company_name($company_id));
 
     return;
@@ -155,7 +173,11 @@ if ($mode === 'manage') {
         'company' => fn_get_company_name($company_id),
         'stock_mode' => fn_gm_avito_get_setting($company_id, 'stock_mode', 'all'),
         'text_mode' => fn_gm_avito_get_setting($company_id, 'text_mode', 'old'),
-        'new_text_categories' => array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'new_text_categories', ''))),
+        'new_text_categories' => $new_text_categories = array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'new_text_categories', ''))),
+        'new_text_names' => implode(', ', $new_text_names = array_values(array_filter(array_map(static function ($id) use ($names) {
+            return $names[$id] ?? '';
+        }, $new_text_categories)))),
+        'new_text_count' => count($new_text_names),
         'common_block' => fn_gm_avito_xml_text((string) fn_gm_avito_get_setting($company_id, 'common_block', '')),
         'defaults' => fn_gm_avito_fields_text((array) json_decode((string) fn_gm_avito_get_setting($company_id, 'defaults', '{}'), true)),
         'images_limit' => fn_gm_avito_get_setting($company_id, 'images_limit', 10),

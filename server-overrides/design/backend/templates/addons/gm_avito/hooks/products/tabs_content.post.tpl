@@ -49,7 +49,13 @@
         <div class="control-group">
             <label class="control-label">Объявление</label>
             <div class="controls">
-                <p>Id в файле: {$gm_avito.ad_id}{if $gm_avito.avito_id} &#183; номер на Авито: {$gm_avito.avito_id}{/if} &#183; цена: {$gm_avito.price|format_price:$currencies.$primary_currency nofilter} &#183; фото: {$gm_avito.images}</p>
+                <p>Id в файле: {$gm_avito.ad_id}{if $gm_avito.avito_id} &#183; номер на Авито: {if $gm_avito.report.url}<a href="{$gm_avito.report.url}" target="_blank">{$gm_avito.avito_id}</a>{else}{$gm_avito.avito_id}{/if}{/if} &#183; цена: {$gm_avito.price|format_price:$currencies.$primary_currency nofilter} &#183; фото: {$gm_avito.images}</p>
+                {if $gm_avito.report_status}
+                    <p>Авито, последняя загрузка: <strong>{$gm_avito.report.section}</strong>{if $gm_avito.report.avito_status} &#183; статус: {$gm_avito.report.avito_status}{/if}{if $gm_avito.report.date_end} &#183; размещено до {$gm_avito.report.date_end}{/if}</p>
+                    {foreach from=$gm_avito.report.messages item="m"}
+                        <p class="{if $m.type == "error"}text-error{else}text-warning{/if}">{if $m.type == "error"}Ошибка{else}Предупреждение{/if}: {$m.title} {$m.text}</p>
+                    {/foreach}
+                {/if}
                 <p class="muted">Текст в файле: {if $gm_avito.new_text}новое описание (о товаре + характеристики + общий блок){else}прежнее описание из UnitXML &#8211; новое включается в настройках Авито{/if}.</p>
             </div>
         </div>

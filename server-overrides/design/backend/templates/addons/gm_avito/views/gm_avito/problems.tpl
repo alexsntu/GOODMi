@@ -1,5 +1,6 @@
 {* GOODMi: «Товары → Авито: проблемы» (2026-10-19) – итог fn_gm_avito_check (после сборки файла и по кнопке) *}
 {capture name="mainbox"}
+{include file="addons/gm_avito/views/gm_avito/components/nav.tpl"}
 {if !$gm_avito_allowed}
     <p>Выберите витрину GOODMi или Maxmobiles в переключателе витрин вверху админки.</p>
 {else}
@@ -21,10 +22,28 @@
             <tr><td><strong>Заголовков длиннее 50 знаков</strong></td><td>{$c.long_titles|count}</td></tr>
             <tr><td><strong>Категорий с незаполненными полями Авито</strong></td><td>{$c.missing|count}</td></tr>
             <tr><td><strong>Категорий без шаблона</strong></td><td>{$c.no_template|count}</td></tr>
-            <tr><td><strong>Ошибки из отчётов Авито</strong></td><td class="muted">появятся после подключения API Авито (следующий этап)</td></tr>
+            <tr><td><strong>Отчёт Авито о последней загрузке</strong></td><td>{if $gm_avito_report.time}{$gm_avito_report.started_at|replace:"T":" "|replace:"Z":" UTC"} &#183; объявлений {$gm_avito_report.ads}{if $gm_avito_report.feed_label} &#183; файл: {$gm_avito_report.feed_label}{/if}<br /><span class="muted">получен {$gm_avito_report.time|date_format:"`$settings.Appearance.date_format`, `$settings.Appearance.time_format`"}</span>{else}<span class="muted">ещё не получали &#8211; кнопка «Обновить отчёт Авито»</span>{/if}</td></tr>
+            {foreach from=$gm_avito_report.stats.sections item="s"}
+                <tr><td>&#8211; {$s.title}</td><td>{$s.count}{if $s.sections} ({foreach from=$s.sections item="ss" name="ss"}{$ss.title|lower} {$ss.count}{if !$smarty.foreach.ss.last}, {/if}{/foreach}){/if}</td></tr>
+            {/foreach}
         </tbody>
     </table>
     </div>
+
+    {if $gm_avito_report_problems}
+    {include file="common/subheader.tpl" title="Ошибки и предупреждения Авито (последняя загрузка)" target="#gm_avito_p_report"}
+    <div id="gm_avito_p_report" class="in collapse">
+        <table class="table table-middle"><thead><tr><th width="25%">Товар</th><th width="15%">Раздел отчёта</th><th>Что пишет Авито</th></tr></thead><tbody>
+        {foreach from=$gm_avito_report_problems item="r"}
+            <tr>
+                <td>{if $r.product_id}<a href="{"products.update?product_id=`$r.product_id`&selected_section=gm_avito"|fn_url}">{$r.product}</a>{/if}{if $r.url}<br /><a href="{$r.url}" target="_blank" class="muted">на Авито</a>{/if}{if $r.enabled != "Y"} <span class="muted">(выключен)</span>{/if}</td>
+                <td>{$r.section}{if $r.avito_status}<br /><span class="muted">{$r.avito_status}</span>{/if}</td>
+                <td>{foreach from=$r.messages item="m"}<span class="{if $m.type == "error"}text-error{else}text-warning{/if}">{$m.title}</span> <span class="muted">{$m.text|truncate:220}</span><br />{foreachelse}<span class="muted">без сообщений</span>{/foreach}</td>
+            </tr>
+        {/foreach}
+        </tbody></table>
+    </div>
+    {/if}
 
     {if $c.enabled_problems}
     {include file="common/subheader.tpl" title="Включены, но не попадают в файл" target="#gm_avito_p_enabled"}
@@ -80,6 +99,7 @@
 
     <div class="buttons-container">
         <input type="submit" class="btn btn-primary" name="dispatch[gm_avito.check]" value="Проверить сейчас" />
+        <input type="submit" class="btn" name="dispatch[gm_avito.sync]" value="Обновить отчёт Авито" />
     </div>
 </form>
 {/if}

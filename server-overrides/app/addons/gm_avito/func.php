@@ -801,6 +801,8 @@ function fn_gm_avito_admin_item($company_id, $product_id)
         'template_auto' => $ad['template'] ? implode(', ', $ad['template']['auto_fields']) : '',
         'required' => $ad['template'] ? implode(', ', $ad['template']['required_fields']) : '',
         'missing' => implode(', ', $ad['missing']),
+        'report' => (array) json_decode(fn_gm_avito_xml_text((string) $item['status_text']), true),
+        'report_status' => $item['status'],
         'new_text' => $ad['new_text'],
         'preview' => $ad['description'],
         'price' => $ad['price'],
@@ -923,4 +925,228 @@ function fn_gm_avito_check($company_id)
     fn_gm_avito_set_setting($company_id, 'check', json_encode($check, JSON_UNESCAPED_UNICODE));
 
     return $check;
+}
+
+/**
+ * API Авито (этап 3, 2026-10-19). Ключи client_id/client_secret витрины – в закрытом файле вне папки сайта
+ * (<папка пользователя сайта>/private/gm_avito.json, {"<company_id>": {...}}), в базу и репозиторий не попадают;
+ * токен (живёт сутки) хранится в настройке api_token.
+ */
+function fn_gm_avito_api_credentials($company_id)
+{
+    $file = dirname(rtrim(DIR_ROOT, '/'), 2) . '/private/gm_avito.json';
+    $all = is_readable($file) ? (array) json_decode((string) file_get_contents($file), true) : [];
+
+    return $all[(string) $company_id] ?? null;
+}
+
+function fn_gm_avito_api_request($method, $url, array $headers = [], $body = null)
+{
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => $method,
+        CURLOPT_HTTPHEADER => $headers,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_TIMEOUT => 60,
+    ]);
+    if ($body !== null) {
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+    }
+    $response = curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+
+    return [$code, $response === false ? '' : (string) $response, $error];
+}
+
+/**
+ * Токен API витрины (client_credentials), из настройки, пока не истёк
+ */
+function fn_gm_avito_api_token($company_id)
+{
+    $cached = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'api_token', '{}'), true);
+    if (!empty($cached['token']) && (int) ($cached['exp'] ?? 0) > TIME + 300) {
+        return $cached['token'];
+    }
+    $credentials = fn_gm_avito_api_credentials($company_id);
+    if (!$credentials) {
+        throw new Exception('нет ключей API Авито для витрины ' . $company_id);
+    }
+    list($code, $response, $error) = fn_gm_avito_api_request('POST', 'https://api.avito.ru/token', ['Content-Type: application/x-www-form-urlencoded'], http_build_query([
+        'grant_type' => 'client_credentials',
+        'client_id' => $credentials['client_id'],
+        'client_secret' => $credentials['client_secret'],
+    ]));
+    $data = (array) json_decode($response, true);
+    if ($code !== 200 || empty($data['access_token'])) {
+        throw new Exception('токен Авито: ответ ' . $code . ' ' . $error);
+    }
+    fn_gm_avito_set_setting($company_id, 'api_token', json_encode(['token' => $data['access_token'], 'exp' => TIME + (int) $data['expires_in']]));
+
+    return $data['access_token'];
+}
+
+/**
+ * GET к API Авито (только чтение), ответ – массив
+ */
+function fn_gm_avito_api_get($company_id, $path)
+{
+    // Авито ограничивает частоту (429): пауза между запросами и до трёх повторов с ожиданием
+    static $last = 0.0;
+    for ($attempt = 0; $attempt < 4; $attempt++) {
+        $wait = 1.5 - (microtime(true) - $last);
+        if ($wait > 0) {
+            usleep((int) ($wait * 1000000));
+        }
+        list($code, $response, $error) = fn_gm_avito_api_request('GET', 'https://api.avito.ru' . $path, ['Authorization: Bearer ' . fn_gm_avito_api_token($company_id)]);
+        $last = microtime(true);
+        if ($code !== 429) {
+            break;
+        }
+        sleep(10 * ($attempt + 1));
+    }
+    if ($code !== 200) {
+        throw new Exception('Авито ' . $path . ': ответ ' . $code . ' ' . $error . ' ' . mb_substr($response, 0, 200));
+    }
+
+    return (array) json_decode($response, true);
+}
+
+/**
+ * Отчёт о последней завершённой загрузке: сводка → настройка report; объявления из разделов с проблемами (всё, кроме
+ * «успешно») – по разделам (постраничная выдача всего отчёта у Авито нестабильна: страницы перекрываются); номера
+ * объявлений на Авито – /autoload/v2/items/avito_ids пачками по 100. В items: avito_id, status = раздел отчёта
+ * (successful – есть номер и нет замечаний), status_text = JSON: раздел, статус на Авито, ссылка, срок, ошибки и
+ * предупреждения. Возвращает сводку.
+ */
+function fn_gm_avito_sync_report($company_id)
+{
+    $summary = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/last_successful');
+    $by_ad = [];
+    foreach ((array) ($summary['stats']['sections'] ?? []) as $section) {
+        $slug = (string) ($section['slug'] ?? '');
+        if ($slug === '' || $slug === 'successful' || (int) ($section['count'] ?? 0) === 0) {
+            continue;
+        }
+        $page = 1;
+        do {
+            $data = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/last_successful/items?sections=' . rawurlencode($slug) . '&page=' . $page);
+            foreach ((array) ($data['items'] ?? []) as $row) {
+                $messages = [];
+                foreach ((array) ($row['messages'] ?? []) as $message) {
+                    if (in_array($message['type'] ?? '', ['error', 'alarm'], true)) {
+                        $messages[] = [
+                            'type' => $message['type'],
+                            'title' => trim((string) ($message['title'] ?? '')),
+                            'text' => trim(html_entity_decode(strip_tags((string) ($message['description'] ?? '')), ENT_QUOTES, 'UTF-8')),
+                        ];
+                    }
+                }
+                $by_ad[(string) $row['ad_id']] = [
+                    'avito_id' => (int) ($row['avito_id'] ?? 0),
+                    'status' => (string) ($row['section']['slug'] ?? $slug),
+                    'info' => [
+                        'section' => (string) ($row['section']['title'] ?? $section['title'] ?? ''),
+                        'avito_status' => (string) ($row['avito_status'] ?? ''),
+                        'url' => (string) ($row['url'] ?? ''),
+                        'date_end' => substr((string) ($row['avito_date_end'] ?? ''), 0, 10),
+                        'messages' => $messages,
+                    ],
+                ];
+            }
+            $pages = (int) ($data['meta']['pages'] ?? 1);
+            $page++;
+        } while ($page <= $pages && $page <= 50);
+    }
+
+    $items = db_get_hash_single_array('SELECT ad_id, product_id FROM ?:gm_avito_items WHERE company_id = ?i AND (enabled = ?s OR avito_id IS NOT NULL)', ['ad_id', 'product_id'], $company_id, 'Y');
+    $avito_ids = [];
+    foreach (array_chunk(array_keys($items), 100) as $chunk) {
+        $data = fn_gm_avito_api_get($company_id, '/autoload/v2/items/avito_ids?query=' . rawurlencode(implode(',', $chunk)));
+        foreach ((array) ($data['items'] ?? []) as $row) {
+            if (!empty($row['avito_id'])) {
+                $avito_ids[(string) $row['ad_id']] = (int) $row['avito_id'];
+            }
+        }
+    }
+
+    $stats = ['problems' => 0, 'published' => 0, 'none' => 0];
+    foreach ($items as $ad_id => $product_id) {
+        $ad_id = (string) $ad_id;
+        if (isset($by_ad[$ad_id])) {
+            $row = $by_ad[$ad_id];
+            $avito_id = $row['avito_id'] ?: ($avito_ids[$ad_id] ?? 0);
+            $status = $row['status'];
+            $info = $row['info'];
+            $stats['problems']++;
+        } elseif (isset($avito_ids[$ad_id])) {
+            $avito_id = $avito_ids[$ad_id];
+            $status = 'successful';
+            $info = ['section' => 'Опубликовано, замечаний нет', 'url' => 'https://www.avito.ru/items/' . $avito_id, 'messages' => []];
+            $stats['published']++;
+        } else {
+            db_query('UPDATE ?:gm_avito_items SET status = ?s, status_text = NULL WHERE company_id = ?i AND ad_id = ?s', '', $company_id, $ad_id);
+            $stats['none']++;
+            continue;
+        }
+        if ($info['url'] === '' && $avito_id) {
+            $info['url'] = 'https://www.avito.ru/items/' . $avito_id;
+        }
+        db_query('UPDATE ?:gm_avito_items SET ?u WHERE company_id = ?i AND ad_id = ?s', [
+            'avito_id' => $avito_id ?: null,
+            'status' => $status,
+            'status_text' => fn_gm_avito_db_text(json_encode($info, JSON_UNESCAPED_UNICODE)),
+        ], $company_id, $ad_id);
+    }
+
+    $report = [
+        'time' => TIME,
+        'upload_id' => $summary['upload_id'] ?? '',
+        'started_at' => $summary['started_at'] ?? '',
+        'upload_status' => $summary['status'] ?? '',
+        'feed_urls' => $summary['feed_urls'] ?? [],
+        'stats' => $summary['stats'] ?? [],
+        'ads' => count($items),
+        'with_problems' => $stats['problems'],
+        'published' => $stats['published'],
+        'not_on_avito' => $stats['none'],
+        'unknown_count' => count(array_diff(array_keys($by_ad), array_map('strval', array_keys($items)))),
+    ];
+    fn_gm_avito_set_setting($company_id, 'report', json_encode($report, JSON_UNESCAPED_UNICODE));
+
+    return $report;
+}
+
+/**
+ * Объявления с ошибками и предупреждениями по последнему отчёту – для страницы проблем
+ */
+function fn_gm_avito_report_problems($company_id)
+{
+    $rows = db_get_array(
+        'SELECT i.product_id, i.ad_id, i.avito_id, i.status, i.status_text, i.enabled, pd.product FROM ?:gm_avito_items AS i'
+        . ' LEFT JOIN ?:product_descriptions AS pd ON pd.product_id = i.product_id AND pd.lang_code = ?s'
+        . ' WHERE i.company_id = ?i AND i.status <> ?s AND i.status <> ?s ORDER BY i.status, pd.product',
+        'ru',
+        $company_id,
+        '',
+        'successful'
+    );
+    $result = [];
+    foreach ($rows as $row) {
+        $info = (array) json_decode(fn_gm_avito_xml_text((string) $row['status_text']), true);
+        $result[] = [
+            'product_id' => $row['product_id'],
+            'product' => $row['product'],
+            'enabled' => $row['enabled'],
+            'section' => $info['section'] ?? $row['status'],
+            'status' => $row['status'],
+            'avito_status' => $info['avito_status'] ?? '',
+            'url' => $info['url'] ?? '',
+            'messages' => $info['messages'] ?? [],
+        ];
+    }
+
+    return $result;
 }

@@ -83,8 +83,9 @@
 | `app/addons/gm_avito/controllers/frontend/gm_avito.php` | `index.php?dispatch=gm_avito.feed&key=…` – отдаёт файл витрины по секретному ключу, иначе 404 |
 | `app/addons/gm_avito/controllers/backend/gm_avito.php` | страницы настроек и шаблонов категорий |
 | `app/addons/gm_avito/controllers/backend/products.post.php` | вкладка «Авито» в карточке товара (витрины GOODMi и Maxmobiles) |
-| `app/addons/gm_avito/schemas/menu/menu.post.php` | пункты меню «Товары → Авито: …» |
+| `app/addons/gm_avito/schemas/menu/menu.post.php` | пункт меню «Товары → Авито» с подпунктами «Настройки», «Проблемы и отчёт Авито», «Шаблоны категорий» (те же вкладки – `views/gm_avito/components/nav.tpl`) |
 | `app/addons/gm_avito/bin/build.php` | сборка файла: `php app/addons/gm_avito/bin/build.php 2` (номер витрины) |
+| `app/addons/gm_avito/bin/sync.php` | отчёт Авито о последней загрузке (API): номер объявления, статус, ссылка, ошибки и предупреждения → вкладка «Авито» и страница проблем; cron в :30 (сборка файла – в :55, Авито забирает в :08) |
 | `app/addons/gm_avito/bin/fill.php` | заполнение «о товаре» всем включённым товарам (правленое вручную не трогает) |
 | `design/backend/templates/addons/gm_avito/hooks/products/tabs_content.post.tpl` | разметка вкладки «Авито» |
 | `design/backend/templates/addons/gm_avito/views/gm_avito/manage.tpl`, `templates.tpl`, `problems.tpl` | страницы модуля; «Авито: проблемы» – итог проверки `fn_gm_avito_check` (включённые не в файле и почему, незаполненные обязательные поля по категориям, длинные заголовки, категории без шаблона) |
