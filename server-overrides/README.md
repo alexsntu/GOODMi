@@ -66,21 +66,32 @@
 ### Модуль «GOODMi: выгрузка на Авито» (`gm_avito`, с 2026-10-19)
 
 Собственный модуль вместо платного UnitXML в МойСклад: файл автозагрузки Авито (XML, formatVersion 3) собирается
-на сайте. Этап 1: объявления GOODMi перенесены из фида UnitXML (556, заголовки, описания и поля категорий – как были),
-цена и фото берутся с сайта. Хуков нет, на страницы витрин не влияет. Таблицы `cscart_gm_avito_settings` и
-`cscart_gm_avito_items` (`_DEV/gm_avito/tables.sql`) ставятся вручную; перенос из UnitXML и сверка –
-`_DEV/gm_avito/tools/`. Ключи API Авито хранятся на сервере вне папки сайта, в репозиторий не попадают.
+на сайте. Этап 1: объявления GOODMi перенесены из фида UnitXML (556; заголовки, описания и поля – как были), цена и фото
+берутся с сайта. Этап 2: в карточке товара вкладка «Авито» (переключатель «Продавать на Авито», заголовок, «описание для
+Авито: о товаре», предпросмотр), страницы «Товары → Авито: настройки» (какие товары выгружать – с остатком / без остатка /
+все включённые, режим текста, общий блок магазина, поля по умолчанию, ссылка на файл, сборка) и «Товары → Авито: шаблоны
+категорий». Новое описание = «о товаре» + характеристики + общий блок. Таблицы `cscart_gm_avito_settings`,
+`cscart_gm_avito_items`, `cscart_gm_avito_templates` (`_DEV/gm_avito/tables.sql`) ставятся вручную; перенос из UnitXML,
+вывод шаблонов из него, начальные настройки и сверка – `_DEV/gm_avito/tools/`. Ключи API Авито хранятся на сервере вне
+папки сайта, в репозиторий не попадают.
 
 | Файл (от корня магазина) | Что делает |
 |---|---|
 | `app/addons/gm_avito/addon.xml` | описание модуля |
-| `app/addons/gm_avito/func.php` | настройки витрины, цена (витрины, иначе общая), фото карточки, сборка файла |
+| `app/addons/gm_avito/init.php` | хук `update_product_post` (сохранение вкладки «Авито») |
+| `app/addons/gm_avito/func.php` | настройки, шаблоны, цена, фото, характеристики, автоматические заголовок и «о товаре», сборка объявления и файла, хук |
 | `app/addons/gm_avito/controllers/frontend/gm_avito.php` | `index.php?dispatch=gm_avito.feed&key=…` – отдаёт файл витрины по секретному ключу, иначе 404 |
-| `app/addons/gm_avito/bin/build.php` | сборка файла из командной строки: `php app/addons/gm_avito/bin/build.php 2` (номер витрины) |
-| `app/addons/gm_avito/init.php` | пусто (хуков пока нет) |
+| `app/addons/gm_avito/controllers/backend/gm_avito.php` | страницы настроек и шаблонов категорий |
+| `app/addons/gm_avito/controllers/backend/products.post.php` | вкладка «Авито» в карточке товара (витрины GOODMi и Maxmobiles) |
+| `app/addons/gm_avito/schemas/menu/menu.post.php` | пункты меню «Товары → Авито: …» |
+| `app/addons/gm_avito/bin/build.php` | сборка файла: `php app/addons/gm_avito/bin/build.php 2` (номер витрины) |
+| `app/addons/gm_avito/bin/fill.php` | заполнение «о товаре» всем включённым товарам (правленое вручную не трогает) |
+| `design/backend/templates/addons/gm_avito/hooks/products/tabs_content.post.tpl` | разметка вкладки «Авито» |
+| `design/backend/templates/addons/gm_avito/views/gm_avito/manage.tpl`, `templates.tpl` | страницы модуля |
 
-Файл витрины – `var/files/<номер>/gm_avito/feed.xml`. Откат: выключить модуль в админке (Авито продолжит брать
-файл UnitXML, пока ссылка в кабинете Авито не заменена).
+Файл витрины – `var/files/<номер>/gm_avito/feed.xml`. После выкладки шаблонов админки или меню – убрать
+`var/cache/templates/backend` и сбросить реестр (`fn_clear_cache('registry')`). Откат: выключить модуль в админке
+(Авито продолжит брать файл UnitXML, пока ссылка в кабинете Авито не заменена).
 
 ### Свой шаблон карточки товара `goodmi_card` (с 2026-10-09 – шаблон по умолчанию всей витрины GOODMi)
 
