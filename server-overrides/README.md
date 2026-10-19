@@ -534,3 +534,18 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   дольше 5 с – строками DBLONG. Ротация – `/etc/logrotate.d/gm-perf` (14 дней). Исходники и копии – `_DEV/perf/`.
 - Вместе с журналом времени ответа `/var/log/nginx/gm-timing-*.log`. Выключить: убрать 3 строки slowlog из пулов и шаблона
   (reload php-fpm74), удалить 99-gm-slowlog.cnf и `SET GLOBAL slow_query_log=0`, удалить /etc/cron.d/gm-sampler.
+
+### Разбор «что тормозит» 19.10 и первые исправления (боевые goodmi.ru, maxmobiles.ru)
+
+По журналам с 18.10 вечера (gm-timing, php-fpm-slow, mariadb-slow, gm-sampler; отчёты – `_DEV/perf/gm-timing-report.py`,
+`gm-slowdb-report.py`):
+- Проверки здоровья NGENIX – 50 % времени PHP, с 14.10 пачками по 40–65 в секунду (причина роста упираний в предел процессов).
+  `vhosts-resources/{goodmi.ru,maxmobiles.ru}/gm-ngenix-health.conf`: проверки с условным именем сайта (Host `s[0-9]+`, UA `NCDN/`,
+  ~90 %) получают от nginx тот же 301 на https://maxmobiles.ru/, без PHP; проверки с настоящим именем (~10 %) идут в PHP, как раньше.
+- Боты без cookie на страницах с параметрами отображения («Скидки» Maxmobiles – 76 % медленного времени базы, «Новинки» GOODMi,
+  категории): `conf.d/gm-display-params.conf` + `vhosts-resources/<сайт>/gm-display-params.conf` – GET без единого cookie с
+  sort_by/sort_order/items_per_page/layout → 301 на адрес без них (features_hash сохраняется; .php и админку не трогаем).
+- Ночное зависание ~1 мин в 04:01–04:03: ночная копия ISPmanager (CHECK TABLE + mysqldump) по `cscart_logs` 9,1 ГБ / 38 млн записей
+  (почти все «товар обновлён» от МойСклад, хранились 90 дней). Удалено старше 30 дней порциями (`_DEV/perf/gm-logs-cleanup.sh`),
+  срок хранения журнала – 30 дней (Настройки → Журналы).
+- Копии nginx до правок – `/root/backup-2026-10-18-pre-php83/before-{ngenix-health,display-params}/`.
