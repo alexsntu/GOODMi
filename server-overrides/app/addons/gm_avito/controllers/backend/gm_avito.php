@@ -4,6 +4,7 @@
  *   gm_avito.manage    – настройки: какие товары выгружать, текст объявлений, общий блок, поля по умолчанию, ссылка на файл
  *   gm_avito.templates – шаблоны категорий: категория Авито и её поля для категории сайта (и вложенных)
  *   gm_avito.problems  – что мешает выгрузке: включённые товары не в файле, незаполненные поля, категории без шаблона
+ *   gm_avito.help      – инструкция: как работает модуль и что заполнять (только шаблон, данных не нужно)
  *   POST gm_avito.update / build / fill / update_templates / check / sync – сохранить, собрать файл, заполнить описания,
  *   сохранить шаблоны, проверить, получить отчёт Авито (API)
  */
@@ -103,6 +104,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $view = Tygh::$app['view'];
 $view->assign('gm_avito_allowed', $allowed);
+if ($mode === 'help') {
+    $view->assign('gm_avito_company_id', $company_id);
+    $view->assign('gm_avito_companies', db_get_hash_single_array(
+        'SELECT company_id, company FROM ?:companies WHERE company_id IN (?n) ORDER BY company_id DESC',
+        ['company_id', 'company'],
+        array_keys(GM_AVITO_COMPANIES)
+    ));
+
+    return;
+}
 $view->assign('gm_avito_company_id', $company_id);
 $view->assign('gm_avito_companies', db_get_hash_single_array(
     'SELECT company_id, company FROM ?:companies WHERE company_id IN (?n) ORDER BY company_id DESC',
