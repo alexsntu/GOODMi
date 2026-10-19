@@ -45,6 +45,29 @@
     </div>
     {/if}
 
+    {if $c.by_category}
+    {include file="common/subheader.tpl" title="Товары по категориям: сколько продаётся на Авито" target="#gm_avito_p_bycat"}
+    <div id="gm_avito_p_bycat" class="collapse">
+        <p class="muted">Включённые на сайте товары витрины. «Не включено» – товары, у которых на вкладке «Авито» не отмечено «Продавать на Авито». Сначала категории, где больше всего товаров в наличии не выставлено.</p>
+        <input type="text" class="input-xlarge gm-avito-filter" placeholder="Найти категорию" data-target="gm_avito_bycat_table" />
+        <table class="table table-middle" id="gm_avito_bycat_table">
+            <thead><tr><th>Категория</th><th>Товаров / в наличии</th><th>Продаётся на Авито</th><th>Не включено</th><th>Не включено, в наличии</th><th>Шаблон</th></tr></thead>
+            <tbody>
+            {foreach from=$c.by_category key="category_id" item="b"}
+                <tr class="gm-avito-filter-item">
+                    <td><a href="{"products.manage?cid=`$category_id`"|fn_url}">{$b.path}</a></td>
+                    <td>{$b.total} / {$b.in_stock}</td>
+                    <td>{$b.enabled}</td>
+                    <td>{$b.off}</td>
+                    <td>{if $b.off_in_stock}<strong>{$b.off_in_stock}</strong>{else}0{/if}</td>
+                    <td>{if $b.template}есть{else}<span class="text-warning">нет</span>{/if}</td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    {/if}
+
     {if $c.enabled_problems}
     {include file="common/subheader.tpl" title="Включены, но не попадают в файл" target="#gm_avito_p_enabled"}
     <div id="gm_avito_p_enabled" class="in collapse">
@@ -103,6 +126,19 @@
     </div>
 </form>
 {/if}
+{literal}
+<script>
+document.addEventListener('input', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('gm-avito-filter')) return;
+    var q = e.target.value.toLowerCase().trim();
+    var box = document.getElementById(e.target.getAttribute('data-target'));
+    if (!box) return;
+    box.querySelectorAll('.gm-avito-filter-item').forEach(function (el) {
+        el.style.display = !q || el.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+});
+</script>
+{/literal}
 {/capture}
 {if $gm_avito_company}{$gm_avito_title = "Авито: проблемы &#8211; `$gm_avito_company`"}{else}{$gm_avito_title = "Авито: проблемы"}{/if}
 {include file="common/mainbox.tpl" title=$gm_avito_title content=$smarty.capture.mainbox}

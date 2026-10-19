@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_gm_avito_set_setting($company_id, 'stock_mode', in_array($stock_mode, ['in_stock', 'out_of_stock', 'all'], true) ? $stock_mode : 'all');
         fn_gm_avito_set_setting($company_id, 'text_mode', in_array($text_mode, ['old', 'new', 'categories'], true) ? $text_mode : 'old');
         fn_gm_avito_set_setting($company_id, 'new_text_categories', implode(',', array_filter(array_map('intval', (array) ($data['new_text_categories'] ?? [])))));
+        fn_gm_avito_set_setting($company_id, 'skip_categories', implode(',', array_filter(array_map('intval', (array) ($data['skip_categories'] ?? [])))));
         fn_gm_avito_set_setting($company_id, 'common_block', fn_gm_avito_db_text(trim((string) ($data['common_block'] ?? ''))));
         fn_gm_avito_set_setting($company_id, 'defaults', json_encode(fn_gm_avito_parse_fields($data['defaults'] ?? ''), JSON_UNESCAPED_UNICODE));
         fn_gm_avito_set_setting($company_id, 'images_limit', (string) max(1, min(10, (int) ($data['images_limit'] ?? 10))));
@@ -115,9 +116,11 @@ if (!$allowed) {
 if ($mode === 'problems') {
     $view->assign('gm_avito_check', (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'check', '{}'), true));
     $report = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'report', '{}'), true);
+    // В отчёте Авито – адрес его копии файла (api.avito.ru/…/feed/content/…), какой файл указан в кабинете – в профиле
     $labels = [];
-    foreach ((array) ($report['feed_urls'] ?? []) as $url) {
-        $url = is_array($url) ? (string) ($url['url'] ?? reset($url)) : (string) $url;
+    $profile = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'profile', '{}'), true);
+    foreach ((array) ($profile['feeds'] ?? []) as $url) {
+        $url = (string) $url;
         $labels[] = strpos($url, 'gm_avito') !== false ? 'наш модуль' : (strpos($url, 'unitxml') !== false ? 'UnitXML' : $url);
     }
     $report['feed_label'] = implode(', ', array_unique($labels));
@@ -184,6 +187,14 @@ if ($mode === 'manage') {
             return $names[$id] ?? '';
         }, $new_text_categories)))),
         'new_text_count' => count($new_text_names),
+        'skip_categories' => $skip_categories = array_values(array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'skip_categories', ''))))),
+        'skip_names' => implode(', ', array_map(static function ($id) use ($names) {
+            return $names[$id] ?? $id;
+        }, $skip_categories)),
+        'all_categories' => (static function () use ($category_paths) {
+            asort($category_paths);
+            return $category_paths;
+        })(),
         'common_block' => fn_gm_avito_xml_text((string) fn_gm_avito_get_setting($company_id, 'common_block', '')),
         'defaults' => fn_gm_avito_fields_text((array) json_decode((string) fn_gm_avito_get_setting($company_id, 'defaults', '{}'), true)),
         'images_limit' => fn_gm_avito_get_setting($company_id, 'images_limit', 10),

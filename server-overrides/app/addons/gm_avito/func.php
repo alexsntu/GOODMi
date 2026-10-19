@@ -585,7 +585,9 @@ function fn_gm_avito_prepare_ad($company_id, array $item, array $context)
         }
     }
 
-    if (empty($product) || $product['status'] !== 'A') {
+    if (fn_gm_avito_path_skipped($context, $path)) {
+        $ad['skip'] = 'категория не выгружается на Авито (настройки)';
+    } elseif (empty($product) || $product['status'] !== 'A') {
         $ad['skip'] = 'товар выключен или скрыт на сайте';
     } elseif ($context['stock_mode'] === 'in_stock' && $ad['amount'] <= 0) {
         $ad['skip'] = 'нет в наличии';
@@ -620,7 +622,17 @@ function fn_gm_avito_context($company_id, array $product_ids = [])
         'new_text_categories' => array_values(array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'new_text_categories', ''))))),
         'templates' => fn_gm_avito_templates($company_id),
         'paths' => fn_gm_avito_main_paths($product_ids),
+        'skip_categories' => array_values(array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'skip_categories', ''))))),
     ];
+}
+
+/**
+ * Категория товара (или её родитель) в списке «не выгружаются на Авито» (настройка skip_categories: сервисный центр,
+ * услуги, уценка и т.п. – шаблонов у них нет намеренно)
+ */
+function fn_gm_avito_path_skipped(array $context, $id_path)
+{
+    return (bool) array_intersect(array_map('intval', explode('/', (string) $id_path)), $context['skip_categories'] ?? []);
 }
 
 /**
@@ -848,7 +860,7 @@ function fn_gm_avito_check($company_id)
 
     $check = [
         'time' => TIME, 'products' => count($rows), 'enabled' => 0, 'in_file' => 0, 'reasons' => [],
-        'enabled_problems' => [], 'long_titles' => [], 'missing' => [], 'no_template' => [],
+        'enabled_problems' => [], 'long_titles' => [], 'missing' => [], 'no_template' => [], 'by_category' => [],
     ];
     foreach ($rows as $row) {
         $product_id = (int) $row['product_id'];
@@ -856,6 +868,28 @@ function fn_gm_avito_check($company_id)
         $main = (int) substr(strrchr('/' . $path, '/'), 1);
         $own = (array) json_decode((string) $row['fields'], true);
         $in_stock = (int) $row['amount'] > 0;
+        if (fn_gm_avito_path_skipped($context, $path) && $row['enabled'] !== 'Y') {
+            $check['skipped_by_settings'] = ($check['skipped_by_settings'] ?? 0) + 1;
+            continue;
+        }
+
+        // Сколько товаров категории продаётся на Авито и сколько нет (в том числе в наличии)
+        if (!isset($check['by_category'][$main])) {
+            $check['by_category'][$main] = [
+                'path' => $path_name($path), 'total' => 0, 'in_stock' => 0, 'enabled' => 0, 'off' => 0, 'off_in_stock' => 0,
+                'template' => (bool) fn_gm_avito_template_for_path($context['templates'], $path),
+            ];
+        }
+        $by = &$check['by_category'][$main];
+        $by['total']++;
+        $by['in_stock'] += $in_stock ? 1 : 0;
+        if ($row['enabled'] === 'Y') {
+            $by['enabled']++;
+        } else {
+            $by['off']++;
+            $by['off_in_stock'] += $in_stock ? 1 : 0;
+        }
+        unset($by);
 
         if ($row['enabled'] === 'Y') {
             $check['enabled']++;
@@ -927,6 +961,9 @@ function fn_gm_avito_check($company_id)
     });
     uasort($check['no_template'], static function ($a, $b) {
         return $b['in_stock'] - $a['in_stock'];
+    });
+    uasort($check['by_category'], static function ($a, $b) {
+        return [$b['off_in_stock'], $b['off']] <=> [$a['off_in_stock'], $a['off']];
     });
     fn_gm_avito_set_setting($company_id, 'check', json_encode($check, JSON_UNESCAPED_UNICODE));
 

@@ -16,6 +16,21 @@
                 <p class="muted description">Включается у товара на вкладке «Авито». Выключенные и скрытые на сайте товары не выгружаются никогда. Сейчас включено {$gm_avito.items_enabled} из {$gm_avito.items_total} товаров.</p>
             </div>
         </div>
+        <div class="control-group">
+            <label class="control-label">Не выгружать категории</label>
+            <div class="controls">
+                <details class="gm-avito-picker">
+                    <summary>Выбрано: {$gm_avito.skip_categories|count}{if $gm_avito.skip_names} &#8211; {$gm_avito.skip_names}{/if} <span class="muted">(нажмите, чтобы изменить)</span></summary>
+                    <input type="text" class="input-xlarge gm-avito-filter" placeholder="Найти категорию" data-target="gm_avito_skip_list" />
+                    <div id="gm_avito_skip_list" style="max-height: 320px; overflow-y: auto; border: 1px solid #ddd; padding: 6px 10px; margin-top: 6px;">
+                        {foreach from=$gm_avito.all_categories key="category_id" item="path"}
+                            <label class="checkbox gm-avito-filter-item"><input type="checkbox" name="gm_avito[skip_categories][]" value="{$category_id}" {if $category_id|in_array:$gm_avito.skip_categories}checked="checked"{/if} /> {$path}</label>
+                        {/foreach}
+                    </div>
+                </details>
+                <p class="muted description">Категория вместе со всеми вложенными: товары из неё не попадают в файл и не показываются на странице проблем (сервисный центр, услуги, уценка и т.п.).</p>
+            </div>
+        </div>
     </div>
 
     {include file="common/subheader.tpl" title="Текст объявлений" target="#gm_avito_text"}

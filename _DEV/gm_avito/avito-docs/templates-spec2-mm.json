@@ -1,0 +1,1251 @@
+[
+ {
+  "category_id": 2517,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2132,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2515,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2516,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 166,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 692,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2560,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2561,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2011,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 671,
+  "slug": "sistemnye_bloki",
+  "fields": {
+   "Category": "Настольные компьютеры",
+   "GoodsSubType": "Системные блоки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Настольные компьютеры / Системные блоки"
+ },
+ {
+  "category_id": 407,
+  "slug": "sistemnye_bloki",
+  "fields": {
+   "Category": "Настольные компьютеры",
+   "GoodsSubType": "Системные блоки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Настольные компьютеры / Системные блоки"
+ },
+ {
+  "category_id": 2135,
+  "slug": "blendery_2303686",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для нарезки и смешивания",
+   "GoodsSubType": "Блендеры"
+  },
+  "auto_fields": [
+   "Vendor"
+  ],
+  "required_fields": [
+   "BlenderType",
+   "Vendor",
+   "Capacity"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для нарезки и смешивания / Блендеры"
+ },
+ {
+  "category_id": 2018,
+  "slug": "kofevarki_2303639",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления напитков",
+   "GoodsSubType": "Кофеварки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления напитков / Кофеварки"
+ },
+ {
+  "category_id": 2017,
+  "slug": "kofemashiny_2303637",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления напитков",
+   "GoodsSubType": "Кофемашины"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления напитков / Кофемашины"
+ },
+ {
+  "category_id": 2134,
+  "slug": "kofemolki",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для нарезки и смешивания",
+   "GoodsSubType": "Кофемолки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для нарезки и смешивания / Кофемолки"
+ },
+ {
+  "category_id": 2016,
+  "slug": "toster",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления блюд",
+   "GoodsSubType": "Тостеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления блюд / Тостеры"
+ },
+ {
+  "category_id": 2015,
+  "slug": "elektrochainiki_2303640",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для кухни",
+   "ProductType": "Мелкая кухонная техника",
+   "GoodsSubCategory": "Для приготовления напитков",
+   "GoodsSubType": "Электрочайники"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для кухни / Мелкая кухонная техника / Для приготовления напитков / Электрочайники"
+ },
+ {
+  "category_id": 313,
+  "slug": "setevoe_oborudovanie",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Сетевое оборудование"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Сетевое оборудование"
+ },
+ {
+  "category_id": 2007,
+  "slug": "setevoe_oborudovanie",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Сетевое оборудование"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Сетевое оборудование"
+ },
+ {
+  "category_id": 314,
+  "slug": "kvadrokoptery_2304693",
+  "fields": {
+   "Category": "Фототехника",
+   "GoodsType": "Оборудование и аксессуары",
+   "GoodsSubType": "Квадрокоптеры и аксессуары",
+   "ProductType": "Квадрокоптеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Фототехника / Оборудование и аксессуары / Квадрокоптеры и аксессуары / Квадрокоптеры"
+ },
+ {
+  "category_id": 2008,
+  "slug": "monitory_2300557",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Мониторы и запчасти",
+   "ProductsType": "Мониторы"
+  },
+  "auto_fields": [
+   "Brand",
+   "Model"
+  ],
+  "required_fields": [
+   "Brand",
+   "Model"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Товары для компьютера / Мониторы и запчасти / Мониторы"
+ },
+ {
+  "category_id": 2020,
+  "slug": "nastolnye_lampy",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Настольное и напольное",
+   "LigitingType": "Настольные лампы",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [
+   "Brand",
+   "Color"
+  ],
+  "required_fields": [
+   "Brand",
+   "Color",
+   "LedLamp"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Настольное и напольное / Настольные лампы"
+ },
+ {
+  "category_id": 2127,
+  "slug": "nastolnye_lampy",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Настольное и напольное",
+   "LigitingType": "Настольные лампы",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [
+   "Brand",
+   "Color"
+  ],
+  "required_fields": [
+   "Brand",
+   "Color",
+   "LedLamp"
+  ],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Настольное и напольное / Настольные лампы"
+ },
+ {
+  "category_id": 2258,
+  "slug": "ekshn_kamery",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Экшн-камеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Экшн-камеры"
+ },
+ {
+  "category_id": 2482,
+  "slug": "televizory_1147261",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Телевизоры и проекторы",
+   "ProductType": "Телевизоры",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model"
+  ],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Телевизоры и проекторы / Телевизоры"
+ },
+ {
+  "category_id": 2492,
+  "slug": "fitnes_braslety",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Фитнес-браслеты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Фитнес-браслеты"
+ },
+ {
+  "category_id": 2473,
+  "slug": "kompaktnye_fotoapparaty",
+  "fields": {
+   "Category": "Фототехника",
+   "GoodsType": "Компактные фотоаппараты"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Фототехника / Компактные фотоаппараты"
+ },
+ {
+  "category_id": 312,
+  "slug": "ekshn_kamery",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видеокамеры",
+   "ProductType": "Экшн-камеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Электроника / Аудио и видео / Видеокамеры / Экшн-камеры"
+ },
+ {
+  "category_id": 2481,
+  "slug": "figurki_i_nabory",
+  "fields": {
+   "Category": "Товары для детей и игрушки",
+   "GoodsType": "Игрушки",
+   "Toys": "Фигурки и наборы",
+   "Condition": "Новый"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Товары для детей и игрушки / Игрушки / Фигурки и наборы"
+ },
+ {
+  "category_id": 2128,
+  "slug": "pribory_i_aksessuary_150095",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Приборы и аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Приборы и аксессуары"
+ },
+ {
+  "category_id": 2301,
+  "slug": "pribory_i_aksessuary_150095",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Приборы и аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Приборы и аксессуары"
+ },
+ {
+  "category_id": 2126,
+  "slug": "ochistiteli_vozdukha",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Климатическое оборудование",
+   "ProductType": "Приборы для обработки воздуха",
+   "GoodsSubType": "Очистители воздуха"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Климатическое оборудование / Приборы для обработки воздуха / Очистители воздуха"
+ },
+ {
+  "category_id": 2472,
+  "slug": "ukhod_za_polostyu_rta",
+  "fields": {
+   "Category": "Красота и здоровье",
+   "GoodsType": "Уход и гигиена",
+   "GoodsSubType": "Уход за полостью рта"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "по справочнику Авито 19.10: Личные вещи / Красота и здоровье / Уход и гигиена / Уход за полостью рта"
+ },
+ {
+  "category_id": 204,
+  "slug": "plansety",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Планшеты",
+   "RamSize": "8",
+   "ProductsType": "Планшет",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand",
+   "Model",
+   "MemorySize",
+   "SimSlot",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Планшеты"
+ },
+ {
+  "category_id": 212,
+  "slug": "plansety",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Планшеты",
+   "RamSize": "6",
+   "ProductsType": "Планшет",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand",
+   "Model",
+   "MemorySize",
+   "SimSlot",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Планшеты"
+ },
+ {
+  "category_id": 213,
+  "slug": "plansety",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Планшеты",
+   "ProductsType": "Планшет",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand",
+   "Model",
+   "MemorySize",
+   "SimSlot",
+   "RamSize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Планшеты"
+ },
+ {
+  "category_id": 219,
+  "slug": "monobloki",
+  "fields": {
+   "Category": "Настольные компьютеры",
+   "GoodsSubType": "Моноблоки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Настольные компьютеры / Моноблоки"
+ },
+ {
+  "category_id": 225,
+  "slug": "noutbuki",
+  "fields": {
+   "Category": "Ноутбуки",
+   "KBCondition": "Без дефектов",
+   "VideocardType": "Встроенная",
+   "ProcessorLine": "Apple M5",
+   "DrivesConfig": "SSD",
+   "OperatingSystem": "macOS",
+   "Devicework": "Включается",
+   "CaseCondition": "Без дефектов",
+   "ScreenCondition": "Без дефектов",
+   "KBLayout": "Есть кириллица",
+   "AkbH": "Больше 30 минут",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Ноутбуки"
+ },
+ {
+  "category_id": 234,
+  "slug": "aksessuary_571",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Другое"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Аксессуары"
+ },
+ {
+  "category_id": 267,
+  "slug": "noutbuki",
+  "fields": {
+   "Category": "Ноутбуки",
+   "KBCondition": "Без дефектов",
+   "VideocardType": "Встроенная",
+   "DrivesConfig": "SSD",
+   "OperatingSystem": "macOS",
+   "Devicework": "Включается",
+   "CaseCondition": "Без дефектов",
+   "ScreenCondition": "Без дефектов",
+   "KBLayout": "Есть кириллица",
+   "AkbH": "Больше 30 минут",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Ноутбуки"
+ },
+ {
+  "category_id": 303,
+  "slug": "nausniki",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Наушники"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Наушники"
+ },
+ {
+  "category_id": 304,
+  "slug": "aksessuary",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Аксессуары"
+ },
+ {
+  "category_id": 308,
+  "slug": "dekorativnoe_osveshhenie_i_girliandy",
+  "fields": {
+   "Category": "Мебель и интерьер",
+   "GoodsType": "Освещение",
+   "GoodsSubType": "Декоративное освещение и гирлянды",
+   "AdType": "Товар куплен на продажу"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Мебель и интерьер / Освещение / Декоративное освещение и гирлянды"
+ },
+ {
+  "category_id": 311,
+  "slug": "video_dvd_i_blu_ray_pleery",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Видео, DVD и Blu-ray плееры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Видео, DVD и Blu-ray плееры"
+ },
+ {
+  "category_id": 315,
+  "slug": "portativnye_kolonki_2304139",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Акустика, колонки, сабвуферы",
+   "GoodsSubType": "Портативные колонки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Акустика, колонки, сабвуферы / Портативные колонки"
+ },
+ {
+  "category_id": 322,
+  "slug": "igrovye_pristavki",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Игровые приставки",
+   "GoodsSubType": "аксессуар для приставки",
+   "BoxSealed": "Да",
+   "ScreenCondition": "Без дефектов",
+   "CaseCondition": "Без дефектов"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Игровые приставки"
+ },
+ {
+  "category_id": 323,
+  "slug": "nausniki",
+  "fields": {
+   "Category": "Аудио и видео",
+   "GoodsType": "Наушники"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Аудио и видео / Наушники"
+ },
+ {
+  "category_id": 335,
+  "slug": "monobloki",
+  "fields": {
+   "Category": "Настольные компьютеры",
+   "GoodsSubType": "Моноблоки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Настольные компьютеры / Моноблоки"
+ },
+ {
+  "category_id": 336,
+  "slug": "noutbuki",
+  "fields": {
+   "Category": "Ноутбуки",
+   "KBCondition": "Без дефектов",
+   "VideocardType": "Встроенная",
+   "DrivesConfig": "SSD",
+   "OperatingSystem": "macOS",
+   "Devicework": "Включается",
+   "CaseCondition": "Без дефектов",
+   "ScreenCondition": "Без дефектов",
+   "KBLayout": "Есть кириллица",
+   "AkbH": "Больше 30 минут",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Ноутбуки"
+ },
+ {
+  "category_id": 337,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 406,
+  "slug": "poverbanki",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Аксессуары",
+   "GoodsSubType": "Зарядные устройства",
+   "ProductType": "Повербанки"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Аксессуары / Зарядные устройства / Повербанки"
+ },
+ {
+  "category_id": 413,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color",
+   "RamSize"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 670,
+  "slug": "monitory_2300557",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Мониторы и запчасти",
+   "ProductsType": "Мониторы"
+  },
+  "auto_fields": [
+   "Brand",
+   "Model"
+  ],
+  "required_fields": [
+   "Brand",
+   "Model"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Мониторы и запчасти / Мониторы"
+ },
+ {
+  "category_id": 710,
+  "slug": "plansety",
+  "fields": {
+   "Category": "Планшеты и электронные книги",
+   "GoodsType": "Планшеты",
+   "ProductsType": "Планшет",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Brand",
+   "Model",
+   "MemorySize",
+   "SimSlot",
+   "RamSize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Планшеты и электронные книги / Планшеты"
+ },
+ {
+  "category_id": 1364,
+  "slug": "igrovye_pristavki",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Игровые приставки",
+   "GoodsSubType": "портативная",
+   "BoxSealed": "Да",
+   "ScreenCondition": "Без дефектов",
+   "CaseCondition": "Без дефектов"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Игровые приставки"
+ },
+ {
+  "category_id": 1365,
+  "slug": "geimpady_i_kontrollery",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Аксессуары",
+   "ProductSubType": "Геймпады и контроллеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Аксессуары / Геймпады и контроллеры"
+ },
+ {
+  "category_id": 1366,
+  "slug": "aksessuary_dlya_geimpadov",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Аксессуары",
+   "ProductSubType": "Аксессуары для геймпадов"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Аксессуары / Аксессуары для геймпадов"
+ },
+ {
+  "category_id": 1399,
+  "slug": "konstruktory",
+  "fields": {
+   "Category": "Товары для детей и игрушки",
+   "GoodsType": "Игрушки",
+   "Toys": "Конструкторы",
+   "Condition": "Новый"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Личные вещи / Товары для детей и игрушки / Игрушки / Конструкторы"
+ },
+ {
+  "category_id": 2087,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "6 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2088,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "6 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2096,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2121,
+  "slug": "vertikalnye",
+  "fields": {
+   "Category": "Бытовая техника",
+   "ProductType": "Пылесосы и запчасти",
+   "GoodsType": "Для дома",
+   "GoodsSubType": "Пылесосы",
+   "ProductSubType": "Вертикальные"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для дома / Пылесосы и запчасти / Пылесосы / Вертикальные"
+ },
+ {
+  "category_id": 2123,
+  "slug": "feny_klassicheskie",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Фены и приборы для укладки",
+   "ProductSubType": "Фены классические"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Фены и приборы для укладки / Фены классические"
+ },
+ {
+  "category_id": 2124,
+  "slug": "multistailery_2304125",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Фены и приборы для укладки",
+   "ProductSubType": "Мультистайлеры"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Фены и приборы для укладки / Мультистайлеры"
+ },
+ {
+  "category_id": 2125,
+  "slug": "vypryamiteli",
+  "fields": {
+   "Category": "Бытовая техника",
+   "GoodsType": "Для индивидуального ухода",
+   "ProductType": "Фены и приборы для укладки",
+   "ProductSubType": "Выпрямители"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Для дома и дачи / Бытовая техника / Для индивидуального ухода / Фены и приборы для укладки / Выпрямители"
+ },
+ {
+  "category_id": 2130,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "RamSize": "12 ГБ",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2192,
+  "slug": "aksessuary",
+  "fields": {
+   "Category": "Товары для компьютера",
+   "GoodsType": "Аксессуары"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Товары для компьютера / Аксессуары"
+ },
+ {
+  "category_id": 2197,
+  "slug": "vr_ustroistva",
+  "fields": {
+   "Category": "Игры, приставки и программы",
+   "GoodsType": "Игровые приставки и аксессуары",
+   "ProductType": "Аксессуары",
+   "ProductSubType": "VR-устройства"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "DeviceType"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Игры, приставки и программы / Игровые приставки и аксессуары / Аксессуары / VR-устройства"
+ },
+ {
+  "category_id": 2282,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "8 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2283,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "8 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2284,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "8 ГБ",
+   "MemorySize": "128 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2285,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "8 ГБ",
+   "MemorySize": "256 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2500,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "12 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2501,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "12 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2502,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "8 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2503,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "12 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2505,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2506,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2507,
+  "slug": "smart_chasy",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Смарт-часы и фитнес-браслеты",
+   "GoodsSubType": "Смарт-часы"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Смарт-часы и фитнес-браслеты / Смарт-часы"
+ },
+ {
+  "category_id": 2531,
+  "slug": "mobilnye_telefony",
+  "fields": {
+   "Category": "Телефоны",
+   "GoodsType": "Мобильные телефоны",
+   "DeviceHistory": "Неактивированный",
+   "RamSize": "8 ГБ",
+   "BoxSealed": "Да",
+   "SimConfig": "Не знаю"
+  },
+  "auto_fields": [],
+  "required_fields": [
+   "Vendor",
+   "Model",
+   "MemorySize",
+   "Color"
+  ],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Телефоны / Мобильные телефоны"
+ },
+ {
+  "category_id": 2532,
+  "slug": "noutbuki",
+  "fields": {
+   "Category": "Ноутбуки",
+   "KBCondition": "Без дефектов",
+   "VideocardType": "Встроенная",
+   "Videocard": "Apple graphics 5-core",
+   "RamSize": "8",
+   "ProcessorLine": "Apple A18 Pro",
+   "DrivesConfig": "SSD",
+   "ScreenSize": "13",
+   "OperatingSystem": "macOS",
+   "ProcessorCores": "6",
+   "ScreenRes": "2408x1506",
+   "Devicework": "Включается",
+   "CaseCondition": "Без дефектов",
+   "ScreenCondition": "Без дефектов",
+   "KBLayout": "Есть кириллица",
+   "AkbH": "Больше 30 минут",
+   "BoxSealed": "Да"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Электроника / Ноутбуки"
+ },
+ {
+  "category_id": 2539,
+  "slug": "portativnye_elektrostancii",
+  "fields": {
+   "Category": "Спорт и отдых",
+   "GoodsType": "Туризм и отдых на природе",
+   "TourismType": "Туристическое снаряжение",
+   "GoodsSubType": "Портативные электростанции"
+  },
+  "auto_fields": [],
+  "required_fields": [],
+  "note": "из UnitXML, по справочнику Авито 19.10: Хобби и отдых / Спорт и отдых / Туризм и отдых на природе / Туристическое снаряжение / Портативные электростанции"
+ }
+]
