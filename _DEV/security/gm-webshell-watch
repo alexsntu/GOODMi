@@ -63,9 +63,12 @@ if not first_run:
             old = json.load(f)
     except Exception:
         first_run = True
-added = sorted(p for p in files if p not in old) if not first_run else []
-changed = sorted(p for p in files if p in old and old[p] != files[p]) if not first_run else []
-removed = sorted(p for p in old if p not in files) if not first_run else []
+# Снимок файлов ядра var/snapshots/*.php CS-Cart пересоздаёт сам при каждом входе в админку (helpdesk_connector) – в «изменения
+# кода» не пишем (2026-10-19, шум в тревогах); правилами ClamAV выше он проверяется, как все файлы
+SNAPSHOT = re.compile(r'/var/snapshots/[^/]+\.php$')
+added = sorted(p for p in files if p not in old and not SNAPSHOT.search(p)) if not first_run else []
+changed = sorted(p for p in files if p in old and old[p] != files[p] and not SNAPSHOT.search(p)) if not first_run else []
+removed = sorted(p for p in old if p not in files and not SNAPSHOT.search(p)) if not first_run else []
 
 def info(path):
     try:
@@ -109,6 +112,21 @@ SITE_ROOT = {'/var/www/maxmobiles/data/logs/': '/var/www/maxmobiles/data/www/max
              '/var/www/www-root/data/logs/': '/var/www/www-root/data/www/dev.maxmobiles.ru'}
 WATCHED = ('goodmi.ru', 'maxmobiles.ru', 'xione.ru', 'dev.maxmobiles.ru', 'dev.goodmi.ru', 'dev.mi92.ru')
 
+# Заглушки CS-Cart из поставки (например images/index.php – только переадресация на ../index.php, чтобы не показывать список
+# файлов папки): обращение к ним сканеров и так закрыто правилом, тревогу о них не пишем (2026-10-19)
+STUB = re.compile(r'^\s*<\?php\s+header\(\s*[\'"]Location:\s*\.\./index\.php[\'"]\s*\);\s*(\?>)?\s*$')
+
+
+def is_stub(path):
+    try:
+        if os.path.getsize(path) > 300:
+            return False
+        with open(path, encoding='utf-8', errors='replace') as f:
+            return bool(STUB.match(f.read()))
+    except OSError:
+        return False
+
+
 try:
     with open(OFFSETS) as f:
         offsets = json.load(f)
@@ -145,7 +163,8 @@ for logdir, site_root in SITE_ROOT.items():
                     events.append({'ts': int(time.time()), 'kind': 'blocked_data', 'site': site, 'ip': m.group(1), 'uri': uri[:200]})
                     continue
                 script = PHP_FILE.match(uri) if PHP_IN_DATA.search(uri) else None
-                if script and os.path.isfile(os.path.normpath(site_root + script.group(1))):
+                target = os.path.normpath(site_root + script.group(1)) if script else ''
+                if script and os.path.isfile(target) and not is_stub(target):
                     events.append({'ts': int(time.time()), 'kind': 'blocked_php', 'site': site, 'ip': m.group(1), 'uri': uri[:200]})
 tmp = OFFSETS + '.tmp'
 with open(tmp, 'w') as f:

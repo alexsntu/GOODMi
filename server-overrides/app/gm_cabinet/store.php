@@ -1530,16 +1530,28 @@ function fn_gm_cab_auth_status($hours = 1)
         if (!empty($watch['error'])) {
             $status['alerts'][] = 'Сторож кода сайтов: ' . $watch['error'];
         }
+        // Тестовая копия (dev.*, пользователь www-root) – одной строкой без списка (2026-10-19): там правим мы сами, а подробный
+        // список вперемешку с боевыми мешал заметить настоящее изменение. Закладки на копии всё равно – отдельной тревогой выше.
         $changes = [];
+        $dev_changes = 0;
         foreach ((array) @file('/var/lib/gm-status/code-changes.jsonl', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             $c = json_decode($line, true);
-            if (is_array($c) && (int) $c['ts'] > $hour) {
-                $changes[] = ($c['kind'] === 'added' ? 'новый ' : 'изменён ') . str_replace('/var/www/maxmobiles/data/www/maxmobiles.ru/', '', $c['file']);
+            if (!is_array($c) || (int) $c['ts'] <= $hour) {
+                continue;
             }
+            if (strpos($c['file'], '/var/www/www-root/') === 0) {
+                $dev_changes++;
+                continue;
+            }
+            $changes[] = ($c['kind'] === 'added' ? 'новый ' : 'изменён ') . str_replace('/var/www/maxmobiles/data/www/maxmobiles.ru/', '', $c['file']);
         }
         if ($changes) {
             $status['alerts'][] = 'Код сайтов изменился (' . count($changes) . '): ' . implode('; ', array_slice($changes, 0, 10))
                 . (count($changes) > 10 ? '; …' : '') . '. Если это не наша правка – проверить';
+        }
+        if ($dev_changes) {
+            $status['alerts'][] = 'На тестовой копии (dev) изменено файлов с кодом: ' . $dev_changes
+                . ' – обычно это наши правки; список – /var/lib/gm-status/code-changes.jsonl';
         }
         // События из журналов сайтов за окно сводки: ошибки доступа к файлам (после снятия «записи для всех») и отказы нашего
         // правила gm-no-php-in-data.conf, которые могли быть нужными (закрытые папки данных, существующий PHP в папке данных)
