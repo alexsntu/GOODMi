@@ -1,0 +1,38 @@
+
+
+/**
+ * Обмен CommerceML (МойСклад) – пропуск неизменённых товаров (2026-10-19). МойСклад каждые 2 часа присылает весь каталог
+ * (СодержитТолькоИзменения=false, «только изменения» в его настройках нет): CS-Cart заново записывал 10–14 тыс. товаров по
+ * 5–6 минут, покупатели ждали базу. Перед импортом товара считаем отпечаток пришедших данных (всё, кроме внутреннего номера
+ * и признака «новый») и сравниваем с прошлым разом (cscart_gm_cml_hash). Совпал и моложе суток – товар не трогаем: импортёр
+ * видит неуспех и просто идёт к следующему (ExecuteCatalogImportCommandHandler::importItem результат только пишет в журнал).
+ * Новый товар (нет в карте сущностей) и раз в сутки каждый товар импортируются полностью – как раньше.
+ */
+function fn_gm_delivery_date_commerceml_product_importer_import_pre($product, $import_storage, $main_result)
+{
+    if (empty($product->id->external_id)) {
+        return;
+    }
+    $company_id = (int) $import_storage->getImport()->company_id;
+    $data = get_object_vars($product);
+    unset($data['id'], $data['is_new']);
+    $data['external_id'] = $product->id->external_id;
+    $filled = array_keys(array_filter($data, static function ($value) {
+        return !($value === null || $value === '' || $value === [] || ($value instanceof \Countable && count($value) === 0));
+    }));
+    $key = md5($product->id->external_id . '|' . implode(',', $filled));
+    $hash = md5(serialize($data));
+    $mapped = db_get_field(
+        'SELECT local_id FROM ?:commerceml_import_entity_map WHERE entity_id = ?s AND entity_type = ?s AND company_id = ?i',
+        $product->id->external_id,
+        'product',
+        $company_id
+    );
+    $row = db_get_row('SELECT hash, updated_at FROM ?:gm_cml_hash WHERE company_id = ?i AND entity_key = ?s', $company_id, $key);
+    if ($mapped && $row && $row['hash'] === $hash && (int) $row['updated_at'] > TIME - SECONDS_IN_DAY) {
+        $main_result->setSuccess(false);
+        $GLOBALS['gm_cml_skipped'] = (isset($GLOBALS['gm_cml_skipped']) ? $GLOBALS['gm_cml_skipped'] : 0) + 1;
+        return;
+    }
+    db_query('REPLACE INTO ?:gm_cml_hash ?e', ['company_id' => $company_id, 'entity_key' => $key, 'hash' => $hash, 'updated_at' => TIME]);
+}
