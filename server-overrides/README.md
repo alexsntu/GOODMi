@@ -549,3 +549,15 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   (почти все «товар обновлён» от МойСклад, хранились 90 дней). Удалено старше 30 дней порциями (`_DEV/perf/gm-logs-cleanup.sh`),
   срок хранения журнала – 30 дней (Настройки → Журналы).
 - Копии nginx до правок – `/root/backup-2026-10-18-pre-php83/before-{ngenix-health,display-params}/`.
+
+### Почта закрыта снаружи, Roundcube выключен (2026-10-19, решение пользователя: почтой не пользуется)
+
+Ящиков нет (ни в панели, ни в dovecot), за неделю 13 служебных писем и 0 доставленных, тысячи попыток подбора пароля в сутки.
+- `gm-firewall` (`_DEV/security/`): в `PORTS` добавлены 25 465 587 (exim) и 110 143 993 995 (dovecot) – цепочка `GM_CLOSED`,
+  свои адреса и 127.0.0.1 пускаются (служебная почта cron работает). Исходящие (CS-Cart → smtp.yandex.ru:465) не затрагиваются.
+  Службы exim4/dovecot не останавливали – монитор служб ISPmanager поднял бы их.
+- `vhosts-resources/<каждый сайт>/gm-no-webmail.conf` (копия – `all-sites/`): `/roundcube` → 404 до выбора location. Подключение
+  пакета `/etc/nginx/vhosts-includes/roundcube-nginx.conf` не трогали (его перезапишет обновление). Для нового сайта в панели – положить
+  этот файл и в его папку.
+- Копии до правок – `/root/backup-2026-10-18-pre-php83/before-mail-close/`. Открыть почту: убрать порты из `PORTS`,
+  `iptables -D INPUT -p tcp --dport N -j GM_CLOSED` (и ip6tables), удалить gm-no-webmail.conf, `nginx -t && reload`.
