@@ -6,7 +6,10 @@
 # iptables -D INPUT -p tcp --dport N -j GM_CLOSED (и ip6tables), см. /root/incident-2026-10-18/ и server-overrides/README.md.
 # 2026-10-19: почта – 25/465/587 (exim) и 110/143/993/995 (dovecot): ящиков нет, писем 0, только перебор паролей (тысячи в
 # сутки); CS-Cart шлёт письма через SMTP Яндекса (исходящие не затрагиваются), служебная почта cron – изнутри сервера.
-PORTS="3306 21 6081 25 465 587 110 143 993 995"
+PORTS="3306 21 6081 25 465 587 110 143 993 995 53"
+# 2026-10-19: DNS (named, ISPmanager) – 15 зон, но ни один домен на этот сервер не делегирован (NGENIX, Яндекс, Cloudflare,
+# Timeweb), сам сервер спрашивает внешние DNS хостинга (/etc/resolv.conf). DNS – в основном UDP, поэтому отдельный список.
+UDP_PORTS="53"
 OWN4="127.0.0.0/8 176.123.171.223 82.202.160.72"
 for ipt in iptables ip6tables; do
     $ipt -N GM_CLOSED 2>/dev/null || true
@@ -19,6 +22,9 @@ for ipt in iptables ip6tables; do
     $ipt -A GM_CLOSED -j DROP
     for p in $PORTS; do
         $ipt -C INPUT -p tcp --dport "$p" -j GM_CLOSED >/dev/null 2>&1 || $ipt -I INPUT 1 -p tcp --dport "$p" -j GM_CLOSED
+    done
+    for p in $UDP_PORTS; do
+        $ipt -C INPUT -p udp --dport "$p" -j GM_CLOSED >/dev/null 2>&1 || $ipt -I INPUT 1 -p udp --dport "$p" -j GM_CLOSED
     done
 done
 

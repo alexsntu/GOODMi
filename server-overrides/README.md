@@ -561,3 +561,12 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   этот файл и в его папку.
 - Копии до правок – `/root/backup-2026-10-18-pre-php83/before-mail-close/`. Открыть почту: убрать порты из `PORTS`,
   `iptables -D INPUT -p tcp --dport N -j GM_CLOSED` (и ip6tables), удалить gm-no-webmail.conf, `nginx -t && reload`.
+
+### DNS-сервер named закрыт снаружи (2026-10-19, решение пользователя)
+
+BIND от ISPmanager – 15 зон (магазины, dev, old, переадресующие и .рф), записи по шаблону панели (NS – заглушки ns1/ns2.example.com),
+но ни один домен на этот сервер не делегирован: goodmi.ru и maxmobiles.ru – NGENIX, xione.ru / goodmi92.ru / гудми.рф / гудми92.рф /
+ми92.рф – Яндекс, mi92.ru – Cloudflare, максмобайлс.рф – Timeweb; сервер сам спрашивает внешние DNS хостинга (/etc/resolv.conf).
+Настоящие записи доменов правятся у этих провайдеров, не в панели. `gm-firewall`: 53/tcp в `PORTS` и новый список `UDP_PORTS="53"`
+(правило `-p udp --dport 53 -j GM_CLOSED`). Служба named не остановлена. Проверять закрытие с Mac нельзя – VPN перехватывает DNS
+(ответ с чужого адреса), смотреть счётчики `iptables -L INPUT -v -n | grep dpt:53`. Копия до правки – `before-dns-close/`.
