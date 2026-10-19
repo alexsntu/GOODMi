@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- GOODMi: выгрузка товаров на Авито (автозагрузка) для витрин GOODMi и Maxmobiles вместо UnitXML (2026-10-19). -->
+<addon scheme="3.0">
+    <id>gm_avito</id>
+    <version>1.0</version>
+    <priority>4294967100</priority>
+    <position>0</position>
+    <status>active</status>
+    <default_language>ru</default_language>
+    <supplier>GOODMi</supplier>
+</addon>

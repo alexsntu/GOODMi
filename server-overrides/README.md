@@ -63,6 +63,25 @@
 | `js/addons/gm_delivery_date/seomenu.js` | кнопка «Ещё» в строке быстрых ссылок категории (блок 1284, класс `.seomenu`): на ПК видны две строки, остальное раскрывается; на телефоне не работает (там прокрутка). Стили – секция 65 (с 2026-10-13) |
 | `app/addons/gm_delivery_date/init.php`, `controllers/frontend/profiles.pre.php` | обработчики входа по номеру и регистрации (`auth_routines`, `update_user_pre`, `update_profile`), проверка формы регистрации, защита подтверждённого номера в профиле |
 
+### Модуль «GOODMi: выгрузка на Авито» (`gm_avito`, с 2026-10-19)
+
+Собственный модуль вместо платного UnitXML в МойСклад: файл автозагрузки Авито (XML, formatVersion 3) собирается
+на сайте. Этап 1: объявления GOODMi перенесены из фида UnitXML (556, заголовки, описания и поля категорий – как были),
+цена и фото берутся с сайта. Хуков нет, на страницы витрин не влияет. Таблицы `cscart_gm_avito_settings` и
+`cscart_gm_avito_items` (`_DEV/gm_avito/tables.sql`) ставятся вручную; перенос из UnitXML и сверка –
+`_DEV/gm_avito/tools/`. Ключи API Авито хранятся на сервере вне папки сайта, в репозиторий не попадают.
+
+| Файл (от корня магазина) | Что делает |
+|---|---|
+| `app/addons/gm_avito/addon.xml` | описание модуля |
+| `app/addons/gm_avito/func.php` | настройки витрины, цена (витрины, иначе общая), фото карточки, сборка файла |
+| `app/addons/gm_avito/controllers/frontend/gm_avito.php` | `index.php?dispatch=gm_avito.feed&key=…` – отдаёт файл витрины по секретному ключу, иначе 404 |
+| `app/addons/gm_avito/bin/build.php` | сборка файла из командной строки: `php app/addons/gm_avito/bin/build.php 2` (номер витрины) |
+| `app/addons/gm_avito/init.php` | пусто (хуков пока нет) |
+
+Файл витрины – `var/files/<номер>/gm_avito/feed.xml`. Откат: выключить модуль в админке (Авито продолжит брать
+файл UnitXML, пока ссылка в кабинете Авито не заменена).
+
 ### Свой шаблон карточки товара `goodmi_card` (с 2026-10-09 – шаблон по умолчанию всей витрины GOODMi)
 
 | Файл (от `design/themes/abt__unitheme2/templates/`) | Что делает |
