@@ -3,6 +3,7 @@
  * Данные товаров для написания текстов объявлений Авито (скил avito-listing-copy, 2026-10-20). Только CLI, из корня сайта:
  *   php export-for-copy.php <company_id> <выбор> [лимит]
  * выбор: «123,456» – товары; «category:539» – главная категория (с вложенными); «enabled» – все, что продаются на Авито;
+ *        «need-copy» – продаются на Авито, но без ручного текста или вне «Категорий с новым описанием» (новые товары);
  *        «enabled-category:539» – продаются на Авито в категории.
  * Выводит JSON: товар, название, цена, остаток, раздел Авито, гарантия, текущие заголовок и «о товаре», описание с сайта
  * (текст, до 2500 знаков), характеристики (видимые в карточке, главные первыми).
@@ -32,6 +33,11 @@ if (preg_match('/^(enabled-)?category:(\d+)$/', $select, $m)) {
     }
 } elseif ($select === 'enabled') {
     $where .= db_quote(' AND i.enabled = ?s', 'Y');
+} elseif ($select === 'need-copy') {
+    // продаются на Авито, но без текста, написанного вручную, или их категория не в «Категориях с новым описанием»
+    $cats = array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'new_text_categories', ''))));
+    $where .= db_quote(' AND i.enabled = ?s AND (i.intro_auto <> ?s OR i.intro_auto IS NULL', 'Y', 'N')
+        . ($cats ? db_quote(' OR p.product_id NOT IN (SELECT product_id FROM ?:products_categories WHERE link_type = ?s AND category_id IN (?n)))', 'M', $cats) : ')');
 } else {
     $where .= db_quote(' AND p.product_id IN (?n)', array_map('intval', explode(',', $select)));
 }
