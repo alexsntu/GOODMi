@@ -645,3 +645,7 @@ company_id = 1: штатное окно `call_requests.request` («Быстры�
   (только телефон, обязателен) теперь и у Maxmobiles (company_id 1), было только GOODMi (2). Xione – как было.
 - 2026-10-20: цена товара в окне «Быстрый заказ» Maxmobiles – `app/addons/my_changes/controllers/frontend/call_requests.post.php`
   (досчёт цены со скидками) + блок `.mm-cr-price` в `call_requests_content.tpl` (только company_id 1).
+- 2026-10-20: тот же хук и для GOODMi (company_id 2): класс `gm-gl-quick`, подпись «Быстрый заказ». Стили – секция 71 «Своего CSS»
+  GOODMi (`CSS/goodmi-styles.css`): «В корзину» под ценой (цена в настройке темы – в одну строку), на ПК рядом «Быстрый заказ»,
+  на телефоне – ниже. Бэкап и откат – `/root/gm-backups/2026-10-20-gm-tiles/live/` (шаблон и CSS до правки); после смены
+  шаблона – удалить `var/cache/registry/thooks_C/*`.
