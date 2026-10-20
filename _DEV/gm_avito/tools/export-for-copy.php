@@ -79,6 +79,11 @@ foreach ($rows as $row) {
         'in_stock' => (int) $row['amount'] > 0,
         'on_avito' => $item['enabled'] === 'Y',
         'avito_category' => implode(' / ', $category),
+        // готовность к выгрузке: шаблон категории (или свои поля из UnitXML), незаполненные обязательные поля, причина пропуска
+        'template_ok' => !empty($ad['template']) || !empty($ad['fields']['Category']),
+        'missing_fields' => $ad['missing'],
+        'skip' => $ad['skip'],
+        'new_text' => $ad['new_text'],
         'warranty' => fn_gm_avito_warranty($company_id, $product_id),
         'title_now' => fn_gm_avito_xml_text($item['title']),
         'intro_now' => fn_gm_avito_xml_text($item['intro']),
