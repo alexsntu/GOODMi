@@ -30,5 +30,8 @@ fn_register_hooks(
     'add_to_cart',
     'place_order',
     // Меню админки: «Поиск Maxmobiles» – только при выбранной витрине Maxmobiles (схема меню кэшируется для всех витрин)
-    'backend_menu_generate_before_process_item'
+    'backend_menu_generate_before_process_item',
+    // Витрина Maxmobiles: без предзагрузки шрифта ядром (метка версии не совпадает с CSS – шрифт качается дважды);
+    // шрифты предзагружает модуль ab__preload
+    'block_styles_before_build_preload_links'
 );

@@ -1,9 +1,10 @@
 {*
   Переопределение штатного шаблона модуля call_requests (responsive).
-  Для GOODMi (company_id = 2) в форме «Купить в один клик» убрано поле E-mail:
-  телефон обязателен, блок «или» и e-mail не выводятся, имя и телефон стоят в одну строку. Остальные витрины без изменений.
+  Для GOODMi (company_id = 2) и Maxmobiles (company_id = 1, с 2026-10-20) в форме «Купить в один клик» / «Быстрый заказ»
+  убрано поле E-mail: телефон обязателен, блок «или» и e-mail не выводятся, имя и телефон стоят в одну строку
+  (без e-mail модуль сам ставит служебный адрес заказа). Xione – без изменений. Вид окна Maxmobiles – секция MM-15 «Своего CSS».
 *}
-{$gm_phone_only = ($product && $runtime.company_id == 2)}
+{$gm_phone_only = ($product && ($runtime.company_id == 2 || $runtime.company_id == 1))}
 {$gm_phone_class = ($gm_phone_only) ? "ty-input-text-full" : ""}
 <div id="{$id}">
 
@@ -21,6 +22,15 @@
         </div>
         <div class="ty-cr-product-info-header">
             <h3 class="ty-product-block-title"><bdi>{$product.product}</bdi></h3>
+            {* Maxmobiles: цена товара (со скидками – досчитывает my_changes/controllers/frontend/call_requests.post.php) *}
+            {if $runtime.company_id == 1 && $product.price > 0}
+                <div class="mm-cr-price">
+                    <span class="mm-cr-price__now">{include file="common/price.tpl" value=$product.price}</span>
+                    {if $product.list_price > $product.price}
+                        <span class="mm-cr-price__old">{include file="common/price.tpl" value=$product.list_price}</span>
+                    {/if}
+                </div>
+            {/if}
         </div>
     </div>
 {/if}

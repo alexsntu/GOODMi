@@ -608,3 +608,32 @@ BIND от ISPmanager – 15 зон (магазины, dev, old, переадре
 Настоящие записи доменов правятся у этих провайдеров, не в панели. `gm-firewall`: 53/tcp в `PORTS` и новый список `UDP_PORTS="53"`
 (правило `-p udp --dport 53 -j GM_CLOSED`). Служба named не остановлена. Проверять закрытие с Mac нельзя – VPN перехватывает DNS
 (ответ с чужого адреса), смотреть счётчики `iptables -L INPUT -v -n | grep dpt:53`. Копия до правки – `before-dns-close/`.
+
+### Maxmobiles: скорость, пункт 1 – шрифты и Jivo (2026-10-20)
+
+По замерам карточки товара (новая `maxmobiles_card` и обычная – почти одинаковы; тормозит общее: стили темы 1,6 МБ, скрипты темы).
+- **Inter урезан** до латиницы, кириллицы и знаков (₽ — – → ← ★ ✓ № «», U+2000–27BF): `design/themes/abt__unitheme2/media/custom_fonts/inter/*.woff2`
+  ~110 → ~61 КБ каждый, все OpenType-функции сохранены (`pyftsubset --layout-features='*'`). Файлы общие – Inter использует и **Xione**
+  (тоже русский сайт), GOODMi – нет.
+- **nginx maxmobiles.ru**: в правила `expires 365d` добавлены `woff2|ttf` (шрифты отдавались с кэшем на сутки – попадали под соседнее
+  правило 24h). Файл `/etc/nginx/vhosts/maxmobiles/maxmobiles.ru.conf` ведёт ISPmanager – после правки сайта в панели проверить.
+- **Jivo** (HTML-блок 2648, макет 24: главная, категории, товар; только ПК): вместо `<script src=…jivo… async>` – загрузчик, который
+  подключает виджет после `load` по первому действию посетителя (прокрутка, мышь, касание, клавиша) или через 5 с. У GOODMi свой блок 2649 – не трогали.
+- **Предзагрузка шрифтов**: ядро (`Styles.php`) кэширует адрес шрифта с меткой одного CSS-файла, а у разных страниц свои CSS со своими
+  метками – `inter-regular` качался дважды. Хук `my_changes` `block_styles_before_build_preload_links` (только company_id = 1) убирает
+  предзагрузку ядра; шрифты Maxmobiles предзагружает модуль `ab__preload` (метка – от CSS текущей страницы): `inter-regular.woff2`
+  и `inter-700.woff2`. Две ссылки на Roboto (`KFOMCnq…`) у Maxmobiles удалены владельцем – в стилях не использовались.
+- Бэкап и откат – `/root/gm-backups/2026-10-20-mm-speed/<время>/ROLLBACK.txt` (шрифты, nginx, блок 2648) и `…/preload-<время>/` (my_changes).
+
+### Maxmobiles: «Быстрый заказ» в плитках каталога (2026-10-20)
+
+`design/themes/abt__unitheme2/templates/addons/my_changes/hooks/products/product_multicolumns_list_control.post.tpl` – только
+company_id = 1: штатное окно `call_requests.request` («Быстрый заказ», как в карточке) рядом с «В корзину» в плитке
+(`blocks/list_templates/grid_list.tpl`, хук `products:product_multicolumns_list_control`). Не для товаров без цены. Тема своё
+выводит только на странице товара (`addons/call_requests/hooks/products/add_to_cart.post.tpl`, условие `$details_page`).
+Стили – секция MM-15 «Своего CSS» Maxmobiles (`Maxmobiles/_DEV/category/MM-15-category.css`). После добавления хука –
+удалить `var/cache/registry/thooks_C/1/*`.
+- 2026-10-20: `addons/call_requests/views/call_requests/components/call_requests_content.tpl` – форма «Быстрый заказ» без e-mail
+  (только телефон, обязателен) теперь и у Maxmobiles (company_id 1), было только GOODMi (2). Xione – как было.
+- 2026-10-20: цена товара в окне «Быстрый заказ» Maxmobiles – `app/addons/my_changes/controllers/frontend/call_requests.post.php`
+  (досчёт цены со скидками) + блок `.mm-cr-price` в `call_requests_content.tpl` (только company_id 1).

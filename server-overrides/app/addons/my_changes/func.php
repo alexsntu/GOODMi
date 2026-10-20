@@ -505,3 +505,16 @@ function fn_my_changes_backend_menu_generate_before_process_item(&$menu, $group,
         unset($items['items'][$key]);
     }
 }
+
+/**
+ * Витрина Maxmobiles (company_id = 1): убрать предзагрузку шрифта, которую ядро строит в Styles.php. Ядро кэширует адрес
+ * шрифта с меткой версии одного CSS-файла (кэш preloaded_font_resources на всю витрину), а у разных страниц свои
+ * CSS-файлы со своими метками – обычное начертание Inter скачивалось дважды (замер 2026-10-20). Шрифты Maxmobiles
+ * предзагружает модуль ab__preload: его метка берётся от CSS текущей страницы.
+ */
+function fn_my_changes_block_styles_before_build_preload_links($params, $content, &$preloaded_resources)
+{
+    if ((int) \Tygh\Registry::get('runtime.company_id') === 1) {
+        $preloaded_resources = [];
+    }
+}
