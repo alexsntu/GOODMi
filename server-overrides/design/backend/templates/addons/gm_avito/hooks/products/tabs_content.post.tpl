@@ -50,6 +50,7 @@
             <label class="control-label">Объявление</label>
             <div class="controls">
                 <p>Id в файле: {$gm_avito.ad_id}{if $gm_avito.avito_id} &#183; номер на Авито: {if $gm_avito.report.url}<a href="{$gm_avito.report.url}" target="_blank">{$gm_avito.avito_id}</a>{else}{$gm_avito.avito_id}{/if}{/if} &#183; цена: {$gm_avito.price|format_price:$currencies.$primary_currency nofilter} &#183; фото: {$gm_avito.images}</p>
+                {if $gm_avito.stats.impressions || $gm_avito.stats.views}<p>За 30 дней: показов {$gm_avito.stats.impressions}, просмотров {$gm_avito.stats.views}, контактов <strong>{$gm_avito.stats.contacts}</strong>, в избранном {$gm_avito.stats.favorites}</p>{/if}
                 {if $gm_avito.report_status}
                     <p>Авито, последняя загрузка: <strong>{$gm_avito.report.section}</strong>{if $gm_avito.report.avito_status} &#183; статус: {$gm_avito.report.avito_status}{/if}{if $gm_avito.report.date_end} &#183; размещено до {$gm_avito.report.date_end}{/if}</p>
                     {foreach from=$gm_avito.report.messages item="m"}

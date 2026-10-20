@@ -1,6 +1,7 @@
 <?php
 /**
  * GOODMi: страницы модуля Авито в админке (2026-10-19), для витрины, выбранной вверху админки (GOODMi или Maxmobiles).
+ *   gm_avito.dashboard – обзор: файл, последняя загрузка Авито, ошибки, баланс кабинета, статистика и подсказки
  *   gm_avito.manage    – настройки: какие товары выгружать, текст объявлений, общий блок, поля по умолчанию, ссылка на файл
  *   gm_avito.templates – шаблоны категорий: категория Авито и её поля для категории сайта (и вложенных)
  *   gm_avito.problems  – что мешает выгрузке: включённые товары не в файле, незаполненные поля, категории без шаблона
@@ -18,6 +19,9 @@ $allowed = array_key_exists($company_id, GM_AVITO_COMPANIES);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $return = $mode === 'update_templates' ? 'gm_avito.templates' : (in_array($mode, ['check', 'sync'], true) ? 'gm_avito.problems' : 'gm_avito.manage');
+    if (!empty($_REQUEST['return_to']) && in_array($_REQUEST['return_to'], ['dashboard', 'problems', 'manage', 'templates'], true)) {
+        $return = 'gm_avito.' . $_REQUEST['return_to'];
+    }
     if (!$allowed) {
         return [CONTROLLER_STATUS_OK, $return];
     }
@@ -35,6 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_gm_avito_set_setting($company_id, 'images_limit', (string) max(1, min(10, (int) ($data['images_limit'] ?? 10))));
         fn_gm_avito_set_setting($company_id, 'specs_limit', (string) max(0, min(30, (int) ($data['specs_limit'] ?? 10))));
         fn_set_notification('N', __('notice'), 'Настройки Авито сохранены. Файл пересоберётся при следующей сборке или по кнопке «Собрать файл сейчас».');
+    }
+
+    if ($mode === 'stats') {
+        try {
+            $balance = fn_gm_avito_sync_balance($company_id);
+            $stats = fn_gm_avito_sync_stats($company_id, 3);
+            fn_set_notification('N', __('notice'), 'Баланс и статистика за последние дни обновлены (строк ' . $stats['rows'] . ').');
+        } catch (Exception $e) {
+            fn_set_notification('E', __('error'), 'Статистика Авито не получена: ' . $e->getMessage());
+        }
     }
 
     if ($mode === 'sync') {
@@ -121,6 +135,78 @@ $view->assign('gm_avito_companies', db_get_hash_single_array(
     array_keys(GM_AVITO_COMPANIES)
 ));
 if (!$allowed) {
+    return;
+}
+
+if ($mode === 'dashboard') {
+    $setting = static function ($name) use ($company_id) {
+        return (array) json_decode(fn_gm_avito_xml_text((string) fn_gm_avito_get_setting($company_id, $name, '{}')), true);
+    };
+    $report = $setting('report');
+    $profile = $setting('profile');
+    $hours = [];
+    foreach ((array) ($profile['schedule'] ?? []) as $slot) {
+        $hours = array_merge($hours, array_map('intval', (array) ($slot['time_slots'] ?? [])));
+    }
+    sort($hours);
+    $feed = implode(', ', array_map(static function ($url) {
+        return strpos($url, 'gm_avito') !== false ? 'наш модуль' : (strpos($url, 'unitxml') !== false ? 'UnitXML' : $url);
+    }, (array) ($profile['feeds'] ?? [])));
+    $statuses = db_get_hash_single_array(
+        'SELECT status, COUNT(*) AS n FROM ?:gm_avito_items WHERE company_id = ?i AND status <> ?s GROUP BY status',
+        ['status', 'n'],
+        $company_id,
+        ''
+    );
+    $summary = fn_gm_avito_stats_summary($company_id, 30);
+    $metrics = [];
+    foreach (['impressions' => 'Показы в поиске', 'views' => 'Просмотры', 'contacts' => 'Контакты', 'favorites' => 'В избранном'] as $key => $label) {
+        $now = (int) ($summary['total'][$key] ?? 0);
+        $was = (int) ($summary['prev'][$key] ?? 0);
+        $metrics[$key] = ['label' => $label, 'value' => number_format($now, 0, ',', ' '), 'delta' => $was ? round(($now - $was) * 100 / $was) : null];
+    }
+    $summary['metrics'] = $metrics;
+    $t = $summary['total'];
+    $summary['ctr'] = !empty($t['impressions']) ? round($t['views'] * 100 / $t['impressions'], 1) : 0;
+    $summary['cr'] = !empty($t['views']) ? round($t['contacts'] * 100 / $t['views'], 1) : 0;
+    $max_day = 0;
+    foreach ($summary['by_day'] as $day) {
+        $max_day = max($max_day, (int) $day['views']);
+    }
+    foreach ($summary['by_day'] as &$day) {
+        $day['h'] = $max_day ? max(2, (int) round($day['views'] * 115 / $max_day)) : 2;
+    }
+    unset($day);
+    $summary['first_day'] = $summary['by_day'] ? $summary['by_day'][0]['date'] : '';
+    $summary['last_day'] = $summary['by_day'] ? end($summary['by_day'])['date'] : '';
+    $balance = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'balance', '{}'), true);
+    foreach (['wallet', 'bonus', 'cpa'] as $key) {
+        if (isset($balance[$key])) {
+            $balance[$key . '_fmt'] = number_format((float) $balance[$key], 2, ',', ' ');
+        }
+    }
+    $view->assign('gm_avito_dash', [
+        'company' => fn_get_company_name($company_id),
+        'account_name' => fn_gm_avito_xml_text((string) fn_gm_avito_get_setting($company_id, 'account_name', '')),
+        'build' => $setting('last_build'),
+        'check' => $setting('check'),
+        'report' => $report,
+        'report_started' => !empty($report['started_at']) ? date('d.m.Y H:i', strtotime($report['started_at'])) : '',
+        'profile' => $profile,
+        'hours' => implode(', ', array_map(static function ($h) {
+            return sprintf('%02d', $h);
+        }, array_unique($hours))),
+        'feed' => $feed,
+        'statuses' => $statuses,
+        'problems' => array_sum(array_diff_key($statuses, array_flip(['successful']))),
+        'published' => (int) ($statuses['successful'] ?? 0),
+        'balance' => $balance,
+        'stats_sync' => $setting('stats_sync'),
+        'summary' => $summary,
+        'max_day' => $max_day,
+        'cron' => GM_AVITO_CRON[$company_id] ?? [],
+    ]);
+
     return;
 }
 

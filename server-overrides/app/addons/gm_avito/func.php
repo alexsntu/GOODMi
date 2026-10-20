@@ -820,6 +820,13 @@ function fn_gm_avito_admin_item($company_id, $product_id)
         'required' => $ad['template'] ? implode(', ', $ad['template']['required_fields']) : '',
         'missing' => implode(', ', $ad['missing']),
         'report' => (array) json_decode(fn_gm_avito_xml_text((string) $item['status_text']), true),
+        'stats' => $item['avito_id'] ? db_get_row(
+            'SELECT SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites FROM ?:gm_avito_stats'
+            . ' WHERE company_id = ?i AND avito_id = ?i AND date >= ?s',
+            $company_id,
+            $item['avito_id'],
+            date('Y-m-d', strtotime('-30 day', TIME))
+        ) : [],
         'report_status' => $item['status'],
         'new_text' => $ad['new_text'],
         'preview' => $ad['description'],
@@ -1055,6 +1062,176 @@ function fn_gm_avito_api_get($company_id, $path)
     }
 
     return (array) json_decode($response, true);
+}
+
+/**
+ * POST к API Авито (статистика), ответ – массив; те же паузы и повторы, что у GET
+ */
+function fn_gm_avito_api_post($company_id, $path, $body)
+{
+    static $last = 0.0;
+    for ($attempt = 0; $attempt < 4; $attempt++) {
+        $wait = 3.0 - (microtime(true) - $last);
+        if ($wait > 0) {
+            usleep((int) ($wait * 1000000));
+        }
+        list($code, $response, $error) = fn_gm_avito_api_request(
+            'POST',
+            'https://api.avito.ru' . $path,
+            ['Authorization: Bearer ' . fn_gm_avito_api_token($company_id), 'Content-Type: application/json'],
+            json_encode($body)
+        );
+        $last = microtime(true);
+        if ($code !== 429 && $code !== 0 && $code < 500) {
+            break;
+        }
+        sleep(15 * ($attempt + 1));
+    }
+    if ($code !== 200) {
+        throw new Exception('Авито ' . $path . ': ответ ' . $code . ' ' . $error . ' ' . mb_substr($response, 0, 200));
+    }
+
+    return (array) json_decode($response, true);
+}
+
+/**
+ * Номер аккаунта Авито витрины (для статистики и баланса), кэш в настройке account_id
+ */
+function fn_gm_avito_account_id($company_id)
+{
+    $id = (int) fn_gm_avito_get_setting($company_id, 'account_id', 0);
+    if (!$id) {
+        $self = fn_gm_avito_api_get($company_id, '/core/v1/accounts/self');
+        $id = (int) ($self['id'] ?? 0);
+        fn_gm_avito_set_setting($company_id, 'account_id', (string) $id);
+        fn_gm_avito_set_setting($company_id, 'account_name', fn_gm_avito_db_text((string) ($self['name'] ?? '')));
+    }
+
+    return $id;
+}
+
+/**
+ * Баланс кабинета Авито: кошелёк (core/v1/…/balance – рубли) и счёт CPA/продвижения (cpa/v3/balanceInfo – в копейках)
+ * → настройка balance
+ */
+function fn_gm_avito_sync_balance($company_id)
+{
+    $account_id = fn_gm_avito_account_id($company_id);
+    $wallet = fn_gm_avito_api_get($company_id, '/core/v1/accounts/' . $account_id . '/balance/');
+    $cpa = fn_gm_avito_api_post($company_id, '/cpa/v3/balanceInfo', new stdClass());
+    $balance = [
+        'time' => TIME,
+        'wallet' => (float) ($wallet['real'] ?? 0),
+        'bonus' => (float) ($wallet['bonus'] ?? 0),
+        'cpa' => isset($cpa['balance']) ? round($cpa['balance'] / 100, 2) : null,
+    ];
+    fn_gm_avito_set_setting($company_id, 'balance', json_encode($balance));
+
+    return $balance;
+}
+
+/**
+ * Статистика объявлений по дням (stats/v2, группировка по объявлению, один запрос на день) → cscart_gm_avito_stats.
+ * Дни, которые уже есть, не перезапрашиваются, кроме двух последних (Авито досчитывает).
+ */
+function fn_gm_avito_sync_stats($company_id, $days = 30)
+{
+    $account_id = fn_gm_avito_account_id($company_id);
+    $have = db_get_fields('SELECT DISTINCT date FROM ?:gm_avito_stats WHERE company_id = ?i', $company_id);
+    $stats = ['days' => 0, 'rows' => 0];
+    for ($i = 1; $i <= $days; $i++) {
+        $date = date('Y-m-d', strtotime('-' . $i . ' day', TIME));
+        if ($i > 2 && in_array($date, $have, true)) {
+            continue;
+        }
+        $offset = 0;
+        do {
+            $data = fn_gm_avito_api_post($company_id, '/stats/v2/accounts/' . $account_id . '/items', [
+                'dateFrom' => $date, 'dateTo' => $date, 'grouping' => 'item',
+                'metrics' => ['impressions', 'views', 'contacts', 'favorites'], 'limit' => 1000, 'offset' => $offset,
+            ]);
+            $groups = (array) ($data['result']['groupings'] ?? []);
+            foreach ($groups as $group) {
+                $m = [];
+                foreach ((array) ($group['metrics'] ?? []) as $metric) {
+                    $m[$metric['slug']] = (int) $metric['value'];
+                }
+                db_query('REPLACE INTO ?:gm_avito_stats ?e', [
+                    'company_id' => $company_id, 'avito_id' => (int) $group['id'], 'date' => $date,
+                    'impressions' => $m['impressions'] ?? 0, 'views' => $m['views'] ?? 0,
+                    'contacts' => $m['contacts'] ?? 0, 'favorites' => $m['favorites'] ?? 0,
+                ]);
+                $stats['rows']++;
+            }
+            $offset += 1000;
+        } while (count($groups) === 1000 && $offset < 10000);
+        $stats['days']++;
+    }
+    fn_gm_avito_set_setting($company_id, 'stats_sync', json_encode(['time' => TIME] + $stats));
+
+    return $stats;
+}
+
+/**
+ * Сводка статистики для дашборда: итоги за период и предыдущий период, по дням, объявления с подсказками
+ */
+function fn_gm_avito_stats_summary($company_id, $days = 30)
+{
+    $from = date('Y-m-d', strtotime('-' . $days . ' day', TIME));
+    $prev_from = date('Y-m-d', strtotime('-' . (2 * $days) . ' day', TIME));
+    $sum = 'SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites';
+    $total = db_get_row("SELECT $sum FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s", $company_id, $from);
+    $prev = db_get_row("SELECT $sum FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s AND date < ?s", $company_id, $prev_from, $from);
+    $by_day = db_get_array("SELECT date, $sum FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s GROUP BY date ORDER BY date", $company_id, $from);
+    $items = db_get_array(
+        "SELECT s.avito_id, $sum, i.product_id, i.enabled, i.status, pd.product FROM ?:gm_avito_stats AS s"
+        . ' LEFT JOIN ?:gm_avito_items AS i ON i.company_id = s.company_id AND i.avito_id = s.avito_id'
+        . ' LEFT JOIN ?:product_descriptions AS pd ON pd.product_id = i.product_id AND pd.lang_code = ?s'
+        . ' WHERE s.company_id = ?i AND s.date >= ?s GROUP BY s.avito_id',
+        'ru',
+        $company_id,
+        $from
+    );
+    $top = $no_views = $no_contacts = [];
+    foreach ($items as $row) {
+        $row = array_map(static function ($v) {
+            return $v;
+        }, $row);
+        if ((int) $row['contacts'] > 0) {
+            $top[] = $row;
+        }
+        if ((int) $row['impressions'] >= 300 && (int) $row['views'] * 100 < (int) $row['impressions'] * 2) {
+            $no_views[] = $row;
+        }
+        if ((int) $row['views'] >= 40 && (int) $row['contacts'] === 0) {
+            $no_contacts[] = $row;
+        }
+    }
+    usort($top, static function ($a, $b) {
+        return $b['contacts'] - $a['contacts'];
+    });
+    usort($no_views, static function ($a, $b) {
+        return $b['impressions'] - $a['impressions'];
+    });
+    usort($no_contacts, static function ($a, $b) {
+        return $b['views'] - $a['views'];
+    });
+    $published = db_get_fields('SELECT avito_id FROM ?:gm_avito_items WHERE company_id = ?i AND enabled = ?s AND status = ?s AND avito_id IS NOT NULL', $company_id, 'Y', 'successful');
+    $with_stats = array_flip(array_column(array_filter($items, static function ($row) {
+        return (int) $row['impressions'] > 0;
+    }), 'avito_id'));
+    $silent = [];
+    foreach ($published as $avito_id) {
+        if (!isset($with_stats[$avito_id])) {
+            $silent[] = $avito_id;
+        }
+    }
+
+    return [
+        'days' => $days, 'total' => $total, 'prev' => $prev, 'by_day' => $by_day,
+        'top' => array_slice($top, 0, 15), 'no_views' => array_slice($no_views, 0, 15), 'no_contacts' => array_slice($no_contacts, 0, 15),
+        'silent_count' => count($silent), 'items_with_stats' => count($items),
+    ];
 }
 
 /**

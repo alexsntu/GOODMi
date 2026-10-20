@@ -7,6 +7,7 @@
 </div>
 {if $gm_avito_allowed}<span class="muted" style="margin-left: 10px;">Открыты настройки витрины {$gm_avito_companies[$gm_avito_company_id]} &#8211; у каждой витрины свой аккаунт Авито, файл, шаблоны и расписание.</span>{/if}
 <ul class="nav nav-tabs">
+    <li class="{if $runtime.mode == "dashboard"}active{/if}"><a href="{"gm_avito.dashboard"|fn_url}">Обзор</a></li>
     <li class="{if $runtime.mode == "manage"}active{/if}"><a href="{"gm_avito.manage"|fn_url}">Настройки</a></li>
     <li class="{if $runtime.mode == "problems"}active{/if}"><a href="{"gm_avito.problems"|fn_url}">Проблемы и отчёт Авито</a></li>
     <li class="{if $runtime.mode == "templates"}active{/if}"><a href="{"gm_avito.templates"|fn_url}">Шаблоны категорий</a></li>

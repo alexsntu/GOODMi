@@ -53,3 +53,16 @@ CREATE TABLE IF NOT EXISTS cscart_gm_avito_templates (
 -- Переход с этапа 1 (2026-10-19), уже выполнен на mm_work и mm_dev:
 -- ALTER TABLE cscart_gm_avito_items ADD COLUMN title_auto CHAR(1) NOT NULL DEFAULT 'N' AFTER title,
 --     ADD COLUMN intro MEDIUMTEXT AFTER title_auto, ADD COLUMN intro_auto CHAR(1) NOT NULL DEFAULT 'Y' AFTER intro;
+
+-- Статистика объявлений Авито по дням (stats/v2, 2026-10-20): показы, просмотры, контакты, избранное.
+CREATE TABLE IF NOT EXISTS cscart_gm_avito_stats (
+    company_id INT UNSIGNED NOT NULL,
+    avito_id BIGINT UNSIGNED NOT NULL,
+    date DATE NOT NULL,
+    impressions INT UNSIGNED NOT NULL DEFAULT 0,
+    views INT UNSIGNED NOT NULL DEFAULT 0,
+    contacts INT UNSIGNED NOT NULL DEFAULT 0,
+    favorites INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (company_id, avito_id, date),
+    KEY date (company_id, date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -11,9 +11,14 @@ if (!defined('BOOTSTRAP')) {
 
 $schema['central']['products']['items']['gm_avito'] = [
     'title' => 'Авито',
-    'href' => 'gm_avito.manage',
+    'href' => 'gm_avito.dashboard',
     'position' => 900,
     'subitems' => [
+        'gm_avito_dashboard' => [
+            'title' => 'Обзор',
+            'href' => 'gm_avito.dashboard',
+            'position' => 50,
+        ],
         'gm_avito_manage' => [
             'title' => 'Настройки',
             'href' => 'gm_avito.manage',
