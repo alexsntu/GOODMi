@@ -22,12 +22,14 @@
         </div>
         <div class="ty-cr-product-info-header">
             <h3 class="ty-product-block-title"><bdi>{$product.product}</bdi></h3>
-            {* Maxmobiles: цена товара (со скидками – досчитывает my_changes/controllers/frontend/call_requests.post.php) *}
-            {if $runtime.company_id == 1 && $product.price > 0}
-                <div class="mm-cr-price">
-                    <span class="mm-cr-price__now">{include file="common/price.tpl" value=$product.price}</span>
+            {* Maxmobiles и GOODMi (с 2026-10-20): цена товара (со скидками – досчитывает my_changes/controllers/frontend/call_requests.post.php);
+               классы mm-cr-price / gm-cr-price – стили в «Своём CSS» каждой витрины (MM-15f / секция 72) *}
+            {if ($runtime.company_id == 1 || $runtime.company_id == 2) && $product.price > 0}
+                {if $runtime.company_id == 2}{$cr_price_class = "gm-cr-price"}{else}{$cr_price_class = "mm-cr-price"}{/if}
+                <div class="{$cr_price_class}">
+                    <span class="{$cr_price_class}__now">{include file="common/price.tpl" value=$product.price}</span>
                     {if $product.list_price > $product.price}
-                        <span class="mm-cr-price__old">{include file="common/price.tpl" value=$product.list_price}</span>
+                        <span class="{$cr_price_class}__old">{include file="common/price.tpl" value=$product.list_price}</span>
                     {/if}
                 </div>
             {/if}

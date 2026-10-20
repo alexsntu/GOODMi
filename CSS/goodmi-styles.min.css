@@ -4158,3 +4158,39 @@ body.gm-sg-open > jdiv{display:none !important}
 .grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__control>div{flex:none;width:100%}
 .grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__control .gm-gl-quick{flex:none;width:100%;height:36px;font-size:13px}
 }
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"]{border:0 !important;border-radius:20px !important;box-shadow:0 24px 64px rgba(0,0,0,.22) !important;overflow:hidden;max-width:94vw !important;background:#fff !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-titlebar{background:#fff !important;border:0 !important;padding:22px 24px 6px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-title{font-size:22px !important;font-weight:700 !important;letter-spacing:-.01em;color:#1c1c1c !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-titlebar-close{width:34px !important;height:34px !important;border-radius:50% !important;background:#f5f5f5 !important;border:0 !important;top:18px !important;right:18px !important;transition:background-color .15s}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-titlebar-close:hover{background:#ebebeb !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-content{padding:0 24px !important;background:#fff !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .object-container{padding-left:0 !important;padding-right:0 !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-container{display:flex !important;align-items:center;gap:16px;width:auto !important;max-width:none !important;margin:10px 0 18px !important;padding:12px !important;border-radius:16px;background:#f5f5f5;box-sizing:border-box}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-image{flex:none;width:72px !important;height:72px;margin:0 !important;padding:6px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-sizing:border-box}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-image img{width:auto !important;height:auto !important;max-width:60px !important;max-height:60px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-header{margin:0 !important;padding:0 !important;float:none !important;width:auto !important;min-width:0}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-header .ty-product-block-title{font-size:15px !important;line-height:1.35;font-weight:500 !important;color:#1c1c1c !important;margin:0 !important;padding:0 !important;text-transform:none !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:6px}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price__now,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price__now *{font-size:18px !important;font-weight:700 !important;color:#1c1c1c !important;white-space:nowrap}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price__old,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price__old *{font-size:13px !important;font-weight:400 !important;color:#6b6b6b !important;text-decoration:line-through;white-space:nowrap}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-control-group{margin:0 0 14px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-control-group__title{display:block;font-size:13px !important;font-weight:400 !important;color:#6b6b6b !important;margin:0 0 6px !important;padding:0 !important;text-transform:none !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-control-group__title.cm-required::after{color:#ff6900 !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] input.ty-input-text-full,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] input.ty-input-phone{width:100% !important;height:46px !important;padding:0 14px !important;border:1px solid #e0e0e0 !important;border-radius:12px !important;background:#fff !important;box-shadow:none !important;font-size:16px !important;color:#1c1c1c !important;box-sizing:border-box;transition:border-color .15s,box-shadow .15s}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] input.ty-input-text-full:focus,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] input.ty-input-phone:focus{border-color:#ff6900 !important;box-shadow:0 0 0 3px rgba(255,105,0,.15) !important;outline:0 !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .cm-subscribe-policy,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-lable-subscribe-policy__wrapper{width:auto !important;max-width:none !important;margin:4px 0 0 !important;box-sizing:border-box}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-lable-subscribe-policy__wrapper input[type="checkbox"]{accent-color:#ff6900}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-lable-subscribe-policy,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-lable-subscribe-policy *{font-size:12px !important;line-height:1.45 !important;color:#6b6b6b !important;font-weight:400 !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-lable-subscribe-policy a{color:#ff6900 !important;text-decoration:none !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-lable-subscribe-policy a:hover{text-decoration:underline !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container{background:#fff !important;border:0 !important;padding:14px 24px 24px !important;margin:0 !important;left:0;right:0;box-shadow:none !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container .ty-btn__primary{width:100% !important;height:50px !important;margin:0 !important;border:0 !important;border-radius:12px !important;background:#ff6900 !important;color:#fff !important;font-size:16px !important;font-weight:600 !important;text-transform:none !important;letter-spacing:0 !important;box-shadow:none !important;transition:background-color .15s}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container .ty-btn__primary:hover{background:#e55a00 !important}
+@media (max-width:767px){
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"]{position:fixed !important;left:0 !important;right:0 !important;top:auto !important;bottom:0 !important;width:auto !important;max-width:none !important;height:auto !important;min-height:0 !important;max-height:92vh;overflow-y:auto !important;border-radius:20px 20px 0 0 !important;padding-bottom:env(safe-area-inset-bottom) !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-titlebar{padding:18px 20px 4px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-title{font-size:20px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-content{padding:0 20px !important;height:auto !important;max-height:none !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .object-container{height:auto !important;padding-top:4px !important;padding-bottom:0 !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container{position:static !important;padding:12px 0 20px !important}
+}

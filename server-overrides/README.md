@@ -649,3 +649,6 @@ company_id = 1: штатное окно `call_requests.request` («Быстры�
   GOODMi (`CSS/goodmi-styles.css`): «В корзину» под ценой (цена в настройке темы – в одну строку), на ПК рядом «Быстрый заказ»,
   на телефоне – ниже. Бэкап и откат – `/root/gm-backups/2026-10-20-gm-tiles/live/` (шаблон и CSS до правки); после смены
   шаблона – удалить `var/cache/registry/thooks_C/*`.
+- 2026-10-20: окно «Быстрый заказ» GOODMi – секция 72 «Своего CSS» (вид как MM-15f, цвета GOODMi); цена товара в окне и у GOODMi:
+  `call_requests_content.tpl` (класс `gm-cr-price` для company 2, `mm-cr-price` для 1) и `call_requests.post.php` (company 1 и 2).
+  Бэкап – `/root/gm-backups/2026-10-20-gm-tiles/cr-live/`.
