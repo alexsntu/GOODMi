@@ -421,10 +421,14 @@ function fn_gm_avito_compose_description($company_id, $product_id, $intro, array
 
     $limit = (int) fn_gm_avito_get_setting($company_id, 'specs_limit', 10);
     $specs = [];
+    $seen = [];
     foreach ($features as $feature) {
-        if (in_array($feature['name'], GM_AVITO_SPECS_SKIP, true)) {
+        // одно свойство бывает заведено в карточке дважды («Диагональ экрана» 6.9" и 6.9 ") – выводим первое
+        $key = mb_strtolower(trim($feature['name']));
+        if (in_array($feature['name'], GM_AVITO_SPECS_SKIP, true) || isset($seen[$key])) {
             continue;
         }
+        $seen[$key] = true;
         $specs[] = '<li>' . fn_gm_avito_esc($feature['name'] . ': ' . fn_gm_avito_feature_text($feature)) . '</li>';
         if (count($specs) >= $limit) {
             break;
