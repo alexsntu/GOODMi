@@ -1,0 +1,6 @@
+[
+ {"product_ids": [14642, 269097, 275262, 239316], "remove": ["Category","GoodsType","GoodsSubType","ProductType","ProductsType","ProductSubType","GoodsSubCategory","ToolType","ToolSubType","CarpenterSubType","TourismType","Gamepad"], "set": {"Category": "Игры, приставки и программы", "GoodsType": "Игровые приставки и аксессуары", "ProductType": "Аксессуары", "ProductSubType": "VR-устройства", "DeviceType": "VR- и AR-системы"}},
+ {"product_ids": [282219], "remove": [], "set": {"ScreenCondition": "Без дефектов", "CaseCondition": "Без дефектов"}},
+ {"product_ids": [283001], "remove": [], "set": {"RamSize": "8 ГБ", "Color": "серый"}},
+ {"product_ids": [282084], "remove": ["Case_Condition", "Screen_Condition", "GoodsType", "GoodsSubType"], "set": {"Category": "Телефоны", "GoodsType": "Смарт-часы и фитнес-браслеты", "GoodsSubType": "Смарт-часы", "Vendor": "Apple", "Model": "Apple Watch Series 10", "CaseCondition": "Без дефектов", "ScreenCondition": "Без дефектов"}}
+]

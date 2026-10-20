@@ -1,0 +1,12 @@
+[
+ {"product_ids": [10082], "remove": ["Category","GoodsType","GoodsSubType","ProductType","ProductsType","ProductSubType","GoodsSubCategory","ToolType","ToolSubType","CarpenterSubType","TourismType","Gamepad"], "set": {"Category": "Спорт и отдых", "GoodsType": "Туризм и отдых на природе", "TourismType": "Фонари и лампы"}},
+ {"product_ids": [11963], "remove": ["Category","GoodsType","GoodsSubType","ProductType","ProductsType","ProductSubType","GoodsSubCategory","ToolType","ToolSubType","CarpenterSubType","TourismType","Gamepad"], "set": {"Category": "Бытовая техника", "GoodsType": "Климатическое оборудование", "ProductType": "Приборы для обработки воздуха", "GoodsSubType": "Автоматические освежители и аромадиффузоры"}},
+ {"product_ids": [268027], "remove": [], "set": {"GoodsSubType": "Настольное и напольное", "LigitingType": "Настольные лампы", "Brand": "Другой", "Color": "Белый", "LedLamp": "Да"}},
+ {"product_ids": [282257], "remove": [], "set": {"GoodsSubType": "Электрика", "Brand": "Другой", "Voltage": "23 В"}},
+ {"product_ids": [282258], "remove": [], "set": {"GoodsSubType": "Электрика", "Brand": "Другой", "Voltage": "22 В"}},
+ {"product_ids": [282333], "remove": [], "set": {"GoodsSubType": "Электрика", "Brand": "Другой", "Voltage": "26 В"}},
+ {"product_ids": [278584], "remove": [], "set": {"Brand": "Xiaomi", "Model": "Redmi G Pro 27Q"}},
+ {"product_ids": [267788], "remove": ["Category","GoodsType","GoodsSubType","ProductType","ProductsType","ProductSubType","GoodsSubCategory","ToolType","ToolSubType","CarpenterSubType","TourismType","Gamepad"], "set": {"Category": "Бытовая техника", "GoodsType": "Для индивидуального ухода", "ProductType": "Бритвы и триммеры"}},
+ {"product_ids": [9332], "remove": ["Category","GoodsType","GoodsSubType","ProductType","ProductsType","ProductSubType","GoodsSubCategory","ToolType","ToolSubType","CarpenterSubType","TourismType","Gamepad"], "set": {"Category": "Ремонт и строительство", "GoodsType": "Инструменты", "ToolType": "Ручные инструменты", "ToolSubType": "Столярно-слесарные инструменты", "CarpenterSubType": "Отвёртки"}},
+ {"product_ids": [270682, 270683, 269466, 281836, 281837, 281838], "remove": ["Model"], "set": {}}
+]
