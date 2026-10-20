@@ -1058,7 +1058,7 @@ function fn_gm_avito_api_get($company_id, $path)
 }
 
 /**
- * Отчёт о последней завершённой загрузке: сводка → настройка report; объявления из разделов с проблемами (всё, кроме
+ * Отчёт о последней обработанной загрузке (текущая, если готова, иначе последняя успешная): сводка → настройка report; объявления из разделов с проблемами (всё, кроме
  * «успешно») – по разделам (постраничная выдача всего отчёта у Авито нестабильна: страницы перекрываются); номера
  * объявлений на Авито – /autoload/v2/items/avito_ids пачками по 100. В items: avito_id, status = раздел отчёта
  * (successful – есть номер и нет замечаний), status_text = JSON: раздел, статус на Авито, ссылка, срок, ошибки и
@@ -1066,7 +1066,14 @@ function fn_gm_avito_api_get($company_id, $path)
  */
 function fn_gm_avito_sync_report($company_id)
 {
-    $summary = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/last_successful');
+    // Текущая загрузка, если уже обработана (last_successful у Авито отстаёт: 20.10 отдавал вчерашнюю при готовой ночной),
+    // иначе – последняя успешная
+    $base = 'current';
+    $summary = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/current');
+    if (in_array((string) ($summary['status'] ?? ''), ['processing', 'new', 'in_progress', ''], true)) {
+        $base = 'last_successful';
+        $summary = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/last_successful');
+    }
     $profile = fn_gm_avito_api_get($company_id, '/autoload/v2/profile');
     fn_gm_avito_set_setting($company_id, 'profile', json_encode([
         'time' => TIME,
@@ -1084,7 +1091,7 @@ function fn_gm_avito_sync_report($company_id)
         }
         $page = 1;
         do {
-            $data = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/last_successful/items?sections=' . rawurlencode($slug) . '&page=' . $page);
+            $data = fn_gm_avito_api_get($company_id, '/autoload/v4/uploads/' . $base . '/items?sections=' . rawurlencode($slug) . '&page=' . $page);
             foreach ((array) ($data['items'] ?? []) as $row) {
                 $messages = [];
                 foreach ((array) ($row['messages'] ?? []) as $message) {
