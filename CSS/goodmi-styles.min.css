@@ -4194,3 +4194,9 @@ body.gm-sg-open > jdiv{display:none !important}
 .ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .object-container{height:auto !important;padding-top:4px !important;padding-bottom:0 !important}
 .ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container{position:static !important;padding:12px 0 20px !important}
 }
+@media (max-width:767px){
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row>div{flex-wrap:wrap !important;align-items:baseline;gap:0 6px !important}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ut2-sld-short{display:none !important}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-price,.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-price .ty-price-num{font-size:17px !important;white-space:nowrap}
+.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-strike,.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-strike .ty-list-price{font-size:13px !important;white-space:nowrap}
+}
