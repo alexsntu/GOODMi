@@ -5637,3 +5637,32 @@ body.gm-sg-open > jdiv{display:none !important}
 @media (max-width:767px){
 .ut2-wl__grid .ut2-gl__control .gm-gl-quick{height:36px;font-size:13px}
 }
+
+/* ================================================================
+   76. Окно «Быстрый заказ» на ПК – компактное, 460px (2026-10-21, дополняет секцию 72)
+   Тема задаёт диалогам width:initial !important (селектор .ui-dialog.ui-widget:not(...):not(...)), окно стоит на left:50%
+   и сжимается по содержимому до оставшейся половины экрана – на большом мониторе разъезжалось до ~1280px.
+   Ширина 460px – селектором сильнее темы. Имя и телефон в одну строку (у обёртки полей inline flex-wrap, ячейки
+   переносились при узком окне), отступы, фото товара, поля и кнопка – меньше. Телефон (шторка, секция 72) не меняется.
+================================================================ */
+@media (min-width:768px){
+.ui-dialog.ui-widget.ui-widget-content.ui-front[aria-describedby^="content_buy_now_with_one_click_"]{width:460px !important;min-width:0 !important;max-width:94vw !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-titlebar{padding:18px 20px 4px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-title{font-size:20px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-titlebar-close{width:32px !important;height:32px !important;top:14px !important;right:14px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ui-dialog-content{padding:0 20px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .object-container{padding-top:6px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-container{gap:12px;margin:8px 0 14px !important;padding:10px !important;border-radius:14px}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-image{width:56px !important;height:56px;padding:4px;border-radius:10px}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-image img{max-width:48px !important;max-height:48px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-cr-product-info-header .ty-product-block-title{font-size:14px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price{margin-top:4px}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price__now,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .gm-cr-price__now *{font-size:16px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] form>div[style*="flex-wrap"]{flex-wrap:nowrap !important;gap:0 12px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] form>div[style*="flex-wrap"]>div{flex:1 1 0 !important;min-width:0 !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-control-group{margin:0 0 10px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .ty-control-group__title{margin:0 0 4px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] input.ty-input-text-full,.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] input.ty-input-phone{height:42px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container{padding:12px 20px 20px !important}
+.ui-dialog[aria-describedby^="content_buy_now_with_one_click_"] .buttons-container .ty-btn__primary{height:46px !important;font-size:15px !important}
+}
