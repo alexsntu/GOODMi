@@ -7,5 +7,12 @@ timeout $((MIN*60)) tail -n0 -F /var/log/nginx/gm-timing-$S.log /var/www/httpd-l
   grep --line-buffered -E 'commerceml|PHP message|^\[2|executing too slow' | \
   sed -u -E 's/(key|code|requestId|filename=[^&]*)=[^& "]*/\1=…/g' | cut -c1-200
 echo "=== сводка обмена $T0 – $(date +%H:%M:%S):"
-awk -v t="${D}T$T0" '$1 >= t' /var/log/nginx/gm-timing-$S.log | grep commerceml | grep -oE '"(GET|POST) [^ ]*type=[a-z]+&mode=[a-z]+|" [0-9]{3} |rt=[0-9.]+' | paste - - - | awk '{split($5,a,"="); k=$2" "$3" -> "$4; n[k]++; if(a[2]>mx[k]) mx[k]=a[2]} END {for(k in n) printf "  %4d × %s, макс %.2f с\n", n[k], k, mx[k]}' | sed -E 's/\?.*type=/ type=/' | sort
+awk -v t="${D}T$T0" '$1 >= t' /var/log/nginx/gm-timing-$S.log | grep commerceml | python3 -c '
+import sys,re,collections
+n=collections.Counter(); mx=collections.defaultdict(float)
+for l in sys.stdin:
+    m=re.search(r"type=([a-z]+)&mode=([a-z]+)[^\"]*\" (\d{3}) \d+ rt=([\d.]+)",l)
+    if m:
+        k="%s/%s -> %s"%(m.group(1),m.group(2),m.group(3)); n[k]+=1; mx[k]=max(mx[k],float(m.group(4)))
+for k in sorted(n): print("  %4d x %s, макс %.2f с"%(n[k],k,mx[k]))'
 echo "PHP-сообщения за время обмена:"; awk -v t="$T0" '$2 >= t' /var/www/httpd-logs/$S.error.log | grep "PHP message" | sed -E 's/.*PHP message: //; s/ in \/var\/www\/[^ ]*\/maxmobiles.ru\// @ /; s/" while.*//' | cut -c1-150 | sort | uniq -c | sort -rn | head
