@@ -1,8 +1,9 @@
 <?php
 /**
- * Перенос данных маркетинг-портала (JSON из export-portal.js) в таблицы cscart_gm_mkt_* (2026-10-21).
- * Только CLI, из корня сайта: php import-portal.php <portal-export.json> [--dry]
+ * Перенос данных маркетинг-портала (без бонусов – раздел не переносится по решению пользователя) (JSON из export-portal.js) в таблицы cscart_gm_mkt_* (2026-10-21).
+ * Только CLI, из корня сайта: php import-portal.php <portal-export.json> [--dry] [--fresh]
  * Номера записей и время (UTC) сохраняются как в портале; повторный запуск перезаписывает те же номера (REPLACE).
+ * --fresh – перед переносом очистить таблицы (окончательный перенос при переключении routines: удалённое в портале не остаётся).
  */
 if (PHP_SAPI !== 'cli') {
     exit;
@@ -17,6 +18,7 @@ if (!is_array($data)) {
     exit("Нужен файл выгрузки портала\n");
 }
 $dry = in_array('--dry', $argv, true);
+$fresh = in_array('--fresh', $argv, true);
 $t = 'fn_gm_mkt_db_text';
 $map = [
     'drafts' => ['gm_mkt_drafts', static function ($r) use ($t) {
@@ -49,23 +51,12 @@ $map = [
         return ['id' => $r['id'], 'title' => $t($r['title']), 'summary' => $t($r['summary']), 'source_channel' => $r['source_channel'] !== null ? $t($r['source_channel']) : null,
             'source_url' => $r['source_url'] !== null ? $t($r['source_url']) : null, 'status' => $r['status'], 'created_at' => $r['created_at']];
     }],
-    'bonus_batches' => ['gm_mkt_bonus_batches', static function ($r) {
-        return ['id' => $r['id'], 'status' => $r['status'], 'created_at' => $r['created_at']];
-    }],
-    'bonus_batch_items' => ['gm_mkt_bonus_items', static function ($r) use ($t) {
-        $r['name'] = $r['name'] !== null ? $t($r['name']) : null;
-        $r['error'] = $r['error'] !== null ? $t($r['error']) : null;
-
-        return $r;
-    }],
-    'bonus_batch_log' => ['gm_mkt_bonus_log', static function ($r) use ($t) {
-        $r['details'] = $r['details'] !== null ? $t($r['details']) : null;
-
-        return $r;
-    }],
 ];
 foreach ($map as $src => [$table, $conv]) {
     $rows = (array) ($data[$src] ?? []);
+    if ($fresh && !$dry) {
+        db_query('DELETE FROM ?:' . $table);
+    }
     $n = 0;
     foreach ($rows as $row) {
         $row = $conv($row);

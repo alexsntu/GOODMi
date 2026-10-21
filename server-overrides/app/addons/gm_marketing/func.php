@@ -1,10 +1,10 @@
 <?php
 /**
- * GOODMi: модуль «Маркетинг» – маркетинг-портал (черновики постов, темы блога, задачи, план, идеи акций, репосты, списание
- * бонусов БонусПлюс) внутри админки CS-Cart вместо отдельного портала на VPS price.maxmobiles.ru (2026-10-21).
+ * GOODMi: модуль «Маркетинг» – маркетинг-портал (черновики постов, темы блога, задачи, план, идеи акций, репосты)
+ * внутри админки CS-Cart вместо отдельного портала на VPS price.maxmobiles.ru (2026-10-21).
  * Данные – таблицы cscart_gm_mkt_* (_DEV/gm_marketing/tables.sql), страницы – controllers/backend/gm_marketing.php,
  * API для облачных routines – controllers/frontend/gm_marketing.php (те же пути и ответы, что у портала: /api/... → /mkt-api/...).
- * Секреты (токен API routines, ключ БонусПлюс) – <папка пользователя сайта>/private/gm_marketing.json, не в базе и не в репозитории.
+ * Секрет (токен API routines) – <папка пользователя сайта>/private/gm_marketing.json, не в базе и не в репозитории.
  */
 
 use Tygh\Registry;
@@ -54,7 +54,7 @@ const GM_MKT_ROUTINES = [
 ];
 
 /**
- * Секреты модуля: {"api_token": "...", "bonusplus_api_key": "...", "bonusplus_api_base": "https://bonusplus.pro/api"}
+ * Секреты модуля: {"api_token": "..."}
  */
 function fn_gm_mkt_config($name = null)
 {
@@ -262,7 +262,6 @@ function fn_gm_mkt_nav_counts()
         'topics' => (int) db_get_field("SELECT COUNT(*) FROM ?:gm_mkt_topics WHERE status = 'pending'"),
         'promo_ideas' => (int) db_get_field("SELECT COUNT(*) FROM ?:gm_mkt_promo_ideas WHERE status = 'pending'"),
         'reposts' => (int) db_get_field("SELECT COUNT(*) FROM ?:gm_mkt_reposts WHERE status = 'pending'"),
-        'bonuses' => (int) db_get_field("SELECT COUNT(*) FROM ?:gm_mkt_bonus_batches WHERE status = 'executed'"),
     ];
 }
 
@@ -383,277 +382,6 @@ function fn_gm_mkt_calendar($month, array $items)
     }
 
     return array_chunk($cells, 7);
-}
-
-// ---------- БонусПлюс ----------
-
-function fn_gm_mkt_bp_configured()
-{
-    return fn_gm_mkt_config('bonusplus_api_key') !== '';
-}
-
-/**
- * Запрос к API БонусПлюс; ошибка – исключение с кодом и телом ответа
- */
-function fn_gm_mkt_bp_request($method, $path, $body = null)
-{
-    $base = fn_gm_mkt_config('bonusplus_api_base') ?: 'https://bonusplus.pro/api';
-    $ch = curl_init(rtrim($base, '/') . $path);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => $method,
-        CURLOPT_HTTPHEADER => [
-            'Authorization: ApiKey ' . base64_encode(fn_gm_mkt_config('bonusplus_api_key')),
-            'Content-Type: application/json',
-        ],
-        CURLOPT_CONNECTTIMEOUT => 10,
-        CURLOPT_TIMEOUT => 30,
-    ]);
-    if ($body !== null) {
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-    }
-    $response = curl_exec($ch);
-    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $error = curl_error($ch);
-    curl_close($ch);
-    if ($response === false || $code < 200 || $code >= 300) {
-        throw new Exception('БонусПлюс ' . $method . ' ' . $path . ' -> ' . ($code ?: $error) . ': ' . mb_substr((string) $response, 0, 300));
-    }
-
-    return (array) json_decode((string) $response, true);
-}
-
-// активные (availableBonuses) и ожидающие (notActiveBonuses) бонусы клиента
-function fn_gm_mkt_bp_customer($phone)
-{
-    return fn_gm_mkt_bp_request('GET', '/customer?phone=' . rawurlencode($phone));
-}
-
-// amount < 0 – списание. НЕ использовать transactionType 30 для «активации» ожидающих бонусов: это отдельное начисление,
-// а не перевод – задваивает баланс (проверено в портале 2026-09-02)
-function fn_gm_mkt_bp_patch_balance($phone, $amount)
-{
-    return fn_gm_mkt_bp_request('PATCH', '/customer/' . rawurlencode($phone) . '/balance', ['amount' => $amount]);
-}
-
-function fn_gm_mkt_normalize_phone($raw)
-{
-    $digits = preg_replace('/\D/', '', (string) $raw);
-    if (strlen($digits) === 11 && $digits[0] === '8') {
-        return '7' . substr($digits, 1);
-    }
-    if (strlen($digits) === 10) {
-        return '7' . $digits;
-    }
-
-    return $digits;
-}
-
-/**
- * Строки «телефон сумма» → [телефон => сумма] (дубли телефонов складываются) и [телефон => сколько строк]
- */
-function fn_gm_mkt_parse_bonus_list($text)
-{
-    $totals = [];
-    $dups = [];
-    foreach (preg_split('/\r?\n/', (string) $text) as $line) {
-        $parts = preg_split('/[\s,;]+/', trim($line), -1, PREG_SPLIT_NO_EMPTY);
-        if (count($parts) < 2) {
-            continue;
-        }
-        $phone = fn_gm_mkt_normalize_phone($parts[0]);
-        $amount = (float) str_replace(',', '.', $parts[1]);
-        if (!preg_match('/^7\d{10}$/', $phone) || !is_numeric(str_replace(',', '.', $parts[1])) || $amount <= 0) {
-            continue;
-        }
-        $totals[$phone] = ($totals[$phone] ?? 0) + $amount;
-        $dups[$phone] = ($dups[$phone] ?? 0) + 1;
-    }
-
-    return [$totals, $dups];
-}
-
-function fn_gm_mkt_bonus_log($batch_id, $action, $phone = null, $amount = null, $details = null)
-{
-    db_query('INSERT INTO ?:gm_mkt_bonus_log ?e', [
-        'batch_id' => (int) $batch_id,
-        'phone' => $phone,
-        'action' => $action,
-        'amount' => $amount,
-        'details' => $details !== null ? fn_gm_mkt_db_text($details) : null,
-        'user_id' => (int) (Tygh::$app['session']['auth']['user_id'] ?? 0),
-        'created_at' => fn_gm_mkt_now(),
-    ]);
-}
-
-/**
- * Превью партии списания: по каждому телефону – текущий баланс и ожидающие бонусы в БонусПлюс
- */
-function fn_gm_mkt_bonus_preview($list)
-{
-    [$totals, $dups] = fn_gm_mkt_parse_bonus_list($list);
-    if (!$totals) {
-        return 0;
-    }
-    $batch_id = (int) db_query('INSERT INTO ?:gm_mkt_bonus_batches ?e', [
-        'status' => 'preview',
-        'user_id' => (int) (Tygh::$app['session']['auth']['user_id'] ?? 0),
-        'created_at' => fn_gm_mkt_now(),
-    ]);
-    fn_gm_mkt_bonus_log($batch_id, 'batch_created', null, null, 'строк во входном списке: ' . array_sum($dups) . ', уникальных телефонов: ' . count($totals));
-    foreach ($totals as $phone => $requested) {
-        $phone = (string) $phone;
-        $name = null;
-        $balance = 0;
-        $pending = 0;
-        try {
-            $customer = fn_gm_mkt_bp_customer($phone);
-            $balance = (float) ($customer['availableBonuses'] ?? 0);
-            $pending = (float) ($customer['notActiveBonuses'] ?? 0);
-            $name = $customer['person']['fn'] ?? null;
-        } catch (Exception $e) {
-            fn_gm_mkt_bonus_log($batch_id, 'preview_error', $phone, null, $e->getMessage());
-        }
-        db_query('INSERT INTO ?:gm_mkt_bonus_items ?e', [
-            'batch_id' => $batch_id,
-            'phone' => $phone,
-            'name' => $name !== null ? fn_gm_mkt_db_text($name) : null,
-            'dup_count' => $dups[$phone] ?? 1,
-            'requested_deduct' => $requested,
-            'balance_at_preview' => $balance,
-            'pending_at_preview' => $pending,
-        ]);
-        if (($dups[$phone] ?? 1) > 1) {
-            fn_gm_mkt_bonus_log($batch_id, 'duplicate_summed', $phone, $requested, $dups[$phone] . ' строк в исходном списке сложены в одну сумму');
-        }
-    }
-
-    return $batch_id;
-}
-
-/**
- * Шаг 1: списать по превью (не больше активного баланса); где не хватило, но есть ожидающие бонусы – шаг 2 после ручной
- * активации в кабинете БонусПлюс (API активировать не умеет)
- */
-function fn_gm_mkt_bonus_execute($batch_id)
-{
-    $any_step2 = false;
-    foreach (db_get_array('SELECT * FROM ?:gm_mkt_bonus_items WHERE batch_id = ?i ORDER BY id', $batch_id) as $it) {
-        $actual = min((float) $it['requested_deduct'], (float) $it['balance_at_preview']);
-        $error = null;
-        if ($actual > 0) {
-            try {
-                fn_gm_mkt_bp_patch_balance($it['phone'], -$actual);
-                fn_gm_mkt_bonus_log($batch_id, 'deduct_step1', $it['phone'], $actual, 'баланс до списания: ' . (float) $it['balance_at_preview']);
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-                fn_gm_mkt_bonus_log($batch_id, 'error', $it['phone'], null, $error);
-            }
-        }
-        $shortfall = (float) $it['requested_deduct'] - ($error ? 0 : $actual);
-        $step2 = !$error && $shortfall > 0.001 && (float) $it['pending_at_preview'] > 0;
-        $any_step2 = $any_step2 || $step2;
-        db_query('UPDATE ?:gm_mkt_bonus_items SET ?u WHERE id = ?i', [
-            'deducted_step1' => $error ? 0 : $actual,
-            'step2_needed' => $step2 ? 1 : 0,
-            'error' => $error !== null ? fn_gm_mkt_db_text($error) : null,
-        ], $it['id']);
-    }
-    fn_gm_mkt_set_status('gm_mkt_bonus_batches', $batch_id, $any_step2 ? 'executed' : 'done');
-    fn_gm_mkt_bonus_log($batch_id, $any_step2 ? 'step1_finished_awaiting_activation' : 'step1_finished_done');
-}
-
-/**
- * Шаг 2: после ручной активации – свежий баланс и доудержание недостающего
- */
-function fn_gm_mkt_bonus_followup($batch_id)
-{
-    $still = 0;
-    foreach (db_get_array('SELECT * FROM ?:gm_mkt_bonus_items WHERE batch_id = ?i AND step2_needed = 1 AND step2_done = 0 ORDER BY id', $batch_id) as $it) {
-        $shortfall = (float) $it['requested_deduct'] - (float) $it['deducted_step1'];
-        $error = null;
-        try {
-            $customer = fn_gm_mkt_bp_customer($it['phone']);
-        } catch (Exception $e) {
-            $error = $e->getMessage();
-            fn_gm_mkt_bonus_log($batch_id, 'error', $it['phone'], null, $error);
-            db_query('UPDATE ?:gm_mkt_bonus_items SET error = ?s WHERE id = ?i', fn_gm_mkt_db_text($error), $it['id']);
-            $still++;
-            continue;
-        }
-        $balance = (float) ($customer['availableBonuses'] ?? 0);
-        $pending = (float) ($customer['notActiveBonuses'] ?? 0);
-        $now = min($shortfall, $balance);
-        if ($now > 0) {
-            try {
-                fn_gm_mkt_bp_patch_balance($it['phone'], -$now);
-                fn_gm_mkt_bonus_log($batch_id, 'deduct_step2', $it['phone'], $now, 'баланс после активации: ' . $balance);
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-                fn_gm_mkt_bonus_log($batch_id, 'error', $it['phone'], null, $error);
-            }
-        }
-        $more = !$error && $pending > 0 && $now < $shortfall;
-        if ($more) {
-            $still++;
-            fn_gm_mkt_bonus_log($batch_id, 'still_not_activated', $it['phone'], null, 'ожидает: ' . $pending . ', недосписано: ' . ($shortfall - $now));
-        }
-        db_query(
-            'UPDATE ?:gm_mkt_bonus_items SET deducted_step2 = deducted_step2 + ?d, step2_needed = ?i, pending_at_preview = ?d, step2_done = ?i, error = ?s WHERE id = ?i',
-            $error ? 0 : $now,
-            $more ? 1 : 0,
-            $pending,
-            $more ? 0 : 1,
-            $error !== null ? fn_gm_mkt_db_text($error) : null,
-            $it['id']
-        );
-    }
-    fn_gm_mkt_set_status('gm_mkt_bonus_batches', $batch_id, $still ? 'executed' : 'done');
-    fn_gm_mkt_bonus_log($batch_id, $still ? 'step2_finished_partial' : 'step2_finished_done');
-}
-
-/**
- * Партия для страницы: строки с итогами и списки «нужна активация» / «нечего активировать»
- */
-function fn_gm_mkt_bonus_batch_view($batch_id)
-{
-    $batch = db_get_row('SELECT * FROM ?:gm_mkt_bonus_batches WHERE id = ?i', $batch_id);
-    if (!$batch) {
-        return [];
-    }
-    $items = fn_gm_mkt_rows(db_get_array('SELECT * FROM ?:gm_mkt_bonus_items WHERE batch_id = ?i ORDER BY id', $batch_id), ['id', 'batch_id', 'dup_count', 'step2_needed', 'step2_done']);
-    $totals = ['requested' => 0, 'deducted' => 0, 'remaining' => 0];
-    foreach ($items as &$it) {
-        $it['total_deducted'] = (float) $it['deducted_step1'] + (float) $it['deducted_step2'];
-        $it['shortfall'] = (float) $it['requested_deduct'] - $it['total_deducted'];
-        $it['still_pending'] = $it['step2_needed'] === 1 && $it['step2_done'] === 0;
-        $totals['requested'] += (float) $it['requested_deduct'];
-        $totals['deducted'] += $it['total_deducted'];
-        $totals['remaining'] += max(0, $it['shortfall']);
-        // целые для показа (в Smarty 5 нет модификатора round)
-        $it['requested_r'] = (int) round((float) $it['requested_deduct']);
-        $it['balance_r'] = (int) round((float) $it['balance_at_preview']);
-        $it['pending_r'] = (int) round((float) $it['pending_at_preview']);
-        $it['deducted_r'] = (int) round($it['total_deducted']);
-        $it['shortfall_r'] = (int) round(max(0, $it['shortfall']));
-    }
-    unset($it);
-    foreach (['requested', 'deducted', 'remaining'] as $key) {
-        $totals[$key . '_r'] = (int) round($totals[$key]);
-    }
-    $batch['created_at_msk'] = fn_gm_mkt_msk($batch['created_at']);
-
-    return [
-        'batch' => $batch,
-        'items' => $items,
-        'totals' => $totals,
-        'partial' => array_values(array_filter($items, static function ($it) { return $it['still_pending'] && (float) $it['deducted_step1'] > 0; })),
-        'zero' => array_values(array_filter($items, static function ($it) { return $it['still_pending'] && (float) $it['deducted_step1'] == 0; })),
-        'dups' => array_values(array_filter($items, static function ($it) { return $it['dup_count'] > 1; })),
-        'uncollectible' => array_values(array_filter($items, static function ($it) use ($batch) {
-            return $it['shortfall'] > 0.001 && !$it['still_pending'] && $batch['status'] !== 'preview';
-        })),
-    ];
 }
 
 // ---------- API для routines ----------

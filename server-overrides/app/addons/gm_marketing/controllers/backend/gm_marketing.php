@@ -7,10 +7,8 @@
  *   gm_marketing.plan        – маркетинговый план (список и календарь), plan_edit – правка мероприятия
  *   gm_marketing.promo_ideas – идеи акций на одобрение
  *   gm_marketing.reposts     – предложения постов для репоста
- *   gm_marketing.bonuses     – массовое списание бонусов БонусПлюс: партии, bonus_batch – партия, bonus_log – журнал
  *   gm_marketing.help        – справка
- *   POST: set_status (черновики, темы, идеи, репосты, задачи, план), add_task, delete_task, add_plan, update_plan, delete_plan,
- *   bonus_preview, bonus_execute, bonus_followup
+ *   POST: set_status (черновики, темы, идеи, репосты, задачи, план), add_task, delete_task, add_plan, update_plan, delete_plan
  */
 
 use Tygh\Registry;
@@ -90,39 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return [CONTROLLER_STATUS_OK, $back('gm_marketing.plan')];
     }
 
-    if ($mode === 'bonus_preview') {
-        if (!fn_gm_mkt_bp_configured()) {
-            fn_set_notification('E', __('error'), 'Не задан ключ API БонусПлюс (private/gm_marketing.json).');
-
-            return [CONTROLLER_STATUS_OK, 'gm_marketing.bonuses'];
-        }
-        $batch_id = fn_gm_mkt_bonus_preview((string) ($_REQUEST['list'] ?? ''));
-        if (!$batch_id) {
-            fn_set_notification('E', __('error'), 'Список пуст или не распознан – формат: телефон и сумма через пробел, по одному на строку.');
-
-            return [CONTROLLER_STATUS_OK, 'gm_marketing.bonuses'];
-        }
-
-        return [CONTROLLER_STATUS_OK, 'gm_marketing.bonus_batch?batch_id=' . $batch_id];
-    }
-
-    if ($mode === 'bonus_execute' || $mode === 'bonus_followup') {
-        $batch_id = (int) ($_REQUEST['batch_id'] ?? 0);
-        $status = (string) db_get_field('SELECT status FROM ?:gm_mkt_bonus_batches WHERE id = ?i', $batch_id);
-        if ($mode === 'bonus_execute' && $status === 'preview') {
-            fn_gm_mkt_bonus_execute($batch_id);
-        } elseif ($mode === 'bonus_followup' && $status === 'executed') {
-            fn_gm_mkt_bonus_followup($batch_id);
-        }
-
-        return [CONTROLLER_STATUS_OK, 'gm_marketing.bonus_batch?batch_id=' . $batch_id];
-    }
-
     return [CONTROLLER_STATUS_OK, 'gm_marketing.drafts'];
 }
 
 $counts = fn_gm_mkt_nav_counts();
-$active = ['plan_edit' => 'plan', 'bonus_batch' => 'bonuses', 'bonus_log' => 'bonuses'][$mode] ?? $mode;
+$active = ['plan_edit' => 'plan'][$mode] ?? $mode;
 $tabs = [];
 foreach ([
     'drafts' => ['Черновики', $counts['drafts']],
@@ -131,7 +101,6 @@ foreach ([
     'plan' => ['План', 0],
     'promo_ideas' => ['Идеи акций', $counts['promo_ideas']],
     'reposts' => ['Предложение постов', $counts['reposts']],
-    'bonuses' => ['Бонусы', $counts['bonuses']],
     'help' => ['Справка', 0],
 ] as $tab => [$title, $count]) {
     $tabs[$tab] = ['title' => $title, 'count' => $count, 'active' => $tab === $active];
@@ -215,47 +184,4 @@ if ($mode === 'plan_edit') {
         'gm_mkt_item' => fn_gm_mkt_rows([$item])[0],
         'gm_mkt_plan_types' => GM_MKT_PLAN_TYPES,
     ]);
-}
-
-if ($mode === 'bonuses') {
-    $batches = db_get_array(
-        'SELECT b.*, (SELECT COUNT(*) FROM ?:gm_mkt_bonus_items i WHERE i.batch_id = b.id) AS items_count,'
-        . ' (SELECT COALESCE(SUM(requested_deduct), 0) FROM ?:gm_mkt_bonus_items i WHERE i.batch_id = b.id) AS total_requested,'
-        . ' (SELECT COALESCE(SUM(deducted_step1), 0) + COALESCE(SUM(deducted_step2), 0) FROM ?:gm_mkt_bonus_items i WHERE i.batch_id = b.id) AS total_deducted'
-        . ' FROM ?:gm_mkt_bonus_batches b ORDER BY b.created_at DESC, b.id DESC'
-    );
-    foreach ($batches as &$b) {
-        $b['created_msk'] = fn_gm_mkt_msk($b['created_at']);
-        $b['total_requested_r'] = (int) round((float) $b['total_requested']);
-        $b['total_deducted_r'] = (int) round((float) $b['total_deducted']);
-    }
-    unset($b);
-    $view->assign(['gm_mkt_batches' => $batches, 'gm_mkt_bp_configured' => fn_gm_mkt_bp_configured()]);
-}
-
-if ($mode === 'bonus_batch') {
-    $data = fn_gm_mkt_bonus_batch_view((int) ($_REQUEST['batch_id'] ?? 0));
-    if (!$data) {
-        return [CONTROLLER_STATUS_NO_PAGE];
-    }
-    $view->assign('gm_mkt_bb', $data);
-}
-
-if ($mode === 'bonus_log') {
-    $phone = trim((string) ($_REQUEST['phone'] ?? ''));
-    $batch_id = (int) ($_REQUEST['batch_id'] ?? 0);
-    $where = '1';
-    if ($phone !== '') {
-        $where .= db_quote(' AND l.phone LIKE ?l', '%' . preg_replace('/\D/', '', $phone) . '%');
-    }
-    if ($batch_id) {
-        $where .= db_quote(' AND l.batch_id = ?i', $batch_id);
-    }
-    $entries = fn_gm_mkt_rows(db_get_array('SELECT l.* FROM ?:gm_mkt_bonus_log l WHERE ' . $where . ' ORDER BY l.created_at DESC, l.id DESC LIMIT 500'), ['id', 'batch_id']);
-    foreach ($entries as &$e) {
-        $e['created_msk'] = fn_gm_mkt_msk($e['created_at']);
-        $e['amount_r'] = $e['amount'] !== null ? (string) (int) round((float) $e['amount']) : '';
-    }
-    unset($e);
-    $view->assign(['gm_mkt_entries' => $entries, 'gm_mkt_phone' => $phone, 'gm_mkt_batch_id' => $batch_id]);
 }

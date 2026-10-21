@@ -18,7 +18,6 @@ $schema['central']['marketing']['items']['gm_marketing'] = [
         'gm_marketing_plan' => ['title' => 'План', 'href' => 'gm_marketing.plan', 'position' => 400],
         'gm_marketing_promo_ideas' => ['title' => 'Идеи акций', 'href' => 'gm_marketing.promo_ideas', 'position' => 500],
         'gm_marketing_reposts' => ['title' => 'Предложение постов', 'href' => 'gm_marketing.reposts', 'position' => 600],
-        'gm_marketing_bonuses' => ['title' => 'Бонусы', 'href' => 'gm_marketing.bonuses', 'position' => 700],
         'gm_marketing_help' => ['title' => 'Справка', 'href' => 'gm_marketing.help', 'position' => 800],
     ],
 ];
