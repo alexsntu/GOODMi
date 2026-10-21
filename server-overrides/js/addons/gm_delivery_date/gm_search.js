@@ -102,7 +102,13 @@
   function render(d) {
     items = [];
     active = -1;
-    var q = '', s = '', p = '';
+    var q = '', s = '', p = '', f = '';
+    // Запрос о магазине («рассрочка», «доставка», «адрес»…) – первой строкой ссылка на страницу магазина (2026-10-21)
+    $.each(d.info || [], function (k, x) {
+      var i = items.push({type: 'u', url: x.url, src: 'sg_info', text: x.title}) - 1;
+      f += '<a class="gm-sg__q gm-sg__q--scope gm-sg__q--info" href="' + esc(x.url) + '" data-i="' + i + '" role="option"><span class="gm-sg__t">' + esc(x.title)
+        + '</span> <i>— страница магазина</i></a>';
+    });
     // Пустое поле: при истории «Часто ищут» короче (5), чтобы список не был длинным
     var queries = d.popular && histGet().length ? (d.queries || []).slice(0, 5) : (d.queries || []);
     $.each(queries, function (k, x) {
@@ -146,12 +152,12 @@
       }).join('') + '</div>';
     }
     shownCount = items.length;
-    if (!h && !q && !s && !p) { hide(); return; }
+    if (!h && !q && !s && !p && !f) { hide(); return; }
     panel.html(
       c + h
       + (d.popular && q ? '<div class="gm-sg__h">Часто ищут</div>' : '')
       + (d.layout ? '<div class="gm-sg__h">Показаны результаты для «' + esc(d.layout) + '»</div>' : '')
-      + '<div class="gm-sg__cols' + (p ? '' : ' gm-sg__cols--one') + '"><div class="gm-sg__left">' + q + s + '</div>'
+      + '<div class="gm-sg__cols' + (p ? '' : ' gm-sg__cols--one') + '"><div class="gm-sg__left">' + f + q + s + '</div>'
       + (p ? '<div class="gm-sg__right">' + (d.popular ? '<div class="gm-sg__h">Популярные товары</div>' : '') + p + '</div>' : '') + '</div>'
     );
     show();

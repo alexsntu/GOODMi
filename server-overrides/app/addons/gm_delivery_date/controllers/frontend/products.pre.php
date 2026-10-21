@@ -26,6 +26,20 @@ if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 2) {
     if (isset($_REQUEST['q']) && is_string($_REQUEST['q']) && trim($_REQUEST['q']) !== '' && is_file($gm_lib)) {
         try {
             require_once $gm_lib;
+            // Запрос о магазине («рассрочка», «доставка», «адрес», название ТЦ…) – сразу на страницу магазина (2026-10-21);
+            // в статистику – режимом redirect (адрес страницы – в поле shown)
+            $gm_info = gm_search_info_page((string) $_REQUEST['q']);
+            if ($gm_info) {
+                try {
+                    if (preg_grep('/^sid_customer_/', array_keys($_COOKIE)) && gm_search_sid() !== '') {
+                        db_query('INSERT INTO ?:gm_search_log ?e', ['ts' => TIME, 'sid' => gm_search_sid(), 'source' => 'page',
+                            'q' => mb_substr(trim((string) $_REQUEST['q']), 0, 120), 'qn' => mb_substr(gm_search_normalize((string) $_REQUEST['q']), 0, 120),
+                            'mode' => 'redirect', 'total' => 1, 'cat' => 0, 'page' => 1, 'sort' => '', 'device' => gm_search_device(), 'ms' => 0, 'shown' => $gm_info['url']]);
+                    }
+                } catch (\Throwable $e) {
+                }
+                return [CONTROLLER_STATUS_REDIRECT, Registry::get('config.current_location') . $gm_info['url']];
+            }
             // Индекс не отвечает – не держим обработчик PHP: 1 с на соединение, 3 с на ответ (2026-10-17: Manticore завис на 14 ч)
             $gm_mc = mysqli_init();
             $gm_mc->options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
