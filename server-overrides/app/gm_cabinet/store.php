@@ -1514,6 +1514,29 @@ function fn_gm_cab_auth_status($hours = 1)
         }
     }
 
+    // Исправленный PHP (уязвимость от 21.10.2026): раз в 3 часа /usr/local/sbin/gm-php-patch-status смотрит репозиторий ISPmanager.
+    // О вышедшей сборке сообщаем в окне, где она появилась, и затем раз в сутки, пока не установлена; «нет данных 12 часов» – один раз.
+    $patch = json_decode((string) @file_get_contents('/var/lib/gm-status/php-patch.json'), true);
+    $written = is_array($patch) ? (int) $patch['written_at'] : 0;
+    $stale = $now - 12 * 3600;
+    if ($written < $stale) {
+        if ($written >= $stale - 3600 * $hours) {
+            $status['alerts'][] = 'Проверка выхода исправленного PHP не обновлялась больше 12 часов – не работает /usr/local/sbin/gm-php-patch-status';
+        }
+    } else {
+        foreach ((array) $patch['packages'] as $name => $p) {
+            $since = (int) $p['ready_since'];
+            if (!$since) {
+                continue;
+            }
+            $day_before = $hour >= $since ? intdiv($hour - $since, 86400) : -1;
+            if (intdiv($now - $since, 86400) > $day_before) {
+                $status['alerts'][] = 'Вышел исправленный PHP: ' . $name . ' ' . $p['candidate'] . ' (стоит ' . $p['installed'] . ', ' . $p['note']
+                    . ') – обновить днём с проверкой витрин, см. заметку project-php2shell-2026-10-21';
+            }
+        }
+    }
+
     // Сторож кода сайтов (2026-10-18, после найденных веб-шеллов): раз в час /usr/local/sbin/gm-webshell-watch проверяет своими
     // правилами ClamAV все файлы с кодом в /var/www (официальные базы и maldet закладки не узнали) и сравнивает PHP-файлы с прошлым
     // запуском. Закладка – в каждой сводке, пока её не убрали; новые и изменённые файлы – по журналу code-changes.jsonl за окно

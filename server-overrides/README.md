@@ -685,3 +685,13 @@ company_id = 1: штатное окно `call_requests.request` («Быстры�
 - `app/addons/cp_image_gallery/func.php` (~820): `$ajax_vars['description'] ?? null` – убирает Warning «array offset on null» (≈100 в сутки),
   поведение то же. Сторонний модуль Cart-Power – после обновления вернуть.
 - Оригиналы – `/root/gm-backups/2026-10-21-warn-fixes/{live,dev}/`.
+
+### Оповещение о выходе исправленного PHP (2026-10-21)
+
+- `/usr/local/sbin/gm-php-patch-status` (root, раз в 3 часа по `/etc/cron.d/gm-php-patch-status`): обновляет список пакетов только
+  репозитория ISPmanager (`ispsystem-base.list`) и кладёт в `/var/lib/gm-status/php-patch.json` установленную и доступную версию
+  `isp-php83`, `isp-php82`, `isp-php74`. Для 8.3/8.2 «исправлено» – с 8.3.36 / 8.2.35, для 7.4 – любая сборка новее 7.4.33-1708-deb11.
+- `app/gm_cabinet/store.php`, `fn_gm_cab_auth_status()`, блок «Исправленный PHP»: тревога в сводке (→ Telegram) в окне, где сборка
+  появилась, и затем раз в сутки, пока не установлена; «данные не обновлялись 12 часов» – один раз.
+- Когда обновление поставлено – тревоги прекращаются сами. Убрать проверку: удалить оба файла и блок в `store.php`.
+- Оригинал `store.php` и проверка на подставных данных – `/root/gm-backups/2026-10-21-php-patch-alert/`.

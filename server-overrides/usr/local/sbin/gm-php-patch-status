@@ -1,0 +1,59 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Вышла ли в репозитории ISPmanager сборка PHP с исправлением безопасности от 21.10.2026 (CVE-2026-109618 / CVE-2026-109619),
+ * для сводки оповещений GOODMi (gm_cabinet.auth_status → Telegram).
+ * root раз в 3 часа (/etc/cron.d/gm-php-patch-status) обновляет список пакетов только репозитория ISPmanager
+ * и кладёт выжимку в /var/lib/gm-status/php-patch.json, доступную сайту только на чтение.
+ * ready_since – когда в репозитории появилась исправленная сборка, которая ещё не установлена (0 – нечего ставить).
+ */
+$dir = '/var/lib/gm-status';
+$file = $dir . '/php-patch.json';
+
+// Версия PHP, начиная с которой уязвимость исправлена; у 7.4 исправлений от PHP нет – ждём любую новую сборку ISPmanager
+$packages = [
+    'isp-php83' => ['fixed' => '8.3.36'],
+    'isp-php82' => ['fixed' => '8.2.35'],
+    'isp-php74' => ['baseline' => '7.4.33-1708-deb11'],
+];
+
+exec('apt-get update -qq -o Dir::Etc::sourcelist=sources.list.d/ispsystem-base.list -o Dir::Etc::sourceparts=- -o APT::Get::List-Cleanup=0 2>&1', $out, $rc);
+
+$prev = json_decode((string) @file_get_contents($file), true);
+$status = ['written_at' => time(), 'apt_update_ok' => $rc === 0, 'packages' => []];
+
+foreach ($packages as $name => $rule) {
+    $policy = (string) shell_exec('apt-cache policy ' . escapeshellarg($name) . ' 2>/dev/null');
+    $installed = preg_match('/Installed:\s+(\S+)/', $policy, $m) ? $m[1] : '';
+    $candidate = preg_match('/Candidate:\s+(\S+)/', $policy, $m) ? $m[1] : '';
+    $is_fixed = function ($ver) use ($rule) {
+        if ($ver === '' || $ver === '(none)') {
+            return false;
+        }
+        if (isset($rule['fixed'])) {
+            return version_compare(strtok($ver, '-'), $rule['fixed'], '>=');
+        }
+        exec('dpkg --compare-versions ' . escapeshellarg($ver) . ' gt ' . escapeshellarg($rule['baseline']), $o, $gt);
+        return $gt === 0;
+    };
+    $installed_fixed = $is_fixed($installed);
+    $ready = !$installed_fixed && $candidate !== $installed && $is_fixed($candidate);
+
+    $old = isset($prev['packages'][$name]) ? $prev['packages'][$name] : [];
+    $ready_since = 0;
+    if ($ready) {
+        $ready_since = (!empty($old['ready_since']) && $old['candidate'] === $candidate) ? (int) $old['ready_since'] : time();
+    }
+    $status['packages'][$name] = [
+        'installed' => $installed, 'candidate' => $candidate, 'installed_fixed' => $installed_fixed,
+        'ready_since' => $ready_since, 'note' => isset($rule['fixed']) ? 'исправлено с ' . $rule['fixed'] : 'новая сборка после ' . $rule['baseline'],
+    ];
+}
+
+if (!is_dir($dir)) {
+    mkdir($dir, 0755, true);
+}
+$tmp = $file . '.tmp';
+file_put_contents($tmp, json_encode($status, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+chmod($tmp, 0644);
+rename($tmp, $file);

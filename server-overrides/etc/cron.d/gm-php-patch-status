@@ -1,0 +1,2 @@
+# Вышла ли исправленная сборка PHP в репозитории ISPmanager – для оповещений GOODMi в Telegram (см. /usr/local/sbin/gm-php-patch-status)
+40 */3 * * * root /usr/local/sbin/gm-php-patch-status >/dev/null 2>&1
