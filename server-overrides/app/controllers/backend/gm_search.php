@@ -8,6 +8,7 @@
  *   suggest  – что выбирают в подсказках и брошенный ввод;
  *   orders   – заказы после поиска (купили ли кликнутый товар);
  *   check    – проверка запроса q=: как понят и почему товары стоят в таком порядке;
+ *   candidates – кандидаты в синонимы из переформулировок (POST action=accept – сделать синонимом, dismiss – скрыть пару);
  *   synonyms – свои синонимы (POST action=save|toggle|delete); pins – закрепления товаров по запросу (action=add|delete|up|down);
  *              изменения выгружаются в app/gm_search/custom.json и сразу действуют в поиске;
  *   index    – состояние индекса и запуски сборки; POST action=rebuild – пересобрать (флаг, cron раз в минуту).
@@ -48,6 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($act === 'save') { $res = gm_stats_synonym_save((string) ($_REQUEST['src'] ?? ''), (string) ($_REQUEST['dst'] ?? ''), (string) ($_REQUEST['note'] ?? '')); }
         elseif ($act === 'toggle') { gm_stats_synonym_toggle((int) ($_REQUEST['id'] ?? 0), !empty($_REQUEST['active'])); }
         elseif ($act === 'delete') { gm_stats_synonym_delete((int) ($_REQUEST['id'] ?? 0)); $res = ['ok' => true, 'message' => 'Синоним удалён.']; }
+    } elseif ($mode === 'candidates') {
+        if ($act === 'accept') {
+            $res = gm_stats_synonym_save((string) ($_REQUEST['src'] ?? ''), (string) ($_REQUEST['dst'] ?? ''),
+                mb_substr('из переформулировки: «' . (string) ($_REQUEST['a'] ?? '') . '» → «' . (string) ($_REQUEST['b'] ?? '') . '»', 0, 120));
+        } elseif ($act === 'dismiss') {
+            gm_stats_candidate_dismiss((string) ($_REQUEST['a'] ?? ''), (string) ($_REQUEST['b'] ?? ''));
+            $res = ['ok' => true, 'message' => 'Пара скрыта и больше не появится в кандидатах.'];
+        }
     } elseif ($mode === 'pins') {
         if ($act === 'add') { $res = gm_stats_pin_add((string) ($_REQUEST['q'] ?? ''), (int) ($_REQUEST['product_id'] ?? 0)); }
         elseif ($act === 'delete') { gm_stats_pin_delete((int) ($_REQUEST['id'] ?? 0)); $res = ['ok' => true, 'message' => 'Закрепление снято.']; }
@@ -57,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_set_notification($res['ok'] ? 'N' : 'E', $res['ok'] ? 'Готово' : 'Ошибка', $res['message']);
     }
     $back = $mode === 'pins' && !empty($_REQUEST['q']) ? 'gm_search.pins?q=' . urlencode((string) $_REQUEST['q']) : 'gm_search.' . $mode;
+    if ($mode === 'candidates' && !empty($_REQUEST['days'])) { $back .= '?days=' . (int) $_REQUEST['days']; }
     // Синонимы: вернуться на ту же страницу списка и с тем же поиском
     if ($mode === 'synonyms' && (!empty($_REQUEST['find']) || !empty($_REQUEST['page']))) {
         $back .= '?find=' . urlencode((string) ($_REQUEST['find'] ?? '')) . '&page=' . (int) ($_REQUEST['page'] ?? 1);
@@ -73,7 +83,7 @@ $view->assign('gm_periods', gm_stats_periods());
 $view->assign('gm_mode', $mode);
 $view->assign('gm_tabs', [
     'manage' => 'Обзор', 'queries' => 'Запросы', 'zero' => 'Ничего не найдено', 'noclick' => 'Нашли, но не кликнули',
-    'suggest' => 'Подсказки', 'orders' => 'Заказы после поиска', 'check' => 'Проверка запроса', 'synonyms' => 'Синонимы',
+    'suggest' => 'Подсказки', 'orders' => 'Заказы после поиска', 'check' => 'Проверка запроса', 'candidates' => 'Кандидаты в синонимы', 'synonyms' => 'Синонимы',
     'pins' => 'Закрепления', 'index' => 'Индекс',
 ]);
 
@@ -100,6 +110,8 @@ if ($mode === 'manage') {
         $view->assign('gm_sg', gm_search_suggest($gm_mc, $q));
     }
     $view->assign('gm_engine', (bool) $gm_mc);
+} elseif ($mode === 'candidates') {
+    $view->assign('gm_rows', gm_stats_candidates($gm_from, 150));
 } elseif ($mode === 'synonyms') {
     $gm_list = gm_stats_synonyms(isset($_REQUEST['find']) ? mb_substr((string) $_REQUEST['find'], 0, 60) : '', isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1, 25);
     $view->assign('gm_list', $gm_list);
