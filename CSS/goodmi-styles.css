@@ -5601,3 +5601,25 @@ body.gm-sg-open > jdiv{display:none !important}
 .grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-price,.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-price .ty-price-num{font-size:17px !important;white-space:nowrap}
 .grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-strike,.grid-list.ut2-gl:not(.ut2-wl__grid) .ut2-gl__price.pr-row .ty-strike .ty-list-price{font-size:13px !important;white-space:nowrap}
 }
+
+/* ================================================================
+   74. Главная, товарные ленты (лёгкий скроллер): «В корзину» под ценой, ниже «Быстрый заказ» (2026-10-21)
+   Ленты главной – .grid-list.ut2-gl__simple-scroller (без класса ut2-gl), поэтому секции 71 и 73 на них не действуют,
+   а кнопка «Быстрый заказ» из хука my_changes появилась и там – без стилей. Карточки узкие (около 210px на ПК),
+   поэтому кнопки всегда друг под другом: «В корзину» на всю ширину (с иконкой), ниже «Быстрый заказ».
+   Цена на телефоне – как в секции 73.
+================================================================ */
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price-wrap{flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:10px}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price-wrap>.ut2-gl__price{width:100%;min-height:0 !important}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price-wrap>.ut2-gl__control{display:flex;flex-direction:column;align-items:stretch;gap:6px;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__control>div{flex:none;width:100%;min-width:0;height:auto}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__control .ty-btn__add-to-cart{display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 8px;box-sizing:border-box;white-space:nowrap}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__control .gm-gl-quick{flex:none;width:100%;min-width:0;display:inline-flex;align-items:center;justify-content:center;height:36px;margin:0;padding:0 8px;border:0;border-radius:8px;background:#f5f5f5;box-shadow:none;color:#1c1c1c;font-size:13px;font-weight:500;line-height:1;text-transform:none;letter-spacing:0;white-space:nowrap;text-decoration:none;box-sizing:border-box;transition:background-color .15s,color .15s}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__control .gm-gl-quick:hover{background:#fff0e6;color:#ff6900}
+@media (max-width:767px){
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price-wrap{gap:8px}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row>div{flex-wrap:wrap !important;align-items:baseline;gap:0 6px !important}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ut2-sld-short{display:none !important}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-price,.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-price .ty-price-num{font-size:17px !important;white-space:nowrap}
+.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-strike,.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-strike .ty-list-price{font-size:13px !important;white-space:nowrap}
+}
