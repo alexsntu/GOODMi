@@ -64,6 +64,9 @@ function gm_search_synonyms()
         'повербанк' => 'внешний аккумулятор', 'пауэрбанк' => 'внешний аккумулятор', 'павербанк' => 'внешний аккумулятор', 'powerbank' => 'внешний аккумулятор', 'power bank' => 'внешний аккумулятор',
         'роботпылесос' => 'робот пылесос', 'аэрофритюрница' => 'аэрогриль', 'air fryer' => 'аэрогриль',
         'маршрутизатор' => 'роутер', 'вайфай' => 'wi-fi', 'вай фай' => 'wi-fi', 'wifi' => 'wi-fi', 'колонки' => 'колонка',
+        // Единицы отдельным словом по-русски (2026-10-21, «ремешок 22 мм»): в названиях – «22mm», «65W», «20000mAh», «5G»;
+        // слитно («22мм») их и так переводит gm_search_normalize, через пробел – только здесь
+        'мм' => 'mm', 'вт' => 'w', 'мач' => 'mah', 'гц' => 'hz', 'джи' => 'g',
     ];
     // Синонимы из админки (gm_search.synonyms → custom.json): добавляются к стартовому списку, при совпадении – главнее
     $custom = gm_search_custom();
@@ -100,6 +103,34 @@ function gm_search_mods()
 function gm_search_strip_parent($phrase)
 {
     return preg_replace('/^xiaomi (?=(redmi|redmibook|poco|mijia|roborock|dreame|viomi|70mai|imilab|zmi|huohou|youpin)\b)/u', '', $phrase);
+}
+
+/**
+ * «xiaomi» перед суббрендом убирается и в запросе (2026-10-21): телефоны в каталоге – «Redmi Note 17», «POCO F8», без Xiaomi,
+ * поэтому «xiaomi redmi note 17» не находился по всем словам. Учитывает русские написания («сяоми редми»).
+ */
+function gm_search_drop_parent($norm)
+{
+    $syn = gm_search_synonyms();
+    $subs = ['redmi', 'redmibook', 'poco', 'mijia', 'roborock', 'dreame', 'viomi', '70mai', 'imilab', 'zmi', 'huohou', 'youpin'];
+    $tokens = explode(' ', $norm);
+    $out = [];
+    foreach ($tokens as $i => $t) {
+        $next = isset($tokens[$i + 1]) ? $tokens[$i + 1] : '';
+        $next = isset($syn[$next]) ? $syn[$next] : $next;
+        if (($t === 'xiaomi' || isset($syn[$t]) && $syn[$t] === 'xiaomi') && in_array($next, $subs, true)) { continue; }
+        $out[] = $t;
+    }
+    return $out ? implode(' ', $out) : $norm;
+}
+
+/** Сколько товаров в индексе содержит каждое слово запроса (после разбора Manticore): слово → число товаров. */
+function gm_search_doc_counts($mc, $norm)
+{
+    $docs = [];
+    $r = $mc->query('CALL KEYWORDS(' . gm_search_q($mc, $norm) . ", 'gm_products', 1 AS stats)");
+    while ($r && ($x = $r->fetch_assoc())) { $docs[$x['tokenized']] = (int) $x['docs']; }
+    return $docs;
 }
 
 /** Кириллица → латиница («эирпод» → «eirpod»): для названий брендов и моделей, набранных по-русски. */
@@ -259,8 +290,32 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
 {
     $norm = gm_search_normalize($query);
     if ($norm === '') { return ['mode' => 'empty', 'total' => 0, 'items' => []]; }
+    $norm = gm_search_drop_parent($norm);
     $words = [];
     $expr = gm_search_match_expr($norm, $words);
+    // Модель – слово латиницей и номер за ним («xiaomi 15», «note 15», «x 8», «s 26»): сначала ищем их рядом, не дальше
+    // чем через одно слово (2026-10-21; «redmi 15» – и «Redmi Note 15») – иначе по «xiaomi 15» первыми шли повербанк «(15W)»
+    // и зарядка «MDY-15-EK». Нет таких товаров – обычный поиск
+    $pairs = [];
+    for ($k = 0; $k + 1 < count($words); $k++) {
+        // Год («pro 2026») – не номер модели; буквы-двойники c/b/h/p/y/k («p20» – и Dreame R20, «c302» – и S302, «к1» – Q1) – тоже нет
+        if (preg_match('/^[a-z]+$/', $words[$k]) && !preg_match('/^[cbhpyk]$/', $words[$k]) && preg_match('/^\d+$/', $words[$k + 1])
+            && !preg_match('/^(19|20)\d\d$/', $words[$k + 1])) { $pairs[] = $words[$k] . ' ' . $words[$k + 1]; }
+    }
+    $pairs = array_values(array_unique($pairs));
+    $pair_expr = implode(' ', array_map(function ($p) { return '"' . gm_search_escape($p) . '"~2'; }, $pairs));
+    // Названия, которых в каталоге нет совсем («pecron», «saros»): латиница от 3 букв, ни одного товара и нет похожего слова
+    // с одной ошибкой («banf» – опечатка в band, не название). С ними не выбрасываем слова (режим 60%) – иначе вместо
+    // «нет такого» показывались случайные товары по оставшимся словам и цифрам
+    // Только в коротком запросе (до 4 слов): в длинном это обычно вставленное название с артикулом («DZN4021CN, Отвертка …»)
+    $docs = gm_search_doc_counts($mc, $norm);
+    $unknown = [];
+    foreach (count($words) <= 4 ? explode(' ', $norm) : [] as $t) {
+        if (preg_match('/^[a-z]{3,}$/', $t) && isset($docs[$t]) && $docs[$t] === 0) {
+            $r = $mc->query('CALL SUGGEST(' . gm_search_q($mc, $t) . ", 'gm_products', 1 AS max_edits, 1 AS limit)");
+            if (!($r && $r->fetch_row())) { $unknown[] = $t; }
+        }
+    }
     $wants_acc = (bool) array_intersect($words, gm_search_acc_words());
     $acc_mul = $wants_acc ? '1.0' : '0.2'; // ниже, чем устройство не в наличии (0.4)
     // Модификации (Pro, Max…), уценка, запчасти и подарочные сертификаты, о которых в запросе не просили, – ниже
@@ -309,17 +364,70 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
     if (preg_match('/^[a-z\[\];\',.`\s]+$/i', trim((string) $query)) && preg_match('/[\[\];\',.`]/', (string) $query)) {
         $layout_expr = gm_search_match_expr(gm_search_normalize(gm_search_switch_layout(mb_strtolower(trim((string) $query), 'UTF-8'))));
     }
-    $distance = $min_len <= 4 ? 1 : 2;
+    // Каждое слово – началом («книж клав» → «книжка с клавиатурой»), если по целым словам и началу последнего не нашлось
+    $stop = ['на', 'для', 'в', 'во', 'с', 'со', 'и', 'к', 'по', 'от', 'из', 'под', 'без'];
+    $prefix_all = implode(' ', array_map(function ($t) { return !preg_match('/^\d+$/', $t) && mb_strlen($t) >= 3 ? gm_search_escape($t) . '*' : gm_search_escape($t); },
+        array_values(array_filter($tokens, function ($t) use ($stop) { return !in_array($t, $stop, true); }))));
+    if (count($tokens) < 2 || $prefix_all === $prefix || $prefix_all === $expr) { $prefix_all = ''; }
+    // Опечатки: в словах до 6 букв – не больше одной (2026-10-21: «saros» с двумя ошибками давал «coros», «smart» – 894 случайных товара)
+    $distance = $min_len <= 6 ? 1 : 2;
+    // Ни одного слова запроса нет в каталоге и Manticore не знает похожих в пределах этих ошибок («воздуходув» – ближайшее
+    // «воздуховод», 3 ошибки) – нечёткий поиск не запускаем: он находил случайное (настольную лампу)
+    $fuzzy_ok = true;
+    $named = array_values(array_filter(explode(' ', $norm), function ($t) { return mb_strlen($t) >= 3 && !preg_match('/^\d+$/', $t); }));
+    $all_unknown = $named && !array_filter($named, function ($t) use ($docs) { return !isset($docs[$t]) || $docs[$t] > 0; });
+    if ($all_unknown) {
+        $fuzzy_ok = false;
+        foreach ($named as $t) {
+            $r = $mc->query('CALL SUGGEST(' . gm_search_q($mc, $t) . ", 'gm_products', $distance AS max_edits, 1 AS limit)");
+            if ($r && $r->fetch_row()) { $fuzzy_ok = true; break; }
+        }
+    }
+    // Запрос набран не в той раскладке, а таких слов в каталоге нет (2026-10-21): латиница – «htvtijr 22 vv» → «ремешок 22 мм»,
+    // кириллица – «ьщяфке» → «mozart». Пробуем раньше нечёткого поиска, который по таким словам находил случайное
+    // Переведённый запрос ищется целиком заново – с его правилами порядка («ремешок» – аксессуар, который просили)
+    $layout_words = '';
+    if ($layout_expr === '' && ($unknown && preg_match('/^[a-z0-9\s]+$/', $norm) || $all_unknown && preg_match('/^[а-я0-9\s]+$/u', $norm))) {
+        $alt = gm_search_switch_layout(mb_strtolower(trim((string) $query), 'UTF-8'));
+        if (gm_search_normalize($alt) !== '' && gm_search_normalize($alt) !== $norm) { $layout_words = $alt; }
+    }
+    // 60% слов, от трёх слов – с округлением вверх (2026-10-21: «xiaomi desktop speaker» – два слова из трёх, а не любое одно)
+    $need_q = count($words) <= 2 ? 1 : (int) ceil(count($words) * 0.6);
+    // Названную модель в коротком запросе («iphone 17», «pecron f5000», «xiaomi 18 pro») не выбрасываем – она обязательна,
+    // необязательны остальные слова. В длинном (вставили название товара с артикулом и объёмом памяти) – как раньше
+    $quorum = '"' . gm_search_escape($norm) . '"/' . max(1, $need_q);
+    if ($pairs && count($words) <= 4) {
+        $in_pairs = [];
+        foreach ($pairs as $p) { foreach (explode(' ', $p) as $w) { $in_pairs[$w] = 1; } }
+        $rest = array_values(array_filter($words, function ($w) use ($in_pairs) { return !isset($in_pairs[$w]); }));
+        $need = $need_q - count($in_pairs);
+        $quorum = $pair_expr . ($rest && $need > 0 ? ' "' . gm_search_escape(implode(' ', $rest)) . '"/' . $need : '');
+    }
     $tries = [
+        ['all', $pairs ? "WHERE MATCH(" . gm_search_q($mc, $expr . ' ' . $pair_expr) . ")" : '', $opts],
         ['all', "WHERE MATCH(" . gm_search_q($mc, $expr) . ")", $opts],
         ['prefix', $prefix !== '' && $prefix !== $expr ? "WHERE MATCH(" . gm_search_q($mc, $prefix) . ")" : '', $opts],
-        ['fuzzy', "WHERE MATCH(" . gm_search_q($mc, $norm) . ")", $opts . ", fuzzy = 1, distance = $distance, layouts = 'us,ru'"],
+        ['prefix', $prefix_all !== '' ? "WHERE MATCH(" . gm_search_q($mc, $prefix_all) . ")" : '', $opts],
+        ['layout', $layout_words !== '' ? '@layout' : '', $opts],
+        ['fuzzy', $fuzzy_ok ? "WHERE MATCH(" . gm_search_q($mc, $norm) . ")" : '', $opts . ", fuzzy = 1, distance = $distance, layouts = 'us,ru'"],
         ['translit', $translit !== '' ? "WHERE MATCH(" . gm_search_q($mc, $translit) . ")" : '', $opts . ", fuzzy = 1, distance = 2"],
         ['layout', $layout_expr !== '' ? "WHERE MATCH(" . gm_search_q($mc, $layout_expr) . ")" : '', $opts],
-        ['quorum', "WHERE MATCH(" . gm_search_q($mc, '"' . gm_search_escape($norm) . '"/' . max(1, (int) floor(count($words) * 0.6))) . ")", $opts],
+        ['quorum', $unknown ? '' : "WHERE MATCH(" . gm_search_q($mc, $quorum) . ")", $opts],
+        // Не нашлось и так – меньше слов, как до 2026-10-21 («кулон mi banf» – хотя бы кулоны)
+        ['quorum', $unknown || $quorum !== '"' . gm_search_escape($norm) . '"/' . max(1, $need_q) || $need_q <= (int) floor(count($words) * 0.6) ? ''
+            : "WHERE MATCH(" . gm_search_q($mc, '"' . gm_search_escape($norm) . '"/' . max(1, (int) floor(count($words) * 0.6))) . ")", $opts],
     ];
+    static $depth = 0;
     foreach ($tries as $t) {
         if ($t[1] === '') { continue; }
+        if ($t[1] === '@layout') {
+            if ($depth > 0) { continue; }
+            $depth++;
+            $f = gm_search_raw($mc, $layout_words, $limit, $offset);
+            $depth--;
+            if (!empty($f['items'])) { $f['mode'] = 'layout'; return $f; }
+            continue;
+        }
         // Сначала товары в наличии, потом остальные – везде (решение пользователя 2026-10-16); внутри – товары названного
         // в запросе раздела, затем со словом запроса в начале названия, затем по релевантности
         $sql = "$select {$t[1]} ORDER BY ab ASC, tb DESC, in_stock DESC, " . ($short ? 'hb DESC, ' : '') . "score DESC LIMIT " . (int) $offset . ', ' . (int) $limit . " {$t[2]}";
@@ -602,7 +710,7 @@ function gm_search_explain($mc, $q, $limit = 30)
             'w' => (int) $it['w'], 'factors' => $m, 'score' => round((float) $it['score']), 'demand' => (int) $it['demand'], 'popularity' => (int) $it['popularity']];
     }
     $modes = ['all' => 'все слова (с синонимами и морфологией)', 'prefix' => 'по началу последнего слова', 'fuzzy' => 'с исправлением опечаток и раскладки',
-        'translit' => 'русское название латиницей', 'quorum' => 'достаточно 60% слов', 'pinned' => 'только закреплённые товары', 'none' => 'ничего не нашлось', 'empty' => 'пустой запрос'];
+        'translit' => 'русское название латиницей', 'layout' => 'набрано в другой раскладке клавиатуры', 'quorum' => 'достаточно 60% слов', 'pinned' => 'только закреплённые товары', 'none' => 'ничего не нашлось', 'empty' => 'пустой запрос'];
 
     return ['q' => $q, 'norm' => isset($f['norm']) ? $f['norm'] : '', 'mode' => $f['mode'], 'mode_text' => isset($modes[$f['mode']]) ? $modes[$f['mode']] : $f['mode'],
         'expr' => isset($f['expr']) ? $f['expr'] : '', 'translit' => isset($f['translit']) ? $f['translit'] : '', 'total' => $f['total'],
