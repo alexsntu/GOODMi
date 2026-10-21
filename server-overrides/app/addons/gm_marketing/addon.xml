@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- GOODMi: маркетинг-портал (черновики, темы блога, задачи, план, идеи акций, репосты, бонусы) в админке вместо VPS (2026-10-21). -->
+<addon scheme="3.0">
+    <id>gm_marketing</id>
+    <version>1.0</version>
+    <priority>4294967101</priority>
+    <position>0</position>
+    <status>active</status>
+    <default_language>ru</default_language>
+    <supplier>GOODMi</supplier>
+</addon>
