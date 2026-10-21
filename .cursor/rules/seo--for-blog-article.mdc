@@ -20,7 +20,7 @@ alwaysApply: false
 ## Архитектура двух файлов (CS-Cart)
 
 > **Критично:** CS-Cart дважды рендерит `<script>` теги из wysiwyg-описания страницы →
-> дублирование JSON-LD в GSC (ошибки «BlogPosting дублируется», «FAQPage дублируется»).
+> дублирование JSON-LD в GSC (ошибки «BlogPosting дублируется»).
 
 Каждая статья = **два файла**:
 
@@ -52,7 +52,10 @@ alwaysApply: false
 Обязательные типы:
 - `BlogPosting` — headline, description (150–160 chars), datePublished, dateModified, author, publisher с logo, inLanguage: `"ru"`, keywords, speakable, mainEntityOfPage
 - `BreadcrumbList` — 3 уровня: Главная → Блог → Заголовок статьи
-- `FAQPage` — те же 4 вопроса, что и HTML-секция FAQ (строго совпадают); обязательны `@id` и `mainEntity`
+
+> **`FAQPage` не используется — ни в JSON-LD, ни микроразметкой в HTML** (решение владельца 21.10.2026, см. `CLAUDE.md`):
+> Google с сентября 2023 г. не показывает FAQ rich results коммерческим сайтам, разметка даёт ошибки в GSC без пользы.
+> Сама секция FAQ в статье остаётся — как обычный текст (AEO: прямые ответы цитируются нейросетями и без разметки).
 
 ```html
 <script type="application/ld+json">
@@ -93,14 +96,6 @@ alwaysApply: false
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "@id": "https://goodmi.ru/blog-xiaomi-na-russkom/SLUG/#faq",
-  "mainEntity": [...]
-}
-</script>
 ```
 
 ---
@@ -303,14 +298,13 @@ alwaysApply: false
 ## FAQ — требования AEO
 
 ```html
-<section class="gm-faq" aria-labelledby="faq-heading"
-         itemscope itemtype="https://schema.org/FAQPage">
+<section class="gm-faq" aria-labelledby="faq-heading">
   <h2 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы</h2>
 
-  <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-    <p class="gm-faq-question" itemprop="name">ВОПРОС</p>
-    <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-      <p itemprop="text">ПРЯМОЙ ОТВЕТ первым предложением. Детали далее. 40–80 слов.</p>
+  <div class="gm-faq-item">
+    <p class="gm-faq-question">ВОПРОС</p>
+    <div class="gm-faq-answer">
+      <p>ПРЯМОЙ ОТВЕТ первым предложением. Детали далее. 40–80 слов.</p>
     </div>
   </div>
 </section>
@@ -328,7 +322,7 @@ alwaysApply: false
 **Правила AEO:**
 - Первое предложение каждого ответа = полный прямой ответ
 - Не начинать с «Это зависит от...», «Мы рекомендуем...», «Отвечаем:»
-- JSON-LD `FAQPage` содержит те же 4 вопроса — дословно совпадают с HTML
+- Без `itemscope` / `itemtype` / `itemprop` и без JSON-LD `FAQPage` — разметка FAQ не используется
 
 ---
 
@@ -414,7 +408,7 @@ CTA:          gm-cta · gm-cta-text · gm-cta-actions · gm-btn · gm-btn-primar
 - [ ] `datePublished` — ISO 8601 (YYYY-MM-DD)
 - [ ] `speakable.cssSelector` = `[".gm-article-key-facts", ".gm-faq"]`
 - [ ] `BreadcrumbList` — ровно 3 уровня
-- [ ] `FAQPage` дословно совпадает с HTML FAQ
+- [ ] Нет `FAQPage` — ни в JSON-LD, ни `itemscope`/`itemprop` в секции FAQ
 
 **GEO/AEO/E-E-A-T:**
 - [ ] Key Facts пункты — без отсылок к статье, standalone

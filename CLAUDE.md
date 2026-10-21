@@ -98,7 +98,7 @@ All category and page blocks follow a shared structure:
 
 ### Hard prohibitions
 - `@graph` in JSON-LD — **never use** (CS-Cart incompatible)
-- `FAQPage` JSON-LD schema — **prohibited** (Google dropped FAQ rich results for commercial sites Sept 2023; causes GSC errors with no ranking benefit)
+- `FAQPage` — **prohibited** everywhere: JSON-LD and HTML microdata (`itemscope`/`itemprop` in FAQ sections), in category blocks, blog articles and routine prompts (Google dropped FAQ rich results for commercial sites Sept 2023; causes GSC errors with no ranking benefit; owner confirmed 2026-10-21). FAQ sections themselves stay as plain HTML
 - `itemscope itemtype="Product"` on `.gm-services-grid` cards — **prohibited** (triggers GSC critical errors for missing `offers`/`review`/`aggregateRating`)
 - `WebPage` in JSON-LD — **prohibited** (CS-Cart generates it automatically)
 - Prices in card descriptions or JSON-LD `description` fields — **prohibited**

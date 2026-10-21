@@ -211,7 +211,7 @@ description: "Рерайт существующих статей для блог
       <li class="gm-howto-step" itemprop="step" itemscope itemtype="https://schema.org/HowToStep">
         <div class="gm-howto-step-body">
           <strong itemprop="name">Шаг 1</strong>
-          <p itemprop="text">[Описание]</p>
+          <p>[Описание]</p>
         </div>
       </li>
     </ol>
@@ -233,35 +233,34 @@ description: "Рерайт существующих статей для блог
   </div><!-- /.gm-article-body -->
 
   <!-- 6. FAQ (AEO) — 4 вопроса, первое предложение = прямой ответ -->
-  <section class="gm-faq" aria-labelledby="faq-heading"
-           itemscope itemtype="https://schema.org/FAQPage">
+  <section class="gm-faq" aria-labelledby="faq-heading">
     <h2 id="faq-heading" class="gm-section-title">Часто задаваемые вопросы</h2>
 
-    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-      <p class="gm-faq-question" itemprop="name">[Вопрос по теме статьи]</p>
-      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-        <p itemprop="text">[Прямой ответ первым предложением. Детали далее. 40–80 слов.]</p>
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">[Вопрос по теме статьи]</p>
+      <div class="gm-faq-answer">
+        <p>[Прямой ответ первым предложением. Детали далее. 40–80 слов.]</p>
       </div>
     </div>
 
-    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-      <p class="gm-faq-question" itemprop="name">Где купить [тема] в Севастополе?</p>
-      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-        <p itemprop="text">[Ответ с упоминанием GOODMi, доставки СДЭК, Крыма]</p>
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Где купить [тема] в Севастополе?</p>
+      <div class="gm-faq-answer">
+        <p>[Ответ с упоминанием GOODMi, доставки СДЭК, Крыма]</p>
       </div>
     </div>
 
-    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-      <p class="gm-faq-question" itemprop="name">Какая гарантия на технику Xiaomi в GOODMi?</p>
-      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-        <p itemprop="text">[Ответ про гарантию]</p>
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">Какая гарантия на технику Xiaomi в GOODMi?</p>
+      <div class="gm-faq-answer">
+        <p>[Ответ про гарантию]</p>
       </div>
     </div>
 
-    <div class="gm-faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-      <p class="gm-faq-question" itemprop="name">[Сравнение / выбор: вариант A или B?]</p>
-      <div class="gm-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-        <p itemprop="text">[Ответ]</p>
+    <div class="gm-faq-item">
+      <p class="gm-faq-question">[Сравнение / выбор: вариант A или B?]</p>
+      <div class="gm-faq-answer">
+        <p>[Ответ]</p>
       </div>
     </div>
 
@@ -298,7 +297,7 @@ description: "Рерайт существующих статей для блог
 
 #### Файл 2: `Блог/[slug]-jsonld.html`
 
-Два отдельных `<script>` блока. **Запрещено:** `@graph`, `FAQPage` в JSON-LD.
+Два отдельных `<script>` блока. **Запрещено:** `@graph`, `FAQPage` – ни в JSON-LD, ни микроразметкой (`itemscope`/`itemprop`) в секции FAQ (решение владельца 21.10.2026).
 
 ```html
 <script type="application/ld+json">
@@ -439,7 +438,7 @@ HTML-код **не выводить в чат** — только краткий 
 
 **JSON-LD:**
 - [ ] Нет `@graph` — только отдельные `<script>` на тип
-- [ ] Нет `FAQPage` в JSON-LD (запрещено в проекте)
+- [ ] Нет `FAQPage` – ни в JSON-LD, ни `itemscope`/`itemprop` в секции FAQ (запрещено в проекте)
 - [ ] `BlogPosting.description` — 150–160 символов
 - [ ] `speakable.cssSelector` = `[".gm-article-key-facts", ".gm-faq"]`
 - [ ] BreadcrumbList — ровно 3 уровня
