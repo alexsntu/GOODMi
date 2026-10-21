@@ -661,3 +661,14 @@ company_id = 1: штатное окно `call_requests.request` («Быстры�
 - 2026-10-20: окно «Быстрый заказ» GOODMi – секция 72 «Своего CSS» (вид как MM-15f, цвета GOODMi); цена товара в окне и у GOODMi:
   `call_requests_content.tpl` (класс `gm-cr-price` для company 2, `mm-cr-price` для 1) и `call_requests.post.php` (company 1 и 2).
   Бэкап – `/root/gm-backups/2026-10-20-gm-tiles/cr-live/`.
+
+### Маркетинг-портал в админке – модуль gm_marketing (2026-10-21)
+
+- Модуль `app/addons/gm_marketing/` + шаблоны `design/backend/templates/addons/gm_marketing/` + вход API `mkt-api.php` в корне сайта;
+  правило nginx `vhosts-resources/goodmi.ru/gm-mkt-api.conf` (копия – `etc/nginx/vhosts-resources/goodmi.ru/gm-mkt-api.conf`):
+  `https://goodmi.ru/mkt-api/<путь>` → `mkt-api.php` → `index.php?dispatch=gm_marketing.api` (без подмены адреса SEO-модуль CS-Cart
+  отвечает 301 «/» и 404). Таблицы `cscart_gm_mkt_*` – `_DEV/gm_marketing/tables.sql`; токен API для routines – `<data>/private/gm_marketing.json`
+  (не в репозитории). Ключей сторонних сервисов в модуле нет: раздел бонусов БонусПлюс убран по решению владельца.
+- Установлен на боевой и dev 21.10 (fn_install_addon – `_DEV/gm_marketing/tools/install.php`), данные портала перенесены
+  `tools/export-portal.js` → `tools/import-portal.php` (окончательно при переключении routines – с `--fresh`). Портал на VPS пока работает.
+- После обновления CS-Cart / темы: вернуть файлы из этой папки; таблицы и данные обновление не трогает.
