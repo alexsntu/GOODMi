@@ -817,7 +817,8 @@ function fn_cp_image_gallery_dispatch_before_display()
                 if (defined('AJAX_REQUEST')) {
                     $ajax_vars = Registry::get('ajax')->getAssignedVar('ab__sf_data');
                     $is_ab_seo = true;
-                    $var_data['description'] = $ajax_vars['description'];
+                    // GOODMi 2026-10-21: ab__sf_data есть не в каждом AJAX-запросе – без ?? Warning «array offset on null» (поведение то же)
+                    $var_data['description'] = $ajax_vars['description'] ?? null;
                 }
             if (!empty($var_data)) {
                 foreach ($var_fields as $var_field) {

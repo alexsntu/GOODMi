@@ -672,3 +672,16 @@ company_id = 1: штатное окно `call_requests.request` («Быстры�
 - Установлен на боевой и dev 21.10 (fn_install_addon – `_DEV/gm_marketing/tools/install.php`), данные портала перенесены
   `tools/export-portal.js` → `tools/import-portal.php` (окончательно при переключении routines – с `--fresh`). Портал на VPS пока работает.
 - После обновления CS-Cart / темы: вернуть файлы из этой папки; таблицы и данные обновление не трогает.
+
+### Исправления по журналам после перехода GOODMi на PHP 8.3 (2026-10-21, боевые и dev)
+
+- `app/gm_cabinet/store.php`, `app/mm_cabinet/store.php`: штрих-код карты лояльности в кабинете – своя кодировка Code 128
+  (`fn_gm_cab_code128_widths` / `fn_mm_cab_code128_widths`, стандартная таблица 107 шаблонов) вместо генератора модуля CS-Cart
+  `barcode`: в его наборе C нет знаков 100–102, у ~1,7 % номеров с чётным числом цифр контрольный знак выпадал – касса такой код
+  не читает (в журнале «Undefined array key» в Generator.php:726). Сверено на 20 000 номеров: где генератор CS-Cart прав – совпадает.
+- `app/addons/ab__intelligent_accessories/func.php` (~847): `REPLACE` вместо `INSERT` в `cscart_ab__ia_data` – одновременные запросы к товару
+  без готовой подборки давали Duplicate entry → 500 в `ab__ia_joins.get_join_products` (≈19 раз за 2 недели). Сторонний модуль AlexBranding –
+  после его обновления вернуть правку.
+- `app/addons/cp_image_gallery/func.php` (~820): `$ajax_vars['description'] ?? null` – убирает Warning «array offset on null» (≈100 в сутки),
+  поведение то же. Сторонний модуль Cart-Power – после обновления вернуть.
+- Оригиналы – `/root/gm-backups/2026-10-21-warn-fixes/{live,dev}/`.

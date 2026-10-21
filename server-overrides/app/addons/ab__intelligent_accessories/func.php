@@ -844,7 +844,8 @@ $data[] = [
 'list' => serialize($p['list']),
 ];
 }
-db_query('INSERT INTO ?:ab__ia_data ?m', $data);
+// GOODMi 2026-10-21: REPLACE вместо INSERT – два одновременных запроса к товару без готовой подборки давали Duplicate entry (500)
+db_query('REPLACE INTO ?:ab__ia_data ?m', $data);
 }
 $time_end = time();
 db_query('UPDATE ?:ab__ia_joins SET last_update_date = ?s, start_update = ?i, end_update = ?i WHERE join_id = ?i', date('Y-m-d H:i:s'), $time_start, $time_end, $join_id);
