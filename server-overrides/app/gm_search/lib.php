@@ -296,11 +296,19 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
     // Модель – слово латиницей и номер за ним («xiaomi 15», «note 15», «x 8», «s 26»): сначала ищем их рядом, не дальше
     // чем через одно слово (2026-10-21; «redmi 15» – и «Redmi Note 15») – иначе по «xiaomi 15» первыми шли повербанк «(15W)»
     // и зарядка «MDY-15-EK». Нет таких товаров – обычный поиск
+    // Пара – по тому, что ввёл покупатель (русское слово – через его синоним: «айфон 17» → iphone 17); сочетание из словаря
+    // синонимов не трогаем («ps 5» → «playstation 5»: игры подписаны «(PS5)», а не PlayStation 5)
     $pairs = [];
-    for ($k = 0; $k + 1 < count($words); $k++) {
-        // Год («pro 2026») – не номер модели; буквы-двойники c/b/h/p/y/k («p20» – и Dreame R20, «c302» – и S302, «к1» – Q1) – тоже нет
-        if (preg_match('/^[a-z]+$/', $words[$k]) && !preg_match('/^[cbhpyk]$/', $words[$k]) && preg_match('/^\d+$/', $words[$k + 1])
-            && !preg_match('/^(19|20)\d\d$/', $words[$k + 1])) { $pairs[] = $words[$k] . ' ' . $words[$k + 1]; }
+    $syn_all = gm_search_synonyms();
+    $nt = array_values(array_filter(explode(' ', $norm), function ($t) { return !in_array($t, ['на', 'для', 'в', 'во', 'с', 'со', 'и', 'к', 'по', 'от', 'из', 'под', 'без'], true); }));
+    for ($k = 0; $k + 1 < count($nt); $k++) {
+        $n = $nt[$k + 1];
+        // Год («pro 2026») – не номер модели
+        if (!preg_match('/^\d+$/', $n) || preg_match('/^(19|20)\d\d$/', $n) || isset($syn_all[$nt[$k] . ' ' . $n])) { continue; }
+        $w = preg_match('/^[a-z]+$/', $nt[$k]) ? $nt[$k] : (isset($syn_all[$nt[$k]]) && preg_match('/^[a-z]+$/', $syn_all[$nt[$k]]) ? $syn_all[$nt[$k]] : '');
+        // Буквы-двойники c/b/h/p/y/k («p20» – и Dreame R20, «c302» – и S302, «к1» – Q1) – не пара
+        if ($w === '' || preg_match('/^[cbhpyk]$/', $w)) { continue; }
+        $pairs[] = $w . ' ' . $n;
     }
     $pairs = array_values(array_unique($pairs));
     $pair_expr = implode(' ', array_map(function ($p) { return '"' . gm_search_escape($p) . '"~2'; }, $pairs));
@@ -389,19 +397,24 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
     $layout_words = '';
     if ($layout_expr === '' && ($unknown && preg_match('/^[a-z0-9\s]+$/', $norm) || $all_unknown && preg_match('/^[а-я0-9\s]+$/u', $norm))) {
         $alt = gm_search_switch_layout(mb_strtolower(trim((string) $query), 'UTF-8'));
-        if (gm_search_normalize($alt) !== '' && gm_search_normalize($alt) !== $norm) { $layout_words = $alt; }
+        $alt_norm = gm_search_normalize($alt);
+        if ($alt_norm !== '' && $alt_norm !== $norm) { $layout_words = $alt; }
     }
-    // 60% слов, от трёх слов – с округлением вверх (2026-10-21: «xiaomi desktop speaker» – два слова из трёх, а не любое одно)
+    // 60% слов (по словам после синонимов: «мак бук аир m4» → macbook air m 4), от трёх слов – с округлением вверх (2026-10-21: «xiaomi desktop speaker» – два слова из трёх, а не любое одно)
     $need_q = count($words) <= 2 ? 1 : (int) ceil(count($words) * 0.6);
     // Названную модель в коротком запросе («iphone 17», «pecron f5000», «xiaomi 18 pro») не выбрасываем – она обязательна,
     // необязательны остальные слова. В длинном (вставили название товара с артикулом и объёмом памяти) – как раньше
-    $quorum = '"' . gm_search_escape($norm) . '"/' . max(1, $need_q);
-    if ($pairs && count($words) <= 4) {
+    $qwords = implode(' ', $words);
+    $quorum = '"' . gm_search_escape($qwords) . '"/' . max(1, $need_q);
+    // Однобуквенные обозначения («m 4», «x 8», «s 24») обязательными не делаем: по «macbook air m4» (такого нет) лучше MacBook Air M5,
+    // чем всё с M4 – MacBook Pro и чехлы для iPad
+    $mand = array_values(array_filter($pairs, function ($p) { return strlen(explode(' ', $p)[0]) >= 2; }));
+    if ($mand && count($words) <= 4) {
         $in_pairs = [];
-        foreach ($pairs as $p) { foreach (explode(' ', $p) as $w) { $in_pairs[$w] = 1; } }
+        foreach ($mand as $p) { foreach (explode(' ', $p) as $w) { $in_pairs[$w] = 1; } }
         $rest = array_values(array_filter($words, function ($w) use ($in_pairs) { return !isset($in_pairs[$w]); }));
         $need = $need_q - count($in_pairs);
-        $quorum = $pair_expr . ($rest && $need > 0 ? ' "' . gm_search_escape(implode(' ', $rest)) . '"/' . $need : '');
+        $quorum = implode(' ', array_map(function ($p) { return '"' . gm_search_escape($p) . '"~2'; }, $mand)) . ($rest && $need > 0 ? ' "' . gm_search_escape(implode(' ', $rest)) . '"/' . $need : '');
     }
     $tries = [
         ['all', $pairs ? "WHERE MATCH(" . gm_search_q($mc, $expr . ' ' . $pair_expr) . ")" : '', $opts],
@@ -414,8 +427,8 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
         ['layout', $layout_expr !== '' ? "WHERE MATCH(" . gm_search_q($mc, $layout_expr) . ")" : '', $opts],
         ['quorum', $unknown ? '' : "WHERE MATCH(" . gm_search_q($mc, $quorum) . ")", $opts],
         // Не нашлось и так – меньше слов, как до 2026-10-21 («кулон mi banf» – хотя бы кулоны)
-        ['quorum', $unknown || $quorum !== '"' . gm_search_escape($norm) . '"/' . max(1, $need_q) || $need_q <= (int) floor(count($words) * 0.6) ? ''
-            : "WHERE MATCH(" . gm_search_q($mc, '"' . gm_search_escape($norm) . '"/' . max(1, (int) floor(count($words) * 0.6))) . ")", $opts],
+        ['quorum', $unknown || $quorum !== '"' . gm_search_escape($qwords) . '"/' . max(1, $need_q) || $need_q <= (int) floor(count($words) * 0.6) ? ''
+            : "WHERE MATCH(" . gm_search_q($mc, '"' . gm_search_escape($qwords) . '"/' . max(1, (int) floor(count($words) * 0.6))) . ")", $opts],
     ];
     static $depth = 0;
     foreach ($tries as $t) {
@@ -425,7 +438,9 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
             $depth++;
             $f = gm_search_raw($mc, $layout_words, $limit, $offset);
             $depth--;
-            if (!empty($f['items'])) { $f['mode'] = 'layout'; return $f; }
+            // Принимаем, только если в другой раскладке нашлось по всем словам, началу или с опечаткой – не по части слов
+            // («Realmi15t» → «кфкьш15е» находил «Диагностика iPhone» по одной цифре)
+            if (!empty($f['items']) && in_array($f['mode'], ['all', 'prefix', 'fuzzy', 'translit'], true)) { $f['mode'] = 'layout'; return $f; }
             continue;
         }
         // Сначала товары в наличии, потом остальные – везде (решение пользователя 2026-10-16); внутри – товары названного
