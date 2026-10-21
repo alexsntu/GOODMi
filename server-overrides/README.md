@@ -524,6 +524,10 @@ xione.ru}/gm-timing-log.conf` (`access_log /var/log/nginx/gm-timing-<сайт>.l
   `vhosts-resources/<сайт>/gm-cscart-fallback.conf` (копия – `server-overrides/etc/nginx/gm-cscart-fallback.conf`): ISPmanager при
   смене версии PHP стирает этот блок из vhost, и весь каталог отдаёт 500. Если панель когда-нибудь вернёт блок в vhost – nginx
   не стартует из-за дубля: убрать блок из vhost. Копия до правки – `/root/backup-2026-10-18-pre-php83/before-fallback/nginx.tar`.
+- 2026-10-21: HSTS (`add_header Strict-Transport-Security "max-age=31536000;"`) вынесен из vhost goodmi.ru и xione.ru в
+  `vhosts-resources/<сайт>/gm-hsts.conf` (копии – `etc/nginx/vhosts-resources/{goodmi.ru,xione.ru}/gm-hsts.conf`): проба на копиях
+  с файлами nginx как у боевых (dev 8.3 → 8.2 → 8.3) показала, что при смене версии PHP панель стирает только эту ручную строку,
+  остальные ручные правки vhost уцелели. У maxmobiles.ru HSTS не было. Копия до правки – `/root/backup-2026-10-18-pre-php83/before-hsts/nginx.tar`.
 - `gm-search.php` и `mm-search.php`: первой строкой `mysqli_report(MYSQLI_REPORT_OFF)` – на PHP 8.1+ mysqli бросает исключения,
   и недоступный Manticore давал бы фатальную ошибку вместо мягкого 503.
 - `/opt/php83/etc/php-fpm.d/user.d/maxmobiles.conf` = как у 7.4 (загрузка 1024M, error_reporting без DEPRECATED); панель может
