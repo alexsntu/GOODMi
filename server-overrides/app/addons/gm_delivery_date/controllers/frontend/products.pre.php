@@ -80,6 +80,11 @@ if ($mode === 'search' && (int) Registry::get('runtime.company_id') === 2) {
                     'cat' => $gm_cat,
                     'log_id' => 0,
                 ]);
+                // Ничего не нашлось – данные для своей страницы «ничего не нашлось» (шаблон-подмена хука
+                // products:search_results_no_matching_found, 2026-10-21; стили – раздел 77 «Своего CSS»)
+                if (!$gm_items && !$gm_cat) {
+                    Tygh::$app['view']->assign('gm_empty', gm_search_empty($gm_mc, (string) $_REQUEST['q']));
+                }
                 // Статистика: что искали, как нашли; сбой записи не мешает поиску
                 try {
                     // Нет cookie сессии сайта (её ставит первая же страница) – это бот, не покупатель: ищем, но в статистику
