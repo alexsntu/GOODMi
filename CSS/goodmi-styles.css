@@ -5623,3 +5623,17 @@ body.gm-sg-open > jdiv{display:none !important}
 .grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-price,.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-price .ty-price-num{font-size:17px !important;white-space:nowrap}
 .grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-strike,.grid-list.ut2-gl__simple-scroller .ut2-gl__price.pr-row .ty-strike .ty-list-price{font-size:13px !important;white-space:nowrap}
 }
+
+/* ================================================================
+   75. Избранное: «Быстрый заказ» под «В корзину» (2026-10-21)
+   Секция 71 избранное (.ut2-wl__grid) не затрагивает, а кнопка «Быстрый заказ» из хука my_changes выводится и там –
+   без стилей она вставала слева от «В корзину» (тема ставит .ut2-gl__control row-reverse) с подписью в две строки.
+   Карточки избранного узкие, поэтому кнопки друг под другом: «В корзину» на всю ширину (44px, секция 26), ниже «Быстрый заказ» 40px (телефон – 36px).
+================================================================ */
+.ut2-wl__grid .ut2-gl__control{display:flex;flex-direction:column;align-items:stretch;gap:6px;height:auto;min-height:0}
+.ut2-wl__grid .ut2-gl__control>div{flex:none;width:100%}
+.ut2-wl__grid .ut2-gl__control .gm-gl-quick{flex:none;width:100%;min-width:0;display:inline-flex;align-items:center;justify-content:center;height:40px;margin:0;padding:0 8px;border:0;border-radius:12px;background:#f5f5f5;box-shadow:none;color:#1c1c1c;font-size:14px;font-weight:500;line-height:1;text-transform:none;letter-spacing:0;white-space:nowrap;text-decoration:none;box-sizing:border-box;transition:background-color .15s,color .15s}
+.ut2-wl__grid .ut2-gl__control .gm-gl-quick:hover{background:#fff0e6;color:#ff6900}
+@media (max-width:767px){
+.ut2-wl__grid .ut2-gl__control .gm-gl-quick{height:36px;font-size:13px}
+}
