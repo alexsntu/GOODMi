@@ -823,8 +823,9 @@ function fn_gm_avito_admin_item($company_id, $product_id)
         'template_auto' => $ad['template'] ? implode(', ', $ad['template']['auto_fields']) : '',
         'required' => $ad['template'] ? implode(', ', $ad['template']['required_fields']) : '',
         'missing' => implode(', ', $ad['missing']),
-        'report' => (array) json_decode(fn_gm_avito_xml_text((string) $item['status_text']), true),
-        'stats' => $item['avito_id'] ? db_get_row(
+        'report' => (array) json_decode(fn_gm_avito_xml_text((string) ($item['status_text'] ?? '')), true),
+        // у товара, которого ещё нет в Авито, avito_id в строке нет
+        'stats' => !empty($item['avito_id']) ? db_get_row(
             'SELECT SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites FROM ?:gm_avito_stats'
             . ' WHERE company_id = ?i AND avito_id = ?i AND date >= ?s',
             $company_id,

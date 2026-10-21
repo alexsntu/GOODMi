@@ -10347,7 +10347,8 @@ function fn_checkout_update_steps(&$cart, &$auth, $params)
 
     $is_shipping_method_changed = false;
     if (!empty($cart['chosen_shipping'])) {
-        $shipping_ids = array_column($cart['shipping'], 'shipping_id');
+        // GOODMi/Maxmobiles 2026-10-21: при оформлении заказа $cart['shipping'] бывает пустым (null) – на PHP 8 array_column(null) фатален (TypeError)
+        $shipping_ids = array_column(is_array($cart['shipping'] ?? null) ? $cart['shipping'] : [], 'shipping_id');
         $is_shipping_method_changed = !empty(array_diff($cart['chosen_shipping'], $shipping_ids));
     }
 
