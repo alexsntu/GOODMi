@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fn_gm_avito_set_setting($company_id, 'text_mode', in_array($text_mode, ['old', 'new', 'categories'], true) ? $text_mode : 'old');
         fn_gm_avito_set_setting($company_id, 'new_text_categories', implode(',', array_filter(array_map('intval', (array) ($data['new_text_categories'] ?? [])))));
         fn_gm_avito_set_setting($company_id, 'skip_categories', implode(',', array_filter(array_map('intval', (array) ($data['skip_categories'] ?? [])))));
+        fn_gm_avito_set_setting($company_id, 'in_stock_categories', implode(',', array_filter(array_map('intval', (array) ($data['in_stock_categories'] ?? [])))));
         fn_gm_avito_set_setting($company_id, 'common_block', fn_gm_avito_db_text(trim((string) ($data['common_block'] ?? ''))));
         fn_gm_avito_set_setting($company_id, 'defaults', json_encode(fn_gm_avito_parse_fields($data['defaults'] ?? ''), JSON_UNESCAPED_UNICODE));
         fn_gm_avito_set_setting($company_id, 'images_limit', (string) max(1, min(10, (int) ($data['images_limit'] ?? 10))));
@@ -302,6 +303,10 @@ if ($mode === 'manage') {
         'skip_names' => implode(', ', array_map(static function ($id) use ($names) {
             return $names[$id] ?? $id;
         }, $skip_categories)),
+        'in_stock_categories' => $in_stock_categories = array_values(array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'in_stock_categories', ''))))),
+        'in_stock_names' => implode(', ', array_map(static function ($id) use ($names) {
+            return $names[$id] ?? $id;
+        }, $in_stock_categories)),
         'all_categories' => (static function () use ($category_paths) {
             asort($category_paths);
             return $category_paths;

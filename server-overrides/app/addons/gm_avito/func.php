@@ -595,6 +595,8 @@ function fn_gm_avito_prepare_ad($company_id, array $item, array $context)
         $ad['skip'] = 'товар выключен или скрыт на сайте';
     } elseif ($context['stock_mode'] === 'in_stock' && $ad['amount'] <= 0) {
         $ad['skip'] = 'нет в наличии';
+    } elseif ($ad['amount'] <= 0 && fn_gm_avito_path_in($path, $context['in_stock_categories'] ?? [])) {
+        $ad['skip'] = 'нет в наличии (категория выгружается только с остатком – б/у)';
     } elseif ($context['stock_mode'] === 'out_of_stock' && $ad['amount'] > 0) {
         $ad['skip'] = 'есть в наличии (выгружаются только товары без остатка)';
     } elseif ($ad['price'] <= 0) {
@@ -627,7 +629,17 @@ function fn_gm_avito_context($company_id, array $product_ids = [])
         'templates' => fn_gm_avito_templates($company_id),
         'paths' => fn_gm_avito_main_paths($product_ids),
         'skip_categories' => array_values(array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'skip_categories', ''))))),
+        // выгружаются только с остатком при любом stock_mode (Maxmobiles: 327 «Идеальное БУ» – б/у экземпляры, 2026-10-22)
+        'in_stock_categories' => array_values(array_filter(array_map('intval', explode(',', (string) fn_gm_avito_get_setting($company_id, 'in_stock_categories', ''))))),
     ];
+}
+
+/**
+ * Категория товара (или её родитель) входит в список категорий (по id_path)
+ */
+function fn_gm_avito_path_in($id_path, array $category_ids)
+{
+    return (bool) array_intersect(array_map('intval', explode('/', (string) $id_path)), $category_ids);
 }
 
 /**

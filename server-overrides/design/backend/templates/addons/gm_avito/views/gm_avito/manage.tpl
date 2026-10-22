@@ -31,6 +31,21 @@
                 <p class="muted description">Категория вместе со всеми вложенными: товары из неё не попадают в файл и не показываются на странице проблем (сервисный центр, услуги, уценка и т.п.).</p>
             </div>
         </div>
+        <div class="control-group">
+            <label class="control-label">Только с остатком – категории</label>
+            <div class="controls">
+                <details class="gm-avito-picker">
+                    <summary>Выбрано: {$gm_avito.in_stock_categories|count}{if $gm_avito.in_stock_names} &#8211; {$gm_avito.in_stock_names}{/if} <span class="muted">(нажмите, чтобы изменить)</span></summary>
+                    <input type="text" class="input-xlarge gm-avito-filter" placeholder="Найти категорию" data-target="gm_avito_in_stock_list" />
+                    <div id="gm_avito_in_stock_list" style="max-height: 320px; overflow-y: auto; border: 1px solid #ddd; padding: 6px 10px; margin-top: 6px;">
+                        {foreach from=$gm_avito.all_categories key="category_id" item="path"}
+                            <label class="checkbox gm-avito-filter-item"><input type="checkbox" name="gm_avito[in_stock_categories][]" value="{$category_id}" {if $category_id|in_array:$gm_avito.in_stock_categories}checked="checked"{/if} /> {$path}</label>
+                        {/foreach}
+                    </div>
+                </details>
+                <p class="muted description">Категория вместе со всеми вложенными: товар выгружается, только пока есть остаток, при любом выборе выше (закончился &#8211; объявление снимается, поступил &#8211; возвращается). Для б/у техники: каждый экземпляр единственный, под заказ его не привезти.</p>
+            </div>
+        </div>
     </div>
 
     {include file="common/subheader.tpl" title="Текст объявлений" target="#gm_avito_text"}
