@@ -205,6 +205,13 @@
         </div>
         {/if}
     </div>
+    {if $sm.few_photos_count}
+    <h5>Мало фото – меньше 7 ({$sm.few_photos_count} из {$sm.enabled_with_stats})</h5>
+    <p class="muted" style="font-size: 11px;">В объявление попадают фото из карточки товара на сайте (до 10). Добавьте в карточку настоящие фото товара – объявление обновится со следующей выгрузкой. Сверху – больше всего просмотров: там фото дадут больше всего. Для б/у – живые фото именно этого экземпляра.</p>
+    <table class="table table-condensed"><thead><tr><th>Товар</th><th>Фото</th><th>Просм.</th><th>Конт.</th></tr></thead><tbody>
+    {foreach from=$sm.few_photos item="r"}<tr><td><a href="{"products.update?product_id=`$r.product_id`"|fn_url}">{$r.product|truncate:70}</a></td><td><strong>{$r.photos}</strong></td><td>{$r.views}</td><td>{$r.contacts}</td></tr>{/foreach}
+    </tbody></table>
+    {/if}
     {if $d.stats_sync.time}<p class="muted">Статистика собрана {$d.stats_sync.time|date_format:"`$settings.Appearance.date_format`, `$settings.Appearance.time_format`"}; объявлений со статистикой {$sm.items_with_stats}.</p>{/if}
 </div>
 </form>

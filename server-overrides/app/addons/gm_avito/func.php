@@ -1335,6 +1335,30 @@ function fn_gm_avito_stats_summary($company_id, $days = 30)
     usort($no_contacts, static function ($a, $b) {
         return $b['views'] - $a['views'];
     });
+    // Мало фото (меньше 7): в объявление идут фото карточки товара на сайте (основное + дополнительные, до 10),
+    // поэтому считаем их по базе; порядок – по просмотрам, сверху те, где фото дадут больше всего (2026-10-22)
+    $enabled_ids = [];
+    foreach ($items as $row) {
+        if ($row['product_id'] && $row['enabled'] === 'Y') {
+            $enabled_ids[] = (int) $row['product_id'];
+        }
+    }
+    $photos = $enabled_ids ? db_get_hash_single_array(
+        'SELECT object_id, COUNT(*) AS cnt FROM ?:images_links WHERE object_type = ?s AND detailed_id > 0 AND object_id IN (?n) GROUP BY object_id',
+        ['object_id', 'cnt'],
+        'product',
+        $enabled_ids
+    ) : [];
+    $few_photos = [];
+    foreach ($items as $row) {
+        if ($row['product_id'] && $row['enabled'] === 'Y' && (int) ($photos[$row['product_id']] ?? 0) < 7) {
+            $row['photos'] = (int) ($photos[$row['product_id']] ?? 0);
+            $few_photos[] = $row;
+        }
+    }
+    usort($few_photos, static function ($a, $b) {
+        return $b['views'] - $a['views'];
+    });
     $published = db_get_fields('SELECT avito_id FROM ?:gm_avito_items WHERE company_id = ?i AND enabled = ?s AND status = ?s AND avito_id IS NOT NULL', $company_id, 'Y', 'successful');
     $with_stats = array_flip(array_column(array_filter($items, static function ($row) {
         return (int) $row['impressions'] > 0;
@@ -1355,6 +1379,8 @@ function fn_gm_avito_stats_summary($company_id, $days = 30)
         'spend_no_contacts' => array_map('fn_gm_avito_money_row', array_slice($spend_no_contacts, 0, 30)),
         'paid_no_stock' => array_map('fn_gm_avito_money_row', $paid_no_stock),
         'in_stock_only' => $in_stock_only,
+        'few_photos' => array_slice($few_photos, 0, 30), 'few_photos_count' => count($few_photos),
+        'enabled_with_stats' => count(array_unique($enabled_ids)),
     ];
 }
 
