@@ -46,7 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $balance = fn_gm_avito_sync_balance($company_id);
             $stats = fn_gm_avito_sync_stats($company_id, 3);
-            fn_set_notification('N', __('notice'), 'Баланс и статистика за последние дни обновлены (строк ' . $stats['rows'] . ').');
+            $promos = fn_gm_avito_sync_promotions($company_id);
+            fn_set_notification('N', __('notice'), 'Баланс и статистика за последние дни обновлены (строк ' . $stats['rows'] . '), ставок на объявлениях: ' . count($promos['items']) . '.');
         } catch (Exception $e) {
             fn_set_notification('E', __('error'), 'Статистика Авито не получена: ' . $e->getMessage());
         }
@@ -200,8 +201,69 @@ if ($mode === 'dashboard') {
             $balance[$key . '_fmt'] = number_format((float) $balance[$key], 2, ',', ' ');
         }
     }
+    // Стратегия продвижения: текст – настройка strategy (правится при пересмотре), что работает сейчас – по ставкам
+    // из promotions (Авито, вместе со статистикой) и фактическим расходам за 30 дней
+    $strategy = $setting('strategy');
+    $promos = $setting('promotions');
+    $titles = [];
+    $promo_ids = array_keys((array) ($promos['items'] ?? []));
+    if ($promo_ids) {
+        $titles = db_get_hash_array(
+            'SELECT i.avito_id, i.product_id, d.product FROM ?:gm_avito_items i'
+            . ' LEFT JOIN ?:product_descriptions d ON d.product_id = i.product_id AND d.lang_code = ?s'
+            . ' WHERE i.company_id = ?i AND i.avito_id IN (?n)',
+            'avito_id',
+            CART_LANGUAGE,
+            $company_id,
+            $promo_ids
+        );
+    }
+    $actions = [1 => 'звонок', 5 => 'просмотр', 7 => 'чат'];
+    $budget_types = ['1d' => 'в день', '7d' => 'в неделю', '30d' => 'в месяц'];
+    $promo_rows = [];
+    $manual = $auto = $limits = 0;
+    foreach ((array) ($promos['items'] ?? []) as $avito_id => $p) {
+        $p['type'] === 'auto' ? $auto++ : $manual++;
+        $limits += (int) $p['limit'];
+        $promo_rows[] = [
+            'avito_id' => $avito_id,
+            'product_id' => $titles[$avito_id]['product_id'] ?? 0,
+            'product' => $titles[$avito_id]['product'] ?? '',
+            'type' => $p['type'] === 'auto' ? 'авто' : 'ручная',
+            'action' => $actions[$p['action']] ?? (string) $p['action'],
+            'value' => $p['type'] === 'auto'
+                ? ($p['budget'] ? 'бюджет ' . fn_gm_avito_rub($p['budget'], 0) . ' ₽ ' . ($budget_types[$p['budget_type']] ?? $p['budget_type']) : 'без бюджета')
+                : fn_gm_avito_rub($p['bid'], 0) . ' ₽' . ($p['limit'] ? ', лимит ' . fn_gm_avito_rub($p['limit'], 0) . ' ₽ в день' : ''),
+        ];
+    }
+    // цена просмотра и расход в день – только по дням со списаниями (платить могли начать посреди периода)
+    $paid_days = $paid_views = 0;
+    foreach ($summary['by_day'] as $day) {
+        if ((int) $day['spending'] > 0) {
+            $paid_days++;
+            $paid_views += (int) $day['views'];
+        }
+    }
+    if ($promo_rows) {
+        $now_text = 'Ставки выше минимальной: ручные – ' . $manual . ', автонастройка – ' . $auto
+            . ($limits ? ', дневные лимиты в сумме ' . fn_gm_avito_rub($limits, 0) . ' ₽' : '') . '.';
+    } elseif (!empty($promos['time'])) {
+        $now_text = 'Ставок выше минимальной нет ни на одном объявлении.';
+    } else {
+        $now_text = 'Ставки у Авито ещё не запрашивались – нажмите «Обновить сейчас» в блоке баланса.';
+    }
+    $now_text .= $spent
+        ? ' Авито списывает за просмотры: в среднем ' . ($paid_views ? fn_gm_avito_rub($spent / $paid_views) : '–') . ' ₽ за просмотр, '
+            . fn_gm_avito_rub($spent / max(1, $paid_days), 0) . ' ₽ в день (дней со списаниями за 30 дней: ' . $paid_days . ').'
+        : ' Платных списаний за 30 дней нет – размещение бесплатное.';
+    $strategy['now'] = $now_text;
+    $strategy['promos'] = $promo_rows;
+    $strategy['promos_time'] = (int) ($promos['time'] ?? 0);
+    $strategy['checked'] = (int) ($promos['checked'] ?? 0);
+
     $view->assign('gm_avito_dash', [
         'company' => fn_get_company_name($company_id),
+        'strategy' => $strategy,
         'account_name' => fn_gm_avito_xml_text((string) fn_gm_avito_get_setting($company_id, 'account_name', '')),
         'build' => $setting('last_build'),
         'check' => $setting('check'),

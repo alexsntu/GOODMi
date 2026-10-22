@@ -48,6 +48,42 @@
     </div></div>
 </div>
 
+{$st = $d.strategy}
+{include file="common/subheader.tpl" title="Стратегия продвижения" target="#gm_avito_dash_strategy"}
+<div id="gm_avito_dash_strategy" class="in collapse">
+    <div style="{$card} min-height: 0; border-left: 4px solid #4a90d9;">
+        <p><strong>Что работает сейчас.</strong> {$st.now}</p>
+        {if $st.promos_time}<p class="muted" style="font-size: 11px;">Ставки проверены у Авито {$st.promos_time|date_format:"`$settings.Appearance.date_format`, `$settings.Appearance.time_format`"} по {$st.checked} объявлениям; обновляются вместе со статистикой.</p>{/if}
+        {if $st.promos}
+            <details><summary>Объявления со ставкой ({$st.promos|count})</summary>
+            <table class="table table-condensed" style="width: auto;"><thead><tr><th>Объявление</th><th>Настройка</th><th>За что платим</th><th>Ставка / бюджет</th></tr></thead><tbody>
+            {foreach from=$st.promos item="r"}<tr><td>{if $r.product_id}<a href="{"products.update?product_id=`$r.product_id`&selected_section=gm_avito"|fn_url}">{$r.product|truncate:60}</a>{else}№ {$r.avito_id}{/if}</td><td>{$r.type}</td><td>{$r.action}</td><td>{$r.value}</td></tr>{/foreach}
+            </tbody></table>
+            </details>
+        {/if}
+    </div>
+    {if $st.summary}
+        <p><strong>Стратегия{if $st.status} – {$st.status}{/if}.</strong> {$st.summary}</p>
+        <div class="row-fluid">
+            {if $st.inputs}<div class="span4"><h5>Из чего исходим</h5><ul>{foreach from=$st.inputs item="line"}<li>{$line}</li>{/foreach}</ul></div>{/if}
+            {if $st.rules}<div class="span4"><h5>Правила</h5><ol>{foreach from=$st.rules item="line"}<li>{$line}</li>{/foreach}</ol></div>{/if}
+            {if $st.plan}<div class="span4"><h5>Порядок действий</h5><ol>{foreach from=$st.plan item="line"}<li>{$line}</li>{/foreach}</ol></div>{/if}
+        </div>
+        {if $st.advice}
+            <h5>Кандидаты на ставку по расчёту{if $st.advice_date} от {$st.advice_date}{/if}</h5>
+            <p class="muted" style="font-size: 11px;">Ценность просмотра – сколько прибыли в среднем приносит один просмотр при наших правилах; ставка – ступень сетки Авито с наибольшей ожидаемой прибылью; «обходит» – доля конкурентов, которых объявление обойдёт по оценке Авито.</p>
+            <div style="max-height: 420px; overflow: auto; margin-bottom: 12px;">
+            <table class="table table-condensed"><thead><tr><th>Объявление</th><th>Цена, ₽</th><th>Ценность просмотра, ₽</th><th>Ставка, ₽</th><th>Обходит</th><th>Рекомендация Авито, ₽</th><th>Дневной лимит, ₽</th></tr></thead><tbody>
+            {foreach from=$st.advice item="r"}<tr><td>{if $r.product_id}<a href="{"products.update?product_id=`$r.product_id`&selected_section=gm_avito"|fn_url}">{$r.title|truncate:60}</a>{else}{$r.title}{/if}</td><td>{$r.price}</td><td>{$r.view_value}</td><td><strong>{$r.bid}</strong></td><td>{$r.compare}%</td><td>{$r.rec_bid}</td><td>{$r.limit}</td></tr>{/foreach}
+            </tbody></table>
+            </div>
+        {/if}
+        {if $st.updated}<p class="muted" style="font-size: 11px;">Стратегия пересмотрена {$st.updated}.{if $st.review} Следующий пересмотр: {$st.review}.{/if}</p>{/if}
+    {else}
+        <p class="muted">Стратегия для этой витрины ещё не записана.</p>
+    {/if}
+</div>
+
 {$sm = $d.summary}
 {include file="common/subheader.tpl" title="Статистика за 30 дней" target="#gm_avito_dash_stats"}
 <div id="gm_avito_dash_stats" class="in collapse">

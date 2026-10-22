@@ -29,7 +29,8 @@ foreach ($companies as $company_id) {
     try {
         $balance = fn_gm_avito_sync_balance($company_id);
         $stats = fn_gm_avito_sync_stats($company_id, $days, $force);
-        echo date('Y-m-d H:i'), ' витрина ', $company_id, ': баланс кошелёк ', $balance['wallet'], ' ₽, CPA ', $balance['cpa'], ' ₽; статистика – дней ', $stats['days'], ', строк ', $stats['rows'], PHP_EOL;
+        $promos = fn_gm_avito_sync_promotions($company_id);
+        echo date('Y-m-d H:i'), ' витрина ', $company_id, ': баланс кошелёк ', $balance['wallet'], ' ₽, CPA ', $balance['cpa'], ' ₽; статистика – дней ', $stats['days'], ', строк ', $stats['rows'], '; ставок ', count($promos['items']), PHP_EOL;
     } catch (Exception $e) {
         echo date('Y-m-d H:i'), ' витрина ', $company_id, ': ошибка – ', $e->getMessage(), PHP_EOL;
     }

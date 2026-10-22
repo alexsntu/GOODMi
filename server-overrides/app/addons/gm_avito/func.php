@@ -1157,6 +1157,43 @@ function fn_gm_avito_sync_balance($company_id)
 }
 
 /**
+ * Действующие ставки «цены целевого действия» по включённым объявлениям (cpxpromo/1/getPromotionsByItemIds, пачки по 100,
+ * только чтение, 2026-10-22) → настройка promotions: {time, checked, items: {avito_id: {type, action, bid, limit, budget,
+ * budget_type}}}; деньги в копейках. Объявления без ставки Авито не возвращает.
+ */
+function fn_gm_avito_sync_promotions($company_id)
+{
+    $ids = array_map('intval', db_get_fields(
+        'SELECT avito_id FROM ?:gm_avito_items WHERE company_id = ?i AND enabled = ?s AND avito_id > 0',
+        $company_id,
+        'Y'
+    ));
+    $items = [];
+    foreach (array_chunk($ids, 100) as $chunk) {
+        $data = fn_gm_avito_api_post($company_id, '/cpxpromo/1/getPromotionsByItemIds', ['itemIDs' => $chunk]);
+        foreach ((array) ($data['items'] ?? []) as $promo) {
+            $manual = (array) ($promo['manualPromotion'] ?? []);
+            $auto = (array) ($promo['autoPromotion'] ?? []);
+            if (!$manual && !$auto) {
+                continue;
+            }
+            $items[(string) $promo['itemID']] = [
+                'type' => $auto ? 'auto' : 'manual',
+                'action' => (int) ($promo['actionTypeID'] ?? 0),
+                'bid' => (int) ($manual['bidPenny'] ?? 0),
+                'limit' => (int) ($manual['limitPenny'] ?? 0),
+                'budget' => (int) ($auto['budgetPenny'] ?? 0),
+                'budget_type' => (string) ($auto['budgetType'] ?? ''),
+            ];
+        }
+    }
+    $result = ['time' => TIME, 'checked' => count($ids), 'items' => $items];
+    fn_gm_avito_set_setting($company_id, 'promotions', json_encode($result));
+
+    return $result;
+}
+
+/**
  * Копейки → «1 234,56» (рубли для показа в админке)
  */
 function fn_gm_avito_rub($kopecks, $decimals = 2)
