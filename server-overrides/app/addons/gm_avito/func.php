@@ -825,13 +825,22 @@ function fn_gm_avito_admin_item($company_id, $product_id)
         'missing' => implode(', ', $ad['missing']),
         'report' => (array) json_decode(fn_gm_avito_xml_text((string) ($item['status_text'] ?? '')), true),
         // у товара, которого ещё нет в Авито, avito_id в строке нет
-        'stats' => !empty($item['avito_id']) ? db_get_row(
-            'SELECT SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites FROM ?:gm_avito_stats'
+        'stats' => !empty($item['avito_id']) ? fn_gm_avito_money_row(db_get_row(
+            'SELECT SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites,'
+            . ' SUM(spending) spending, SUM(promo_spending) promo_spending FROM ?:gm_avito_stats'
             . ' WHERE company_id = ?i AND avito_id = ?i AND date >= ?s',
             $company_id,
             $item['avito_id'],
             date('Y-m-d', strtotime('-30 day', TIME))
-        ) : [],
+        )) : [],
+        // по дням (новые сверху) – только дни, где что-то было
+        'stats_days' => !empty($item['avito_id']) ? array_map('fn_gm_avito_money_row', db_get_array(
+            'SELECT date, impressions, views, contacts, spending, promo_spending FROM ?:gm_avito_stats'
+            . ' WHERE company_id = ?i AND avito_id = ?i AND date >= ?s AND (spending > 0 OR views > 0 OR contacts > 0) ORDER BY date DESC',
+            $company_id,
+            $item['avito_id'],
+            date('Y-m-d', strtotime('-30 day', TIME))
+        )) : [],
         'report_status' => $item['status'],
         'new_text' => $ad['new_text'],
         'preview' => $ad['description'],
@@ -1136,24 +1145,49 @@ function fn_gm_avito_sync_balance($company_id)
 }
 
 /**
- * Статистика объявлений по дням (stats/v2, группировка по объявлению, один запрос на день) → cscart_gm_avito_stats.
- * Дни, которые уже есть, не перезапрашиваются, кроме двух последних (Авито досчитывает).
+ * Копейки → «1 234,56» (рубли для показа в админке)
  */
-function fn_gm_avito_sync_stats($company_id, $days = 30)
+function fn_gm_avito_rub($kopecks, $decimals = 2)
+{
+    return number_format((int) $kopecks / 100, $decimals, ',', ' ');
+}
+
+/**
+ * Строка статистики с расходами в рублях для шаблонов: spending_rub, promo_rub и cpc_rub (₽ за контакт, если были)
+ */
+function fn_gm_avito_money_row($row)
+{
+    $row = (array) $row;
+    $spending = (int) ($row['spending'] ?? 0);
+    $contacts = (int) ($row['contacts'] ?? 0);
+    $row['spending_rub'] = fn_gm_avito_rub($spending);
+    $row['promo_rub'] = fn_gm_avito_rub($row['promo_spending'] ?? 0);
+    $row['cpc_rub'] = $spending && $contacts ? fn_gm_avito_rub($spending / $contacts, 0) : '';
+
+    return $row;
+}
+
+/**
+ * Статистика объявлений по дням (stats/v2, группировка по объявлению, один запрос на день) → cscart_gm_avito_stats:
+ * показы, просмотры, контакты, избранное и расходы (копейки: всего, размещение, продвижение).
+ * Дни, которые уже есть, не перезапрашиваются, кроме двух последних (Авито досчитывает); $force – перезапросить все дни.
+ */
+function fn_gm_avito_sync_stats($company_id, $days = 30, $force = false)
 {
     $account_id = fn_gm_avito_account_id($company_id);
     $have = db_get_fields('SELECT DISTINCT date FROM ?:gm_avito_stats WHERE company_id = ?i', $company_id);
     $stats = ['days' => 0, 'rows' => 0];
     for ($i = 1; $i <= $days; $i++) {
         $date = date('Y-m-d', strtotime('-' . $i . ' day', TIME));
-        if ($i > 2 && in_array($date, $have, true)) {
+        if (!$force && $i > 2 && in_array($date, $have, true)) {
             continue;
         }
         $offset = 0;
         do {
             $data = fn_gm_avito_api_post($company_id, '/stats/v2/accounts/' . $account_id . '/items', [
                 'dateFrom' => $date, 'dateTo' => $date, 'grouping' => 'item',
-                'metrics' => ['impressions', 'views', 'contacts', 'favorites'], 'limit' => 1000, 'offset' => $offset,
+                'metrics' => ['impressions', 'views', 'contacts', 'favorites', 'spending', 'presenceSpending', 'promoSpending'],
+                'limit' => 1000, 'offset' => $offset,
             ]);
             $groups = (array) ($data['result']['groupings'] ?? []);
             foreach ($groups as $group) {
@@ -1165,6 +1199,8 @@ function fn_gm_avito_sync_stats($company_id, $days = 30)
                     'company_id' => $company_id, 'avito_id' => (int) $group['id'], 'date' => $date,
                     'impressions' => $m['impressions'] ?? 0, 'views' => $m['views'] ?? 0,
                     'contacts' => $m['contacts'] ?? 0, 'favorites' => $m['favorites'] ?? 0,
+                    'spending' => $m['spending'] ?? 0, 'presence_spending' => $m['presenceSpending'] ?? 0,
+                    'promo_spending' => $m['promoSpending'] ?? 0,
                 ]);
                 $stats['rows']++;
             }
@@ -1178,25 +1214,38 @@ function fn_gm_avito_sync_stats($company_id, $days = 30)
 }
 
 /**
- * Сводка статистики для дашборда: итоги за период и предыдущий период, по дням, объявления с подсказками
+ * Сводка статистики для дашборда: итоги за период и предыдущий период, по дням, объявления с подсказками;
+ * расходы (копейки) – по дням и по объявлениям, «тратит без контактов», «платим за товар без остатка» (только для
+ * витрин, где выгружается то, что в наличии: у Maxmobiles товары без остатка продаются под заказ – это не ошибка)
  */
 function fn_gm_avito_stats_summary($company_id, $days = 30)
 {
     $from = date('Y-m-d', strtotime('-' . $days . ' day', TIME));
     $prev_from = date('Y-m-d', strtotime('-' . (2 * $days) . ' day', TIME));
-    $sum = 'SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites';
+    $sum = 'SUM(impressions) impressions, SUM(views) views, SUM(contacts) contacts, SUM(favorites) favorites,'
+        . ' SUM(spending) spending, SUM(presence_spending) presence_spending, SUM(promo_spending) promo_spending';
     $total = db_get_row("SELECT $sum FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s", $company_id, $from);
     $prev = db_get_row("SELECT $sum FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s AND date < ?s", $company_id, $prev_from, $from);
     $by_day = db_get_array("SELECT date, $sum FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s GROUP BY date ORDER BY date", $company_id, $from);
     $items = db_get_array(
-        "SELECT s.avito_id, $sum, i.product_id, i.enabled, i.status, pd.product FROM ?:gm_avito_stats AS s"
+        "SELECT s.avito_id, $sum, i.product_id, i.enabled, i.status, pd.product, p.amount FROM ?:gm_avito_stats AS s"
         . ' LEFT JOIN ?:gm_avito_items AS i ON i.company_id = s.company_id AND i.avito_id = s.avito_id'
         . ' LEFT JOIN ?:product_descriptions AS pd ON pd.product_id = i.product_id AND pd.lang_code = ?s'
+        . ' LEFT JOIN ?:products AS p ON p.product_id = i.product_id'
         . ' WHERE s.company_id = ?i AND s.date >= ?s GROUP BY s.avito_id',
         'ru',
         $company_id,
         $from
     );
+    // Расход за последние 3 дня – чтобы «без остатка» показывало только то, за что платим сейчас
+    $recent = db_get_hash_single_array(
+        'SELECT avito_id, SUM(spending) AS spending FROM ?:gm_avito_stats WHERE company_id = ?i AND date >= ?s GROUP BY avito_id',
+        ['avito_id', 'spending'],
+        $company_id,
+        date('Y-m-d', strtotime('-3 day', TIME))
+    );
+    $in_stock_only = fn_gm_avito_get_setting($company_id, 'stock_mode', 'all') === 'in_stock';
+    $spend = $spend_no_contacts = $paid_no_stock = [];
     $top = $no_views = $no_contacts = [];
     foreach ($items as $row) {
         $row = array_map(static function ($v) {
@@ -1211,7 +1260,23 @@ function fn_gm_avito_stats_summary($company_id, $days = 30)
         if ((int) $row['views'] >= 40 && (int) $row['contacts'] === 0) {
             $no_contacts[] = $row;
         }
+        if ((int) $row['spending'] > 0) {
+            $spend[] = $row;
+            // от 100 ₽ за период без единого контакта
+            if ((int) $row['contacts'] === 0 && (int) $row['spending'] >= 10000) {
+                $spend_no_contacts[] = $row;
+            }
+            if ($in_stock_only && $row['product_id'] && (int) $row['amount'] <= 0 && (int) ($recent[$row['avito_id']] ?? 0) > 0) {
+                $paid_no_stock[] = $row;
+            }
+        }
     }
+    $by_spending = static function ($a, $b) {
+        return $b['spending'] - $a['spending'];
+    };
+    usort($spend, $by_spending);
+    usort($spend_no_contacts, $by_spending);
+    usort($paid_no_stock, $by_spending);
     usort($top, static function ($a, $b) {
         return $b['contacts'] - $a['contacts'];
     });
@@ -1233,9 +1298,14 @@ function fn_gm_avito_stats_summary($company_id, $days = 30)
     }
 
     return [
-        'days' => $days, 'total' => $total, 'prev' => $prev, 'by_day' => $by_day,
+        'days' => $days, 'total' => fn_gm_avito_money_row($total), 'prev' => fn_gm_avito_money_row($prev),
+        'by_day' => array_map('fn_gm_avito_money_row', $by_day),
         'top' => array_slice($top, 0, 15), 'no_views' => array_slice($no_views, 0, 15), 'no_contacts' => array_slice($no_contacts, 0, 15),
         'silent_count' => count($silent), 'items_with_stats' => count($items),
+        'spend' => array_map('fn_gm_avito_money_row', $spend),
+        'spend_no_contacts' => array_map('fn_gm_avito_money_row', array_slice($spend_no_contacts, 0, 30)),
+        'paid_no_stock' => array_map('fn_gm_avito_money_row', $paid_no_stock),
+        'in_stock_only' => $in_stock_only,
     ];
 }
 

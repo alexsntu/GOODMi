@@ -169,14 +169,28 @@ if ($mode === 'dashboard') {
     $t = $summary['total'];
     $summary['ctr'] = !empty($t['impressions']) ? round($t['views'] * 100 / $t['impressions'], 1) : 0;
     $summary['cr'] = !empty($t['views']) ? round($t['contacts'] * 100 / $t['views'], 1) : 0;
-    $max_day = 0;
+    // Расходы (копейки): за период, к прошлому периоду, в среднем за день, цена контакта
+    $spent = (int) ($t['spending'] ?? 0);
+    $spent_was = (int) ($summary['prev']['spending'] ?? 0);
+    $summary['spend_card'] = [
+        'total' => fn_gm_avito_rub($spent, 0),
+        'delta' => $spent_was ? round(($spent - $spent_was) * 100 / $spent_was) : null,
+        'per_day' => $summary['by_day'] ? fn_gm_avito_rub($spent / count($summary['by_day']), 0) : '0',
+        'promo' => fn_gm_avito_rub($t['promo_spending'] ?? 0, 0),
+        'cpc' => (string) ($t['cpc_rub'] ?? ''),
+        'cpc_was' => (string) ($summary['prev']['cpc_rub'] ?? ''),
+    ];
+    $max_day = $max_spend = 0;
     foreach ($summary['by_day'] as $day) {
         $max_day = max($max_day, (int) $day['views']);
+        $max_spend = max($max_spend, (int) $day['spending']);
     }
     foreach ($summary['by_day'] as &$day) {
         $day['h'] = $max_day ? max(2, (int) round($day['views'] * 115 / $max_day)) : 2;
+        $day['hs'] = $max_spend ? max(2, (int) round($day['spending'] * 115 / $max_spend)) : 2;
     }
     unset($day);
+    $summary['by_day_desc'] = array_reverse($summary['by_day']);
     $summary['first_day'] = $summary['by_day'] ? $summary['by_day'][0]['date'] : '';
     $summary['last_day'] = $summary['by_day'] ? end($summary['by_day'])['date'] : '';
     $balance = (array) json_decode((string) fn_gm_avito_get_setting($company_id, 'balance', '{}'), true);

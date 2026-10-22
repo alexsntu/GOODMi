@@ -63,6 +63,10 @@ CREATE TABLE IF NOT EXISTS cscart_gm_avito_stats (
     views INT UNSIGNED NOT NULL DEFAULT 0,
     contacts INT UNSIGNED NOT NULL DEFAULT 0,
     favorites INT UNSIGNED NOT NULL DEFAULT 0,
+    -- расходы за день, копейки (stats/v2: spending = presenceSpending + promoSpending), с 2026-10-22
+    spending INT UNSIGNED NOT NULL DEFAULT 0,
+    presence_spending INT UNSIGNED NOT NULL DEFAULT 0,
+    promo_spending INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (company_id, avito_id, date),
     KEY date (company_id, date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

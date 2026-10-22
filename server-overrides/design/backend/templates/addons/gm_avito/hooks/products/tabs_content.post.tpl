@@ -50,7 +50,14 @@
             <label class="control-label">Объявление</label>
             <div class="controls">
                 <p>Id в файле: {$gm_avito.ad_id}{if $gm_avito.avito_id} &#183; номер на Авито: {if $gm_avito.report.url}<a href="{$gm_avito.report.url}" target="_blank">{$gm_avito.avito_id}</a>{else}{$gm_avito.avito_id}{/if}{/if} &#183; цена: {$gm_avito.price|format_price:$currencies.$primary_currency nofilter} &#183; фото: {$gm_avito.images}</p>
-                {if $gm_avito.stats.impressions || $gm_avito.stats.views}<p>За 30 дней: показов {$gm_avito.stats.impressions}, просмотров {$gm_avito.stats.views}, контактов <strong>{$gm_avito.stats.contacts}</strong>, в избранном {$gm_avito.stats.favorites}</p>{/if}
+                {if $gm_avito.stats.impressions || $gm_avito.stats.views || $gm_avito.stats.spending}<p>За 30 дней: показов {$gm_avito.stats.impressions}, просмотров {$gm_avito.stats.views}, контактов <strong>{$gm_avito.stats.contacts}</strong>, в избранном {$gm_avito.stats.favorites}; расход <strong>{$gm_avito.stats.spending_rub} ₽</strong>{if $gm_avito.stats.promo_spending} (из них продвижение {$gm_avito.stats.promo_rub} ₽){/if}{if $gm_avito.stats.cpc_rub} &#183; контакт обходится в {$gm_avito.stats.cpc_rub} ₽{/if}</p>{/if}
+                {if $gm_avito.stats_days}
+                    <details><summary>Расход и статистика по дням</summary>
+                    <table class="table table-condensed" style="width: auto;"><thead><tr><th>День</th><th>Расход, ₽</th><th>Показы</th><th>Просмотры</th><th>Контакты</th></tr></thead><tbody>
+                    {foreach from=$gm_avito.stats_days item="day"}<tr><td>{$day.date}</td><td>{$day.spending_rub}{if $day.promo_spending} <span class="muted">(продв. {$day.promo_rub})</span>{/if}</td><td>{$day.impressions}</td><td>{$day.views}</td><td>{$day.contacts}</td></tr>{/foreach}
+                    </tbody></table>
+                    </details>
+                {/if}
                 {if $gm_avito.report_status}
                     <p>Авито, последняя загрузка: <strong>{$gm_avito.report.section}</strong>{if $gm_avito.report.avito_status} &#183; статус: {$gm_avito.report.avito_status}{/if}{if $gm_avito.report.date_end} &#183; размещено до {$gm_avito.report.date_end}{/if}</p>
                     {foreach from=$gm_avito.report.messages item="m"}
