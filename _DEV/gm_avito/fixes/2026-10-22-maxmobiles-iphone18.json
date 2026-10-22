@@ -1,0 +1,450 @@
+[
+{
+"product_ids": [
+282512,
+282559
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282513,
+282560
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282511,
+282558
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282507,
+282557
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282518,
+282547
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282534,
+282546
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282516,
+282548
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282514,
+282556
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282553,
+282565
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282549,
+282566
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282551,
+282567
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282552,
+282568
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282554,
+282563
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282505,
+282564
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282503,
+282561
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282502,
+282562
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282504,
+282525
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282527,
+282528
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282524,
+282529
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282509,
+282530
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "1024 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282515,
+282522
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282510,
+282523
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282517,
+282521
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282519,
+282520
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "2048 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282538,
+282544
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282545,
+282555
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282539,
+282543
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282541,
+282542
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "256 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+},
+{
+"product_ids": [
+282532,
+282535
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "голубой"
+}
+},
+{
+"product_ids": [
+282526,
+282536
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "красный"
+}
+},
+{
+"product_ids": [
+282508,
+282531
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "серебристый"
+}
+},
+{
+"product_ids": [
+282506,
+282533
+],
+"remove": [],
+"set": {
+"Vendor": "Apple",
+"Model": "iPhone 18 Pro Max",
+"MemorySize": "512 ГБ",
+"RamSize": "12 ГБ",
+"Color": "черный"
+}
+}
+]

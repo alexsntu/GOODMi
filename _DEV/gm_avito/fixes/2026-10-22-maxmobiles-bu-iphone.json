@@ -1,0 +1,9 @@
+[
+ {"product_ids": [283050], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 14", "MemorySize": "128 ГБ", "RamSize": "6 ГБ", "Color": "фиолетовый"}},
+ {"product_ids": [283049], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 15", "MemorySize": "256 ГБ", "RamSize": "6 ГБ", "Color": "черный"}},
+ {"product_ids": [281763], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 15 Pro", "MemorySize": "128 ГБ", "RamSize": "8 ГБ", "Color": "серый"}},
+ {"product_ids": [282629], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 15 Pro", "MemorySize": "128 ГБ", "RamSize": "8 ГБ", "Color": "черный"}},
+ {"product_ids": [283051], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 15 Pro", "MemorySize": "256 ГБ", "RamSize": "8 ГБ", "Color": "черный"}},
+ {"product_ids": [283092], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 16", "MemorySize": "128 ГБ", "RamSize": "8 ГБ", "Color": "черный"}},
+ {"product_ids": [281964], "remove": [], "set": {"Vendor": "Apple", "Model": "iPhone 16 Pro Max", "MemorySize": "256 ГБ", "RamSize": "8 ГБ", "Color": "золотистый"}}
+]
