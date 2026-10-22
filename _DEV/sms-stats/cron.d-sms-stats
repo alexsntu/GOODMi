@@ -1,4 +1,4 @@
 # СМС всех витрин (2026-10-18): баланс и статистика Таргет СМС для админки «Покупатели → СМС: работа и баланс» – раз в час в :05
 # (сборки поиска идут в :15). Копия /etc/cron.d/sms-stats, исходник – _DEV/sms-stats/sms-stats-collect.php
 SHELL=/bin/sh
-5 * * * * root timeout 300 /opt/php74/bin/php /root/sms-stats/sms-stats-collect.php >> /root/sms-stats/cron.log 2>&1
+5 * * * * root timeout 300 /opt/php83/bin/php /root/sms-stats/sms-stats-collect.php >> /root/sms-stats/cron.log 2>&1

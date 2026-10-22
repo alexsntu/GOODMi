@@ -15,6 +15,7 @@ $config = ['dir' => ['root' => getcwd(), 'var' => getcwd() . '/var/', 'cache_mis
 @include 'config.local.php';
 error_reporting(E_ERROR);
 $secrets = (array) include 'app/gm_cabinet/secrets.php';
+mysqli_report(MYSQLI_REPORT_OFF); // как в PHP 7.4: ошибка запроса – false, а не исключение (в PHP 8.1+ по умолчанию исключения)
 $db = new mysqli($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
 $db->set_charset('utf8mb4');
 $p = $config['table_prefix'];

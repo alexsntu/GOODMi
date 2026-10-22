@@ -22,6 +22,7 @@ chdir('/var/www/maxmobiles/data/www/maxmobiles.ru');
 define('BOOTSTRAP', 1); define('DIR_ROOT', getcwd()); define('PRODUCT_STATUS', '');
 require 'app/gm_search/lib.php';
 $config = []; @include 'config.local.php';
+mysqli_report(MYSQLI_REPORT_OFF); // как в PHP 7.4: ошибка запроса – false, а не исключение (в PHP 8.1+ по умолчанию исключения)
 $db = new mysqli($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
 $db->set_charset('utf8mb4');
 $p = $config['table_prefix'];
