@@ -2,9 +2,9 @@
 /**
  * Запись стратегии продвижения витрины в модуль Авито (настройка strategy, блок «Стратегия продвижения» на «Обзоре»,
  * 2026-10-22). Только CLI, из корня сайта:
- *   php set-strategy.php <company_id> <strategy.json> [<cpx-advice.tsv> [<сколько кандидатов, по умолчанию 40>]]
+ *   php set-strategy.php <company_id> <strategy.json> [<cpx-advice.tsv> [<сколько кандидатов, по умолчанию 40> [<дневной лимит, ₽>]]]
  * strategy.json – {status, summary, inputs[], rules[], plan[], updated, review}; из cpx-advice.tsv (вывод cpx-advice.py)
- * берутся объявления со ставкой выше минимума – в advice с дневным лимитом max(50 ₽, ставка × 15).
+ * берутся объявления со ставкой выше минимума – в advice с дневным лимитом: заданным или max(50 ₽, ставка × 15).
  */
 
 if (PHP_SAPI !== 'cli') {
@@ -22,6 +22,7 @@ if (!$company_id || !is_array($strategy)) {
 }
 if (!empty($argv[3])) {
     $top = (int) ($argv[4] ?? 40);
+    $fixed_limit = (int) ($argv[5] ?? 0);
     $fh = fopen($argv[3], 'r');
     $head = fgetcsv($fh, 0, "\t");
     $advice = [];
@@ -40,7 +41,7 @@ if (!empty($argv[3])) {
             'bid' => number_format($bid, 0, ',', ' '),
             'compare' => $r['advice_compare'],
             'rec_bid' => number_format((float) $r['rec_bid'], 0, ',', ' '),
-            'limit' => number_format(max(50, ceil($bid * 15)), 0, ',', ' '),
+            'limit' => number_format($fixed_limit ?: max(50, ceil($bid * 15)), 0, ',', ' '),
         ];
     }
     fclose($fh);

@@ -8,7 +8,11 @@ bids – ответы /cpxpromo/1/getBids/{id}. Ценность просмот�
 import csv, json, sys, collections
 
 cid, items_f, bids_f, out_f = int(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4]
-p_buy = float(sys.argv[5]) if len(sys.argv) > 5 else 0.01
+# '0.01' – конверсия просмотр→покупка одна на всех; 'c0.25' – фактическая конверсия просмотр→контакт объявления
+# (сглаженная) × доля контактов, которые покупают
+arg = sys.argv[5] if len(sys.argv) > 5 else '0.01'
+by_contact = arg.startswith('c')
+p_buy = float(arg.lstrip('c'))
 
 # наценка пользователя (середина диапазона) → доля прибыли в цене продажи k/(1+k)
 MARKUP = {1: {'el': 0.125, 'gad': 0.275, 'acc': 1.125}, 2: {'el': 0.275, 'gad': 0.425, 'acc': 1.125}}[cid]
@@ -58,8 +62,8 @@ for aid, r in rows.items():
     ladder = [x for x in m.get('bids', []) if x.get('valuePenny')]
     price = float(r['price'] or 0)
     g = group(r['cat'] or '')
-    conv = (int(r['contacts']) + 30 * cat_conv.get(r['cat'], prior)) / (int(r['views']) + 30)
-    view_value = price * MARGIN[g] * p_buy
+    conv = (int(r['contacts']) + 100 * cat_conv.get(r['cat'], prior)) / (int(r['views']) + 100)
+    view_value = price * MARGIN[g] * (conv * p_buy if by_contact else p_buy)
     contact_value = view_value / conv if conv else 0
     best, best_profit = None, 0.0
     for x in ladder:
