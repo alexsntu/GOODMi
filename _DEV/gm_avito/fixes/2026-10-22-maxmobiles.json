@@ -1,0 +1,3 @@
+[
+ {"product_ids": [281966], "remove": ["GoodsType", "GoodsSubType", "TourismType", "GoodsSubCategory"], "set": {"Category": "Спорт и отдых", "GoodsType": "Товары для отдыха", "GoodsSubCategory": "Туризм и отдых на природе"}}
+]
