@@ -262,25 +262,47 @@ function mm_search_drop_commerce($norm)
  */
 function mm_search_code_ids($mc, $query)
 {
-    $ids = [];
+    $ids = []; $miss = [];
     foreach (preg_split('/[^a-z0-9\-]+/', strtolower((string) $query)) as $w) {
         $c = str_replace('-', '', trim($w, '-'));
         if (!(preg_match('/[a-z]/', $c) && preg_match('/\d/', $c) && strlen($c) >= 5 || preg_match('/^\d{6,}$/', $c))) { continue; }
         // Слово и номер слитно («fold8», «redmi15c»), где слово есть в названиях, – модель, а не артикул: обычный поиск находит и
         // «Fold 8», и «Fold8» («z fold8» по таблице кодов терял 6 из 24 товаров)
-        if (preg_match('/^([a-z]{3,})\d+[a-z]{0,2}$/', $c, $mw)) {
-            $r = $mc->query("SELECT id FROM mm_products WHERE MATCH('@title {$mw[1]}') LIMIT 1");
-            if ($r && $r->fetch_row()) { continue; }
-        }
+        if (mm_search_model_word($mc, $c)) { continue; }
         foreach (strlen($c) >= 6 ? [$c, $c . '*'] : [$c] as $m) {
             $r = $mc->query("SELECT id FROM mm_codes WHERE MATCH('@codes $m') LIMIT 21");
             $found = [];
             while ($r && ($x = $r->fetch_row())) { $found[] = (int) $x[0]; }
-            if (count($found) > 20) { break; }
-            if ($found) { $ids = array_merge($ids, $found); break; }
+            if (count($found) > 20) { continue 2; }
+            if ($found) { $ids = array_merge($ids, $found); continue 2; }
         }
+        if (strlen($c) >= 8 && preg_match('/[a-z]/', $c)) { $miss[] = $c; }
+    }
+    // Ни один код не нашёлся точно – похожий артикул (буквы и цифры, от 8 знаков): одна ошибка или две соседние переставлены
+    // («MAF-W6501» → MAF-W6051). Кандидаты – по первым 4 знакам. При точном совпадении другого кода не ищем (к повербанку
+    // с двумя кодами в названии прибавлялся рюкзак с похожим)
+    foreach ($ids ? [] : $miss as $c) {
+        $r = $mc->query("SELECT id, codes FROM mm_codes WHERE MATCH('@codes " . substr($c, 0, 4) . "*') LIMIT 300");
+        $near = [];
+        while ($r && ($x = $r->fetch_row())) {
+            foreach (explode(' ', (string) $x[1]) as $k) {
+                if (levenshtein($c, $k) === 1) { $near[(int) $x[0]] = 1; continue; }
+                if (strlen($k) !== strlen($c)) { continue; }
+                $diff = array_keys(array_diff_assoc(str_split($c), str_split($k)));
+                if (count($diff) === 2 && $diff[1] === $diff[0] + 1 && $c[$diff[0]] === $k[$diff[1]] && $c[$diff[1]] === $k[$diff[0]]) { $near[(int) $x[0]] = 1; }
+            }
+        }
+        if ($near && count($near) <= 20) { $ids = array_merge($ids, array_keys($near)); }
     }
     return array_values(array_unique($ids));
+}
+
+/** Слово и номер слитно («fold8», «redmi15c»), где слово есть в названиях товаров, – модель, а не артикул. */
+function mm_search_model_word($mc, $c)
+{
+    if (!preg_match('/^([a-z]{3,})\d+[a-z]{0,2}$/', $c, $mw)) { return false; }
+    $r = $mc->query("SELECT id FROM mm_products WHERE MATCH('@title {$mw[1]}') LIMIT 1");
+    return (bool) ($r && $r->fetch_row());
 }
 
 /** Сколько товаров в индексе содержит каждое слово запроса (после разбора Manticore): слово → число товаров. */
@@ -599,6 +621,13 @@ function mm_search_raw($mc, $query, $limit = 20, $offset = 0)
         $quorum = implode(' ', array_map(function ($p) { return '"' . mm_search_escape($p) . '"~2'; }, $mand)) . ($rest && $need > 0 ? ' "' . mm_search_escape(implode(' ', $rest)) . '"/' . $need : '');
     }
     $code_ids = mm_search_code_ids($mc, $query);
+    // Запрос – один артикул, которого нет в индексе (2026-10-23: «MAF-W6501» – товар снят с продажи, по частям кода находились
+    // ирригаторы): только поиск по всем словам и началу, без опечаток, раскладки и части слов – иначе случайное
+    $raw1 = str_replace('-', '', strtolower(trim((string) $query)));
+    if (!$code_ids && preg_match('/^[a-z0-9]{6,}$/', $raw1) && preg_match('/[a-z]/', $raw1) && preg_match('/\d/', $raw1)
+        && preg_match_all('/[a-z]+|\d+/', $raw1) >= 2 && !mm_search_model_word($mc, $raw1)) {
+        $fuzzy_ok = false; $unknown = $unknown ?: ['code']; $translit = ''; $layout_words = ''; $layout_expr = '';
+    }
     $tries = [
         // Артикул или код товара целиком (mm_search_code_ids) – раньше всего
         ['code', $code_ids ? 'WHERE id IN (' . implode(',', $code_ids) . ')' : '', 'OPTION max_matches = 1000'],
