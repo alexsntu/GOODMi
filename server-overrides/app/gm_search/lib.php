@@ -196,6 +196,9 @@ function gm_search_synonyms()
         // Единицы отдельным словом по-русски (2026-10-21, «ремешок 22 мм»): в названиях – «22mm», «65W», «20000mAh», «5G»;
         // слитно («22мм») их и так переводит gm_search_normalize, через пробел – только здесь
         'мм' => 'mm', 'вт' => 'w', 'мач' => 'mah', 'гц' => 'hz', 'джи' => 'g',
+        // 2026-10-23 по статистике поиска: б/у в каталоге GOODMi – раздел «Уценка» («б/у» gm_search_normalize сводит к «бу»);
+        // «автокормушка» (ни одного товара) – кормушки для животных
+        'бу' => 'уценка', 'автокормушка' => 'кормушка', 'автокормушки' => 'кормушка',
     ];
     // Синонимы из админки (gm_search.synonyms → custom.json): добавляются к стартовому списку, при совпадении – главнее
     $custom = gm_search_custom();
@@ -253,6 +256,49 @@ function gm_search_drop_parent($norm)
     return $out ? implode(' ', $out) : $norm;
 }
 
+/**
+ * Слова «купить», «цена», города и регион (2026-10-23) в названиях товаров не встречаются: запрос «купить айпад б/у севастополь»
+ * искал их как обязательные и ничего не находил. Убираются, если в запросе остаётся что-то ещё.
+ */
+function gm_search_drop_commerce($norm)
+{
+    $stop = ['купить', 'куплю', 'покупка', 'цена', 'цены', 'ценой', 'стоимость', 'недорого', 'дешево', 'наличии', 'интернет',
+        'севастополь', 'севастополе', 'севастополя', 'симферополь', 'симферополе', 'симферополя', 'ялта', 'ялте', 'ялты',
+        'крым', 'крыму', 'крыме', 'крыма', 'россия', 'россии'];
+    $out = array_values(array_filter(explode(' ', $norm), function ($t) use ($stop) { return !in_array($t, $stop, true); }));
+    return $out ? implode(' ', $out) : $norm;
+}
+
+/**
+ * Артикулы и коды целиком (2026-10-23): «MDE14», «XMWXSB02YM», «MAF-D1001», «JYU4643CN». Обычный разбор делит их на буквы и
+ * цифры («mde 14») – находились соседние модели (MDE44), а коды из дополнительного названия не находились вовсе. Таблица
+ * gm_codes (собирает gm-search-index.php: код товара, коды из названия, характеристик и описания). Слово запроса с буквами и
+ * цифрами от 5 знаков или только цифры от 6; от 6 знаков – и началом («jyu4643» → JYU4643CN). Нашлось 1–20 товаров – это они;
+ * больше – слово не артикул («256gb»), ищем как обычно. Возвращает id товаров или [].
+ */
+function gm_search_code_ids($mc, $query)
+{
+    $ids = [];
+    foreach (preg_split('/[^a-z0-9\-]+/', strtolower((string) $query)) as $w) {
+        $c = str_replace('-', '', trim($w, '-'));
+        if (!(preg_match('/[a-z]/', $c) && preg_match('/\d/', $c) && strlen($c) >= 5 || preg_match('/^\d{6,}$/', $c))) { continue; }
+        // Слово и номер слитно («fold8», «redmi15c»), где слово есть в названиях, – модель, а не артикул: обычный поиск находит и
+        // «Fold 8», и «Fold8» («z fold8» по таблице кодов терял 6 из 24 товаров)
+        if (preg_match('/^([a-z]{3,})\d+[a-z]{0,2}$/', $c, $mw)) {
+            $r = $mc->query("SELECT id FROM gm_products WHERE MATCH('@title {$mw[1]}') LIMIT 1");
+            if ($r && $r->fetch_row()) { continue; }
+        }
+        foreach (strlen($c) >= 6 ? [$c, $c . '*'] : [$c] as $m) {
+            $r = $mc->query("SELECT id FROM gm_codes WHERE MATCH('@codes $m') LIMIT 21");
+            $found = [];
+            while ($r && ($x = $r->fetch_row())) { $found[] = (int) $x[0]; }
+            if (count($found) > 20) { break; }
+            if ($found) { $ids = array_merge($ids, $found); break; }
+        }
+    }
+    return array_values(array_unique($ids));
+}
+
 /** Сколько товаров в индексе содержит каждое слово запроса (после разбора Manticore): слово → число товаров. */
 function gm_search_doc_counts($mc, $norm)
 {
@@ -294,6 +340,8 @@ function gm_search_normalize($q)
 {
     $q = mb_strtolower(trim((string) $q), 'UTF-8');
     $q = str_replace('ё', 'е', $q);
+    // «б/у», «б.у.», «б\у» → «бу» (2026-10-23: «айфон 15 б/у» разбиралось на «б» и «у» и ничего не находило)
+    $q = preg_replace('/(?<!\p{L})б\s*[\/.\\\\]\s*у(?!\p{L})\.?/u', 'бу', $q);
     $q = preg_replace('/[^\p{L}\p{N}\s.+\-]/u', ' ', $q);
     // Модели, набранные русскими буквами-двойниками латиницы: «а16» → «a16», «м4» → «m4» (в каталоге – латиница); GOODMi
     // (2026-10-16): и буквами, которые звучат как латинские, – «поко ф7» → f7, «дриме л10» → l10 (только вплотную к цифрам)
@@ -427,7 +475,7 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
         $learn_mul = 'IF(id = ' . (int) $lid . ', ' . sprintf('%.2F', min(2.0, max(1.0, (float) $lm))) . ', ' . ($learn_mul === '' ? '1.0' : $learn_mul) . ')';
     }
     $learn_mul = $learn_mul !== '' ? ' * ' . $learn_mul : '';
-    $norm = gm_search_drop_parent($norm);
+    $norm = gm_search_drop_commerce(gm_search_drop_parent($norm));
     $words = [];
     $expr = gm_search_match_expr($norm, $words);
     // Модель – слово латиницей и номер за ним («xiaomi 15», «note 15», «x 8», «s 26»): сначала ищем их рядом, не дальше
@@ -534,7 +582,18 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
     // Переведённый запрос ищется целиком заново – с его правилами порядка («ремешок» – аксессуар, который просили)
     $layout_words = '';
     if ($layout_expr === '' && ($unknown && preg_match('/^[a-z0-9\s]+$/', $norm) || $all_unknown && preg_match('/^[а-я0-9\s]+$/u', $norm))) {
-        $alt = gm_search_switch_layout(mb_strtolower(trim((string) $query), 'UTF-8'));
+        // Раскладку меняем только у слов из одних букв, которых нет в каталоге (2026-10-23: «hjenth 4a» целиком давало
+        // «роутер 4ф», теперь «роутер 4a»); номера и модели остаются как набраны
+        $alt_w = [];
+        foreach (preg_split('/\s+/u', mb_strtolower(trim((string) $query), 'UTF-8')) as $w) {
+            // Буквы внутри слова с цифрами – тоже («22vv» → «22мм»), если их нет в каталоге («4a» – есть, остаётся)
+            $alt_w[] = preg_replace_callback('/[a-z\[\];\',.`]+|[а-я]+/u', function ($m) use ($docs) {
+                $parts = explode(' ', gm_search_normalize($m[0]));
+                foreach ($parts as $pt) { if (!isset($docs[$pt]) || $docs[$pt] !== 0) { return $m[0]; } }
+                return gm_search_switch_layout($m[0]);
+            }, $w);
+        }
+        $alt = implode(' ', $alt_w);
         $alt_norm = gm_search_normalize($alt);
         if ($alt_norm !== '' && $alt_norm !== $norm) { $layout_words = $alt; }
     }
@@ -554,7 +613,10 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
         $need = $need_q - count($in_pairs);
         $quorum = implode(' ', array_map(function ($p) { return '"' . gm_search_escape($p) . '"~2'; }, $mand)) . ($rest && $need > 0 ? ' "' . gm_search_escape(implode(' ', $rest)) . '"/' . $need : '');
     }
+    $code_ids = gm_search_code_ids($mc, $query);
     $tries = [
+        // Артикул или код товара целиком (gm_search_code_ids) – раньше всего
+        ['code', $code_ids ? 'WHERE id IN (' . implode(',', $code_ids) . ')' : '', 'OPTION max_matches = 1000'],
         ['all', $pairs ? "WHERE MATCH(" . gm_search_q($mc, $expr . ' ' . $pair_expr) . ")" : '', $opts],
         ['all', "WHERE MATCH(" . gm_search_q($mc, $expr) . ")", $opts],
         ['prefix', $prefix !== '' && $prefix !== $expr ? "WHERE MATCH(" . gm_search_q($mc, $prefix) . ")" : '', $opts],
@@ -578,7 +640,7 @@ function gm_search_raw($mc, $query, $limit = 20, $offset = 0)
             $depth--;
             // Принимаем, только если в другой раскладке нашлось по всем словам, началу или с опечаткой – не по части слов
             // («Realmi15t» → «кфкьш15е» находил «Диагностика iPhone» по одной цифре)
-            if (!empty($f['items']) && in_array($f['mode'], ['all', 'prefix', 'fuzzy', 'translit'], true)) { $f['mode'] = 'layout'; return $f; }
+            if (!empty($f['items']) && in_array($f['mode'], ['code', 'all', 'prefix', 'fuzzy', 'translit'], true)) { $f['mode'] = 'layout'; return $f; }
             continue;
         }
         // Сначала товары в наличии, потом остальные – везде (решение пользователя 2026-10-16); внутри – товары названного
@@ -930,7 +992,7 @@ function gm_search_explain($mc, $q, $limit = 30)
             'order' => $order ? 'выше: ' . implode(', ', $order) : '',
             'w' => (int) $it['w'], 'factors' => $m, 'score' => round((float) $it['score']), 'demand' => (int) $it['demand'], 'popularity' => (int) $it['popularity']];
     }
-    $modes = ['all' => 'все слова (с синонимами и морфологией)', 'prefix' => 'по началу последнего слова', 'fuzzy' => 'с исправлением опечаток и раскладки',
+    $modes = ['code' => 'по артикулу или коду товара', 'all' => 'все слова (с синонимами и морфологией)', 'prefix' => 'по началу последнего слова', 'fuzzy' => 'с исправлением опечаток и раскладки',
         'translit' => 'русское название латиницей', 'layout' => 'набрано в другой раскладке клавиатуры', 'quorum' => 'достаточно 60% слов', 'pinned' => 'только закреплённые товары', 'none' => 'ничего не нашлось', 'empty' => 'пустой запрос'];
 
     return ['q' => $q, 'norm' => isset($f['norm']) ? $f['norm'] : '', 'mode' => $f['mode'], 'mode_text' => isset($modes[$f['mode']]) ? $modes[$f['mode']] : $f['mode'],

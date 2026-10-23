@@ -351,7 +351,7 @@ function mm_stats_candidates($from, $limit = 100)
         if ((isset($bad[$r['amode']]) ? $bad[$r['amode']] : 3) < (isset($bad[$out[$k]['mode']]) ? $bad[$out[$k]['mode']] : 3)) { $out[$k]['mode'] = $r['amode']; }
         $out[$k]['sids'][$r['sid']] = 1;
     }
-    $texts = ['none' => 'ничего не нашлось', 'sg_none' => 'в подсказках пусто', 'quorum' => 'по части слов', 'fuzzy' => 'с опечатками',
+    $texts = ['code' => 'по артикулу, но не открыли', 'none' => 'ничего не нашлось', 'sg_none' => 'в подсказках пусто', 'quorum' => 'по части слов', 'fuzzy' => 'с опечатками',
         'translit' => 'через транслит', 'layout' => 'другая раскладка', 'prefix' => 'по началу слова', 'all' => 'нашлось, но не открыли', 'pinned' => 'закреплённые'];
     foreach ($out as &$o) {
         $o['visitors'] = count($o['sids']); unset($o['sids']);

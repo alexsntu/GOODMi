@@ -482,6 +482,9 @@ function fn_gm_avito_get_item($company_id, $product_id, $create = false)
     if (!$item && $create && array_key_exists((int) $company_id, GM_AVITO_COMPANIES)) {
         $item = fn_gm_avito_new_item($company_id, $product_id);
         db_query('INSERT INTO ?:gm_avito_items ?e', $item);
+        // Перечитать: остальные поля (avito_id, status…) – значения таблицы по умолчанию (2026-10-23: без них карточка
+        // нового товара писала в журнал PHP 8.3 Warning «Undefined array key»)
+        $item = db_get_row('SELECT * FROM ?:gm_avito_items WHERE company_id = ?i AND product_id = ?i', $company_id, $product_id);
     }
 
     return $item ?: null;

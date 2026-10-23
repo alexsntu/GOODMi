@@ -14,7 +14,8 @@
 error_reporting(E_ERROR);
 chdir('/var/www/maxmobiles/data/www/maxmobiles.ru');
 define('BOOTSTRAP', 1); define('DIR_ROOT', getcwd()); define('PRODUCT_STATUS', '');
-$config = []; @include 'config.local.php';
+// config.local.php берёт пути из $config['dir'] и адрес посетителя – без них PHP 8.3 пишет в журнал Warning (2026-10-23)
+$_SERVER += ['REMOTE_ADDR' => '']; $config = ['dir' => ['root' => getcwd(), 'var' => getcwd() . '/var/', 'cache_misc' => getcwd() . '/var/cache/misc/']]; @include 'config.local.php';
 mysqli_report(MYSQLI_REPORT_OFF); // как в PHP 7.4: ошибка запроса – false, а не исключение (в PHP 8.1+ по умолчанию исключения)
 $db = new mysqli($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
 $db->set_charset('utf8');
@@ -42,6 +43,26 @@ function lemmas($mc, $text, $table)
     $r = $mc->query("CALL KEYWORDS('" . $mc->real_escape_string($t) . "', '$table')");
     while ($r && ($x = $r->fetch_assoc())) { if ($x['normalized'] !== '') { $out[] = ltrim($x['normalized'], '='); } }
     return $out;
+}
+/**
+ * Артикулы и коды для поиска целиком (таблица mm_codes, 2026-10-23): «MDE14», «XMWXSB02YM», «MAF-D1001» → mde14, xmwxsb02ym,
+ * mafd1001 и d1001. Берётся слово латиницей с буквами и цифрами от 5 знаков, кроме чисел с единицами («256GB», «20000mAh»);
+ * $strict (описание) – только написанное заглавными («JYU4643CN», не «Wi-Fi6e»); $digits (код товара) – и только цифры от 4.
+ */
+function index_codes($text, $strict = false, $digits = false)
+{
+    $out = [];
+    $text = html_entity_decode(strip_tags(str_replace('<', ' <', (string) $text)), ENT_QUOTES, 'UTF-8');
+    foreach (preg_split('/[^A-Za-z0-9\-]+/', $text) as $w) {
+        $w = trim($w, '-');
+        if ($w === '' || $strict && !(preg_match('/^[A-Z0-9\-]+$/', $w) && preg_match_all('/[A-Z]/', $w) >= 2)) { continue; }
+        foreach (strpos($w, '-') !== false ? array_merge([str_replace('-', '', $w)], explode('-', $w)) : [$w] as $c) {
+            $c = strtolower($c);
+            if (preg_match('/^\d+(gb|tb|mb|mah|wh|w|kw|mm|cm|hz|ghz|mhz|g|v|a|ml|l|kg|mp|k|p|fps|dpi|nm|lm|bit|db|in|x\d+)$/', $c)) { continue; }
+            if (preg_match('/[a-z]/', $c) && preg_match('/\d/', $c) ? strlen($c) >= 5 : $digits && preg_match('/^\d{4,}$/', $c)) { $out[$c] = 1; }
+        }
+    }
+    return array_keys($out);
 }
 function split_num($s) { return trim(preg_replace('/\s+/u', ' ', preg_replace(['/(\d)([^\d\s.,])/u', '/([^\d\s.,])(\d)/u'], '$1 $2', (string) $s))); }
 
@@ -80,7 +101,7 @@ $cat_text = function ($cid) use ($cats) {
 // 2026-10-16: и «Аксессуары для iPad / MacBook …» (клавиатуры, стилусы) – как на GOODMi
 $acc_re = '/чехл|чехол|стекл|плёнк|пленк|кабел|ремеш|ремни|адаптер|переходник|держател|подставк|защит|сумк|рюкзак|зарядн|блок питания|кейс|аксессуары для/ui';
 
-$products = rows($db, "SELECT p.product_id, p.product_code, p.amount, p.timestamp, d.product, d.ab__emd_alternative_name alt, d.ab__spt_short_name spt
+$products = rows($db, "SELECT p.product_id, p.product_code, p.amount, p.timestamp, d.product, d.ab__emd_alternative_name alt, d.ab__spt_short_name spt, d.full_description descr
     FROM {$p}products p JOIN {$p}product_descriptions d ON d.product_id = p.product_id AND d.lang_code = 'ru'
     WHERE p.company_id = " . COMPANY . " AND p.status = 'A'");
 $ids = array_map(function ($x) { return (int) $x['product_id']; }, $products);
@@ -125,7 +146,7 @@ foreach (rows($db, "SELECT object_id, name FROM {$p}seo_names WHERE type = 'p' A
 }
 // Характеристики, полезные для поиска
 $feat = [];
-$feat_names = ['Бренд' => 'brand', 'Модель' => 'model', 'Серия' => 'model', 'Тип устройства' => 'model', 'Тип' => 'model', 'Объем встроенной памяти' => 'model', 'Цвет' => 'model'];
+$feat_names = ['Бренд' => 'brand', 'Модель' => 'model', 'Серия' => 'model', 'Тип устройства' => 'model', 'Тип' => 'model', 'Объем встроенной памяти' => 'model', 'Цвет' => 'model', 'Код производителя' => 'code'];
 foreach (rows($db, "SELECT v.product_id, fd.description fname, COALESCE(NULLIF(vd.variant, ''), v.value) val
     FROM {$p}product_features_values v
     JOIN {$p}product_features_descriptions fd ON fd.feature_id = v.feature_id AND fd.lang_code = 'ru'
@@ -142,7 +163,7 @@ mq($mc, "CREATE TABLE mm_products_new (
     cat_ids multi, main_cat int, added timestamp, mods multi, demand int, img string, head multi
 ) morphology = 'lemmatize_ru,stem_en' min_infix_len = '2' index_exact_words = '1' expand_keywords = '0'");
 
-$batch = []; $n = 0; $skipped = 0; $sugg_items = [];
+$batch = []; $n = 0; $skipped = 0; $sugg_items = []; $codes = [];
 foreach ($products as $x) {
     $id = (int) $x['product_id'];
     $cat_names = []; $cat_ids = []; $main = 0;
@@ -161,8 +182,14 @@ foreach ($products as $x) {
     // Аксессуар – по самой вложенной (основной) категории: «Аксессуары → Наушники» аксессуаром не считается
     $main_names = $cat_text($main);
     $is_acc = $main_names && preg_match($acc_re, end($main_names)) ? 1 : 0;
-    $extra = implode(' ', array_filter([$x['product_code'], $x['alt'], $x['spt'], split_num($x['product'])]));
+    $extra = implode(' ', array_filter([$x['product_code'], implode(' ', isset($f['code']) ? $f['code'] : []), $x['alt'], $x['spt'], split_num($x['product'])]));
     $mods = mm_index_mods($x['product']);
+    // «Код производителя» (артикул; GOODMi – Maxmobiles – 9914 и 10850, пользователь 2026-10-23) –
+    // как код товара: и только цифры
+    $mcode = implode(' ', isset($f['code']) ? $f['code'] : []);
+    $codes[$id] = array_unique(array_merge(index_codes($x['product_code'] . ' ' . $mcode, false, true),
+        index_codes(implode(' ', [$x['product'], $x['alt'], $x['spt'], implode(' ', isset($f['model']) ? $f['model'] : [])])),
+        index_codes($x['descr'], true)));
     // Услуга ремонта – всё из раздела «Сервисный центр» (названия услуг слишком разные, чтобы узнавать их по словам)
     if (preg_match('/сервисный центр|^ремонт/ui', implode('|', $cat_names))) { $mods[] = 10; }
     $url = isset($seo[$id]) ? 'https://maxmobiles.ru/' . $seo[$id] . '/' : 'https://maxmobiles.ru/index.php?dispatch=products.view&product_id=' . $id;
@@ -197,6 +224,18 @@ if ($batch) {
 // Подмена без простоя: старая таблица удаляется только после того, как новая собрана
 mq($mc, 'DROP TABLE IF EXISTS mm_products');
 mq($mc, 'ALTER TABLE mm_products_new RENAME mm_products');
+// Артикулы и коды (mm_search_code_ids в lib.php): только товары, попавшие в индекс
+mq($mc, 'DROP TABLE IF EXISTS mm_codes_new');
+mq($mc, "CREATE TABLE mm_codes_new (codes text) min_prefix_len = '4' dict = 'keywords'");
+$rows_k = [];
+foreach ($codes as $cid => $list) {
+    if (!$list) { continue; }
+    $rows_k[] = sprintf('(%d,%s)', $cid, esc($mc, implode(' ', $list)));
+    if (count($rows_k) >= 500) { mq($mc, 'INSERT INTO mm_codes_new (id,codes) VALUES ' . implode(',', $rows_k)); $rows_k = []; }
+}
+if ($rows_k) { mq($mc, 'INSERT INTO mm_codes_new (id,codes) VALUES ' . implode(',', $rows_k)); }
+mq($mc, 'DROP TABLE IF EXISTS mm_codes');
+mq($mc, 'ALTER TABLE mm_codes_new RENAME mm_codes');
 // Категории для подсказок: название, путь, адрес, сколько товаров (заполняется по индексу товаров)
 $cat_count = [];
 $r = $mc->query('SELECT main_cat, COUNT(*) c FROM mm_products GROUP BY main_cat LIMIT 2000');
